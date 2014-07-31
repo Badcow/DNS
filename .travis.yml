@@ -1,0 +1,15 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+
+before_script:
+  - curl --silent http://getcomposer.org/installer | php
+  - php composer.phar install --dev --no-interaction
+
+script: phpunit --coverage-text
+
+notifications:
+  email:
+    - sam@badcow.co
