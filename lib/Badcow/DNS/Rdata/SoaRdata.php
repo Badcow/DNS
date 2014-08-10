@@ -17,7 +17,9 @@ use Badcow\DNS\Validator;
  */
 class SoaRdata implements RdataInterface
 {
-    const TYPE = "SOA";
+    use RdataTrait;
+
+    const TYPE = 'SOA';
 
     /**
      * The <domain-name> of the name server that was the
@@ -78,13 +80,10 @@ class SoaRdata implements RdataInterface
 
     /**
      * @param $expire
-     * @return SoaRdata
      */
     public function setExpire($expire)
     {
-        $this->expire = $expire;
-
-        return $this;
+        $this->expire = (int) $expire;
     }
 
     /**
@@ -97,13 +96,10 @@ class SoaRdata implements RdataInterface
 
     /**
      * @param $minimum
-     * @return SoaRdata
      */
     public function setMinimum($minimum)
     {
-        $this->minimum = $minimum;
-
-        return $this;
+        $this->minimum = (int) $minimum;
     }
 
     /**
@@ -116,7 +112,6 @@ class SoaRdata implements RdataInterface
 
     /**
      * @param $mname
-     * @return SoaRdata
      * @throws RdataException
      */
     public function setMname($mname)
@@ -126,8 +121,6 @@ class SoaRdata implements RdataInterface
         }
 
         $this->mname = $mname;
-
-        return $this;
     }
 
     /**
@@ -140,13 +133,10 @@ class SoaRdata implements RdataInterface
 
     /**
      * @param $refresh
-     * @return SoaRdata
      */
     public function setRefresh($refresh)
     {
-        $this->refresh = $refresh;
-
-        return $this;
+        $this->refresh = (int) $refresh;
     }
 
     /**
@@ -159,13 +149,10 @@ class SoaRdata implements RdataInterface
 
     /**
      * @param $retry
-     * @return SoaRdata
      */
     public function setRetry($retry)
     {
-        $this->retry = $retry;
-
-        return $this;
+        $this->retry = (int) $retry;
     }
 
     /**
@@ -178,7 +165,6 @@ class SoaRdata implements RdataInterface
 
     /**
      * @param $rname
-     * @return SoaRdata
      * @throws RdataException
      */
     public function setRname($rname)
@@ -188,8 +174,6 @@ class SoaRdata implements RdataInterface
         }
 
         $this->rname = $rname;
-
-        return $this;
     }
 
     /**
@@ -201,14 +185,11 @@ class SoaRdata implements RdataInterface
     }
 
     /**
-     * @param $serial
-     * @return SoaRdata
+     * @param int $serial
      */
     public function setSerial($serial)
     {
-        $this->serial = $serial;
-
-        return $this;
+        $this->serial = (int) $serial;
     }
 
     /**
@@ -217,14 +198,6 @@ class SoaRdata implements RdataInterface
     public function getSerial()
     {
         return $this->serial;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLength()
-    {
-        return strlen((string) $this);
     }
 
     /**
@@ -242,13 +215,5 @@ class SoaRdata implements RdataInterface
             $this->expire,
             $this->minimum
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return self::TYPE;
     }
 }

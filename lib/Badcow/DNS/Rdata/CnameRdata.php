@@ -14,7 +14,9 @@ use Badcow\DNS\Validator;
 
 class CnameRdata implements RdataInterface
 {
-    const TYPE = "CNAME";
+    use RdataTrait;
+
+    const TYPE = 'CNAME';
 
     /**
      * @var string
@@ -23,7 +25,6 @@ class CnameRdata implements RdataInterface
 
     /**
      * @param $cname
-     * @return CnameRdata
      * @throws RdataException
      */
     public function setCname($cname)
@@ -33,16 +34,6 @@ class CnameRdata implements RdataInterface
         }
 
         $this->cname = $cname;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLength()
-    {
-        return strlen($this->cname);
     }
 
     /**
@@ -51,13 +42,5 @@ class CnameRdata implements RdataInterface
     public function output()
     {
         return $this->cname;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return self::TYPE;
     }
 }

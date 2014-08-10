@@ -12,7 +12,9 @@ namespace Badcow\DNS\Rdata;
 
 class HinfoRdata implements RdataInterface
 {
-    const TYPE = "HINFO";
+    use RdataTrait
+
+    const TYPE = 'HINFO';
 
     /**
      * @var string
@@ -27,13 +29,10 @@ class HinfoRdata implements RdataInterface
 
     /**
      * @param $cpu
-     * @return HinfoRdata
      */
     public function setCpu($cpu)
     {
         $this->cpu = (string) $cpu;
-
-        return $this;
     }
 
     /**
@@ -45,14 +44,11 @@ class HinfoRdata implements RdataInterface
     }
 
     /**
-     * @param $os
-     * @return HinfoRdata
+     * @param string $os
      */
     public function setOs($os)
     {
         $this->os = (string) $os;
-
-        return $this;
     }
 
     /**
@@ -66,24 +62,8 @@ class HinfoRdata implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function getLength()
-    {
-        return strlen((string) $this);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function output()
     {
         return '"' . $this->cpu . '" "' . $this->os . '"';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return self::TYPE;
     }
 }

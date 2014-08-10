@@ -14,7 +14,9 @@ use Badcow\DNS\Validator;
 
 class NsRdata implements RdataInterface
 {
-    const TYPE = "NS";
+    use RdataTrait;
+
+    const TYPE = 'NS';
 
     /**
      * @var string
@@ -23,7 +25,6 @@ class NsRdata implements RdataInterface
 
     /**
      * @param $nsdname
-     * @return NsRdata
      * @throws RdataException
      */
     public function setNsdname($nsdname)
@@ -33,16 +34,6 @@ class NsRdata implements RdataInterface
         }
 
         $this->nsdname = $nsdname;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLength()
-    {
-        return strlen($this->nsdname);
     }
 
     /**
@@ -51,13 +42,5 @@ class NsRdata implements RdataInterface
     public function output()
     {
         return $this->nsdname;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return self::TYPE;
     }
 }

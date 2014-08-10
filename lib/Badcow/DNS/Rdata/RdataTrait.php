@@ -10,30 +10,27 @@
 
 namespace Badcow\DNS\Rdata;
 
-class TxtRdata implements RdataInterface
+trait RdataTrait
 {
-    use RdataTrait;
-
-    const TYPE = 'TXT';
+    /**
+     * @return string
+     */
+    abstract public function output();
 
     /**
-     * @var string
+     * {@inheritdoc}
      */
-    private $text;
-
-    /**
-     * @param $text
-     */
-    public function setText($text)
+    public function getLength()
     {
-        $this->text = addslashes($text);
+        return strlen($this->output());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function output()
+    public function getType()
     {
-        return '"' . $this->text . '"';
+        /** @const TYPE */
+        return self::TYPE;
     }
 }

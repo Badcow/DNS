@@ -14,7 +14,9 @@ use Badcow\DNS\Validator;
 
 class MxRdata implements RdataInterface
 {
-    const TYPE = "MX";
+    use RdataTrait
+
+    const TYPE = 'MX';
 
     /**
      * @var int
@@ -28,8 +30,7 @@ class MxRdata implements RdataInterface
 
 
     /**
-     * @param $exchange
-     * @return MxRdata
+     * @param string $exchange
      * @throws RdataException
      */
     public function setExchange($exchange)
@@ -39,8 +40,6 @@ class MxRdata implements RdataInterface
         }
 
         $this->exchange = $exchange;
-
-        return $this;
     }
 
     /**
@@ -52,14 +51,11 @@ class MxRdata implements RdataInterface
     }
 
     /**
-     * @param $preference
-     * @return MxRdata
+     * @param int $preference
      */
     public function setPreference($preference)
     {
         $this->preference = (int) $preference;
-
-        return $this;
     }
 
     /**
@@ -73,24 +69,8 @@ class MxRdata implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function getLength()
-    {
-        return strlen((string) $this);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function output()
     {
         return $this->preference . ' ' . $this->exchange;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return self::TYPE;
     }
 }

@@ -14,7 +14,9 @@ use Badcow\DNS\Validator;
 
 class AaaaRdata implements RdataInterface
 {
-    const TYPE = "AAAA";
+    use RdataTrait;
+
+    const TYPE = 'AAAA';
 
     /**
      * @var string
@@ -23,7 +25,6 @@ class AaaaRdata implements RdataInterface
 
     /**
      * @param $address
-     * @return AaaaRdata
      * @throws RdataException
      */
     public function setAddress($address)
@@ -33,8 +34,6 @@ class AaaaRdata implements RdataInterface
         }
 
         $this->address = $address;
-
-        return $this;
     }
 
     /**
@@ -48,24 +47,8 @@ class AaaaRdata implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function getLength()
-    {
-        return strlen($this->address);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function output()
     {
         return $this->address;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return self::TYPE;
     }
 }
