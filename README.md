@@ -10,86 +10,69 @@ interpret valid DNS Zone files and output them as a `\Badcow\DNS\ZoneInterface`.
 
 ## Example usage
 
-    use Badcow\DNS\Zone,
-        Badcow\DNS\ZoneFile,
-        Badcow\DNS\ResourceRecord,
-        Badcow\DNS\Rdata\SoaRdata,
-        Badcow\DNS\Rdata\NsRdata,
-        Badcow\DNS\Rdata\ARdata,
-        Badcow\DNS\Rdata\AaaaRdata,
-        Badcow\DNS\Validator;
+    require_once __DIR__ . '/../vendor/autoload.php';
 
-    $soa_rdata = new SoaRdata;
-    $soa_rdata->setMname('example.com.');
-    $soa_rdata->setRname('postmaster.example.com.');
-    $soa_rdata->setSerial(date('Ymd01'));
-    $soa_rdata->setRefresh(3600);
-    $soa_rdata->setExpire(14400);
-    $soa_rdata->setRetry(604800);
-    $soa_rdata->setMinimum(3600);
+    use Badcow\DNS\Zone;
+    use Badcow\DNS\Rdata\Factory;
+    use Badcow\DNS\ResourceRecord;
+    use Badcow\DNS\Classes;
+    use Badcow\DNS\ZoneBuilder;
+
+    $zone = new Zone('example.com.');
+    $zone->setDefaultTtl(3600);
 
     $soa = new ResourceRecord;
-    $soa->setType('SOA');
-    $soa->setClass('IN');
     $soa->setName('@');
-    $soa->setRdata($soa_rdata);
+    $soa->setRdata(Factory::Soa(
+        'example.com.',
+        'post.example.com.',
+        date('Ymd01'),
+        3600,
+        14400,
+        604800,
+        3600
+    ));
 
-    $ns1r = new NsRdata;
-    $ns1r->setNsdname('ns1.example.com.');
+    $ns = new ResourceRecord;
+    $ns->setName('@');
+    $ns->setRdata(Factory::Ns('n1.nameserver.com.'));
 
-    $ns2r = new NsRdata;
-    $ns2r->setNsdname('ns2.example.com.');
+    $a = new ResourceRecord;
+    $a->setName('sub.domain');
+    $a->setRdata(Factory::A('192.168.1.42'));
+    $a->setComment('This is a local ip.');
 
-    $ns1 = new ResourceRecord;
-    $ns1->setType('NS')
-        ->setClass('IN')
-        ->setName('@')
-        ->setTtl(800)
-        ->setRdata($ns1r);
+    $a6 = new ResourceRecord;
+    $a6->setName('ipv6.domain');
+    $a6->setRdata(Factory::Aaaa('::1'));
+    $a6->setComment('This is an IPv6 domain.');
 
-    $ns2 = new ResourceRecord;
-    $ns2->setType('NS')
-        ->setClass('IN')
-        ->setName('@')
-        ->setRdata($ns2r);
+    $zone->addResourceRecord($soa);
+    $zone->addResourceRecord($ns);
+    $zone->addResourceRecord($a);
+    $zone->addResourceRecord($a6);
 
-    $a_rdata = new ARdata;
-    $a_rdata->setAddress('192.168.1.0');
+    $zoneBuilder = new ZoneBuilder;
 
-    $a_record = new ResourceRecord;
-    $a_record->setType('A')
-        ->setName('subdomain.au')
-        ->setRdata($a_rdata)
-        ->setComment("This is a local ip.");
+    echo $zoneBuilder->build($zone);
 
-    $aa_rdata = new AaaaRdata;
-    $aa_rdata->setAddress('::1');
+### Output
 
-    $aa_record = new ResourceRecord;
-    $aa_record->setType('AAAA')
-        ->setName('ipv6domain')
-        ->setRdata($aa_rdata)
-        ->setComment("This is an IPv6 domain.");
-    
-
-    $zone = new Zone;
-    $zone->setDefaultTtl(14400)
-        ->setZoneName('example.com.')
-        ->addResourceRecord($soa)
-        ->addResourceRecord($ns1)
-        ->addResourceRecord($ns2)
-        ->addResourceRecord($a_record)
-        ->addResourceRecord($aa_record);
-
-    $zoneFile = new ZoneFile($zone);
-
-    $zoneFile->saveToFile(__DIR__);
-
-    header('Content-type: text/plain');
-    echo $zoneFile->render();
-    echo "\n\n\n";
-    echo (\Badcow\DNS\Validator::validateZoneFile($zone->getZoneName(), __DIR__ . '/example.com')) ?
-        'This is a valid record' : 'This is an invalid record';
+    $ORIGIN example.com.
+    $TTL 3600
+    @  IN SOA (
+                example.com.      ; MNAME
+                post.example.com. ; RNAME
+                2014081701        ; SERIAL
+                3600              ; REFRESH
+                14400             ; RETRY
+                604800            ; EXPIRE
+                3600              ; MINIMUM
+                )
+    @  IN NS n1.nameserver.com.
+    sub.domain  IN A 192.168.1.42; This is a local ip.
+    ipv6.domain  IN AAAA ::1; This is an IPv6 domain.
+    @  IN MX 10 mx.email.com.
 
 ## Build Status
-[![Build Status](https://travis-ci.org/samuelwilliams/Badcow-DNS-Zone-Library.png)](https://travis-ci.org/samuelwilliams/Badcow-DNS-Zone-Library)
+[![Build Status](https://travis-ci.org/samuelwilliams/Badcow-DNS-Zone-Library.png)](https://travis-ci.org/samuelwilliams/badcow-dns)
