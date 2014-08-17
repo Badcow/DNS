@@ -11,13 +11,14 @@
 namespace Badcow\DNS;
 
 use Badcow\DNS\Validator;
+use Badcow\DNS\Classes;
 
 class ResourceRecord implements ResourceRecordInterface
 {
     /**
      * @var string
      */
-    private $class;
+    private $class = Classes::INTERNET;
 
     /**
      * @var Rdata\RdataInterface
