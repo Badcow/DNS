@@ -14,7 +14,7 @@ use Badcow\DNS\Validator;
 
 class MxRdata implements RdataInterface
 {
-    use RdataTrait
+    use RdataTrait;
 
     const TYPE = 'MX';
 

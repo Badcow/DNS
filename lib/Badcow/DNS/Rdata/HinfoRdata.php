@@ -12,7 +12,7 @@ namespace Badcow\DNS\Rdata;
 
 class HinfoRdata implements RdataInterface
 {
-    use RdataTrait
+    use RdataTrait;
 
     const TYPE = 'HINFO';
 
