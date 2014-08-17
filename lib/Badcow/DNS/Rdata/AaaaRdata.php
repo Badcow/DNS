@@ -24,7 +24,7 @@ class AaaaRdata implements RdataInterface
     private $address;
 
     /**
-     * @param $address
+     * @param string $address
      * @throws RdataException
      */
     public function setAddress($address)
