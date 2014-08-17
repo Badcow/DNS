@@ -36,7 +36,7 @@ class Zone implements ZoneInterface
      */
     public function __construct($zoneName = null, $defaultTtl = null, array $resourceRecords = array())
     {
-        $this->setZoneName($zoneName);
+        if (null !== $zoneName) $this->setZoneName($zoneName);
         $this->setDefaultTtl($defaultTtl);
         $this->setResourceRecords($resourceRecords);
     }
