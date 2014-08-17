@@ -91,4 +91,47 @@ class Validator
 
         return $exit_status === 0;
     }
+
+    /**
+     * Validates that the zone meets
+     * RFC-1035 especially that:
+     *   1) 5.2.1 All RRs in the file should be of the same class.
+     *   2) 5.2.2 Exactly one SOA RR should be present at the top of the zone.
+     *
+     * @param ZoneInterface $zone
+     * @throws ZoneException
+     */
+    public function validate(ZoneInterface $zone)
+    {
+        $number_soa = 0;
+        $number_ns = 0;
+        $classes = array();
+
+        foreach ($zone->getResourceRecords() as $rr) {
+            /* @var $rr ResourceRecordInterface */
+            if ('SOA' === $rr->getRdata()->getType()) {
+                $number_soa += 1;
+            }
+
+            if ('NS' === $rr->getRdata()->getType()) {
+                $number_ns += 1;
+            }
+
+            if (null !== $rr->getClass()) {
+                $classes[$rr->getClass()] = null;
+            }
+        }
+
+        if ($number_soa !== 1) {
+            throw new ZoneException(sprintf('There must be exactly one SOA record, %s given.', $number_soa));
+        }
+
+        if ($number_ns < 1) {
+            throw new ZoneException(sprintf('There must be at least one NS record, %s given.', $number_ns));
+        }
+
+        if (1 !== $c = count($classes)) {
+            throw new ZoneException(sprintf('There must be exactly one type of class, %s given.', $c));
+        }
+    }
 }
