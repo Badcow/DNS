@@ -37,6 +37,14 @@ class CnameRdata implements RdataInterface
     }
 
     /**
+     * @return string
+     */
+    public function getCname()
+    {
+        return $this->cname;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function output()
