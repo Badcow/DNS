@@ -11,6 +11,7 @@
 namespace Badcow\DNS;
 
 use Badcow\DNS\Validator;
+use Badcow\DNS\Rdata\RdataInterface;
 
 interface ResourceRecordInterface
 {
@@ -41,12 +42,12 @@ interface ResourceRecordInterface
     public function getName();
 
     /**
-     * @param Rdata\RdataInterface $rdata
+     * @param RdataInterface $rdata
      */
-    public function setRdata(Rdata\RdataInterface $rdata);
+    public function setRdata(RdataInterface $rdata);
 
     /**
-     * @return Rdata\RdataInterface
+     * @return RdataInterface
      */
     public function getRdata();
 

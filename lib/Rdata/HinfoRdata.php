@@ -26,7 +26,6 @@ class HinfoRdata implements RdataInterface
      */
     private $os;
 
-
     /**
      * @param $cpu
      */
@@ -64,6 +63,6 @@ class HinfoRdata implements RdataInterface
      */
     public function output()
     {
-        return '"' . $this->cpu . '" "' . $this->os . '"';
+        return sprintf('"%s" "%s"', $this->cpu, $this->os);
     }
 }

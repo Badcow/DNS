@@ -12,9 +12,11 @@
         "php": ">=5.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*"
+        "badcow/common": "dev-master"
     },
     "autoload": {
-        "psr-0": { "Badcow": "lib/" }
+        "psr-4": {
+            "Badcow\\DNS\\": "lib/"
+        }
     }
 }

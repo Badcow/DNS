@@ -10,19 +10,19 @@
 
 namespace Badcow\DNS\Tests;
 
-use Badcow\DNS\Zone,
-    Badcow\DNS\ZoneFile,
+use Badcow\Common\TempFile,
+    Badcow\DNS\Zone,
     Badcow\DNS\ResourceRecord,
     Badcow\DNS\Rdata\SoaRdata,
     Badcow\DNS\Rdata\NsRdata,
     Badcow\DNS\Rdata\ARdata,
     Badcow\DNS\Rdata\AaaaRdata,
-    Badcow\DNS\Validator;
-use Badcow\DNS\ZoneBuilder;
+    Badcow\DNS\Validator,
+    Badcow\DNS\ZoneBuilder;
 
-class ZoneFileTest extends \PHPUnit_Framework_TestCase
+class ZoneFileTest extends TestCase
 {
-    public function getTestZone()
+    private function buildTestZone()
     {
         $soa_rdata = new SoaRdata;
         $soa_rdata->setMname('example.com.');
@@ -39,10 +39,10 @@ class ZoneFileTest extends \PHPUnit_Framework_TestCase
         $soa->setRdata($soa_rdata);
 
         $ns1r = new NsRdata;
-        $ns1r->setNsdname('ns1.infinite.net.au.');
+        $ns1r->setNsdname('ns1.example.net.au.');
 
         $ns2r = new NsRdata;
-        $ns2r->setNsdname('ns2.infinite.net.au.');
+        $ns2r->setNsdname('ns2.example.net.au.');
 
         $ns1 = new ResourceRecord;
         $ns1->setClass('IN');
@@ -82,14 +82,30 @@ class ZoneFileTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-    public function testZone()
+    /**
+     * Tests a zone file using Bind's Check Zone feature. If CHECKZONE_PATH environment variable has been set.
+     */
+    public function testZoneFile()
     {
-        $zone = $this->getTestZone();
+        if (null === $check_zone_path = $this->getEnvVariable('CHECKZONE_PATH')) {
+            $this->markTestSkipped('Bind checkzone path is not defined.');
+            return;
+        }
+
+        if (!`which $check_zone_path`) {
+            $this->markTestSkipped(sprintf('The checkzone path specified "%s" could not be found.', $check_zone_path));
+            return;
+        }
+
+        $zone = $this->buildTestZone();
         $zoneBuilder = new ZoneBuilder;
         $zoneFile = $zoneBuilder->build($zone);
-        $temp = tmpfile();
-        fwrite($temp, $zoneFile);
 
-        //Validator::validateZoneFile($zone->getZoneName(), )
+        $tmpFile = new TempFile('badcow_dns_test_');
+        $tmpFile->write($zoneFile);
+
+        $this->assertTrue(
+                Validator::validateZoneFile($zone->getZoneName(), $tmpFile->getPath(), $check_zone_path)
+        );
     }
 }

@@ -10,8 +10,9 @@
 
 namespace Badcow\DNS;
 
-use Badcow\DNS\Validator;
 use Badcow\DNS\Classes;
+use Badcow\DNS\Rdata\RdataInterface;
+use Badcow\DNS\Validator;
 
 class ResourceRecord implements ResourceRecordInterface
 {
@@ -21,7 +22,7 @@ class ResourceRecord implements ResourceRecordInterface
     private $class = Classes::INTERNET;
 
     /**
-     * @var Rdata\RdataInterface
+     * @var RdataInterface
      */
     private $rdata;
 
@@ -46,7 +47,7 @@ class ResourceRecord implements ResourceRecordInterface
      */
     public function setClass($class)
     {
-        if (!array_key_exists($class, Classes::$classes)) {
+        if (!Validator::isValidClass($class)) {
             throw new ResourceRecordException(sprintf('No such class as "%s"', $class));
         }
 
@@ -67,9 +68,9 @@ class ResourceRecord implements ResourceRecordInterface
     }
 
     /**
-     * @param Rdata\RdataInterface $rdata
+     * @param RdataInterface $rdata
      */
-    public function setRdata(Rdata\RdataInterface $rdata)
+    public function setRdata(RdataInterface $rdata)
     {
         $this->rdata = $rdata;
     }
@@ -107,7 +108,7 @@ class ResourceRecord implements ResourceRecordInterface
     }
 
     /**
-     * @return Rdata\RdataInterface
+     * @return RdataInterface
      */
     public function getRdata()
     {

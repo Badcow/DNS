@@ -3,10 +3,8 @@ Badcow DNS Zone Library
 
 This library constructs DNS zone records based on [RFC1035](http://www.ietf.org/rfc/rfc1035.txt) and subsequent standards.
 
-## Parser
-
-This library includes a DNS parser. The parser is still very much under construction. The aim of the parser is to
-interpret valid DNS Zone files and output them as a `\Badcow\DNS\ZoneInterface`.
+## Build Status
+[![Build Status](https://travis-ci.org/Badcow/DNS.png)](https://travis-ci.org/Badcow/DNS)
 
 ## Example usage
 
@@ -74,5 +72,11 @@ interpret valid DNS Zone files and output them as a `\Badcow\DNS\ZoneInterface`.
     ipv6.domain  IN AAAA ::1; This is an IPv6 domain.
     @  IN MX 10 mx.email.com.
 
-## Build Status
-[![Build Status](https://travis-ci.org/samuelwilliams/Badcow-DNS-Zone-Library.png)](https://travis-ci.org/samuelwilliams/badcow-dns)
+## Running the tests
+
+Simply use phpunit to run the tests. You can run additional tests if you have BIND installed. Add the environment variable to `phpunit.xml`:
+    <env name="CHECKZONE_PATH" value="/path/to/named-checkzone"/>
+
+Or add it at run-time:
+
+    CHECKZONE_PATH="/path/to/named-checkzone" phpunit .

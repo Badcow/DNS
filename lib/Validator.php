@@ -10,6 +10,9 @@
 
 namespace Badcow\DNS;
 
+use Badcow\DNS\Rdata\NsRdata;
+use Badcow\DNS\Rdata\SoaRdata;
+
 class Validator
 {
     /**
@@ -109,11 +112,11 @@ class Validator
 
         foreach ($zone->getResourceRecords() as $rr) {
             /* @var $rr ResourceRecordInterface */
-            if ('SOA' === $rr->getRdata()->getType()) {
+            if (SoaRdata::TYPE === $rr->getRdata()->getType()) {
                 $number_soa += 1;
             }
 
-            if ('NS' === $rr->getRdata()->getType()) {
+            if (NsRdata::TYPE === $rr->getRdata()->getType()) {
                 $number_ns += 1;
             }
 
@@ -133,5 +136,16 @@ class Validator
         if (1 !== $c = count($classes)) {
             throw new ZoneException(sprintf('There must be exactly one type of class, %s given.', $c));
         }
+    }
+
+    /**
+     * Determine if a class is valid
+     *
+     * @param string $class
+     * @return bool
+     */
+    public static function isValidClass($class)
+    {
+        return array_key_exists($class, Classes::$classes);
     }
 }
