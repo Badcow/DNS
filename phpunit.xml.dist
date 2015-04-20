@@ -25,9 +25,9 @@
     <filter>
         <whitelist>
             <directory>./lib</directory>
-            <directory>./vendor</directory>
             <exclude>
                 <directory>./lib/Tests</directory>
+                <directory>./vendor</directory>
             </exclude>
         </whitelist>
     </filter>

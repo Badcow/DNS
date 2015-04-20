@@ -9,8 +9,15 @@
  */
 
 namespace Badcow\DNS;
- 
-class ZoneException extends \Exception
+
+/**
+ * Class ZoneException
+ *
+ * @codeCoverageIgnore
+ *
+ * @package Badcow\DNS
+ */
+class ZoneException extends \ErrorException
 {
 
 }

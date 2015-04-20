@@ -10,6 +10,13 @@
 
 namespace Badcow\DNS;
 
+/**
+ * Class DNSException
+ *
+ * @codeCoverageIgnore
+ *
+ * @package Badcow\DNS
+ */
 class DNSException extends \Exception
 {
 
