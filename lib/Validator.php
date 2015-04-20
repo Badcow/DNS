@@ -141,11 +141,12 @@ class Validator
     /**
      * Determine if a class is valid
      *
+     * @deprecated Use Badcow\DNS\Classes::isValid() instead
      * @param string $class
      * @return bool
      */
     public static function isValidClass($class)
     {
-        return array_key_exists($class, Classes::$classes);
+        return Classes::isValid($class);
     }
 }

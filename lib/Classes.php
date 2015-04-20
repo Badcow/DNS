@@ -24,4 +24,15 @@ class Classes
         self::HESIOD   => 'Hesiod',
         self::INTERNET => 'Internet',
     );
+
+    /**
+     * Determine if a class is valid
+     *
+     * @param string $class
+     * @return bool
+     */
+    public static function isValid($class)
+    {
+        return array_key_exists($class, self::$classes);
+    }
 }
