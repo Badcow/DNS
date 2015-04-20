@@ -18,10 +18,15 @@ use Badcow\Common\TempFile,
     Badcow\DNS\Rdata\ARdata,
     Badcow\DNS\Rdata\AaaaRdata,
     Badcow\DNS\Validator,
-    Badcow\DNS\ZoneBuilder;
+    Badcow\DNS\ZoneBuilder,
+    Badcow\DNS\Classes,
+    Badcow\DNS\Rdata\Factory;
 
 class ZoneFileTest extends TestCase
 {
+    const PHP_ENV_CHECKZONE_PATH = 'CHECKZONE_PATH';
+    const PHP_ENV_PRINT_TEST_ZONE = 'PRINT_TEST_ZONE';
+
     private function buildTestZone()
     {
         $soa_rdata = new SoaRdata;
@@ -72,6 +77,21 @@ class ZoneFileTest extends TestCase
         $aaaa_record->setRdata($aaaa_rdata);
         $aaaa_record->setComment("This is an IPv6 domain.");
 
+        $loc_record = new ResourceRecord;
+        $loc_record->setName('canberra');
+        $loc_record->setRdata(Factory::Loc(
+            -35.3075,   //Lat
+            149.1244,   //Lon
+            500,        //Alt
+            20.12,      //Size
+            200.3,      //HP
+            300.1       //VP
+        ));
+
+        $dname = new ResourceRecord;
+        $dname->setName('bar.example.com.');
+        $dname->setClass(Classes::INTERNET);
+        $dname->setRdata(Factory::Dname('foo.example.com.'));
 
         return new Zone('example.com.', 3600, array(
             $soa,
@@ -79,6 +99,8 @@ class ZoneFileTest extends TestCase
             $ns2,
             $a_record,
             $aaaa_record,
+            $loc_record,
+            $dname,
         ));
     }
 
@@ -87,7 +109,7 @@ class ZoneFileTest extends TestCase
      */
     public function testZoneFile()
     {
-        if (null === $check_zone_path = $this->getEnvVariable('CHECKZONE_PATH')) {
+        if (null === $check_zone_path = $this->getEnvVariable(self::PHP_ENV_CHECKZONE_PATH)) {
             $this->markTestSkipped('Bind checkzone path is not defined.');
             return;
         }
@@ -103,6 +125,16 @@ class ZoneFileTest extends TestCase
 
         $tmpFile = new TempFile('badcow_dns_test_');
         $tmpFile->write($zoneFile);
+
+        if ($this->getEnvVariable(self::PHP_ENV_PRINT_TEST_ZONE)) {
+            print PHP_EOL . PHP_EOL;
+            print '=====================================TEST ZONE FILE=====================================';
+            print PHP_EOL;
+            print $zoneFile;
+            print PHP_EOL;
+            print '=====================================TEST ZONE FILE=====================================';
+            print PHP_EOL . PHP_EOL;
+        }
 
         $this->assertTrue(
                 Validator::validateZoneFile($zone->getZoneName(), $tmpFile->getPath(), $check_zone_path)

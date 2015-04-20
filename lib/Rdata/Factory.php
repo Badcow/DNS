@@ -130,4 +130,38 @@ class Factory
 
         return $rdata;
     }
+
+    /**
+     * @param string $target
+     * @return DnameRdata
+     */
+    public static function Dname($target)
+    {
+        $rdata = new DnameRdata;
+        $rdata->setTarget($target);
+
+        return $rdata;
+    }
+
+    /**
+     * @param $lat
+     * @param $lon
+     * @param float $alt
+     * @param float $size
+     * @param float $hp
+     * @param float $vp
+     * @return LocRdata
+     */
+    public static function Loc($lat, $lon, $alt = 0.0, $size = 1.0, $hp = 10000.0, $vp = 10.0)
+    {
+        $rdata = new LocRdata;
+        $rdata->setLatitude($lat);
+        $rdata->setLongitude($lon);
+        $rdata->setAltitude($alt);
+        $rdata->setSize($size);
+        $rdata->setHorizontalPrecision($hp);
+        $rdata->setVerticalPrecision($vp);
+
+        return $rdata;
+    }
 }
