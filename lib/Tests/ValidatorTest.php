@@ -10,9 +10,13 @@
 
 namespace Badcow\DNS\Tests;
  
-use Badcow\DNS\Validator;
+use Badcow\DNS\Classes;
+use Badcow\DNS\Validator,
+    Badcow\DNS\Rdata\Factory,
+    Badcow\DNS\ResourceRecord,
+    Badcow\DNS\Zone;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends TestCase
 {
     public function testIsValidClass()
     {
@@ -128,5 +132,70 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(Validator::validateIpAddress($invalid2));
         $this->assertFalse(Validator::validateIpAddress($invalid3));
         $this->assertFalse(Validator::validateIpAddress($invalid4));
+    }
+
+    /**
+     * @expectedException \Badcow\DNS\ZoneException
+     * @expectedExceptionMessage There must be exactly one SOA record, 2 given.
+     */
+    public function testValidateNumberOfSoa()
+    {
+        $zone = $this->buildTestZone();
+        $soa = new ResourceRecord;
+        $soa->setClass(Classes::INTERNET);
+        $soa->setName('@');
+        $soa->setRdata(Factory::Soa(
+            'example.com.',
+            'postmaster.example.com.',
+            date('Ymd01'),
+            3600,
+            14400,
+            604800,
+            3600
+        ));
+
+        $zone->addResourceRecord($soa);
+        Validator::validate($zone);
+    }
+
+    /**
+     * @expectedException \Badcow\DNS\ZoneException
+     * @expectedExceptionMessage There must be at least one NS record, 0 given.
+     */
+    public function testValidateNumberOfNs()
+    {
+        $zone = new Zone('example.com.', 3600);
+        $soa = new ResourceRecord;
+        $soa->setClass(Classes::INTERNET);
+        $soa->setName('@');
+        $soa->setRdata(Factory::Soa(
+            'example.com.',
+            'postmaster.example.com.',
+            date('Ymd01'),
+            3600,
+            14400,
+            604800,
+            3600
+        ));
+
+        $zone->addResourceRecord($soa);
+        Validator::validate($zone);
+    }
+
+    /**
+     * @expectedException \Badcow\DNS\ZoneException
+     * @expectedExceptionMessage There must be exactly one type of class, 2 given.
+     */
+    public function testValidateNumberOfClasses()
+    {
+        $zone = $this->buildTestZone();
+        $a = new ResourceRecord;
+        $a->setName('test');
+        $a->setClass(Classes::CHAOS);
+        $a->setRdata(Factory::A('192.168.0.1'));
+        $a->setComment('This class does not belong here');
+        $zone->addResourceRecord($a);
+
+        Validator::validate($zone);
     }
 }

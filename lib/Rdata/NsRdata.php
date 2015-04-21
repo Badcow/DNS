@@ -37,6 +37,14 @@ class NsRdata implements RdataInterface
     }
 
     /**
+     * @return string
+     */
+    public function getNsdname()
+    {
+        return $this->nsdname;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function output()

@@ -91,7 +91,7 @@ class Factory
      * @param int $expire
      * @param int $minimum
      * @param bool $niceFormatting
-     * @return NiceSoaRdata|SoaRdata
+     * @return SoaRdata
      */
     public static function Soa($mname, $rname, $serial, $refresh, $retry, $expire, $minimum, $niceFormatting = true)
     {

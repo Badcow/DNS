@@ -35,6 +35,7 @@ class HinfoRdata implements RdataInterface
     }
 
     /**
+     * @codeCoverageIgnore
      * @return string
      */
     public function getCpu()
@@ -51,6 +52,7 @@ class HinfoRdata implements RdataInterface
     }
 
     /**
+     * @codeCoverageIgnore
      * @return string
      */
     public function getOs()

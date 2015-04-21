@@ -104,7 +104,7 @@ class Validator
      * @param ZoneInterface $zone
      * @throws ZoneException
      */
-    public function validate(ZoneInterface $zone)
+    public static function validate(ZoneInterface $zone)
     {
         $number_soa = 0;
         $number_ns = 0;
