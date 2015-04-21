@@ -26,11 +26,13 @@ class ZoneFileTest extends TestCase
     {
         if (null === $check_zone_path = $this->getEnvVariable(self::PHP_ENV_CHECKZONE_PATH)) {
             $this->markTestSkipped('Bind checkzone path is not defined.');
+
             return;
         }
 
         if (!`which $check_zone_path`) {
             $this->markTestSkipped(sprintf('The checkzone path specified "%s" could not be found.', $check_zone_path));
+
             return;
         }
 

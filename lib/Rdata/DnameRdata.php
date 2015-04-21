@@ -10,8 +10,6 @@
 
 namespace Badcow\DNS\Rdata;
 
-use Badcow\DNS\Validator;
-
 /**
  * Class DnameRdata
  *

@@ -12,5 +12,5 @@ namespace Badcow\DNS\Rdata;
 
 class RdataException extends \Exception
 {
-    
+
 }

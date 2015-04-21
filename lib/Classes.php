@@ -28,7 +28,7 @@ class Classes
     /**
      * Determine if a class is valid
      *
-     * @param string $class
+     * @param  string $class
      * @return bool
      */
     public static function isValid($class)

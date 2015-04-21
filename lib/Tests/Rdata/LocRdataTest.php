@@ -81,7 +81,6 @@ class LocRdataTest extends \PHPUnit_Framework_TestCase
         $rdata->setVerticalPrecision(90000002);
     }
 
-
     /**
      * @expectedException \OutOfRangeException
      */
@@ -99,4 +98,4 @@ class LocRdataTest extends \PHPUnit_Framework_TestCase
         $rdata = new LocRdata();
         $rdata->setHorizontalPrecision(90000002);
     }
-} 
+}

@@ -24,7 +24,6 @@ class NiceSoaRdata extends SoaRdata
             )
 TXT;
 
-
     /**
      * {@inheritdoc}
      */

@@ -30,8 +30,8 @@ class Zone implements ZoneInterface
     private $defaultTtl;
 
     /**
-     * @param string $zoneName
-     * @param string $defaultTtl
+     * @param string                    $zoneName
+     * @param string                    $defaultTtl
      * @param ResourceRecordInterface[] $resourceRecords
      */
     public function __construct($zoneName = null, $defaultTtl = null, array $resourceRecords = array())
@@ -88,7 +88,7 @@ class Zone implements ZoneInterface
     }
 
     /**
-     * @param string $zone A fully qualified zone name
+     * @param  string        $zone A fully qualified zone name
      * @throws ZoneException
      */
     public function setZoneName($zone)

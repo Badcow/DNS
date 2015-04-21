@@ -40,7 +40,7 @@ class ResourceRecord implements ResourceRecordInterface
     private $comment;
 
     /**
-     * @param string $class
+     * @param  string                  $class
      * @throws ResourceRecordException
      */
     public function setClass($class)

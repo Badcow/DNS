@@ -20,7 +20,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     /**
      * Get an environment variable
      *
-     * @param string $varname
+     * @param  string $varname
      * @return mixed
      */
     protected function getEnvVariable($varname)
@@ -121,4 +121,3 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         ));
     }
 }
- 

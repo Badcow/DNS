@@ -28,9 +28,8 @@ class MxRdata implements RdataInterface
      */
     private $exchange;
 
-
     /**
-     * @param string $exchange
+     * @param  string         $exchange
      * @throws RdataException
      */
     public function setExchange($exchange)

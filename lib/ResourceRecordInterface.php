@@ -10,7 +10,6 @@
 
 namespace Badcow\DNS;
 
-use Badcow\DNS\Validator;
 use Badcow\DNS\Rdata\RdataInterface;
 
 interface ResourceRecordInterface

@@ -34,4 +34,4 @@ class ResourceRecordTest extends TestCase
         $rr = new ResourceRecord;
         $rr->setName('example?record.com.');
     }
-} 
+}

@@ -15,7 +15,7 @@ interface ZoneBuilderInterface
     /**
      * Renders a zone
      *
-     * @param ZoneInterface $zone
+     * @param  ZoneInterface $zone
      * @return string
      */
     public function build(ZoneInterface $zone);

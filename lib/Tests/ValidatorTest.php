@@ -9,7 +9,7 @@
  */
 
 namespace Badcow\DNS\Tests;
- 
+
 use Badcow\DNS\Classes;
 use Badcow\DNS\Validator,
     Badcow\DNS\Rdata\Factory,

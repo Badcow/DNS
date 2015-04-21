@@ -25,4 +25,4 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(Classes::isValid('In'));
         $this->assertFalse(Classes::isValid('hS'));
     }
-} 
+}

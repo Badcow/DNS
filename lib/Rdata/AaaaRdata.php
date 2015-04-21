@@ -17,7 +17,7 @@ class AaaaRdata extends ARdata
     const TYPE = 'AAAA';
 
     /**
-     * @param string $address
+     * @param  string         $address
      * @throws RdataException
      */
     public function setAddress($address)

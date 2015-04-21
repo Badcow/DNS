@@ -91,7 +91,7 @@ class LocRdata implements RdataInterface
     }
 
     /**
-     * @param double $altitude
+     * @param  double               $altitude
      * @throws \OutOfRangeException
      */
     public function setAltitude($altitude)
@@ -113,7 +113,7 @@ class LocRdata implements RdataInterface
     }
 
     /**
-     * @param double $horizontalPrecision
+     * @param  double               $horizontalPrecision
      * @throws \OutOfRangeException
      */
     public function setHorizontalPrecision($horizontalPrecision)
@@ -135,7 +135,7 @@ class LocRdata implements RdataInterface
     }
 
     /**
-     * @param double $size
+     * @param  double               $size
      * @throws \OutOfRangeException
      */
     public function setSize($size)
@@ -157,7 +157,7 @@ class LocRdata implements RdataInterface
     }
 
     /**
-     * @param double $verticalPrecision
+     * @param  double               $verticalPrecision
      * @throws \OutOfRangeException
      */
     public function setVerticalPrecision($verticalPrecision)
