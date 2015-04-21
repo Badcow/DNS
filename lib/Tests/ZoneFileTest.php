@@ -11,12 +11,8 @@
 namespace Badcow\DNS\Tests;
 
 use Badcow\Common\TempFile,
-    Badcow\DNS\Zone,
-    Badcow\DNS\ResourceRecord,
     Badcow\DNS\Validator,
-    Badcow\DNS\ZoneBuilder,
-    Badcow\DNS\Classes,
-    Badcow\DNS\Rdata\Factory;
+    Badcow\DNS\ZoneBuilder;
 
 class ZoneFileTest extends TestCase
 {

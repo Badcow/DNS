@@ -16,27 +16,33 @@ use Badcow\DNS\Rdata\SoaRdata;
 class Validator
 {
     /**
-     * @constant
-     */
-    const FQDN_PATTERN = '/(?:(?=^.{1,254}$)(^(?:(?!\d+\.)[a-zA-Z0-9_\-]{1,63}\.?)+(?:[a-zA-Z]{2,})\.$))|(?:^@$)/';
-
-    /**
-     * @constant
-     */
-    const UQDN_PATTERN = '/(?:(?=^.{1,254}$)(^(?:(?!\d+\.)[a-zA-Z0-9_\-]{1,63}\.?)+(?:[a-zA-Z]{2,})))|(?:^@$)/';
-
-    /**
      * @param string $string
-     * @param bool $trailingDot
+     * @param bool $trailingDot Require trailing dot
      * @return bool
      */
     public static function validateFqdn($string, $trailingDot = true)
     {
-        if ($trailingDot) {
-            return preg_match(self::FQDN_PATTERN, $string) === 1;
+        if ($string === '@') {
+            return true;
         }
 
-        return preg_match(self::UQDN_PATTERN, $string) === 1;
+        $parts = explode('.', strtolower($string));
+
+        if ($trailingDot && end($parts) !== '') {
+            return false;
+        }
+
+        if (end($parts) === '') {
+            array_pop($parts);
+        }
+
+        foreach ($parts as $part) {
+            if (1 !== preg_match('/^[^0-9\-_][a-z0-9_\-]+$/', $part)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -103,6 +109,7 @@ class Validator
      *
      * @param ZoneInterface $zone
      * @throws ZoneException
+     * @return bool
      */
     public static function validate(ZoneInterface $zone)
     {
@@ -136,6 +143,8 @@ class Validator
         if (1 !== $c = count($classes)) {
             throw new ZoneException(sprintf('There must be exactly one type of class, %s given.', $c));
         }
+
+        return true;
     }
 
     /**

@@ -17,7 +17,4 @@ namespace Badcow\DNS;
  *
  * @package Badcow\DNS
  */
-class DNSException extends \Exception
-{
-
-}
+class DNSException extends \ErrorException {}

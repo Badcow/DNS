@@ -32,15 +32,30 @@ class ValidatorTest extends TestCase
 
     public function testValidateFqdn()
     {
+        //Pass cases
         $fqdn1 = 'example.com.';
         $fqdn2 = 'www.example.com.';
         $fqdn3 = 'ex-ample.com.';
         $fqdn4 = 'ex-ampl3.com.au.';
-        $fqdn5 = '3xample.com.';
+        $fqdn5 = '@';
 
+        //Fail cases
+        $fqdn6 = '3xample.com.';
+        $fqdn7 = '_example.com.';
+        $fqdn8 = '-example.com.';
+
+        //Pass cases
         $uqdn1 = 'example.com';
         $uqdn2 = 'www.example.com';
         $uqdn3 = 'example';
+        $uqdn4 = '@';
+
+        //Fail cases
+        $uqdn5 = 'exam*ple.com';
+        $uqdn6 = 'wheres-wally?.com';
+        $uqdn7 = '_example.com.';
+        $uqdn8 = '-example.com.';
+        $uqdn9 = '3xample.com.';
 
         $this->assertTrue(Validator::validateFqdn($fqdn1));
         $this->assertTrue(Validator::validateFqdn($fqdn2));
@@ -48,13 +63,25 @@ class ValidatorTest extends TestCase
         $this->assertTrue(Validator::validateFqdn($fqdn4));
         $this->assertTrue(Validator::validateFqdn($fqdn5));
 
+        $this->assertFalse(Validator::validateFqdn($fqdn6));
+        $this->assertFalse(Validator::validateFqdn($fqdn7));
+        $this->assertFalse(Validator::validateFqdn($fqdn8));
+
         $this->assertFalse(Validator::validateFqdn($uqdn1));
         $this->assertFalse(Validator::validateFqdn($uqdn2));
         $this->assertFalse(Validator::validateFqdn($uqdn3));
+        $this->assertFalse(Validator::validateFqdn($uqdn5));
 
         $this->assertTrue(Validator::validateFqdn($uqdn1, false));
         $this->assertTrue(Validator::validateFqdn($uqdn2, false));
         $this->assertTrue(Validator::validateFqdn($uqdn3, false));
+        $this->assertTrue(Validator::validateFqdn($uqdn4, false));
+
+        $this->assertFalse(Validator::validateFqdn($uqdn5, false));
+        $this->assertFalse(Validator::validateFqdn($uqdn6, false));
+        $this->assertFalse(Validator::validateFqdn($uqdn7, false));
+        $this->assertFalse(Validator::validateFqdn($uqdn8, false));
+        $this->assertFalse(Validator::validateFqdn($uqdn9, false));
     }
 
     public function testValidateIpv4Address()
@@ -197,5 +224,14 @@ class ValidatorTest extends TestCase
         $zone->addResourceRecord($a);
 
         Validator::validate($zone);
+    }
+
+    /**
+     *
+     */
+    public function testValidate()
+    {
+        $zone = $this->buildTestZone();
+        $this->assertTrue(Validator::validate($zone));
     }
 }
