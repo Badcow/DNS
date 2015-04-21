@@ -31,6 +31,6 @@ trait RdataTrait
     public function getType()
     {
         /** @const TYPE */
-        return self::TYPE;
+        return static::TYPE;
     }
 }

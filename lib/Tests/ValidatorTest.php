@@ -18,18 +18,6 @@ use Badcow\DNS\Validator,
 
 class ValidatorTest extends TestCase
 {
-    public function testIsValidClass()
-    {
-        $this->assertTrue(Validator::isValidClass('IN'));
-        $this->assertTrue(Validator::isValidClass('HS'));
-        $this->assertTrue(Validator::isValidClass('CH'));
-
-        $this->assertFalse(Validator::isValidClass('INTERNET'));
-        $this->assertFalse(Validator::isValidClass('in'));
-        $this->assertFalse(Validator::isValidClass('In'));
-        $this->assertFalse(Validator::isValidClass('hS'));
-    }
-
     public function testValidateFqdn()
     {
         //Pass cases

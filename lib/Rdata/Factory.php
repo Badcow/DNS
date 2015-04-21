@@ -49,7 +49,7 @@ class Factory
     public static function Cname($cname)
     {
         $rdata = new CnameRdata();
-        $rdata->setCname($cname);
+        $rdata->setTarget($cname);
 
         return $rdata;
     }

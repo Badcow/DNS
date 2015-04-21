@@ -12,16 +12,9 @@ namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\Validator;
 
-class AaaaRdata implements RdataInterface
+class AaaaRdata extends ARdata
 {
-    use RdataTrait;
-
     const TYPE = 'AAAA';
-
-    /**
-     * @var string
-     */
-    private $address;
 
     /**
      * @param string $address
@@ -34,21 +27,5 @@ class AaaaRdata implements RdataInterface
         }
 
         $this->address = $address;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function output()
-    {
-        return $this->address;
     }
 }

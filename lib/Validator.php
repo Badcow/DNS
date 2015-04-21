@@ -150,7 +150,8 @@ class Validator
     /**
      * Determine if a class is valid
      *
-     * @deprecated Use Badcow\DNS\Classes::isValid() instead
+     * @codeCoverageIgnore
+     * @deprecated Use \Badcow\DNS\Classes::isValid() instead
      * @param string $class
      * @return bool
      */

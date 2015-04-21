@@ -23,43 +23,7 @@ use Badcow\DNS\Validator;
  *
  * @package Badcow\DNS\Rdata
  */
-class DnameRdata implements RdataInterface
+class DnameRdata extends CnameRdata
 {
-    use RdataTrait;
-
     const TYPE = 'DNAME';
-
-    /**
-     * @var string
-     */
-    private $target;
-
-    /**
-     * @param $target
-     * @throws RdataException
-     */
-    public function setTarget($target)
-    {
-        if (!Validator::validateFqdn($target)) {
-            throw new RdataException(sprintf('The target "%s" is not a Fully Qualified Domain Name', $target));
-        }
-
-        $this->target = $target;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTarget()
-    {
-        return $this->target;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function output()
-    {
-        return $this->target;
-    }
 }

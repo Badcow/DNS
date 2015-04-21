@@ -17,9 +17,9 @@ class CnameRdataTest extends \PHPUnit_Framework_TestCase
     {
         $target = 'foo.example.com.';
         $cname = new CnameRdata;
-        $cname->setCname($target);
+        $cname->setTarget($target);
 
-        $this->assertEquals($target, $cname->getCname());
+        $this->assertEquals($target, $cname->getTarget());
     }
 
     /**
@@ -29,14 +29,14 @@ class CnameRdataTest extends \PHPUnit_Framework_TestCase
     {
         $target = 'foo.example.com';
         $cname = new CnameRdata;
-        $cname->setCname($target);
+        $cname->setTarget($target);
     }
 
     public function testOutput()
     {
         $target = 'foo.example.com.';
         $cname = new CnameRdata;
-        $cname->setCname($target);
+        $cname->setTarget($target);
 
         $this->assertEquals($target, $cname->output());
     }

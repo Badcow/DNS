@@ -40,8 +40,9 @@ class ZoneFileTest extends TestCase
 
         $tmpFile = new TempFile('badcow_dns_test_');
         $tmpFile->write($zoneFile);
+        $tmpFile->doNotDestroy();
 
-        if ($this->getEnvVariable(self::PHP_ENV_PRINT_TEST_ZONE)) {
+        if (true == $this->getEnvVariable(self::PHP_ENV_PRINT_TEST_ZONE)) {
             print PHP_EOL . PHP_EOL;
             print '=====================================TEST ZONE FILE=====================================';
             print PHP_EOL;

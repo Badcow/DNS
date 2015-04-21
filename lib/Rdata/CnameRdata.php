@@ -21,27 +21,48 @@ class CnameRdata implements RdataInterface
     /**
      * @var string
      */
-    private $cname;
+    protected $target;
 
     /**
-     * @param $cname
+     * @param $target
      * @throws RdataException
      */
-    public function setCname($cname)
+    public function setTarget($target)
     {
-        if (!Validator::validateFqdn($cname)) {
-            throw new RdataException('Cname is not a Fully Qualified Domain Name');
+        if (!Validator::validateFqdn($target)) {
+            throw new RdataException(sprintf('The target "%s" is not a Fully Qualified Domain Name', $target));
         }
 
-        $this->cname = $cname;
+        $this->target = $target;
     }
 
     /**
      * @return string
      */
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    /**
+     * @deprecated Use CnameRdata::setTarget() instead
+     * @codeCoverageIgnore
+     * @param $cname
+     * @throws RdataException
+     */
+    public function setCname($cname)
+    {
+        $this->setTarget($cname);
+    }
+
+    /**
+     * @deprecated Use CnameRdata::getTarget() instead
+     * @codeCoverageIgnore
+     * @return string
+     */
     public function getCname()
     {
-        return $this->cname;
+        return $this->getTarget();
     }
 
     /**
@@ -49,6 +70,6 @@ class CnameRdata implements RdataInterface
      */
     public function output()
     {
-        return $this->cname;
+        return $this->target;
     }
 }

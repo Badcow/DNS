@@ -21,7 +21,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      * Get an environment variable
      *
      * @param string $varname
-     * @return null|string
+     * @return mixed
      */
     protected function getEnvVariable($varname)
     {
@@ -77,7 +77,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         $aaaa->setComment("This is an IPv6 domain.");
 
         $mx = new ResourceRecord;
-        $mx->getName('@');
+        $mx->setName('@');
         $mx->setRdata(Factory::Mx(10, 'mail.example.net.'));
 
         $txt = new ResourceRecord;

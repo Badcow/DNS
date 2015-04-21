@@ -12,7 +12,7 @@ namespace Badcow\DNS\Rdata;
 
 class NiceSoaRdata extends SoaRdata
 {
-    static $format = <<<TXT
+    public static $format = <<<TXT
 (
             %s ; MNAME
             %s ; RNAME

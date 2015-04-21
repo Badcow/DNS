@@ -21,7 +21,7 @@ class ARdata implements RdataInterface
     /**
      * @var string
      */
-    private $address;
+    protected $address;
 
     /**
      * @param string $address
