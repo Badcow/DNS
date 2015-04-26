@@ -45,27 +45,6 @@ class CnameRdata implements RdataInterface
     }
 
     /**
-     * @deprecated Use CnameRdata::setTarget() instead
-     * @codeCoverageIgnore
-     * @param $cname
-     * @throws RdataException
-     */
-    public function setCname($cname)
-    {
-        $this->setTarget($cname);
-    }
-
-    /**
-     * @deprecated Use CnameRdata::getTarget() instead
-     * @codeCoverageIgnore
-     * @return string
-     */
-    public function getCname()
-    {
-        return $this->getTarget();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function output()

@@ -131,7 +131,7 @@ class LocRdata implements RdataInterface
 
     /**
      * @codeCoverageIgnore
-     * @return float
+     * @return double
      */
     public function getHorizontalPrecision()
     {
@@ -153,7 +153,7 @@ class LocRdata implements RdataInterface
 
     /**
      * @codeCoverageIgnore
-     * @return float
+     * @return double
      */
     public function getSize()
     {
@@ -175,7 +175,7 @@ class LocRdata implements RdataInterface
 
     /**
      * @codeCoverageIgnore
-     * @return float
+     * @return double
      */
     public function getVerticalPrecision()
     {

@@ -29,6 +29,11 @@ class TxtRdata implements RdataInterface
         $this->text = addslashes($text);
     }
 
+    public function getText()
+    {
+        return stripslashes($this->text);
+    }
+
     /**
      * {@inheritdoc}
      */

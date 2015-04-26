@@ -17,9 +17,9 @@ class NsRdataTest extends \PHPUnit_Framework_TestCase
     {
         $Nsdname = 'foo.example.com.';
         $dname = new NsRdata;
-        $dname->setNsdname($Nsdname);
+        $dname->setTarget($Nsdname);
 
-        $this->assertEquals($Nsdname, $dname->getNsdname());
+        $this->assertEquals($Nsdname, $dname->getTarget());
     }
 
     /**
@@ -29,14 +29,14 @@ class NsRdataTest extends \PHPUnit_Framework_TestCase
     {
         $Nsdname = 'foo.example.com';
         $dname = new NsRdata;
-        $dname->setNsdname($Nsdname);
+        $dname->setTarget($Nsdname);
     }
 
     public function testOutput()
     {
         $Nsdname = 'foo.example.com.';
         $dname = new NsRdata;
-        $dname->setNsdname($Nsdname);
+        $dname->setTarget($Nsdname);
 
         $this->assertEquals($Nsdname, $dname->output());
     }

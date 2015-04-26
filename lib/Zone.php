@@ -105,23 +105,4 @@ class Zone implements ZoneInterface
     {
         return $this->name;
     }
-
-    /**
-     * @deprecated Use Zone::getName() instead
-     * @param  string        $zone A fully qualified zone name
-     * @throws ZoneException
-     */
-    public function setZoneName($zone)
-    {
-        $this->setName($zone);
-    }
-
-    /**
-     * @deprecated Use Zone::getName() instead
-     * @return string
-     */
-    public function getZoneName()
-    {
-        return $this->getName();
-    }
 }

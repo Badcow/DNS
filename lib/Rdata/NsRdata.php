@@ -13,25 +13,4 @@ namespace Badcow\DNS\Rdata;
 class NsRdata extends CnameRdata
 {
     const TYPE = 'NS';
-
-    /**
-     * @deprecated Use NsRdata::setTarget() instead
-     * @codeCoverageIgnore
-     * @param $nsdname
-     * @throws RdataException
-     */
-    public function setNsdname($nsdname)
-    {
-        $this->setTarget($nsdname);
-    }
-
-    /**
-     * @deprecated Use NsRdata::getTarget() instead
-     * @codeCoverageIgnore
-     * @return string
-     */
-    public function getNsdname()
-    {
-        return $this->getTarget();
-    }
 }
