@@ -20,8 +20,8 @@ class ZoneTest extends TestCase
     public function testSetZoneName()
     {
         $zone = new Zone;
-        $zone->setZoneName('example.com.');
-        $this->assertEquals('example.com.', $zone->getZoneName());
-        $zone->setZoneName('example.com');
+        $zone->setName('example.com.');
+        $this->assertEquals('example.com.', $zone->getName());
+        $zone->setName('example.com');
     }
 }
