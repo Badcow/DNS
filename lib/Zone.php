@@ -10,14 +10,12 @@
 
 namespace Badcow\DNS;
 
-use Badcow\DNS\Validator;
-
 class Zone implements ZoneInterface
 {
     /**
      * @var string
      */
-    private $zoneName;
+    private $name;
 
     /**
      * @var array an array of ResourceRecord
@@ -30,14 +28,14 @@ class Zone implements ZoneInterface
     private $defaultTtl;
 
     /**
-     * @param string                    $zoneName
+     * @param string                    $name
      * @param string                    $defaultTtl
      * @param ResourceRecordInterface[] $resourceRecords
      */
-    public function __construct($zoneName = null, $defaultTtl = null, array $resourceRecords = array())
+    public function __construct($name = null, $defaultTtl = null, array $resourceRecords = array())
     {
-        if (null !== $zoneName) {
-            $this->setZoneName($zoneName);
+        if (null !== $name) {
+            $this->setName($name);
         }
 
         $this->setDefaultTtl($defaultTtl);
@@ -88,23 +86,42 @@ class Zone implements ZoneInterface
     }
 
     /**
-     * @param  string        $zone A fully qualified zone name
+     * @param  string        $name A fully qualified zone name
      * @throws ZoneException
      */
-    public function setZoneName($zone)
+    public function setName($name)
     {
-        if (!Validator::validateFqdn($zone)) {
-            throw new ZoneException(sprintf('Zone "%s" is not a fully qualified domain name.', $zone));
+        if (!Validator::validateFqdn($name)) {
+            throw new ZoneException(sprintf('Zone "%s" is not a fully qualified domain name.', $name));
         }
 
-        $this->zoneName = $zone;
+        $this->name = $name;
     }
 
     /**
      * @return string
      */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @deprecated Use Zone::getName() instead
+     * @param  string        $zone A fully qualified zone name
+     * @throws ZoneException
+     */
+    public function setZoneName($zone)
+    {
+        $this->setName($zone);
+    }
+
+    /**
+     * @deprecated Use Zone::getName() instead
+     * @return string
+     */
     public function getZoneName()
     {
-        return $this->zoneName;
+        return $this->getName();
     }
 }

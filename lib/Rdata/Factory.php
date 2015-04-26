@@ -114,7 +114,7 @@ class Factory
     public static function Ns($nsdname)
     {
         $rdata = new NsRdata;
-        $rdata->setNsdname($nsdname);
+        $rdata->setTarget($nsdname);
 
         return $rdata;
     }

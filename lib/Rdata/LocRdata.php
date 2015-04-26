@@ -57,11 +57,11 @@ class LocRdata implements RdataInterface
     private $verticalPrecision = 10.0;
 
     /**
-     * @param float $latitude
+     * @param double $latitude
      */
     public function setLatitude($latitude)
     {
-        $this->latitude = $latitude;
+        $this->latitude = (double) $latitude;
     }
 
     /**
@@ -74,11 +74,11 @@ class LocRdata implements RdataInterface
     }
 
     /**
-     * @param float $longitude
+     * @param double $longitude
      */
     public function setLongitude($longitude)
     {
-        $this->longitude = $longitude;
+        $this->longitude = (double) $longitude;
     }
 
     /**
@@ -100,7 +100,7 @@ class LocRdata implements RdataInterface
             throw new \OutOfRangeException('The altitude must be on [-100000.00, 42849672.95].');
         }
 
-        $this->altitude = $altitude;
+        $this->altitude = (double) $altitude;
     }
 
     /**
@@ -122,7 +122,7 @@ class LocRdata implements RdataInterface
             throw new \OutOfRangeException('The horizontal precision must be on [0, 90000000.0].');
         }
 
-        $this->horizontalPrecision = $horizontalPrecision;
+        $this->horizontalPrecision = (double) $horizontalPrecision;
     }
 
     /**
@@ -144,7 +144,7 @@ class LocRdata implements RdataInterface
             throw new \OutOfRangeException('The size must be on [0, 90000000.0].');
         }
 
-        $this->size = $size;
+        $this->size = (double) $size;
     }
 
     /**
@@ -186,10 +186,10 @@ class LocRdata implements RdataInterface
         $out = '';
 
         //Calculate latitude
-        $d = (int) floor(abs($this->latitude));
-        $m = (int) floor((abs($this->latitude) - $d) * 60);
-        $s = ((abs($this->latitude) - $d) * 60 - $m) * 60;
-        $h = ($this->latitude < 0) ? 'S' : 'N';
+        $d = (int) floor(abs($this->latitude));             //Degrees
+        $m = (int) floor((abs($this->latitude) - $d) * 60); //Minutes
+        $s = ((abs($this->latitude) - $d) * 60 - $m) * 60;  //Seconds
+        $h = ($this->latitude < 0) ? 'S' : 'N';             //Hemisphere (North or South)
 
         $out .= sprintf('%d %d %.3f %s', $d, $m, $s, $h);
 

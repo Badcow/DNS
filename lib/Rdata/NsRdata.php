@@ -10,45 +10,28 @@
 
 namespace Badcow\DNS\Rdata;
 
-use Badcow\DNS\Validator;
-
-class NsRdata implements RdataInterface
+class NsRdata extends CnameRdata
 {
-    use RdataTrait;
-
     const TYPE = 'NS';
 
     /**
-     * @var string
-     */
-    private $nsdname;
-
-    /**
+     * @deprecated Use NsRdata::setTarget() instead
+     * @codeCoverageIgnore
      * @param $nsdname
      * @throws RdataException
      */
     public function setNsdname($nsdname)
     {
-        if (!Validator::validateFqdn($nsdname)) {
-            throw new RdataException(sprintf('Domain name "%s" is not a Fully Qualified Domain Name', $nsdname));
-        }
-
-        $this->nsdname = $nsdname;
+        $this->setTarget($nsdname);
     }
 
     /**
+     * @deprecated Use NsRdata::getTarget() instead
+     * @codeCoverageIgnore
      * @return string
      */
     public function getNsdname()
     {
-        return $this->nsdname;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function output()
-    {
-        return $this->nsdname;
+        return $this->getTarget();
     }
 }

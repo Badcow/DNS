@@ -38,12 +38,24 @@ interface ZoneInterface
     public function getDefaultTtl();
 
     /**
+     * @deprecated Use Zone::getName() instead
      * @param string $zone A fully qualified zone name
      */
     public function setZoneName($zone);
 
     /**
+     * @deprecated Use Zone::getName() instead
      * @return string
      */
     public function getZoneName();
+
+    /**
+     * @param string $zone A fully qualified zone name
+     */
+    public function setName($zone);
+
+    /**
+     * @return string
+     */
+    public function getName();
 }
