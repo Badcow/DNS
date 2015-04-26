@@ -26,6 +26,10 @@ class LocRdata implements RdataInterface
 
     const TYPE = 'LOC';
 
+    const LATITUDE = 'LATITUDE';
+
+    const LONGITUDE = 'LONGITUDE';
+
     /**
      * @var double
      */
@@ -183,32 +187,35 @@ class LocRdata implements RdataInterface
      */
     public function output()
     {
-        $out = '';
-
-        //Calculate latitude
-        $d = (int) floor(abs($this->latitude));             //Degrees
-        $m = (int) floor((abs($this->latitude) - $d) * 60); //Minutes
-        $s = ((abs($this->latitude) - $d) * 60 - $m) * 60;  //Seconds
-        $h = ($this->latitude < 0) ? 'S' : 'N';             //Hemisphere (North or South)
-
-        $out .= sprintf('%d %d %.3f %s', $d, $m, $s, $h);
-
-        //Calculate longitude
-        $d = (int) floor(abs($this->longitude));
-        $m = (int) floor((abs($this->longitude) - $d) * 60);
-        $s = ((abs($this->longitude) - $d) * 60 - $m) * 60;
-        $h = ($this->longitude < 0) ? 'W' : 'E';
-
-        $out .= sprintf(' %d %d %.3f %s', $d, $m, $s, $h);
-
-        $out .= sprintf(
-                ' %.2fm %.2fm %.2fm %.2fm',
+        return sprintf(
+                '%s %s %.2fm %.2fm %.2fm %.2fm',
+                $this->toDms($this->getLatitude(), self::LATITUDE),
+                $this->toDms($this->getLongitude(), self::LONGITUDE),
                 $this->altitude,
                 $this->size,
                 $this->horizontalPrecision,
                 $this->verticalPrecision
         );
+    }
 
-        return $out;
+    /**
+     * Determine the degree minute seconds value from decimal
+     *
+     * @param $decimal
+     * @param string $axis
+     * @return string
+     */
+    private function toDms($decimal, $axis = self::LATITUDE)
+    {
+        $d = (int) floor(abs($decimal));
+        $m = (int) floor((abs($decimal) - $d) * 60);
+        $s = ((abs($decimal) - $d) * 60 - $m) * 60;
+        if ($axis === self::LATITUDE) {
+            $h = ($decimal < 0) ? 'S' : 'N';
+        } else {
+            $h = ($decimal < 0) ? 'W' : 'E';
+        }
+
+        return sprintf('%d %d %.3f %s', $d, $m, $s, $h);
     }
 }

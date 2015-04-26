@@ -14,7 +14,7 @@ use Badcow\Common\TempFile,
     Badcow\DNS\Validator,
     Badcow\DNS\ZoneBuilder;
 
-class ZoneFileTest extends TestCase
+class ZoneBuilderTest extends TestCase
 {
     const PHP_ENV_CHECKZONE_PATH = 'CHECKZONE_PATH';
     const PHP_ENV_PRINT_TEST_ZONE = 'PRINT_TEST_ZONE';
@@ -54,7 +54,7 @@ class ZoneFileTest extends TestCase
         }
 
         $this->assertTrue(
-                Validator::validateZoneFile($zone->getZoneName(), $tmpFile->getPath(), $check_zone_path)
+                Validator::validateZoneFile($zone->getName(), $tmpFile->getPath(), $check_zone_path)
         );
     }
 }

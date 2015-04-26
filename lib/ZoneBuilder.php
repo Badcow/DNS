@@ -19,7 +19,7 @@ class ZoneBuilder implements ZoneBuilderInterface
     {
         $master = sprintf(
             "\$ORIGIN %s\n\$TTL %s\n",
-            $zone->getZoneName(),
+            $zone->getName(),
             $zone->getDefaultTtl()
         );
 
