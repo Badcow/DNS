@@ -10,6 +10,7 @@
 namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\Classes;
+use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
 
 class ResourceRecordTest extends TestCase
@@ -33,5 +34,26 @@ class ResourceRecordTest extends TestCase
     {
         $rr = new ResourceRecord;
         $rr->setName('example?record.com.');
+    }
+
+    public function testSettersAndGetters()
+    {
+        $rr = new ResourceRecord;
+        $name = 'test';
+        $ttl = 3500;
+        $comment = 'Hello';
+        $a = Factory::A('192.168.7.7');
+
+        $rr->setName($name);
+        $rr->setClass(Classes::INTERNET);
+        $rr->setRdata($a);
+        $rr->setTtl($ttl);
+        $rr->setComment($comment);
+
+        $this->assertEquals($a, $rr->getRdata());
+        $this->assertEquals($name, $rr->getName());
+        $this->assertEquals($ttl, $rr->getTtl());
+        $this->assertEquals($comment, $rr->getComment());
+        $this->assertEquals($a->getType(), $rr->getType());
     }
 }

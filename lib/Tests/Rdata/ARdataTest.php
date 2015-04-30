@@ -46,4 +46,12 @@ class ARdataTest extends \PHPUnit_Framework_TestCase
         $invalidAddress = '192.168.256.1';
         $this->aRdata->setAddress($invalidAddress);
     }
+
+    public function testOutput()
+    {
+        $address = '192.168.1.1';
+        $this->aRdata->setAddress($address);
+
+        $this->assertEquals($address, $this->aRdata->output());
+    }
 }

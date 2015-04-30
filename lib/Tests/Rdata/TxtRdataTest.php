@@ -23,4 +23,14 @@ class TxtRdataTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($text, $txt->getText());
     }
+
+    public function testOutput()
+    {
+        $text = 'This is some text. It\'s a nice piece of text.';
+        $expected = '"This is some text. It\\\'s a nice piece of text."';
+        $txt = new TxtRdata;
+        $txt->setText($text);
+
+        $this->assertEquals($expected, $txt->output());
+    }
 }

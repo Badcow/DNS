@@ -14,6 +14,34 @@ use Badcow\DNS\Rdata\SoaRdata;
 
 class SoaRdataTest extends \PHPUnit_Framework_TestCase
 {
+    public function testSettersAndGetters()
+    {
+        $soa = new SoaRdata();
+        $mname = 'example.com.';
+        $rname = 'post.example.com.';
+        $serial = 1970010101;
+        $refresh = 3600;
+        $retry = 14400;
+        $expire = 604800;
+        $minimum = 3600;
+
+        $soa->setMname($mname);
+        $soa->setRname($rname);
+        $soa->setSerial($serial);
+        $soa->setRefresh($refresh);
+        $soa->setRetry($retry);
+        $soa->setExpire($expire);
+        $soa->setMinimum($minimum);
+
+        $this->assertEquals($mname, $soa->getMname());
+        $this->assertEquals($rname, $soa->getRname());
+        $this->assertEquals($serial, $soa->getSerial());
+        $this->assertEquals($refresh, $soa->getRefresh());
+        $this->assertEquals($retry, $soa->getRetry());
+        $this->assertEquals($expire, $soa->getExpire());
+        $this->assertEquals($minimum, $soa->getMinimum());
+    }
+
     /**
      * @expectedException \Badcow\DNS\Rdata\RdataException
      */
