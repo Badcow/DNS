@@ -71,7 +71,7 @@ DNS;
         $soa->setRdata(Factory::Soa(
             'example.com.',
             'postmaster.example.com.',
-            date('Ymd01'),
+            2015050801,
             3600,
             14400,
             604800,

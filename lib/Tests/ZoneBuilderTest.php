@@ -26,7 +26,6 @@ class ZoneBuilderTest extends TestCase
         $this->assertEquals($this->expected, $zoneBuilder->build($zone));
     }
 
-
     /**
      * Tests a zone file using Bind's Check Zone feature. If CHECKZONE_PATH environment variable has been set.
      */
