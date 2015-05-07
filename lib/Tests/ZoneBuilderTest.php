@@ -19,6 +19,14 @@ class ZoneBuilderTest extends TestCase
     const PHP_ENV_CHECKZONE_PATH = 'CHECKZONE_PATH';
     const PHP_ENV_PRINT_TEST_ZONE = 'PRINT_TEST_ZONE';
 
+    public function testBuild()
+    {
+        $zone = $this->buildTestZone();
+        $zoneBuilder = new ZoneBuilder;
+        $this->assertEquals($this->expected, $zoneBuilder->build($zone));
+    }
+
+
     /**
      * Tests a zone file using Bind's Check Zone feature. If CHECKZONE_PATH environment variable has been set.
      */

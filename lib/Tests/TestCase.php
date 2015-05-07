@@ -18,6 +18,34 @@ use Badcow\DNS\ResourceRecord,
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var string
+     */
+    protected $expected = <<< 'DNS'
+$ORIGIN example.com.
+$TTL 3600
+@  IN SOA (
+            example.com.            ; MNAME
+            postmaster.example.com. ; RNAME
+            2015050801              ; SERIAL
+            3600                    ; REFRESH
+            14400                   ; RETRY
+            604800                  ; EXPIRE
+            3600                    ; MINIMUM
+            )
+@ 14400 IN NS ns1.example.net.au.
+@ 14400 IN NS ns2.example.net.au.
+subdomain.au  IN A 192.168.1.2; This is a local ip.
+ipv6domain  IN AAAA ::1; This is an IPv6 domain.
+canberra  IN LOC 35 18 27.000 S 149 7 27.840 E 500.00m 20.12m 200.30m 300.10m; This is Canberra
+bar.example.com.  IN DNAME foo.example.com.
+@  IN MX 10 mail.example.net.
+alias  IN CNAME subdomain.au.example.com.
+example.net.  IN TXT "v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all"
+@  IN HINFO "2.7GHz" "Ubuntu 12.04"
+
+DNS;
+
+    /**
      * Get an environment variable
      *
      * @param  string $varname

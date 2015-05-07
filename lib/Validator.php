@@ -146,17 +146,4 @@ class Validator
 
         return true;
     }
-
-    /**
-     * Determine if a class is valid
-     *
-     * @codeCoverageIgnore
-     * @deprecated Use \Badcow\DNS\Classes::isValid() instead
-     * @param  string $class
-     * @return bool
-     */
-    public static function isValidClass($class)
-    {
-        return Classes::isValid($class);
-    }
 }

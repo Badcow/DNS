@@ -32,7 +32,7 @@ class LocRdataTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAltitude1()
     {
-        $rdata = new LocRdata();
+        $rdata = new LocRdata;
         $rdata->setAltitude(-100001);
     }
 
@@ -41,8 +41,16 @@ class LocRdataTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAltitude2()
     {
-        $rdata = new LocRdata();
+        $rdata = new LocRdata;
         $rdata->setAltitude(42849673);
+    }
+
+    public function testGetAltitude()
+    {
+        $rdata = new LocRdata;
+        $altitude = 12345;
+        $rdata->setAltitude($altitude);
+        $this->assertEquals($altitude, $rdata->getAltitude());
     }
 
     /**
@@ -61,6 +69,14 @@ class LocRdataTest extends \PHPUnit_Framework_TestCase
     {
         $rdata = new LocRdata();
         $rdata->setSize(90000002);
+    }
+
+    public function testGetSize()
+    {
+        $size = 1231;
+        $rdata = new LocRdata;
+        $rdata->setSize($size);
+        $this->assertEquals($size, $rdata->getSize());
     }
 
     /**
@@ -97,5 +113,21 @@ class LocRdataTest extends \PHPUnit_Framework_TestCase
     {
         $rdata = new LocRdata();
         $rdata->setHorizontalPrecision(90000002);
+    }
+
+    public function testGetHorizontalPrecision()
+    {
+        $hp = 127835;
+        $rdata = new LocRdata();
+        $rdata->setHorizontalPrecision($hp);
+        $this->assertEquals($hp, $rdata->getHorizontalPrecision());
+    }
+
+    public function testGetVerticalPrecision()
+    {
+        $vp = 127835;
+        $rdata = new LocRdata();
+        $rdata->setVerticalPrecision($vp);
+        $this->assertEquals($vp, $rdata->getVerticalPrecision());
     }
 }

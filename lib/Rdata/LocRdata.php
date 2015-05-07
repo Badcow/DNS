@@ -69,7 +69,6 @@ class LocRdata implements RdataInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return float
      */
     public function getLatitude()
@@ -86,7 +85,6 @@ class LocRdata implements RdataInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return float
      */
     public function getLongitude()
@@ -108,7 +106,6 @@ class LocRdata implements RdataInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return float
      */
     public function getAltitude()
@@ -130,7 +127,6 @@ class LocRdata implements RdataInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return double
      */
     public function getHorizontalPrecision()
@@ -152,7 +148,6 @@ class LocRdata implements RdataInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return double
      */
     public function getSize()
@@ -174,7 +169,6 @@ class LocRdata implements RdataInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return double
      */
     public function getVerticalPrecision()

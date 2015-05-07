@@ -12,10 +12,7 @@ namespace Badcow\DNS;
 
 /**
  * Class ResourceRecordException
- * @codeCoverageIgnore
+ *
  * @package Badcow\DNS
  */
-class ResourceRecordException extends \ErrorException
-{
-
-}
+class ResourceRecordException extends \ErrorException {}

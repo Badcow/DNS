@@ -24,4 +24,12 @@ class ZoneTest extends TestCase
         $this->assertEquals('example.com.', $zone->getName());
         $zone->setName('example.com');
     }
+
+    public function testGetTtl()
+    {
+        $ttl = 124567;
+        $zone = new Zone;
+        $zone->setDefaultTtl($ttl);
+        $this->assertEquals($ttl, $zone->getDefaultTtl());
+    }
 }

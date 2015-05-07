@@ -13,11 +13,6 @@ namespace Badcow\DNS;
 /**
  * Class ZoneException
  *
- * @codeCoverageIgnore
- *
  * @package Badcow\DNS
  */
-class ZoneException extends \ErrorException
-{
-
-}
+class ZoneException extends \ErrorException {}
