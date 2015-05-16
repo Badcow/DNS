@@ -18,16 +18,6 @@ class RdataTraitTest extends \PHPUnit_Framework_TestCase
 
     const TYPE = 'RDATA_TEST';
 
-    public function output()
-    {
-        return 'TYPEWRITER';
-    }
-
-    public function testGetLength()
-    {
-        $this->assertEquals(10, $this->getLength());
-    }
-
     public function testGetType()
     {
         $this->assertEquals(self::TYPE, $this->getType());

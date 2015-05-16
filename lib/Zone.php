@@ -18,9 +18,9 @@ class Zone implements ZoneInterface
     private $name;
 
     /**
-     * @var array an array of ResourceRecord
+     * @var ResourceRecord[]
      */
-    private $resourceRecords;
+    private $resourceRecords = array();
 
     /**
      * @var int

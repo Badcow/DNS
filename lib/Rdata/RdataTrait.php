@@ -13,19 +13,6 @@ namespace Badcow\DNS\Rdata;
 trait RdataTrait
 {
     /**
-     * @return string
-     */
-    abstract public function output();
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLength()
-    {
-        return strlen($this->output());
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getType()

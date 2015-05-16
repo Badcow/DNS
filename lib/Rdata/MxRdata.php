@@ -35,7 +35,7 @@ class MxRdata implements RdataInterface
     public function setExchange($exchange)
     {
         if (!Validator::validateFqdn($exchange)) {
-            throw new RdataException(sprintf('The excahnge "%s" is not a Fully Qualified Domain Name', $exchange));
+            throw new RdataException(sprintf('The exchange "%s" is not a Fully Qualified Domain Name', $exchange));
         }
 
         $this->exchange = $exchange;
