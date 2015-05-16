@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Badcow\DNS\Test\Rdata;
+namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\AaaaRdata;
 use Badcow\DNS\Rdata\HinfoRdata;

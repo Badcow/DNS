@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Badcow\DNS\Test\Rdata;
+namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\MxRdata;
 
@@ -43,6 +43,5 @@ class MxRdataTest extends \PHPUnit_Framework_TestCase
         $mx->setPreference(42);
 
         $this->assertEquals('42 foo.example.com.', $mx->output());
-        $this->assertEquals(19, $mx->getLength());
     }
 }
