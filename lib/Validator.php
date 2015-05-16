@@ -37,7 +37,12 @@ class Validator
         }
 
         foreach ($parts as $part) {
-            if (1 !== preg_match('/^[^0-9\-_][a-z0-9_\-]+$/', $part)) {
+            //Does the string begin with a non alpha char?
+            if (1 === preg_match('/^[0-9\-_][a-z0-9_\-]*$/', $part)) {
+                return false;
+            }
+
+            if (1 !== preg_match('/^[a-z0-9_\-]+$/', $part)) {
                 return false;
             }
         }

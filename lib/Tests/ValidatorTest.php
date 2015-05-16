@@ -26,11 +26,12 @@ class ValidatorTest extends TestCase
         $fqdn3 = 'ex-ample.com.';
         $fqdn4 = 'ex-ampl3.com.au.';
         $fqdn5 = '@';
+        $fqdn6 = 'alt2.aspmx.l.google.com.';
 
         //Fail cases
-        $fqdn6 = '3xample.com.';
-        $fqdn7 = '_example.com.';
-        $fqdn8 = '-example.com.';
+        $fqdn7 = '3xample.com.';
+        $fqdn8 = '_example.com.';
+        $fqdn9 = '-example.com.';
 
         //Pass cases
         $uqdn1 = 'example.com';
@@ -50,10 +51,11 @@ class ValidatorTest extends TestCase
         $this->assertTrue(Validator::validateFqdn($fqdn3));
         $this->assertTrue(Validator::validateFqdn($fqdn4));
         $this->assertTrue(Validator::validateFqdn($fqdn5));
+        $this->assertTrue(Validator::validateFqdn($fqdn6));
 
-        $this->assertFalse(Validator::validateFqdn($fqdn6));
         $this->assertFalse(Validator::validateFqdn($fqdn7));
         $this->assertFalse(Validator::validateFqdn($fqdn8));
+        $this->assertFalse(Validator::validateFqdn($fqdn9));
 
         $this->assertFalse(Validator::validateFqdn($uqdn1));
         $this->assertFalse(Validator::validateFqdn($uqdn2));
