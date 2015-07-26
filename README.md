@@ -9,7 +9,6 @@ This library constructs DNS zone records based on [RFC1035](http://www.ietf.org/
 ## Example usage
 
 ```php
-
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Badcow\DNS\Zone;
@@ -32,9 +31,13 @@ $soa->setRdata(Factory::Soa(
     3600
 ));
 
-$ns = new ResourceRecord;
-$ns->setName('@');
-$ns->setRdata(Factory::Ns('n1.nameserver.com.'));
+$ns1 = new ResourceRecord;
+$ns1->setName('@');
+$ns1->setRdata(Factory::Ns('ns1.nameserver.com.'));
+
+$ns2 = new ResourceRecord;
+$ns2->setName('@');
+$ns2->setRdata(Factory::Ns('ns2.nameserver.com.'));
 
 $a = new ResourceRecord;
 $a->setName('sub.domain');
@@ -46,10 +49,26 @@ $a6->setName('ipv6.domain');
 $a6->setRdata(Factory::Aaaa('::1'));
 $a6->setComment('This is an IPv6 domain.');
 
+$mx1 = new ResourceRecord;
+$mx1->setName('@');
+$mx1->setRdata(Factory::Mx(10, 'mail-gw1.example.net.'));
+
+$mx2 = new ResourceRecord;
+$mx2->setName('@');
+$mx2->setRdata(Factory::Mx(20, 'mail-gw2.example.net.'));
+
+$mx3 = new ResourceRecord;
+$mx3->setName('@');
+$mx3->setRdata(Factory::Mx(30, 'mail-gw3.example.net.'));
+
+$zone->addResourceRecord($mx2);
 $zone->addResourceRecord($soa);
-$zone->addResourceRecord($ns);
+$zone->addResourceRecord($ns1);
+$zone->addResourceRecord($mx3);
 $zone->addResourceRecord($a);
 $zone->addResourceRecord($a6);
+$zone->addResourceRecord($ns2);
+$zone->addResourceRecord($mx1);
 
 $zoneBuilder = new AlignedBuilder();
 
@@ -71,13 +90,19 @@ $TTL 3600
                      )
 
 ; NS RECORDS
-@            IN NS   n1.nameserver.com.
+@            IN NS   ns1.nameserver.com.
+@            IN NS   ns2.nameserver.com.
 
 ; A RECORDS
 sub.domain   IN A    192.168.1.42; This is a local ip.
 
 ; AAAA RECORDS
 ipv6.domain  IN AAAA ::1; This is an IPv6 domain.
+
+; MX RECORDS
+@            IN MX   10 mail-gw1.example.net.
+@            IN MX   20 mail-gw2.example.net.
+@            IN MX   30 mail-gw3.example.net.
 ```
 ## Running the tests
 
