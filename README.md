@@ -9,13 +9,13 @@ This library constructs DNS zone records based on [RFC1035](http://www.ietf.org/
 ## Example usage
 
 ```php
-require_once __DIR__ . '/../vendor/autoload.php';
+
+require_once __DIR__ . '/vendor/autoload.php';
 
 use Badcow\DNS\Zone;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
-use Badcow\DNS\Classes;
-use Badcow\DNS\ZoneBuilder;
+use Badcow\DNS\AlignedBuilder;
 
 $zone = new Zone('example.com.');
 $zone->setDefaultTtl(3600);
@@ -51,29 +51,34 @@ $zone->addResourceRecord($ns);
 $zone->addResourceRecord($a);
 $zone->addResourceRecord($a6);
 
-$zoneBuilder = new ZoneBuilder;
+$zoneBuilder = new AlignedBuilder();
 
 echo $zoneBuilder->build($zone);
 ```
 
 ### Output
+```txt
+$ORIGIN example.com.
+$TTL 3600
+@            IN SOA  (
+                     example.com.      ; MNAME
+                     post.example.com. ; RNAME
+                     2015072601        ; SERIAL
+                     3600              ; REFRESH
+                     14400             ; RETRY
+                     604800            ; EXPIRE
+                     3600              ; MINIMUM
+                     )
 
-    $ORIGIN example.com.
-    $TTL 3600
-    @  IN SOA (
-                example.com.      ; MNAME
-                post.example.com. ; RNAME
-                2014081701        ; SERIAL
-                3600              ; REFRESH
-                14400             ; RETRY
-                604800            ; EXPIRE
-                3600              ; MINIMUM
-                )
-    @  IN NS n1.nameserver.com.
-    sub.domain  IN A 192.168.1.42; This is a local ip.
-    ipv6.domain  IN AAAA ::1; This is an IPv6 domain.
-    @  IN MX 10 mx.email.com.
+; NS RECORDS
+@            IN NS   n1.nameserver.com.
 
+; A RECORDS
+sub.domain   IN A    192.168.1.42; This is a local ip.
+
+; AAAA RECORDS
+ipv6.domain  IN AAAA ::1; This is an IPv6 domain.
+```
 ## Running the tests
 
 Simply use phpunit to run the tests. You can run additional tests if you have BIND installed. Add the environment variable to `phpunit.xml`:
