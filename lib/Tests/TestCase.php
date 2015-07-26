@@ -13,32 +13,33 @@ namespace Badcow\DNS\Tests;
 use Badcow\DNS\ResourceRecord,
     Badcow\DNS\Rdata\Factory,
     Badcow\DNS\Classes,
-    Badcow\DNS\Zone;
+    Badcow\DNS\Zone,
+    Badcow\DNS\Validator,
+    Badcow\DNS\ZoneBuilderInterface,
+    Badcow\DNS\ZoneInterface,
+    Badcow\Common\TempFile;
 
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
+    const PHP_ENV_CHECKZONE_PATH = 'CHECKZONE_PATH';
+    const PHP_ENV_PRINT_TEST_ZONE = 'PRINT_TEST_ZONE';
+
     /**
      * @var string
      */
     protected $expected = <<< 'DNS'
 $ORIGIN example.com.
 $TTL 3600
-@  IN SOA (
-            example.com.            ; MNAME
-            postmaster.example.com. ; RNAME
-            2015050801              ; SERIAL
-            3600                    ; REFRESH
-            14400                   ; RETRY
-            604800                  ; EXPIRE
-            3600                    ; MINIMUM
-            )
+@  IN SOA example.com. postmaster.example.com. 2015050801 3600 14400 604800 3600
 @ 14400 IN NS ns1.example.net.au.
 @ 14400 IN NS ns2.example.net.au.
 subdomain.au  IN A 192.168.1.2; This is a local ip.
 ipv6domain  IN AAAA ::1; This is an IPv6 domain.
 canberra  IN LOC 35 18 27.000 S 149 7 27.840 E 500.00m 20.12m 200.30m 300.10m; This is Canberra
 bar.example.com.  IN DNAME foo.example.com.
-@  IN MX 10 mail.example.net.
+@  IN MX 30 mail-gw3.example.net.
+@  IN MX 10 mail-gw1.example.net.
+@  IN MX 20 mail-gw2.example.net.
 alias  IN CNAME subdomain.au.example.com.
 example.net.  IN TXT "v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all"
 @  IN HINFO "2.7GHz" "Ubuntu 12.04"
@@ -61,6 +62,26 @@ DNS;
     }
 
     /**
+     * Print out a block of text
+     *
+     * @param string $text
+     * @param string $title
+     */
+    protected function printBlock($text, $title = '')
+    {
+        $output =
+            PHP_EOL . PHP_EOL .
+            '=====================================' . $title . '=====================================' .
+            PHP_EOL .
+            $text .
+            PHP_EOL .
+            '=====================================' . $title . '=====================================' .
+            PHP_EOL . PHP_EOL;
+
+        print $output;
+    }
+
+    /**
      * @return Zone
      */
     protected function buildTestZone()
@@ -75,7 +96,8 @@ DNS;
             3600,
             14400,
             604800,
-            3600
+            3600,
+            false
         ));
 
         $ns1 = new ResourceRecord;
@@ -104,9 +126,17 @@ DNS;
         $aaaa->setRdata(Factory::Aaaa('::1'));
         $aaaa->setComment("This is an IPv6 domain.");
 
-        $mx = new ResourceRecord;
-        $mx->setName('@');
-        $mx->setRdata(Factory::Mx(10, 'mail.example.net.'));
+        $mx1 = new ResourceRecord;
+        $mx1->setName('@');
+        $mx1->setRdata(Factory::Mx(10, 'mail-gw1.example.net.'));
+
+        $mx2 = new ResourceRecord;
+        $mx2->setName('@');
+        $mx2->setRdata(Factory::Mx(20, 'mail-gw2.example.net.'));
+
+        $mx3 = new ResourceRecord;
+        $mx3->setName('@');
+        $mx3->setRdata(Factory::Mx(30, 'mail-gw3.example.net.'));
 
         $txt = new ResourceRecord;
         $txt->setName('example.net.');
@@ -142,10 +172,43 @@ DNS;
             $aaaa,
             $loc,
             $dname,
-            $mx,
+            $mx3,
+            $mx1,
+            $mx2,
             $cname,
             $txt,
             $hinfo,
         ));
+    }
+
+
+    /**
+     * Tests a zone file using Bind's Check Zone feature. If CHECKZONE_PATH environment variable has been set.
+     *
+     * @param ZoneInterface $zone
+     * @param ZoneBuilderInterface $builder
+     */
+    protected function bindTest(ZoneInterface $zone, ZoneBuilderInterface $builder)
+    {
+        if (null === $check_zone_path = $this->getEnvVariable(self::PHP_ENV_CHECKZONE_PATH)) {
+            $this->markTestSkipped('Bind checkzone path is not defined.');
+
+            return;
+        }
+
+        if (!`which $check_zone_path`) {
+            $this->markTestSkipped(sprintf('The checkzone path specified "%s" could not be found.', $check_zone_path));
+
+            return;
+        }
+
+        $zoneFile = $builder->build($zone);
+
+        $tmpFile = new TempFile('badcow_dns_test_');
+        $tmpFile->write($zoneFile);
+
+        $this->assertTrue(
+            Validator::validateZoneFile($zone->getName(), $tmpFile->getPath(), $check_zone_path)
+        );
     }
 }

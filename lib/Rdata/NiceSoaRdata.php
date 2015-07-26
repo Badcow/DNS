@@ -12,17 +12,10 @@ namespace Badcow\DNS\Rdata;
 
 class NiceSoaRdata extends SoaRdata
 {
-    private static $format = <<<TXT
-(
-            %s ; MNAME
-            %s ; RNAME
-            %s ; SERIAL
-            %s ; REFRESH
-            %s ; RETRY
-            %s ; EXPIRE
-            %s ; MINIMUM
-            )
-TXT;
+    /**
+     * @var int
+     */
+    private $padding = 12;
 
     /**
      * {@inheritdoc}
@@ -30,17 +23,25 @@ TXT;
     public function output()
     {
         $pad = $this->longestVarLength();
+        $leftPadding = str_repeat(' ', $this->padding);
 
-        return sprintf(
-            self::$format,
-            str_pad($this->getMname(), $pad),
-            str_pad($this->getRname(), $pad),
-            str_pad($this->getSerial(), $pad),
-            str_pad($this->getRefresh(), $pad),
-            str_pad($this->getRetry(), $pad),
-            str_pad($this->getExpire(), $pad),
-            str_pad($this->getMinimum(), $pad)
-        );
+        return '(' . PHP_EOL .
+            $leftPadding . str_pad($this->getMname(), $pad)   . ' ; MNAME' . PHP_EOL .
+            $leftPadding . str_pad($this->getRname(), $pad)   . ' ; RNAME' . PHP_EOL .
+            $leftPadding . str_pad($this->getSerial(), $pad)  . ' ; SERIAL' . PHP_EOL .
+            $leftPadding . str_pad($this->getRefresh(), $pad) . ' ; REFRESH' . PHP_EOL .
+            $leftPadding . str_pad($this->getRetry(), $pad)   . ' ; RETRY' . PHP_EOL .
+            $leftPadding . str_pad($this->getExpire(), $pad)  . ' ; EXPIRE' . PHP_EOL .
+            $leftPadding . str_pad($this->getMinimum(), $pad) . ' ; MINIMUM' . PHP_EOL .
+            $leftPadding . ')';
+    }
+
+    /**
+     * @param int $leftPadding
+     */
+    public function setPadding($leftPadding)
+    {
+        $this->padding = (int) $leftPadding;
     }
 
     /**

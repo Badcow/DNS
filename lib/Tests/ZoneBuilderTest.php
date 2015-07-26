@@ -10,58 +10,26 @@
 
 namespace Badcow\DNS\Tests;
 
-use Badcow\Common\TempFile,
-    Badcow\DNS\Validator,
-    Badcow\DNS\ZoneBuilder;
+use Badcow\DNS\ZoneBuilder;
 
 class ZoneBuilderTest extends TestCase
 {
-    const PHP_ENV_CHECKZONE_PATH = 'CHECKZONE_PATH';
-    const PHP_ENV_PRINT_TEST_ZONE = 'PRINT_TEST_ZONE';
-
     public function testBuild()
     {
         $zone = $this->buildTestZone();
         $zoneBuilder = new ZoneBuilder;
-        $this->assertEquals($this->expected, $zoneBuilder->build($zone));
+        $this->assertEquals($this->expected, $output = $zoneBuilder->build($zone));
+
+        if (true == $this->getEnvVariable(self::PHP_ENV_PRINT_TEST_ZONE)) {
+            $this->printBlock($output, 'TEST ZONE FILE');
+        }
     }
 
     /**
-     * Tests a zone file using Bind's Check Zone feature. If CHECKZONE_PATH environment variable has been set.
+     * Test the Zone using Bind
      */
     public function testZoneFile()
     {
-        if (null === $check_zone_path = $this->getEnvVariable(self::PHP_ENV_CHECKZONE_PATH)) {
-            $this->markTestSkipped('Bind checkzone path is not defined.');
-
-            return;
-        }
-
-        if (!`which $check_zone_path`) {
-            $this->markTestSkipped(sprintf('The checkzone path specified "%s" could not be found.', $check_zone_path));
-
-            return;
-        }
-
-        $zone = $this->buildTestZone();
-        $zoneBuilder = new ZoneBuilder;
-        $zoneFile = $zoneBuilder->build($zone);
-
-        $tmpFile = new TempFile('badcow_dns_test_');
-        $tmpFile->write($zoneFile);
-
-        if (true == $this->getEnvVariable(self::PHP_ENV_PRINT_TEST_ZONE)) {
-            print PHP_EOL . PHP_EOL;
-            print '=====================================TEST ZONE FILE=====================================';
-            print PHP_EOL;
-            print $zoneFile;
-            print PHP_EOL;
-            print '=====================================TEST ZONE FILE=====================================';
-            print PHP_EOL . PHP_EOL;
-        }
-
-        $this->assertTrue(
-                Validator::validateZoneFile($zone->getName(), $tmpFile->getPath(), $check_zone_path)
-        );
+        $this->bindTest($this->buildTestZone(), new ZoneBuilder);
     }
 }
