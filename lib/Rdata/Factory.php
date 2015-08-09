@@ -90,12 +90,11 @@ class Factory
      * @param  int      $retry
      * @param  int      $expire
      * @param  int      $minimum
-     * @param  bool     $niceFormatting
      * @return SoaRdata
      */
-    public static function Soa($mname, $rname, $serial, $refresh, $retry, $expire, $minimum, $niceFormatting = true)
+    public static function Soa($mname, $rname, $serial, $refresh, $retry, $expire, $minimum)
     {
-        $rdata = $niceFormatting ? new NiceSoaRdata : new SoaRdata;
+        $rdata = new SoaRdata;
         $rdata->setMname($mname);
         $rdata->setRname($rname);
         $rdata->setSerial($serial);
