@@ -99,7 +99,7 @@ DNS;
         $a = new ResourceRecord;
         $a->setName('subdomain.au');
         $a->setRdata(Factory::A('192.168.1.2'));
-        $a->setComment("This is a local ip.");
+        $a->setComment('This is a local ip.');
 
         $cname = new ResourceRecord;
         $cname->setName('alias');
@@ -108,7 +108,7 @@ DNS;
         $aaaa = new ResourceRecord;
         $aaaa->setName('ipv6domain');
         $aaaa->setRdata(Factory::Aaaa('::1'));
-        $aaaa->setComment("This is an IPv6 domain.");
+        $aaaa->setComment('This is an IPv6 domain.');
 
         $mx1 = new ResourceRecord;
         $mx1->setName('@');
@@ -126,14 +126,15 @@ DNS;
         $dummy->setName('example.com.');
         $dummy->setRdata(new DummyRdata());
 
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($soa, $ns1) < 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($ns2, $ns1) > 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($aaaa, $cname) < 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $a) > 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $mx2) < 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $mx2) < 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($dummy, $txt) > 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $dummy) < 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($soa,   $ns1)   < 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($aaaa,  $cname) < 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1,   $mx2)   < 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1,   $mx2)   < 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1,   $dummy) < 0);
+
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1,   $a)     > 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($ns2,   $ns1)   > 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($dummy, $txt)   > 0);
     }
 
     public function testBuild()

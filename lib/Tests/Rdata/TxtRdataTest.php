@@ -10,7 +10,6 @@
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Rdata\AaaaRdata;
 use Badcow\DNS\Rdata\TxtRdata;
 
 class TxtRdataTest extends \PHPUnit_Framework_TestCase

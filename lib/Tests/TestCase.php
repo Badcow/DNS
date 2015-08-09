@@ -115,7 +115,7 @@ DNS;
         $a_record = new ResourceRecord;
         $a_record->setName('subdomain.au');
         $a_record->setRdata(Factory::A('192.168.1.2'));
-        $a_record->setComment("This is a local ip.");
+        $a_record->setComment('This is a local ip.');
 
         $cname = new ResourceRecord;
         $cname->setName('alias');
@@ -124,7 +124,7 @@ DNS;
         $aaaa = new ResourceRecord;
         $aaaa->setName('ipv6domain');
         $aaaa->setRdata(Factory::Aaaa('::1'));
-        $aaaa->setComment("This is an IPv6 domain.");
+        $aaaa->setComment('This is an IPv6 domain.');
 
         $mx1 = new ResourceRecord;
         $mx1->setName('@');

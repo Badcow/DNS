@@ -17,15 +17,12 @@ class ZoneBuilder implements ZoneBuilderInterface
      */
     public function build(ZoneInterface $zone)
     {
-        $master = sprintf(
-            "\$ORIGIN %s\n\$TTL %s\n",
-            $zone->getName(),
-            $zone->getDefaultTtl()
-        );
+        $master = '$ORIGIN ' . $zone->getName() . PHP_EOL .
+                  '$TTL ' . $zone->getDefaultTtl() . PHP_EOL;
 
         foreach ($zone->getResourceRecords() as $rr) {
             /* @var $rr ResourceRecord */
-            $master .= sprintf("%s %s %s %s %s",
+            $master .= sprintf('%s %s %s %s %s',
                 $rr->getName(),
                 $rr->getTtl(),
                 $rr->getClass(),
@@ -33,7 +30,11 @@ class ZoneBuilder implements ZoneBuilderInterface
                 $rr->getRdata()->output()
             );
 
-            $master .= (null == $rr->getComment()) ? "\n" : sprintf("; %s\n", $rr->getComment());
+            if (null != $rr->getComment()) {
+                $master .= '; ' . $rr->getComment();
+            }
+
+            $master .= PHP_EOL;
         }
 
         return $master;

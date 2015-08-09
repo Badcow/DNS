@@ -11,7 +11,6 @@
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\ARdata;
-use Badcow\DNS\Rdata\RdataException;
 
 class ARdataTest extends \PHPUnit_Framework_TestCase
 {

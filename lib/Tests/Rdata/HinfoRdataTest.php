@@ -10,9 +10,7 @@
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Rdata\AaaaRdata;
 use Badcow\DNS\Rdata\HinfoRdata;
-use Badcow\DNS\Rdata\TxtRdata;
 
 class HinfoRdataTest extends \PHPUnit_Framework_TestCase
 {
