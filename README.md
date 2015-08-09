@@ -141,15 +141,7 @@ $ORIGIN example.com.
 $TTL 3600
 canberra  IN LOC 35 18 27.000 S 149 7 27.840 E 500.00m 20.12m 200.30m 300.10m; This is Canberra
 @  IN MX 20 mail-gw2.example.net.
-@  IN SOA (
-example.com.      ; MNAME
-post.example.com. ; RNAME
-2014110501        ; SERIAL
-3600              ; REFRESH
-14400             ; RETRY
-604800            ; EXPIRE
-3600              ; MINIMUM
-)
+@  IN SOA example.com. post.example.com. 2014110501 3600 14400 604800 3600
 @  IN NS ns1.nameserver.com.
 @  IN MX 30 mail-gw3.example.net.
 sub.domain  IN A 192.168.1.42; This is a local ip.
