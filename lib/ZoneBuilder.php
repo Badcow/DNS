@@ -31,7 +31,7 @@ class ZoneBuilder implements ZoneBuilderInterface
             );
 
             if (null != $rr->getComment()) {
-                $master .= '; ' . $rr->getComment();
+                $master .= ResourceRecord::COMMENT_DELIMINATOR . $rr->getComment();
             }
 
             $master .= PHP_EOL;

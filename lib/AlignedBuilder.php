@@ -65,7 +65,7 @@ class AlignedBuilder implements ZoneBuilderInterface
         foreach ($rrs as $rr) {
             /* @var $rr ResourceRecord */
             if ($rr->getType() !== $current) {
-                $master .= PHP_EOL . '; ' . $rr->getType() . ' RECORDS' . PHP_EOL;
+                $master .= PHP_EOL . ResourceRecord::COMMENT_DELIMINATOR . $rr->getType() . ' RECORDS' . PHP_EOL;
                 $current = $rr->getType();
             }
 
@@ -84,7 +84,7 @@ class AlignedBuilder implements ZoneBuilderInterface
             );
 
             if (null != $rr->getComment()) {
-                $master .= '; ' . $rr->getComment();
+                $master .= ResourceRecord::COMMENT_DELIMINATOR . $rr->getComment();
             }
 
             $master .= PHP_EOL;

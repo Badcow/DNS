@@ -15,11 +15,11 @@ class NsRdataTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetNsdname()
     {
-        $Nsdname = 'foo.example.com.';
+        $nsdname = 'foo.example.com.';
         $dname = new NsRdata;
-        $dname->setTarget($Nsdname);
+        $dname->setTarget($nsdname);
 
-        $this->assertEquals($Nsdname, $dname->getTarget());
+        $this->assertEquals($nsdname, $dname->getTarget());
     }
 
     /**

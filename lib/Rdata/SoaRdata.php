@@ -10,6 +10,7 @@
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Validator;
 
 /**
@@ -222,18 +223,15 @@ class SoaRdata implements RdataInterface, FormattableInterface
      */
     public function outputFormatted()
     {
-        $pad = $this->longestVarLength();
-        $leftPadding = str_repeat(' ', $this->padding);
-
-        return '(' . PHP_EOL .
-            $leftPadding . str_pad($this->getMname(), $pad)   . ' ; MNAME' . PHP_EOL .
-            $leftPadding . str_pad($this->getRname(), $pad)   . ' ; RNAME' . PHP_EOL .
-            $leftPadding . str_pad($this->getSerial(), $pad)  . ' ; SERIAL' . PHP_EOL .
-            $leftPadding . str_pad($this->getRefresh(), $pad) . ' ; REFRESH' . PHP_EOL .
-            $leftPadding . str_pad($this->getRetry(), $pad)   . ' ; RETRY' . PHP_EOL .
-            $leftPadding . str_pad($this->getExpire(), $pad)  . ' ; EXPIRE' . PHP_EOL .
-            $leftPadding . str_pad($this->getMinimum(), $pad) . ' ; MINIMUM' . PHP_EOL .
-            $leftPadding . ')';
+        return ResourceRecord::MULTILINE_BEGIN . PHP_EOL .
+            $this->makeLine($this->getMname(),   'MNAME') .
+            $this->makeLine($this->getRname(),   'RNAME') .
+            $this->makeLine($this->getSerial(),  'SERIAL') .
+            $this->makeLine($this->getRefresh(), 'REFRESH') .
+            $this->makeLine($this->getRetry(),   'RETRY') .
+            $this->makeLine($this->getExpire(),  'EXPIRE') .
+            $this->makeLine($this->getMinimum(), 'MINIMUM') .
+            str_repeat(' ', $this->padding) . ResourceRecord::MULTILINE_END;
     }
 
     /**
@@ -241,7 +239,7 @@ class SoaRdata implements RdataInterface, FormattableInterface
      *
      * @return int
      */
-    private function longestVarLength()
+    public function longestVarLength()
     {
         $l = 0;
 

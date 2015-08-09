@@ -10,6 +10,8 @@
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\ResourceRecord;
+
 /**
  * Class LocRdata
  *
@@ -206,23 +208,19 @@ class LocRdata implements RdataInterface, FormattableInterface
         );
     }
 
-
     /**
      * {@inheritdoc}
      */
     public function outputFormatted()
     {
-        $pad = $this->longestVarLength();
-        $leftPadding = str_repeat(' ', $this->padding);
-
-        return '(' . PHP_EOL .
-            $leftPadding . str_pad($this->getLatitude(self::FORMAT_DMS), $pad)  . ' ; LATITUDE' . PHP_EOL .
-            $leftPadding . str_pad($this->getLongitude(self::FORMAT_DMS), $pad) . ' ; LONGITUDE' . PHP_EOL .
-            $leftPadding . str_pad(sprintf('%.2fm', $this->altitude), $pad)     . ' ; ALTITUDE' . PHP_EOL .
-            $leftPadding . str_pad(sprintf('%.2fm', $this->size), $pad)         . ' ; SIZE' . PHP_EOL .
-            $leftPadding . str_pad(sprintf('%.2fm', $this->horizontalPrecision), $pad) . ' ; HORIZONTAL PRECISION' . PHP_EOL .
-            $leftPadding . str_pad(sprintf('%.2fm', $this->verticalPrecision), $pad)   . ' ; VERTICAL PRECISION' . PHP_EOL .
-            $leftPadding . ')';
+        return ResourceRecord::MULTILINE_BEGIN . PHP_EOL .
+            $this->makeLine($this->getLatitude(self::FORMAT_DMS), 'LATITUDE') .
+            $this->makeLine($this->getLongitude(self::FORMAT_DMS), 'LONGITUDE') .
+            $this->makeLine(sprintf('%.2fm', $this->altitude), 'ALTITUDE') .
+            $this->makeLine(sprintf('%.2fm', $this->size), 'SIZE') .
+            $this->makeLine(sprintf('%.2fm', $this->horizontalPrecision), 'HORIZONTAL PRECISION') .
+            $this->makeLine(sprintf('%.2fm', $this->verticalPrecision), 'VERTICAL PRECISION') .
+            str_repeat(' ', $this->padding) . ResourceRecord::MULTILINE_END;
     }
 
     /**
@@ -230,7 +228,7 @@ class LocRdata implements RdataInterface, FormattableInterface
      *
      * @return int
      */
-    private function longestVarLength()
+    public function longestVarLength()
     {
         $l = 0;
 
