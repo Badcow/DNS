@@ -10,13 +10,12 @@
 
 namespace Badcow\DNS\Rdata;
 
-/**
- * @deprecated
- */
-class NiceSoaRdata extends SoaRdata
+trait FormattableTrait
 {
-    public function output()
+    private $padding;
+
+    public function setPadding($padding)
     {
-        return $this->outputFormatted();
+        $this->padding = (int) $padding;
     }
 }

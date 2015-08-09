@@ -20,15 +20,19 @@ namespace Badcow\DNS\Rdata;
  *
  * @package Badcow\DNS\Rdata
  */
-class LocRdata implements RdataInterface
+class LocRdata implements RdataInterface, FormattableInterface
 {
-    use RdataTrait;
+    use RdataTrait, FormattableTrait;
 
     const TYPE = 'LOC';
 
     const LATITUDE = 'LATITUDE';
 
     const LONGITUDE = 'LONGITUDE';
+
+    const FORMAT_DECIMAL = 'DECIMAL';
+
+    const FORMAT_DMS = 'DMS';
 
     /**
      * @var double
@@ -69,10 +73,15 @@ class LocRdata implements RdataInterface
     }
 
     /**
-     * @return float
+     * @param string $format
+     * @return float|string
      */
-    public function getLatitude()
+    public function getLatitude($format = self::FORMAT_DECIMAL)
     {
+        if ($format === self::FORMAT_DMS) {
+            return $this->toDms($this->latitude, self::LATITUDE);
+        }
+
         return $this->latitude;
     }
 
@@ -85,10 +94,15 @@ class LocRdata implements RdataInterface
     }
 
     /**
-     * @return float
+     * @param string $format
+     * @return float|string
      */
-    public function getLongitude()
+    public function getLongitude($format = self::FORMAT_DECIMAL)
     {
+        if ($format === self::FORMAT_DMS) {
+            return $this->toDms($this->longitude, self::LONGITUDE);
+        }
+
         return $this->longitude;
     }
 
@@ -183,13 +197,55 @@ class LocRdata implements RdataInterface
     {
         return sprintf(
                 '%s %s %.2fm %.2fm %.2fm %.2fm',
-                $this->toDms($this->getLatitude(), self::LATITUDE),
-                $this->toDms($this->getLongitude(), self::LONGITUDE),
+                $this->getLatitude(self::FORMAT_DMS),
+                $this->getLongitude(self::FORMAT_DMS),
                 $this->altitude,
                 $this->size,
                 $this->horizontalPrecision,
                 $this->verticalPrecision
         );
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function outputFormatted()
+    {
+        $pad = $this->longestVarLength();
+        $leftPadding = str_repeat(' ', $this->padding);
+
+        return '(' . PHP_EOL .
+            $leftPadding . str_pad($this->getLatitude(self::FORMAT_DMS), $pad)  . ' ; LATITUDE' . PHP_EOL .
+            $leftPadding . str_pad($this->getLongitude(self::FORMAT_DMS), $pad) . ' ; LONGITUDE' . PHP_EOL .
+            $leftPadding . str_pad(sprintf('%.2fm', $this->altitude), $pad)     . ' ; ALTITUDE' . PHP_EOL .
+            $leftPadding . str_pad(sprintf('%.2fm', $this->size), $pad)         . ' ; SIZE' . PHP_EOL .
+            $leftPadding . str_pad(sprintf('%.2fm', $this->horizontalPrecision), $pad) . ' ; HORIZONTAL PRECISION' . PHP_EOL .
+            $leftPadding . str_pad(sprintf('%.2fm', $this->verticalPrecision), $pad)   . ' ; VERTICAL PRECISION' . PHP_EOL .
+            $leftPadding . ')';
+    }
+
+    /**
+     * Determines the longest variable
+     *
+     * @return int
+     */
+    private function longestVarLength()
+    {
+        $l = 0;
+
+        foreach (array(
+                     $this->getLatitude(self::FORMAT_DMS),
+                     $this->getLongitude(self::FORMAT_DMS),
+                     sprintf('%.2fm', $this->altitude),
+                     sprintf('%.2fm', $this->size),
+                     sprintf('%.2fm', $this->horizontalPrecision),
+                     sprintf('%.2fm', $this->verticalPrecision)
+                ) as $var) {
+            $l = ($l < strlen($var)) ? strlen($var) : $l;
+        }
+
+        return $l;
     }
 
     /**

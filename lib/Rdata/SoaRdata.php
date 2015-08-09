@@ -15,9 +15,9 @@ use Badcow\DNS\Validator;
 /**
  * {@link http://www.ietf.org/rfc/rfc1035.text)
  */
-class SoaRdata implements RdataInterface
+class SoaRdata implements RdataInterface, FormattableInterface
 {
-    use RdataTrait;
+    use RdataTrait, FormattableTrait;
 
     const TYPE = 'SOA';
 
@@ -215,5 +215,48 @@ class SoaRdata implements RdataInterface
             $this->expire,
             $this->minimum
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function outputFormatted()
+    {
+        $pad = $this->longestVarLength();
+        $leftPadding = str_repeat(' ', $this->padding);
+
+        return '(' . PHP_EOL .
+            $leftPadding . str_pad($this->getMname(), $pad)   . ' ; MNAME' . PHP_EOL .
+            $leftPadding . str_pad($this->getRname(), $pad)   . ' ; RNAME' . PHP_EOL .
+            $leftPadding . str_pad($this->getSerial(), $pad)  . ' ; SERIAL' . PHP_EOL .
+            $leftPadding . str_pad($this->getRefresh(), $pad) . ' ; REFRESH' . PHP_EOL .
+            $leftPadding . str_pad($this->getRetry(), $pad)   . ' ; RETRY' . PHP_EOL .
+            $leftPadding . str_pad($this->getExpire(), $pad)  . ' ; EXPIRE' . PHP_EOL .
+            $leftPadding . str_pad($this->getMinimum(), $pad) . ' ; MINIMUM' . PHP_EOL .
+            $leftPadding . ')';
+    }
+
+    /**
+     * Determines the longest variable
+     *
+     * @return int
+     */
+    private function longestVarLength()
+    {
+        $l = 0;
+
+        foreach (array(
+                    $this->getMname(),
+                    $this->getRname(),
+                    $this->getSerial(),
+                    $this->getRefresh(),
+                    $this->getRetry(),
+                    $this->getExpire(),
+                    $this->getMinimum(),
+                ) as $var) {
+            $l = ($l < strlen($var)) ? strlen($var) : $l;
+        }
+
+        return $l;
     }
 }

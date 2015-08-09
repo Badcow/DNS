@@ -24,7 +24,7 @@ $soa->setName('@');
 $soa->setRdata(Factory::Soa(
     'example.com.',
     'post.example.com.',
-    date('Ymd01'),
+    '2014110501',
     3600,
     14400,
     604800,
@@ -61,6 +61,19 @@ $mx3 = new ResourceRecord;
 $mx3->setName('@');
 $mx3->setRdata(Factory::Mx(30, 'mail-gw3.example.net.'));
 
+$loc = new ResourceRecord;
+$loc->setName('canberra');
+$loc->setRdata(Factory::Loc(
+    -35.3075,   //Lat
+    149.1244,   //Lon
+    500,        //Alt
+    20.12,      //Size
+    200.3,      //HP
+    300.1       //VP
+));
+$loc->setComment('This is Canberra');
+
+$zone->addResourceRecord($loc);
 $zone->addResourceRecord($mx2);
 $zone->addResourceRecord($soa);
 $zone->addResourceRecord($ns1);
@@ -82,7 +95,7 @@ $TTL 3600
 @            IN SOA  (
                      example.com.      ; MNAME
                      post.example.com. ; RNAME
-                     2015072601        ; SERIAL
+                     2014110501        ; SERIAL
                      3600              ; REFRESH
                      14400             ; RETRY
                      604800            ; EXPIRE
@@ -103,7 +116,48 @@ ipv6.domain  IN AAAA ::1; This is an IPv6 domain.
 @            IN MX   10 mail-gw1.example.net.
 @            IN MX   20 mail-gw2.example.net.
 @            IN MX   30 mail-gw3.example.net.
+
+; LOC RECORDS
+canberra     IN LOC  (
+                     35 18 27.000 S ; LATITUDE
+                     149 7 27.840 E ; LONGITUDE
+                     500.00m        ; ALTITUDE
+                     20.12m         ; SIZE
+                     200.30m        ; HORIZONTAL PRECISION
+                     300.10m        ; VERTICAL PRECISION
+                     ); This is Canberra
 ```
+
+The above is an example of the `AlignedBuilder` which creates records that are much more aesthetically pleasing. You can also use the flat ZoneBuilder, whose output looks like below:
+
+```php
+...
+$zoneBuilder = new ZoneBuilder();
+
+echo $zoneBuilder->build($zone);
+```
+```txt
+$ORIGIN example.com.
+$TTL 3600
+canberra  IN LOC 35 18 27.000 S 149 7 27.840 E 500.00m 20.12m 200.30m 300.10m; This is Canberra
+@  IN MX 20 mail-gw2.example.net.
+@  IN SOA (
+example.com.      ; MNAME
+post.example.com. ; RNAME
+2014110501        ; SERIAL
+3600              ; REFRESH
+14400             ; RETRY
+604800            ; EXPIRE
+3600              ; MINIMUM
+)
+@  IN NS ns1.nameserver.com.
+@  IN MX 30 mail-gw3.example.net.
+sub.domain  IN A 192.168.1.42; This is a local ip.
+ipv6.domain  IN AAAA ::1; This is an IPv6 domain.
+@  IN NS ns2.nameserver.com.
+@  IN MX 10 mail-gw1.example.net.
+```
+
 ## Running the tests
 
 Simply use phpunit to run the tests. You can run additional tests if you have BIND installed. Add the environment variable to `phpunit.xml`:

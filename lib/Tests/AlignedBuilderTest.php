@@ -52,7 +52,14 @@ bar.example.com.       IN DNAME foo.example.com.
 @                      IN MX    30 mail-gw3.example.net.
 
 ; LOC RECORDS
-canberra               IN LOC   35 18 27.000 S 149 7 27.840 E 500.00m 20.12m 200.30m 300.10m; This is Canberra
+canberra               IN LOC   (
+                                35 18 27.000 S ; LATITUDE
+                                149 7 27.840 E ; LONGITUDE
+                                500.00m        ; ALTITUDE
+                                20.12m         ; SIZE
+                                200.30m        ; HORIZONTAL PRECISION
+                                300.10m        ; VERTICAL PRECISION
+                                ); This is Canberra
 
 ; HINFO RECORDS
 @                      IN HINFO "2.7GHz" "Ubuntu 12.04"

@@ -14,16 +14,21 @@ use Badcow\DNS\Rdata\AaaaRdata;
 use Badcow\DNS\Rdata\ARdata;
 use Badcow\DNS\Rdata\CnameRdata;
 use Badcow\DNS\Rdata\DnameRdata;
+use Badcow\DNS\Rdata\FormattableInterface;
 use Badcow\DNS\Rdata\HinfoRdata;
 use Badcow\DNS\Rdata\LocRdata;
 use Badcow\DNS\Rdata\MxRdata;
-use Badcow\DNS\Rdata\NiceSoaRdata;
 use Badcow\DNS\Rdata\NsRdata;
 use Badcow\DNS\Rdata\SoaRdata;
 use Badcow\DNS\Rdata\TxtRdata;
 
 class AlignedBuilder implements ZoneBuilderInterface
 {
+    /**
+     * The order in which Resource Records should appear in a zone
+     *
+     * @var array
+     */
     private static $order = array(
         SoaRdata::TYPE,
         NsRdata::TYPE,
@@ -42,52 +47,55 @@ class AlignedBuilder implements ZoneBuilderInterface
      */
     public function build(ZoneInterface $zone)
     {
-        $master = sprintf(
-            "\$ORIGIN %s\n\$TTL %s\n",
-            $zone->getName(),
-            $zone->getDefaultTtl()
-        );
+        $master = '$ORIGIN ' . $zone->getName() . PHP_EOL .
+                  '$TTL ' . $zone->getDefaultTtl() . PHP_EOL;
 
         $rrs = $zone->getResourceRecords();
-        usort($rrs, 'self::compareResourceRecords');
         $current = SoaRdata::TYPE;
-
         $namePadding = $ttlPadding = $typePadding = 0;
+        usort($rrs, 'self::compareResourceRecords');
 
         foreach ($rrs as $rr) {
             /* @var $rr ResourceRecord */
             $namePadding = (strlen($rr->getName()) > $namePadding) ? strlen($rr->getName()) : $namePadding;
-            $ttlPadding = (strlen($rr->getTtl()) > $ttlPadding) ? strlen($rr->getTtl()) : $ttlPadding;
+            $ttlPadding  = (strlen($rr->getTtl()) > $ttlPadding)   ? strlen($rr->getTtl())  : $ttlPadding;
             $typePadding = (strlen($rr->getType()) > $typePadding) ? strlen($rr->getType()) : $typePadding;
         }
 
         foreach ($rrs as $rr) {
             /* @var $rr ResourceRecord */
             if ($rr->getType() !== $current) {
-                $master .= "\n; " . $rr->getType() . " RECORDS\n";
+                $master .= PHP_EOL . '; ' . $rr->getType() . ' RECORDS' . PHP_EOL;
                 $current = $rr->getType();
             }
 
-            if ($rr->getRdata() instanceof SoaRdata) {
-                $rr->setRdata($this->niceSoa($rr->getRdata()));
-                $rr->getRdata()->setPadding($namePadding + $ttlPadding + $typePadding + 6);
+            $rdata = $rr->getRdata();
+
+            if ($rdata instanceof FormattableInterface) {
+                $rdata->setPadding($namePadding + $ttlPadding + $typePadding + 6);
             }
 
-            $master .= sprintf("%s %s %s %s %s",
+            $master .= sprintf('%s %s %s %s %s',
                 str_pad($rr->getName(), $namePadding, ' ', STR_PAD_RIGHT),
-                str_pad($rr->getTtl(), $ttlPadding, ' ', STR_PAD_RIGHT),
+                str_pad($rr->getTtl(), $ttlPadding,   ' ', STR_PAD_RIGHT),
                 $rr->getClass(),
                 str_pad($rr->getType(), $typePadding, ' ', STR_PAD_RIGHT),
-                $rr->getRdata()->output()
+                ($rdata instanceof FormattableInterface) ? $rdata->outputFormatted() : $rdata->output()
             );
 
-            $master .= (null == $rr->getComment()) ? "\n" : sprintf("; %s\n", $rr->getComment());
+            if (null != $rr->getComment()) {
+                $master .= '; ' . $rr->getComment();
+            }
+
+            $master .= PHP_EOL;
         }
 
         return $master;
     }
 
     /**
+     * Compares two ResourceRecords to determine which is the higher order. Used with the usort() function.
+     *
      * @param ResourceRecord $a
      * @param ResourceRecord $b
      * @return int
@@ -110,25 +118,5 @@ class AlignedBuilder implements ZoneBuilderInterface
         }
 
         return -1;
-    }
-
-    /**
-     * Converts an SoaRdata to human friendly NiceSoaRdata
-     *
-     * @param SoaRdata $soa
-     * @return NiceSoaRdata
-     */
-    private function niceSoa(SoaRdata $soa)
-    {
-        $niceSoa = new NiceSoaRdata();
-        $niceSoa->setMname($soa->getMname());
-        $niceSoa->setRname($soa->getRname());
-        $niceSoa->setSerial($soa->getSerial());
-        $niceSoa->setRefresh($soa->getRefresh());
-        $niceSoa->setRetry($soa->getRetry());
-        $niceSoa->setExpire($soa->getExpire());
-        $niceSoa->setMinimum($soa->getMinimum());
-
-        return $niceSoa;
     }
 }
