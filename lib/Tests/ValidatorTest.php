@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -11,10 +12,10 @@
 namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\Classes;
-use Badcow\DNS\Validator,
-    Badcow\DNS\Rdata\Factory,
-    Badcow\DNS\ResourceRecord,
-    Badcow\DNS\Zone;
+use Badcow\DNS\Validator;
+use Badcow\DNS\Rdata\Factory;
+use Badcow\DNS\ResourceRecord;
+use Badcow\DNS\Zone;
 
 class ValidatorTest extends TestCase
 {
@@ -158,7 +159,7 @@ class ValidatorTest extends TestCase
     public function testValidateNumberOfSoa()
     {
         $zone = $this->buildTestZone();
-        $soa = new ResourceRecord;
+        $soa = new ResourceRecord();
         $soa->setClass(Classes::INTERNET);
         $soa->setName('@');
         $soa->setRdata(Factory::Soa(
@@ -182,7 +183,7 @@ class ValidatorTest extends TestCase
     public function testValidateNumberOfNs()
     {
         $zone = new Zone('example.com.', 3600);
-        $soa = new ResourceRecord;
+        $soa = new ResourceRecord();
         $soa->setClass(Classes::INTERNET);
         $soa->setName('@');
         $soa->setRdata(Factory::Soa(
@@ -206,7 +207,7 @@ class ValidatorTest extends TestCase
     public function testValidateNumberOfClasses()
     {
         $zone = $this->buildTestZone();
-        $a = new ResourceRecord;
+        $a = new ResourceRecord();
         $a->setName('test');
         $a->setClass(Classes::CHAOS);
         $a->setRdata(Factory::A('192.168.0.1'));

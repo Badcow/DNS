@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -13,9 +14,10 @@ namespace Badcow\DNS;
 interface ZoneBuilderInterface
 {
     /**
-     * Renders a zone
+     * Renders a zone.
      *
-     * @param  ZoneInterface $zone
+     * @param ZoneInterface $zone
+     *
      * @return string
      */
     public function build(ZoneInterface $zone);

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -20,15 +21,16 @@ class Classes
      * @var array
      */
     public static $classes = array(
-        self::CHAOS    => 'CHAOS',
-        self::HESIOD   => 'Hesiod',
+        self::CHAOS => 'CHAOS',
+        self::HESIOD => 'Hesiod',
         self::INTERNET => 'Internet',
     );
 
     /**
-     * Determine if a class is valid
+     * Determine if a class is valid.
      *
-     * @param  string $class
+     * @param string $class
+     *
      * @return bool
      */
     public static function isValid($class)

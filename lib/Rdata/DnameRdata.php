@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -11,15 +12,14 @@
 namespace Badcow\DNS\Rdata;
 
 /**
- * Class DnameRdata
+ * Class DnameRdata.
  *
  * The DNAME record provides redirection for a subtree of the domain
  * name tree in the DNS.  That is, all names that end with a particular
  * suffix are redirected to another part of the DNS.
  * Based on RFC6672
- * @link http://tools.ietf.org/html/rfc6672
  *
- * @package Badcow\DNS\Rdata
+ * @link http://tools.ietf.org/html/rfc6672
  */
 class DnameRdata extends CnameRdata
 {

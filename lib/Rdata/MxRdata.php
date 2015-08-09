@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -29,7 +30,8 @@ class MxRdata implements RdataInterface
     private $exchange;
 
     /**
-     * @param  string         $exchange
+     * @param string $exchange
+     *
      * @throws RdataException
      */
     public function setExchange($exchange)
@@ -70,6 +72,6 @@ class MxRdata implements RdataInterface
      */
     public function output()
     {
-        return $this->preference . ' ' . $this->exchange;
+        return $this->preference.' '.$this->exchange;
     }
 }

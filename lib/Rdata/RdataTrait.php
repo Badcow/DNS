@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -17,7 +18,7 @@ trait RdataTrait
      */
     public function getType()
     {
-        /** @const TYPE */
+        /* @const TYPE */
         return static::TYPE;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -21,7 +22,7 @@ class ARdataTest extends \PHPUnit_Framework_TestCase
 
     public function __construct()
     {
-        $this->aRdata = new ARdata;
+        $this->aRdata = new ARdata();
     }
 
     public function testGetType()

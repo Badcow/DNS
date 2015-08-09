@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -12,5 +13,4 @@ namespace Badcow\DNS\Rdata;
 
 class RdataException extends \Exception
 {
-
 }

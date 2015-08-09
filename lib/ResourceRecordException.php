@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -11,8 +12,8 @@
 namespace Badcow\DNS;
 
 /**
- * Class ResourceRecordException
- *
- * @package Badcow\DNS
+ * Class ResourceRecordException.
  */
-class ResourceRecordException extends \ErrorException {}
+class ResourceRecordException extends \ErrorException
+{
+}

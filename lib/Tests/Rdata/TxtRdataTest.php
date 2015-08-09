@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -17,7 +18,7 @@ class TxtRdataTest extends \PHPUnit_Framework_TestCase
     public function testSetText()
     {
         $text = 'This is some text. It\'s a nice piece of text.';
-        $txt = new TxtRdata;
+        $txt = new TxtRdata();
         $txt->setText($text);
 
         $this->assertEquals($text, $txt->getText());
@@ -27,7 +28,7 @@ class TxtRdataTest extends \PHPUnit_Framework_TestCase
     {
         $text = 'This is some text. It\'s a nice piece of text.';
         $expected = '"This is some text. It\\\'s a nice piece of text."';
-        $txt = new TxtRdata;
+        $txt = new TxtRdata();
         $txt->setText($text);
 
         $this->assertEquals($expected, $txt->output());

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\Zone;
@@ -19,7 +21,7 @@ class ZoneTest extends TestCase
      */
     public function testSetZoneName()
     {
-        $zone = new Zone;
+        $zone = new Zone();
         $zone->setName('example.com.');
         $this->assertEquals('example.com.', $zone->getName());
         $zone->setName('example.com');
@@ -28,7 +30,7 @@ class ZoneTest extends TestCase
     public function testGetTtl()
     {
         $ttl = 124567;
-        $zone = new Zone;
+        $zone = new Zone();
         $zone->setDefaultTtl($ttl);
         $this->assertEquals($ttl, $zone->getDefaultTtl());
     }

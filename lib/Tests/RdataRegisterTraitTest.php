@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -59,4 +60,4 @@ class RdataRegisterTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\\Badcow\\DNS\\Tests\\Rdata\\DummyRdata', $dummy);
         $this->getNewRdataByType('DOESNOTEXIST');
     }
-} 
+}

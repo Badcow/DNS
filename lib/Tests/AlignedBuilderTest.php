@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -71,7 +72,7 @@ DNS;
 
     public function testCompareResourceRecords()
     {
-        $soa = new ResourceRecord;
+        $soa = new ResourceRecord();
         $soa->setClass('IN');
         $soa->setName('@');
         $soa->setRdata(Factory::Soa(
@@ -84,45 +85,45 @@ DNS;
             3600
         ));
 
-        $ns1 = new ResourceRecord;
+        $ns1 = new ResourceRecord();
         $ns1->setClass('IN');
         $ns1->setName('@');
         $ns1->setTtl(14400);
         $ns1->setRdata(Factory::Ns('ns1.example.net.au.'));
 
-        $ns2 = new ResourceRecord;
+        $ns2 = new ResourceRecord();
         $ns2->setClass('IN');
         $ns2->setName('@');
         $ns2->setTtl(14400);
         $ns2->setRdata(Factory::Ns('ns2.example.net.au.'));
 
-        $a = new ResourceRecord;
+        $a = new ResourceRecord();
         $a->setName('subdomain.au');
         $a->setRdata(Factory::A('192.168.1.2'));
         $a->setComment('This is a local ip.');
 
-        $cname = new ResourceRecord;
+        $cname = new ResourceRecord();
         $cname->setName('alias');
         $cname->setRdata(Factory::Cname('subdomain.au.example.com.'));
 
-        $aaaa = new ResourceRecord;
+        $aaaa = new ResourceRecord();
         $aaaa->setName('ipv6domain');
         $aaaa->setRdata(Factory::Aaaa('::1'));
         $aaaa->setComment('This is an IPv6 domain.');
 
-        $mx1 = new ResourceRecord;
+        $mx1 = new ResourceRecord();
         $mx1->setName('@');
         $mx1->setRdata(Factory::Mx(10, 'mailgw01.example.net.'));
 
-        $mx2 = new ResourceRecord;
+        $mx2 = new ResourceRecord();
         $mx2->setName('@');
         $mx2->setRdata(Factory::Mx(20, 'mailgw02.example.net.'));
 
-        $txt = new ResourceRecord;
+        $txt = new ResourceRecord();
         $txt->setName('example.net.');
         $txt->setRdata(Factory::txt('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
 
-        $dummy = new ResourceRecord;
+        $dummy = new ResourceRecord();
         $dummy->setName('example.com.');
         $dummy->setRdata(new DummyRdata());
 
@@ -151,6 +152,6 @@ DNS;
 
     public function testZoneFile()
     {
-        $this->bindTest($this->buildTestZone(), new AlignedBuilder);
+        $this->bindTest($this->buildTestZone(), new AlignedBuilder());
     }
 }

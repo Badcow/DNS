@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -37,20 +38,21 @@ trait FormattableTrait
     abstract public function longestVarLength();
 
     /**
-     * Returns a padded line with comment
+     * Returns a padded line with comment.
      *
      * @param string $text
      * @param string $comment
+     *
      * @return string
      */
     private function makeLine($text, $comment = null)
     {
         $pad = $this->longestVarLength();
-        $output = str_repeat(' ', $this->padding) .
+        $output = str_repeat(' ', $this->padding).
                   str_pad($text, $pad);
 
         if (null !== $comment) {
-            $output .= ' ' . ResourceRecord::COMMENT_DELIMINATOR . $comment;
+            $output .= ' '.ResourceRecord::COMMENT_DELIMINATOR.$comment;
         }
         $output .= PHP_EOL;
 

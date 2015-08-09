@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\MxRdata;
@@ -17,7 +19,7 @@ class MxRdataTest extends \PHPUnit_Framework_TestCase
     {
         $target = 'foo.example.com.';
         $preference = 10;
-        $mx = new MxRdata;
+        $mx = new MxRdata();
         $mx->setExchange($target);
         $mx->setPreference($preference);
 
@@ -31,14 +33,14 @@ class MxRdataTest extends \PHPUnit_Framework_TestCase
     public function testSetTargetException()
     {
         $target = 'foo.example.com';
-        $mx = new MxRdata;
+        $mx = new MxRdata();
         $mx->setExchange($target);
     }
 
     public function testOutput()
     {
         $target = 'foo.example.com.';
-        $mx = new MxRdata;
+        $mx = new MxRdata();
         $mx->SetExchange($target);
         $mx->setPreference(42);
 

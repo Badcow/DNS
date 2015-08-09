@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -25,6 +26,7 @@ class CnameRdata implements RdataInterface
 
     /**
      * @param $target
+     *
      * @throws RdataException
      */
     public function setTarget($target)

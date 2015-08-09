@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -16,8 +17,9 @@ use Badcow\DNS\Rdata\SoaRdata;
 class Validator
 {
     /**
-     * @param  string $string
-     * @param  bool   $trailingDot Require trailing dot
+     * @param string $string
+     * @param bool   $trailingDot Require trailing dot
+     *
      * @return bool
      */
     public static function validateFqdn($string, $trailingDot = true)
@@ -51,10 +53,12 @@ class Validator
     }
 
     /**
-     * Validates an IPv4 Address
+     * Validates an IPv4 Address.
      *
      * @static
-     * @param  string $ipAddress
+     *
+     * @param string $ipAddress
+     *
      * @return bool
      */
     public static function validateIpv4Address($ipAddress)
@@ -65,10 +69,12 @@ class Validator
     }
 
     /**
-     * Validates an IPv6 Address
+     * Validates an IPv6 Address.
      *
      * @static
-     * @param  string $ipAddress
+     *
+     * @param string $ipAddress
+     *
      * @return bool
      */
     public static function validateIpv6Address($ipAddress)
@@ -79,10 +85,12 @@ class Validator
     }
 
     /**
-     * Validates an IPv4 or IPv6 address
+     * Validates an IPv4 or IPv6 address.
      *
      * @static
+     *
      * @param $ipAddress
+     *
      * @return bool
      */
     public static function validateIpAddress($ipAddress)
@@ -91,11 +99,12 @@ class Validator
     }
 
     /**
-     * Validates a zone file
+     * Validates a zone file.
      *
-     * @param  string $zonename
-     * @param  string $directory
-     * @param  string $named_checkzonePath
+     * @param string $zonename
+     * @param string $directory
+     * @param string $named_checkzonePath
+     *
      * @return bool
      */
     public static function validateZoneFile($zonename, $directory, $named_checkzonePath = 'named-checkzone')
@@ -112,8 +121,10 @@ class Validator
      *   1) 5.2.1 All RRs in the file should be of the same class.
      *   2) 5.2.2 Exactly one SOA RR should be present at the top of the zone.
      *
-     * @param  ZoneInterface $zone
+     * @param ZoneInterface $zone
+     *
      * @throws ZoneException
+     *
      * @return bool
      */
     public static function validate(ZoneInterface $zone)

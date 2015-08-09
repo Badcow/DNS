@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -18,24 +19,25 @@ trait RdataRegisterTrait
         Rdata\CnameRdata::TYPE => '\\Badcow\\DNS\\Rdata\\CnameRdata',
         Rdata\DnameRdata::TYPE => '\\Badcow\\DNS\\Rdata\\DnameRdata',
         Rdata\HinfoRdata::TYPE => '\\Badcow\\DNS\\Rdata\\HinfoRdata',
-        Rdata\AaaaRdata::TYPE  => '\\Badcow\\DNS\\Rdata\\AaaaRdata',
-        Rdata\SoaRdata::TYPE   => '\\Badcow\\DNS\\Rdata\\SoaRdata',
-        Rdata\LocRdata::TYPE   => '\\Badcow\\DNS\\Rdata\\LocRdata',
-        Rdata\TxtRdata::TYPE   => '\\Badcow\\DNS\\Rdata\\TxtRdata',
-        Rdata\NsRdata::TYPE    => '\\Badcow\\DNS\\Rdata\\NsRdata',
-        Rdata\MxRdata::TYPE    => '\\Badcow\\DNS\\Rdata\\MxRdata',
-        Rdata\ARdata::TYPE     => '\\Badcow\\DNS\\Rdata\\ARdata',
+        Rdata\AaaaRdata::TYPE => '\\Badcow\\DNS\\Rdata\\AaaaRdata',
+        Rdata\SoaRdata::TYPE => '\\Badcow\\DNS\\Rdata\\SoaRdata',
+        Rdata\LocRdata::TYPE => '\\Badcow\\DNS\\Rdata\\LocRdata',
+        Rdata\TxtRdata::TYPE => '\\Badcow\\DNS\\Rdata\\TxtRdata',
+        Rdata\NsRdata::TYPE => '\\Badcow\\DNS\\Rdata\\NsRdata',
+        Rdata\MxRdata::TYPE => '\\Badcow\\DNS\\Rdata\\MxRdata',
+        Rdata\ARdata::TYPE => '\\Badcow\\DNS\\Rdata\\ARdata',
     );
 
     /**
      * @param string $type
      * @param string $fqcn
+     *
      * @throws \InvalidArgumentException
      */
     public function registerRdataType($type, $fqcn)
     {
         if (!is_subclass_of($fqcn, '\\Badcow\\DNS\\Rdata\\RdataInterface')) {
-           throw new \InvalidArgumentException(sprintf(
+            throw new \InvalidArgumentException(sprintf(
                'The class "%s" is not an instance of Badcow\DNS\Rdata\RdataInterface',
                $fqcn
            ));
@@ -45,7 +47,7 @@ trait RdataRegisterTrait
     }
 
     /**
-     * Removes an Rdata type
+     * Removes an Rdata type.
      *
      * @param $type
      */
@@ -60,6 +62,7 @@ trait RdataRegisterTrait
 
     /**
      * @param $type
+     *
      * @return bool
      */
     public function hasRdataType($type)
@@ -76,10 +79,12 @@ trait RdataRegisterTrait
     }
 
     /**
-     * Returns an Rdata instance based on the type
+     * Returns an Rdata instance based on the type.
      *
      * @param $type
+     *
      * @return RdataInterface
+     *
      * @throws \DomainException
      */
     protected function getNewRdataByType($type)
@@ -91,6 +96,6 @@ trait RdataRegisterTrait
             ));
         }
 
-        return new $this->rdataTypes[$type];
+        return new $this->rdataTypes[$type]();
     }
 }

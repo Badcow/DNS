@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -17,8 +18,8 @@ class ZoneBuilder implements ZoneBuilderInterface
      */
     public function build(ZoneInterface $zone)
     {
-        $master = '$ORIGIN ' . $zone->getName() . PHP_EOL .
-                  '$TTL ' . $zone->getDefaultTtl() . PHP_EOL;
+        $master = '$ORIGIN '.$zone->getName().PHP_EOL.
+                  '$TTL '.$zone->getDefaultTtl().PHP_EOL;
 
         foreach ($zone->getResourceRecords() as $rr) {
             /* @var $rr ResourceRecord */
@@ -31,7 +32,7 @@ class ZoneBuilder implements ZoneBuilderInterface
             );
 
             if (null != $rr->getComment()) {
-                $master .= ResourceRecord::COMMENT_DELIMINATOR . $rr->getComment();
+                $master .= ResourceRecord::COMMENT_DELIMINATOR.$rr->getComment();
             }
 
             $master .= PHP_EOL;

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -48,7 +49,7 @@ class Zone implements ZoneInterface
     public function setResourceRecords(array $resourceRecord)
     {
         foreach ($resourceRecord as $rr) {
-            /** @var ResourceRecordInterface $rr */
+            /* @var ResourceRecordInterface $rr */
             $this->addResourceRecord($rr);
         }
     }
@@ -86,7 +87,8 @@ class Zone implements ZoneInterface
     }
 
     /**
-     * @param  string        $name A fully qualified zone name
+     * @param string $name A fully qualified zone name
+     *
      * @throws ZoneException
      */
     public function setName($name)

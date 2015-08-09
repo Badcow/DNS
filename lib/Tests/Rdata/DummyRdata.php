@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -26,4 +27,4 @@ class DummyRdata implements RdataInterface
     {
         return 'co.badcow.dns.test.dummy';
     }
-} 
+}

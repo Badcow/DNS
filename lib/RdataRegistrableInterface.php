@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -18,6 +19,7 @@ interface RdataRegistrableInterface
      *
      * @param string $type The type of rdata (should be uppercase eg: "DNAME", not "dname")
      * @param string $fqcn The fully qualified class name of the Rdata type
+     *
      * @throws \InvalidArgumentException
      */
     public function registerRdataType($type, $fqcn);
@@ -26,6 +28,7 @@ interface RdataRegistrableInterface
      * Returns true if the Rdata type has been registered.
      *
      * @param string $type
+     *
      * @return bool
      */
     public function hasRdataType($type);

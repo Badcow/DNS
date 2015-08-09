@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -46,7 +47,8 @@ class ResourceRecord implements ResourceRecordInterface
     private $comment;
 
     /**
-     * @param  string                  $class
+     * @param string $class
+     *
      * @throws ResourceRecordException
      */
     public function setClass($class)
@@ -60,6 +62,7 @@ class ResourceRecord implements ResourceRecordInterface
 
     /**
      * @param $name
+     *
      * @throws DNSException
      */
     public function setName($name)
@@ -128,7 +131,7 @@ class ResourceRecord implements ResourceRecordInterface
     }
 
     /**
-     * Set a comment for the record
+     * Set a comment for the record.
      *
      * @param string $comment
      */
@@ -139,7 +142,7 @@ class ResourceRecord implements ResourceRecordInterface
     }
 
     /**
-     * Get the record's comment
+     * Get the record's comment.
      *
      * @return string
      */

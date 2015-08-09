@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\NsRdata;
@@ -16,7 +18,7 @@ class NsRdataTest extends \PHPUnit_Framework_TestCase
     public function testSetNsdname()
     {
         $nsdname = 'foo.example.com.';
-        $dname = new NsRdata;
+        $dname = new NsRdata();
         $dname->setTarget($nsdname);
 
         $this->assertEquals($nsdname, $dname->getTarget());
@@ -28,14 +30,14 @@ class NsRdataTest extends \PHPUnit_Framework_TestCase
     public function testSetNsdnameException()
     {
         $Nsdname = 'foo.example.com';
-        $dname = new NsRdata;
+        $dname = new NsRdata();
         $dname->setTarget($Nsdname);
     }
 
     public function testOutput()
     {
         $Nsdname = 'foo.example.com.';
-        $dname = new NsRdata;
+        $dname = new NsRdata();
         $dname->setTarget($Nsdname);
 
         $this->assertEquals($Nsdname, $dname->output());

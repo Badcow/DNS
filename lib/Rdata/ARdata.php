@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -24,7 +25,8 @@ class ARdata implements RdataInterface
     protected $address;
 
     /**
-     * @param  string         $address
+     * @param string $address
+     *
      * @throws RdataException
      */
     public function setAddress($address)

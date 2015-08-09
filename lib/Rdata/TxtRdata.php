@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -39,6 +40,6 @@ class TxtRdata implements RdataInterface
      */
     public function output()
     {
-        return '"' . $this->text . '"';
+        return '"'.$this->text.'"';
     }
 }

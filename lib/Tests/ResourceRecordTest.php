@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\Classes;
@@ -20,7 +22,7 @@ class ResourceRecordTest extends TestCase
      */
     public function testSetClass()
     {
-        $rr = new ResourceRecord;
+        $rr = new ResourceRecord();
         $rr->setClass(Classes::INTERNET);
         $this->assertEquals(Classes::INTERNET, $rr->getClass());
         $rr->setClass('XX');
@@ -32,13 +34,13 @@ class ResourceRecordTest extends TestCase
      */
     public function testSetName()
     {
-        $rr = new ResourceRecord;
+        $rr = new ResourceRecord();
         $rr->setName('example?record.com.');
     }
 
     public function testSettersAndGetters()
     {
-        $rr = new ResourceRecord;
+        $rr = new ResourceRecord();
         $name = 'test';
         $ttl = 3500;
         $comment = 'Hello';

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -13,14 +14,12 @@ namespace Badcow\DNS\Rdata;
 use Badcow\DNS\ResourceRecord;
 
 /**
- * Class LocRdata
+ * Class LocRdata.
  *
  * Mechanism to allow the DNS to carry location
  * information about hosts, networks, and subnets.
  *
  * @link http://tools.ietf.org/html/rfc1876
- *
- * @package Badcow\DNS\Rdata
  */
 class LocRdata implements RdataInterface, FormattableInterface
 {
@@ -37,37 +36,37 @@ class LocRdata implements RdataInterface, FormattableInterface
     const FORMAT_DMS = 'DMS';
 
     /**
-     * @var double
+     * @var float
      */
     private $latitude;
 
     /**
-     * @var double
+     * @var float
      */
     private $longitude;
 
     /**
-     * @var double
+     * @var float
      */
     private $altitude = 0.0;
 
     /**
-     * @var double
+     * @var float
      */
     private $size = 1.0;
 
     /**
-     * @var double
+     * @var float
      */
     private $horizontalPrecision = 10000.0;
 
     /**
-     * @var double
+     * @var float
      */
     private $verticalPrecision = 10.0;
 
     /**
-     * @param double $latitude
+     * @param float $latitude
      */
     public function setLatitude($latitude)
     {
@@ -76,6 +75,7 @@ class LocRdata implements RdataInterface, FormattableInterface
 
     /**
      * @param string $format
+     *
      * @return float|string
      */
     public function getLatitude($format = self::FORMAT_DECIMAL)
@@ -88,7 +88,7 @@ class LocRdata implements RdataInterface, FormattableInterface
     }
 
     /**
-     * @param double $longitude
+     * @param float $longitude
      */
     public function setLongitude($longitude)
     {
@@ -97,6 +97,7 @@ class LocRdata implements RdataInterface, FormattableInterface
 
     /**
      * @param string $format
+     *
      * @return float|string
      */
     public function getLongitude($format = self::FORMAT_DECIMAL)
@@ -109,7 +110,8 @@ class LocRdata implements RdataInterface, FormattableInterface
     }
 
     /**
-     * @param  double               $altitude
+     * @param float $altitude
+     *
      * @throws \OutOfRangeException
      */
     public function setAltitude($altitude)
@@ -130,7 +132,8 @@ class LocRdata implements RdataInterface, FormattableInterface
     }
 
     /**
-     * @param  double               $horizontalPrecision
+     * @param float $horizontalPrecision
+     *
      * @throws \OutOfRangeException
      */
     public function setHorizontalPrecision($horizontalPrecision)
@@ -143,7 +146,7 @@ class LocRdata implements RdataInterface, FormattableInterface
     }
 
     /**
-     * @return double
+     * @return float
      */
     public function getHorizontalPrecision()
     {
@@ -151,7 +154,8 @@ class LocRdata implements RdataInterface, FormattableInterface
     }
 
     /**
-     * @param  double               $size
+     * @param float $size
+     *
      * @throws \OutOfRangeException
      */
     public function setSize($size)
@@ -164,7 +168,7 @@ class LocRdata implements RdataInterface, FormattableInterface
     }
 
     /**
-     * @return double
+     * @return float
      */
     public function getSize()
     {
@@ -172,7 +176,8 @@ class LocRdata implements RdataInterface, FormattableInterface
     }
 
     /**
-     * @param  double               $verticalPrecision
+     * @param float $verticalPrecision
+     *
      * @throws \OutOfRangeException
      */
     public function setVerticalPrecision($verticalPrecision)
@@ -185,7 +190,7 @@ class LocRdata implements RdataInterface, FormattableInterface
     }
 
     /**
-     * @return double
+     * @return float
      */
     public function getVerticalPrecision()
     {
@@ -213,18 +218,18 @@ class LocRdata implements RdataInterface, FormattableInterface
      */
     public function outputFormatted()
     {
-        return ResourceRecord::MULTILINE_BEGIN . PHP_EOL .
-            $this->makeLine($this->getLatitude(self::FORMAT_DMS), 'LATITUDE') .
-            $this->makeLine($this->getLongitude(self::FORMAT_DMS), 'LONGITUDE') .
-            $this->makeLine(sprintf('%.2fm', $this->altitude), 'ALTITUDE') .
-            $this->makeLine(sprintf('%.2fm', $this->size), 'SIZE') .
-            $this->makeLine(sprintf('%.2fm', $this->horizontalPrecision), 'HORIZONTAL PRECISION') .
-            $this->makeLine(sprintf('%.2fm', $this->verticalPrecision), 'VERTICAL PRECISION') .
-            str_repeat(' ', $this->padding) . ResourceRecord::MULTILINE_END;
+        return ResourceRecord::MULTILINE_BEGIN.PHP_EOL.
+            $this->makeLine($this->getLatitude(self::FORMAT_DMS), 'LATITUDE').
+            $this->makeLine($this->getLongitude(self::FORMAT_DMS), 'LONGITUDE').
+            $this->makeLine(sprintf('%.2fm', $this->altitude), 'ALTITUDE').
+            $this->makeLine(sprintf('%.2fm', $this->size), 'SIZE').
+            $this->makeLine(sprintf('%.2fm', $this->horizontalPrecision), 'HORIZONTAL PRECISION').
+            $this->makeLine(sprintf('%.2fm', $this->verticalPrecision), 'VERTICAL PRECISION').
+            str_repeat(' ', $this->padding).ResourceRecord::MULTILINE_END;
     }
 
     /**
-     * Determines the longest variable
+     * Determines the longest variable.
      *
      * @return int
      */
@@ -238,7 +243,7 @@ class LocRdata implements RdataInterface, FormattableInterface
                      sprintf('%.2fm', $this->altitude),
                      sprintf('%.2fm', $this->size),
                      sprintf('%.2fm', $this->horizontalPrecision),
-                     sprintf('%.2fm', $this->verticalPrecision)
+                     sprintf('%.2fm', $this->verticalPrecision),
                 ) as $var) {
             $l = ($l < strlen($var)) ? strlen($var) : $l;
         }
@@ -247,10 +252,11 @@ class LocRdata implements RdataInterface, FormattableInterface
     }
 
     /**
-     * Determine the degree minute seconds value from decimal
+     * Determine the degree minute seconds value from decimal.
      *
      * @param $decimal
      * @param string $axis
+     *
      * @return string
      */
     private function toDms($decimal, $axis = self::LATITUDE)

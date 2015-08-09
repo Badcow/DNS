@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -17,7 +18,7 @@ class AaaaRdataTest extends \PHPUnit_Framework_TestCase
     public function testSetAddress()
     {
         $address = '2003:dead:beef:4dad:23:46:bb:101';
-        $aaaa = new AaaaRdata;
+        $aaaa = new AaaaRdata();
         $aaaa->setAddress($address);
 
         $this->assertEquals($address, $aaaa->getAddress());
@@ -29,7 +30,7 @@ class AaaaRdataTest extends \PHPUnit_Framework_TestCase
     public function testException()
     {
         $address = '2001::0234:C1ab::A0:aabc:003F';
-        $aaaa = new AaaaRdata;
+        $aaaa = new AaaaRdata();
         $aaaa->setAddress($address);
     }
 }

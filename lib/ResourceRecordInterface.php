@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -29,7 +30,7 @@ interface ResourceRecordInterface
 
     /**
      * Set the name for the resource record.
-     * Eg. "subdomain.example.com."
+     * Eg. "subdomain.example.com.".
      *
      * @param $name
      */
@@ -63,14 +64,14 @@ interface ResourceRecordInterface
     public function getTtl();
 
     /**
-     * Set a comment for the record
+     * Set a comment for the record.
      *
      * @param $comment
      */
     public function setComment($comment);
 
     /**
-     * Get the record's comment
+     * Get the record's comment.
      *
      * @return string
      */

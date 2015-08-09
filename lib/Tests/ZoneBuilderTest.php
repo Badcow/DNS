@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -17,7 +18,7 @@ class ZoneBuilderTest extends TestCase
     public function testBuild()
     {
         $zone = $this->buildTestZone();
-        $zoneBuilder = new ZoneBuilder;
+        $zoneBuilder = new ZoneBuilder();
         $this->assertEquals($this->expected, $output = $zoneBuilder->build($zone));
 
         if (true == $this->getEnvVariable(self::PHP_ENV_PRINT_TEST_ZONE)) {
@@ -26,10 +27,10 @@ class ZoneBuilderTest extends TestCase
     }
 
     /**
-     * Test the Zone using Bind
+     * Test the Zone using Bind.
      */
     public function testZoneFile()
     {
-        $this->bindTest($this->buildTestZone(), new ZoneBuilder);
+        $this->bindTest($this->buildTestZone(), new ZoneBuilder());
     }
 }

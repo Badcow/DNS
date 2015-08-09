@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\LocRdata;
@@ -32,7 +34,7 @@ class LocRdataTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAltitude1()
     {
-        $rdata = new LocRdata;
+        $rdata = new LocRdata();
         $rdata->setAltitude(-100001);
     }
 
@@ -41,13 +43,13 @@ class LocRdataTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAltitude2()
     {
-        $rdata = new LocRdata;
+        $rdata = new LocRdata();
         $rdata->setAltitude(42849673);
     }
 
     public function testGetAltitude()
     {
-        $rdata = new LocRdata;
+        $rdata = new LocRdata();
         $altitude = 12345;
         $rdata->setAltitude($altitude);
         $this->assertEquals($altitude, $rdata->getAltitude());
@@ -74,7 +76,7 @@ class LocRdataTest extends \PHPUnit_Framework_TestCase
     public function testGetSize()
     {
         $size = 1231;
-        $rdata = new LocRdata;
+        $rdata = new LocRdata();
         $rdata->setSize($size);
         $this->assertEquals($size, $rdata->getSize());
     }

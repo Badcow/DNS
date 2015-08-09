@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -11,8 +12,8 @@
 namespace Badcow\DNS;
 
 /**
- * Class ZoneException
- *
- * @package Badcow\DNS
+ * Class ZoneException.
  */
-class ZoneException extends \ErrorException {}
+class ZoneException extends \ErrorException
+{
+}

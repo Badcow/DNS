@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -18,7 +19,7 @@ interface RdataInterface
     public function output();
 
     /**
-     * Get the R-Data type
+     * Get the R-Data type.
      *
      * @return string
      */
