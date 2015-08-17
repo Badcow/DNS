@@ -13,20 +13,7 @@ namespace Badcow\DNS;
 
 class Zone implements ZoneInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var ResourceRecord[]
-     */
-    private $resourceRecords = array();
-
-    /**
-     * @var int
-     */
-    private $defaultTtl;
+    use ZoneTrait;
 
     /**
      * @param string                    $name
@@ -44,49 +31,6 @@ class Zone implements ZoneInterface
     }
 
     /**
-     * @param ResourceRecordInterface[] $resourceRecord
-     */
-    public function setResourceRecords(array $resourceRecord)
-    {
-        foreach ($resourceRecord as $rr) {
-            /* @var ResourceRecordInterface $rr */
-            $this->addResourceRecord($rr);
-        }
-    }
-
-    /**
-     * @param ResourceRecordInterface $resourceRecord
-     */
-    public function addResourceRecord(ResourceRecordInterface $resourceRecord)
-    {
-        $this->resourceRecords[] = $resourceRecord;
-    }
-
-    /**
-     * @return ResourceRecordInterface[]
-     */
-    public function getResourceRecords()
-    {
-        return $this->resourceRecords;
-    }
-
-    /**
-     * @param int $defaultTtl
-     */
-    public function setDefaultTtl($defaultTtl)
-    {
-        $this->defaultTtl = (int) $defaultTtl;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDefaultTtl()
-    {
-        return $this->defaultTtl;
-    }
-
-    /**
      * @param string $name A fully qualified zone name
      *
      * @throws ZoneException
@@ -98,13 +42,5 @@ class Zone implements ZoneInterface
         }
 
         $this->name = $name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 }

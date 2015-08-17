@@ -24,16 +24,6 @@ class DnameRdataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($target, $dname->getTarget());
     }
 
-    /**
-     * @expectedException \Badcow\DNS\Rdata\RdataException
-     */
-    public function testSetTargetException()
-    {
-        $target = 'foo.example.com';
-        $dname = new DnameRdata();
-        $dname->setTarget($target);
-    }
-
     public function testOutput()
     {
         $target = 'foo.example.com.';

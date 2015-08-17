@@ -24,7 +24,7 @@ class ResourceRecord implements ResourceRecordInterface
     /**
      * @var string
      */
-    private $class = Classes::INTERNET;
+    private $class;
 
     /**
      * @var RdataInterface

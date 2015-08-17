@@ -12,6 +12,7 @@
 namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\AlignedBuilder;
+use Badcow\DNS\Classes;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Tests\Rdata\DummyRdata;
@@ -36,21 +37,21 @@ $TTL 3600
 @                14400 IN NS    ns2.example.net.au.
 
 ; A RECORDS
-subdomain.au           IN A     192.168.1.2; This is a local ip.
+subdomain.au              A     192.168.1.2; This is a local ip.
 
 ; AAAA RECORDS
-ipv6domain             IN AAAA  ::1; This is an IPv6 domain.
+ipv6domain                AAAA  ::1; This is an IPv6 domain.
 
 ; CNAME RECORDS
-alias                  IN CNAME subdomain.au.example.com.
+alias                     CNAME subdomain.au.example.com.
 
 ; DNAME RECORDS
 bar.example.com.       IN DNAME foo.example.com.
 
 ; MX RECORDS
-@                      IN MX    10 mail-gw1.example.net.
-@                      IN MX    20 mail-gw2.example.net.
-@                      IN MX    30 mail-gw3.example.net.
+@                         MX    10 mail-gw1.example.net.
+@                         MX    20 mail-gw2.example.net.
+@                         MX    30 mail-gw3.example.net.
 
 ; LOC RECORDS
 canberra               IN LOC   (
@@ -86,7 +87,7 @@ DNS;
         ));
 
         $ns1 = new ResourceRecord();
-        $ns1->setClass('IN');
+        $ns1->setClass(Classes::INTERNET);
         $ns1->setName('@');
         $ns1->setTtl(14400);
         $ns1->setRdata(Factory::Ns('ns1.example.net.au.'));
@@ -105,6 +106,7 @@ DNS;
         $cname = new ResourceRecord();
         $cname->setName('alias');
         $cname->setRdata(Factory::Cname('subdomain.au.example.com.'));
+        $cname->setClass(Classes::INTERNET);
 
         $aaaa = new ResourceRecord();
         $aaaa->setName('ipv6domain');

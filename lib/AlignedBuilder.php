@@ -65,6 +65,10 @@ class AlignedBuilder implements ZoneBuilderInterface
 
         foreach ($rrs as $rr) {
             /* @var $rr ResourceRecord */
+            if (null == $rr->getRdata()) {
+                continue;
+            }
+
             if ($rr->getType() !== $current) {
                 $master .= PHP_EOL.ResourceRecord::COMMENT_DELIMINATOR.$rr->getType().' RECORDS'.PHP_EOL;
                 $current = $rr->getType();
@@ -78,8 +82,8 @@ class AlignedBuilder implements ZoneBuilderInterface
 
             $master .= sprintf('%s %s %s %s %s',
                 str_pad($rr->getName(), $namePadding, ' ', STR_PAD_RIGHT),
-                str_pad($rr->getTtl(), $ttlPadding,   ' ', STR_PAD_RIGHT),
-                $rr->getClass(),
+                str_pad($rr->getTtl(),  $ttlPadding,  ' ', STR_PAD_RIGHT),
+                str_pad($rr->getClass(), 2,           ' ', STR_PAD_RIGHT),
                 str_pad($rr->getType(), $typePadding, ' ', STR_PAD_RIGHT),
                 ($rdata instanceof FormattableInterface) ? $rdata->outputFormatted() : $rdata->output()
             );

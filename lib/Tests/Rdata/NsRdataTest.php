@@ -24,16 +24,6 @@ class NsRdataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($nsdname, $dname->getTarget());
     }
 
-    /**
-     * @expectedException \Badcow\DNS\Rdata\RdataException
-     */
-    public function testSetNsdnameException()
-    {
-        $Nsdname = 'foo.example.com';
-        $dname = new NsRdata();
-        $dname->setTarget($Nsdname);
-    }
-
     public function testOutput()
     {
         $Nsdname = 'foo.example.com.';

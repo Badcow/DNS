@@ -23,15 +23,17 @@ class ZoneBuilder implements ZoneBuilderInterface
 
         foreach ($zone->getResourceRecords() as $rr) {
             /* @var $rr ResourceRecord */
-            $master .= sprintf('%s %s %s %s %s',
-                $rr->getName(),
-                $rr->getTtl(),
-                $rr->getClass(),
-                $rr->getType(),
-                $rr->getRdata()->output()
-            );
+            if (null !== $rr->getRdata()) {
+                $master .= preg_replace('/\s+/', ' ', trim(sprintf('%s %s %s %s %s',
+                    $rr->getName(),
+                    $rr->getTtl(),
+                    $rr->getClass(),
+                    $rr->getType(),
+                    $rr->getRdata()->output()
+                )));
+            }
 
-            if (null != $rr->getComment()) {
+            if (null !== $rr->getComment()) {
                 $master .= ResourceRecord::COMMENT_DELIMINATOR.$rr->getComment();
             }
 

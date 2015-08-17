@@ -31,7 +31,7 @@ class CnameRdata implements RdataInterface
      */
     public function setTarget($target)
     {
-        if (!Validator::validateFqdn($target)) {
+        if (!Validator::validateFqdn($target, false)) {
             throw new RdataException(sprintf('The target "%s" is not a Fully Qualified Domain Name', $target));
         }
 
