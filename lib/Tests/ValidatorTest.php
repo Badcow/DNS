@@ -28,24 +28,26 @@ class ValidatorTest extends TestCase
         $fqdn4 = 'ex-ampl3.com.au.';
         $fqdn5 = '@';
         $fqdn6 = 'alt2.aspmx.l.google.com.';
+        $fqdn7 = 'www.eXAMple.cOm.';
 
         //Fail cases
-        $fqdn7 = '3xample.com.';
-        $fqdn8 = '_example.com.';
-        $fqdn9 = '-example.com.';
+        $fqdn8 = '3xample.com.';
+        $fqdn9 = '_example.com.';
+        $fqdn10 = '-example.com.';
 
         //Pass cases
         $uqdn1 = 'example.com';
         $uqdn2 = 'www.example.com';
         $uqdn3 = 'example';
         $uqdn4 = '@';
+        $uqdn5 = 'wWw.EXample.com';
 
         //Fail cases
-        $uqdn5 = 'exam*ple.com';
-        $uqdn6 = 'wheres-wally?.com';
-        $uqdn7 = '_example.com.';
-        $uqdn8 = '-example.com.';
-        $uqdn9 = '3xample.com.';
+        $uqdn6 = 'exam*ple.com';
+        $uqdn7 = 'wheres-wally?.com';
+        $uqdn8 = '_example.com.';
+        $uqdn9 = '-example.com.';
+        $uqdn10 = '3xample.com.';
 
         $this->assertTrue(Validator::validateFqdn($fqdn1));
         $this->assertTrue(Validator::validateFqdn($fqdn2));
@@ -53,10 +55,11 @@ class ValidatorTest extends TestCase
         $this->assertTrue(Validator::validateFqdn($fqdn4));
         $this->assertTrue(Validator::validateFqdn($fqdn5));
         $this->assertTrue(Validator::validateFqdn($fqdn6));
+        $this->assertTrue(Validator::validateFqdn($fqdn7));
 
-        $this->assertFalse(Validator::validateFqdn($fqdn7));
         $this->assertFalse(Validator::validateFqdn($fqdn8));
         $this->assertFalse(Validator::validateFqdn($fqdn9));
+        $this->assertFalse(Validator::validateFqdn($fqdn10));
 
         $this->assertFalse(Validator::validateFqdn($uqdn1));
         $this->assertFalse(Validator::validateFqdn($uqdn2));
@@ -67,12 +70,13 @@ class ValidatorTest extends TestCase
         $this->assertTrue(Validator::validateFqdn($uqdn2, false));
         $this->assertTrue(Validator::validateFqdn($uqdn3, false));
         $this->assertTrue(Validator::validateFqdn($uqdn4, false));
+        $this->assertTrue(Validator::validateFqdn($uqdn5, false));
 
-        $this->assertFalse(Validator::validateFqdn($uqdn5, false));
         $this->assertFalse(Validator::validateFqdn($uqdn6, false));
         $this->assertFalse(Validator::validateFqdn($uqdn7, false));
         $this->assertFalse(Validator::validateFqdn($uqdn8, false));
         $this->assertFalse(Validator::validateFqdn($uqdn9, false));
+        $this->assertFalse(Validator::validateFqdn($uqdn10, false));
     }
 
     public function testValidateIpv4Address()
@@ -224,5 +228,30 @@ class ValidatorTest extends TestCase
     {
         $zone = $this->buildTestZone();
         $this->assertTrue(Validator::validate($zone));
+    }
+
+    public function testWildcard()
+    {
+        $valid_1 = '*.example.com.';
+        $valid_2 = '*';
+        $valid_3 = '*.sub';
+        $valid_4 = '*.sub.domain';
+        $valid_5 = '*.sub.example.com.';
+
+        $invalid_1 = '*abc.example.com.';
+        $invalid_2 = 'domain.*.example.com.';
+        $invalid_3 = 'example.com.*';
+        $invalid_4 = '*.';
+
+        $this->assertTrue(Validator::validateFqdn($valid_1, true));
+        $this->assertTrue(Validator::validateFqdn($valid_2, false));
+        $this->assertTrue(Validator::validateFqdn($valid_3, false));
+        $this->assertTrue(Validator::validateFqdn($valid_4, false));
+        $this->assertTrue(Validator::validateFqdn($valid_5, true));
+
+        $this->assertFalse(Validator::validateFqdn($invalid_1, true));
+        $this->assertFalse(Validator::validateFqdn($invalid_2, true));
+        $this->assertFalse(Validator::validateFqdn($invalid_3, false));
+        $this->assertFalse(Validator::validateFqdn($invalid_4, true));
     }
 }
