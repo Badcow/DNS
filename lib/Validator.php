@@ -28,19 +28,28 @@ class Validator
             return true;
         }
 
-        $parts = explode('.', strtolower($string));
-
-        if ($trailingDot && end($parts) !== '') {
+        if ($string === '*.') {
             return false;
         }
 
-        if (end($parts) === '') {
+        $parts = explode('.', strtolower($string));
+        $hasTrailingDot = (end($parts) === '');
+
+        if ($trailingDot && !$hasTrailingDot) {
+            return false;
+        }
+
+        if ($hasTrailingDot) {
             array_pop($parts);
         }
 
-        foreach ($parts as $part) {
+        foreach ($parts as $i => $part) {
             //Does the string begin with a non alpha char?
-            if (1 === preg_match('/^[0-9\-_][a-z0-9_\-]*$/', $part)) {
+            if (1 === preg_match('/^[^a-z]/', $part)) {
+                if ('*' === $part && 0 === $i) {
+                    continue;
+                }
+
                 return false;
             }
 
