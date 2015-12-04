@@ -39,7 +39,7 @@ class ResourceRecord implements ResourceRecordInterface
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string

@@ -171,4 +171,26 @@ class Validator
 
         return true;
     }
+
+    /**
+     * @param string $address
+     * @return bool
+     */
+    public static function reverseIpv4($address)
+    {
+        $pattern = '/^(?:[0-9]+\.){1,4}in\-addr\.arpa\.$/i';
+
+        return 1 === preg_match($pattern, $address);
+    }
+
+    /**
+     * @param string $address
+     * @return bool
+     */
+    public static function reverseIpv6($address)
+    {
+        $pattern = '/^(?:[0-9a-f]\.){32}ip6\.arpa\.$/i';
+
+        return 1 === preg_match($pattern, $address);
+    }
 }
