@@ -67,8 +67,8 @@ class ResourceRecord implements ResourceRecordInterface
      */
     public function setName($name)
     {
-        if (!Validator::validateFqdn($name, false)) {
-            throw new DNSException('The name is not a Fully Qualified Domain Name');
+        if (!Validator::rrName($name)) {
+            throw new DNSException(sprintf('"%s" is not a valid resource record name.', $name));
         }
 
         $this->name = (string) $name;

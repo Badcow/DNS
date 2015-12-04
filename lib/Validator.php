@@ -17,6 +17,81 @@ use Badcow\DNS\Rdata\SoaRdata;
 class Validator
 {
     /**
+     * Validates if $string is suitable as an RR name.
+     *
+     * @param string $string
+     * @return bool
+     */
+    public static function rrName($string)
+    {
+        if ($string === '@' ||
+            self::reverseIpv4($string) ||
+            self::reverseIpv6($string)
+        ) {
+            return true;
+        }
+
+        if ($string === '*.') {
+            return false;
+        }
+
+        $parts = explode('.', strtolower($string));
+
+        if ('' === end($parts)) {
+            array_pop($parts);
+        }
+
+        foreach ($parts as $i => $part) {
+            //Does the string begin with a non alpha char?
+            if (1 === preg_match('/^[^a-z]/', $part)) {
+                if ('*' === $part && 0 === $i) {
+                    continue;
+                }
+
+                return false;
+            }
+
+            if (1 !== preg_match('/^[a-z0-9_\-]+$/i', $part)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Validate the string as a Fully Qualified Domain Name
+     *
+     * @param string $string
+     * @return bool
+     */
+    public static function fqdn($string)
+    {
+        $parts = explode('.', strtolower($string));
+
+        //Is there are trailing dot?
+        if ('' !== end($parts)) {
+            return false;
+        }
+
+        array_pop($parts);
+
+        foreach ($parts as $part) {
+            //Does the string begin with a non alpha char?
+            if (1 === preg_match('/^[^a-z]/i', $part)) {
+                return false;
+            }
+
+            if (1 !== preg_match('/^[a-z0-9_\-]+$/i', $part)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
      * @param string $string
      * @param bool   $trailingDot Require trailing dot
      *

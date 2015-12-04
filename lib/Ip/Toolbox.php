@@ -19,15 +19,20 @@ class Toolbox
     /**
      * Expands an IPv6 address to its full, non-short hand representation.
      *
-     * @param string $address
+     * @param string $ip
      * @return string
+     * @throws \Badcow\DNS\DNSException
      */
-    public static function expandIpv6($address)
+    public static function expandIpv6($ip)
     {
-        $hex = unpack("H*hex", inet_pton($address));
-        $address = substr(preg_replace("/([A-f0-9]{4})/", "$1:", $hex['hex']), 0, -1);
+        if (!Validator::validateIpv6Address($ip)) {
+            throw new DNSException(sprintf('"%s" is not a valid IPv6 address.', $ip));
+        }
 
-        return $address;
+        $hex = unpack("H*hex", inet_pton($ip));
+        $ip = substr(preg_replace("/([A-f0-9]{4})/", "$1:", $hex['hex']), 0, -1);
+
+        return $ip;
     }
 
     /**
@@ -45,7 +50,7 @@ class Toolbox
 
         $parts = array_reverse(explode('.', $ip));
 
-        $address = implode($parts);
+        $address = implode('.', $parts);
         $address .= '.in-addr.arpa.';
 
         return $address;

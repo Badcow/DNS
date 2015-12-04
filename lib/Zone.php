@@ -37,7 +37,7 @@ class Zone implements ZoneInterface
      */
     public function setName($name)
     {
-        if (!Validator::validateFqdn($name)) {
+        if (!Validator::fqdn($name)) {
             throw new ZoneException(sprintf('Zone "%s" is not a fully qualified domain name.', $name));
         }
 
