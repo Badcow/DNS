@@ -39,12 +39,34 @@ class ResourceRecord implements ResourceRecordInterface
     /**
      * @var string
      */
-    protected $name;
+    private $name;
 
     /**
      * @var string
      */
     private $comment;
+
+    /**
+     * @param string $name
+     * @param RdataInterface $rdata
+     * @param string $ttl
+     * @param string $class
+     * @param string $comment
+     */
+    public function __construct($name = null, RdataInterface $rdata = null, $ttl = null, $class = null, $comment = null)
+    {
+        if (null !== $name) {
+            $this->setName($name);
+        }
+
+        if (null !== $class) {
+            $this->setClass($class);
+        }
+
+        $this->rdata = $rdata;
+        $this->ttl = $ttl;
+        $this->comment = $comment;
+    }
 
     /**
      * @param string $class

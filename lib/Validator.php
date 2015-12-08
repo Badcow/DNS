@@ -20,9 +20,11 @@ class Validator
      * Validates if $string is suitable as an RR name.
      *
      * @param string $string
+     * @param bool $mustHaveTrailingDot
+     *
      * @return bool
      */
-    public static function rrName($string)
+    public static function rrName($string, $mustHaveTrailingDot = false)
     {
         if ($string === '@' ||
             self::reverseIpv4($string) ||
@@ -37,13 +39,17 @@ class Validator
 
         $parts = explode('.', strtolower($string));
 
+        if ('' !== end($parts) && $mustHaveTrailingDot) {
+            return false;
+        }
+
         if ('' === end($parts)) {
             array_pop($parts);
         }
 
         foreach ($parts as $i => $part) {
-            //Does the string begin with a non alpha char?
-            if (1 === preg_match('/^[^a-z]/', $part)) {
+            //Does the string begin with a non alphanumeric char?
+            if (1 === preg_match('/^[^a-z0-9]/', $part)) {
                 if ('*' === $part && 0 === $i) {
                     continue;
                 }
@@ -60,9 +66,10 @@ class Validator
     }
 
     /**
-     * Validate the string as a Fully Qualified Domain Name
+     * Validate the string as a Fully Qualified Domain Name.
      *
      * @param string $string
+     *
      * @return bool
      */
     public static function fqdn($string)
@@ -89,7 +96,6 @@ class Validator
 
         return true;
     }
-
 
     /**
      * @param string $string
@@ -249,6 +255,7 @@ class Validator
 
     /**
      * @param string $address
+     *
      * @return bool
      */
     public static function reverseIpv4($address)
@@ -260,6 +267,7 @@ class Validator
 
     /**
      * @param string $address
+     *
      * @return bool
      */
     public static function reverseIpv6($address)
