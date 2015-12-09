@@ -47,11 +47,11 @@ class ResourceRecord implements ResourceRecordInterface
     private $comment;
 
     /**
-     * @param string $name
+     * @param string         $name
      * @param RdataInterface $rdata
-     * @param string $ttl
-     * @param string $class
-     * @param string $comment
+     * @param string         $ttl
+     * @param string         $class
+     * @param string         $comment
      */
     public function __construct($name = null, RdataInterface $rdata = null, $ttl = null, $class = null, $comment = null)
     {

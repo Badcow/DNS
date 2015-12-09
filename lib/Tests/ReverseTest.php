@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Badcow\DNS\Tests;
 
-use Badcow\DNS\AlignedBuilder;
+use Badcow\DNS\ZoneBuilder;
 use Badcow\DNS\Zone;
 use Badcow\DNS\Ip\Toolbox;
 use Badcow\DNS\Rdata\Factory;
@@ -20,7 +20,44 @@ use Badcow\DNS\Classes;
 
 class ReverseTest extends TestCase
 {
-    public function testReverseRecord()
+    /**
+     * @var string
+     */
+    private $expectedIpv4Record = <<< 'TXT'
+$ORIGIN 8.168.192.in-addr.arpa.
+$TTL 14400
+@ IN SOA example.com. post.example.com. 2015010101 3600 14400 604800 3600
+@ IN NS ns1.example.com.
+@ IN NS ns2.example.com.
+1 IN PTR foo1.example.com.
+2 IN PTR foo2.example.com.
+3 IN PTR foo3.example.com.
+4 IN PTR foo4.example.com.
+5 IN PTR foo5.example.com.
+
+TXT;
+
+    /**
+     * @var string
+     */
+    private $expectedIpv6Record = <<< 'TXT'
+$ORIGIN 1.2.0.0.3.8.f.0.1.0.0.2.ip6.arpa.
+$TTL 14400
+@ IN SOA example.com. post.example.com. 2015010101 3600 14400 604800 3600
+@ IN NS ns1.example.com.
+@ IN NS ns2.example.com.
+8 IN PTR foo8.example.com.
+9 IN PTR foo9.example.com.
+a IN PTR fooa.example.com.
+b IN PTR foob.example.com.
+c IN PTR fooc.example.com.
+
+TXT;
+
+    /**
+     *
+     */
+    public function testReverseIpv4Record()
     {
         $origin = Toolbox::reverseIpv4('192.168.8');
 
@@ -32,10 +69,10 @@ class ReverseTest extends TestCase
             14400,
             604800,
             3600
-        ));
+        ), null, Classes::INTERNET);
 
-        $ns1 = new ResourceRecord($origin, Factory::Ns('ns1.example.com.'), null, Classes::INTERNET);
-        $ns2 = new ResourceRecord($origin, Factory::Ns('ns2.example.com.'), null, Classes::INTERNET);
+        $ns1 = new ResourceRecord('@', Factory::Ns('ns1.example.com.'), null, Classes::INTERNET);
+        $ns2 = new ResourceRecord('@', Factory::Ns('ns2.example.com.'), null, Classes::INTERNET);
 
         $foo1 = new ResourceRecord('1', Factory::Ptr('foo1.example.com.'), null, Classes::INTERNET);
         $foo2 = new ResourceRecord('2', Factory::Ptr('foo2.example.com.'), null, Classes::INTERNET);
@@ -54,6 +91,54 @@ class ReverseTest extends TestCase
             $foo5,
         ));
 
-        $this->bindTest($zone, new AlignedBuilder);
+        $builder = new ZoneBuilder();
+
+        $this->assertEquals($this->expectedIpv4Record, $builder->build($zone));
+
+        $this->bindTest($zone, $builder);
+    }
+
+    /**
+     *
+     */
+    public function testReverseIpv6Record()
+    {
+        $origin = Toolbox::reverseIpv6('2001:f83:21');
+
+        $soa = new ResourceRecord('@', Factory::Soa(
+            'example.com.',
+            'post.example.com.',
+            2015010101,
+            3600,
+            14400,
+            604800,
+            3600
+        ), null, Classes::INTERNET);
+
+        $ns1 = new ResourceRecord('@', Factory::Ns('ns1.example.com.'), null, Classes::INTERNET);
+        $ns2 = new ResourceRecord('@', Factory::Ns('ns2.example.com.'), null, Classes::INTERNET);
+
+        $foo8 = new ResourceRecord('8', Factory::Ptr('foo8.example.com.'), null, Classes::INTERNET);
+        $foo9 = new ResourceRecord('9', Factory::Ptr('foo9.example.com.'), null, Classes::INTERNET);
+        $fooa = new ResourceRecord('a', Factory::Ptr('fooa.example.com.'), null, Classes::INTERNET);
+        $foob = new ResourceRecord('b', Factory::Ptr('foob.example.com.'), null, Classes::INTERNET);
+        $fooc = new ResourceRecord('c', Factory::Ptr('fooc.example.com.'), null, Classes::INTERNET);
+
+        $zone = new Zone($origin, 14400, array(
+            $soa,
+            $ns1,
+            $ns2,
+            $foo8,
+            $foo9,
+            $fooa,
+            $foob,
+            $fooc,
+        ));
+
+        $builder = new ZoneBuilder();
+
+        $this->assertEquals($this->expectedIpv6Record, $builder->build($zone));
+
+        $this->bindTest($zone, $builder);
     }
 }

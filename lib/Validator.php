@@ -20,7 +20,7 @@ class Validator
      * Validates if $string is suitable as an RR name.
      *
      * @param string $string
-     * @param bool $mustHaveTrailingDot
+     * @param bool   $mustHaveTrailingDot
      *
      * @return bool
      */
