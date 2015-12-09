@@ -83,7 +83,7 @@ class ResourceRecord implements ResourceRecordInterface
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
      * @throws DNSException
      */
