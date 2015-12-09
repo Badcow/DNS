@@ -38,9 +38,9 @@ trait RdataRegisterTrait
     {
         if (!is_subclass_of($fqcn, '\\Badcow\\DNS\\Rdata\\RdataInterface')) {
             throw new \InvalidArgumentException(sprintf(
-               'The class "%s" is not an instance of Badcow\DNS\Rdata\RdataInterface',
-               $fqcn
-           ));
+                'The class "%s" is not an instance of Badcow\DNS\Rdata\RdataInterface',
+                $fqcn
+            ));
         }
 
         $this->rdataTypes[$type] = $fqcn;

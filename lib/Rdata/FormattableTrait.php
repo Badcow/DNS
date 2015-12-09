@@ -49,7 +49,7 @@ trait FormattableTrait
     {
         $pad = $this->longestVarLength();
         $output = str_repeat(' ', $this->padding).
-                  str_pad($text, $pad);
+                    str_pad($text, $pad);
 
         if (null !== $comment) {
             $output .= ' '.ResourceRecord::COMMENT_DELIMINATOR.$comment;
