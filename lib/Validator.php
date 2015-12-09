@@ -17,6 +17,87 @@ use Badcow\DNS\Rdata\SoaRdata;
 class Validator
 {
     /**
+     * Validates if $string is suitable as an RR name.
+     *
+     * @param string $string
+     * @param bool   $mustHaveTrailingDot
+     *
+     * @return bool
+     */
+    public static function rrName($string, $mustHaveTrailingDot = false)
+    {
+        if ($string === '@' ||
+            self::reverseIpv4($string) ||
+            self::reverseIpv6($string)
+        ) {
+            return true;
+        }
+
+        if ($string === '*.') {
+            return false;
+        }
+
+        $parts = explode('.', strtolower($string));
+
+        if ('' !== end($parts) && $mustHaveTrailingDot) {
+            return false;
+        }
+
+        if ('' === end($parts)) {
+            array_pop($parts);
+        }
+
+        foreach ($parts as $i => $part) {
+            //Does the string begin with a non alphanumeric char?
+            if (1 === preg_match('/^[^a-z0-9]/', $part)) {
+                if ('*' === $part && 0 === $i) {
+                    continue;
+                }
+
+                return false;
+            }
+
+            if (1 !== preg_match('/^[a-z0-9_\-]+$/i', $part)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Validate the string as a Fully Qualified Domain Name.
+     *
+     * @param string $string
+     *
+     * @return bool
+     */
+    public static function fqdn($string)
+    {
+        $parts = explode('.', strtolower($string));
+
+        //Is there are trailing dot?
+        if ('' !== end($parts)) {
+            return false;
+        }
+
+        array_pop($parts);
+
+        foreach ($parts as $part) {
+            //Does the string begin with a non alpha char?
+            if (1 === preg_match('/^[^a-z]/i', $part)) {
+                return false;
+            }
+
+            if (1 !== preg_match('/^[a-z0-9_\-]+$/i', $part)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @param string $string
      * @param bool   $trailingDot Require trailing dot
      *
@@ -170,5 +251,29 @@ class Validator
         }
 
         return true;
+    }
+
+    /**
+     * @param string $address
+     *
+     * @return bool
+     */
+    public static function reverseIpv4($address)
+    {
+        $pattern = '/^(?:[0-9]+\.){1,4}in\-addr\.arpa\.$/i';
+
+        return 1 === preg_match($pattern, $address);
+    }
+
+    /**
+     * @param string $address
+     *
+     * @return bool
+     */
+    public static function reverseIpv6($address)
+    {
+        $pattern = '/^(?:[0-9a-f]\.){32}ip6\.arpa\.$/i';
+
+        return 1 === preg_match($pattern, $address);
     }
 }

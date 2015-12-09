@@ -30,7 +30,7 @@ class ResourceRecordTest extends TestCase
 
     /**
      * @expectedException \Badcow\DNS\DNSException
-     * @expectedExceptionMessage The name is not a Fully Qualified Domain Name
+     * @expectedExceptionMessage "example?record.com." is not a valid resource record name.
      */
     public function testSetName()
     {

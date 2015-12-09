@@ -60,7 +60,7 @@ DNS;
             return $var;
         }
 
-        return null;
+        return;
     }
 
     /**

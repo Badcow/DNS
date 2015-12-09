@@ -174,4 +174,17 @@ class Factory
 
         return $rdata;
     }
+
+    /**
+     * @param string $target
+     *
+     * @return PtrRdata
+     */
+    public static function Ptr($target)
+    {
+        $rdata = new PtrRdata();
+        $rdata->setTarget($target);
+
+        return $rdata;
+    }
 }

@@ -47,6 +47,28 @@ class ResourceRecord implements ResourceRecordInterface
     private $comment;
 
     /**
+     * @param string         $name
+     * @param RdataInterface $rdata
+     * @param string         $ttl
+     * @param string         $class
+     * @param string         $comment
+     */
+    public function __construct($name = null, RdataInterface $rdata = null, $ttl = null, $class = null, $comment = null)
+    {
+        if (null !== $name) {
+            $this->setName($name);
+        }
+
+        if (null !== $class) {
+            $this->setClass($class);
+        }
+
+        $this->rdata = $rdata;
+        $this->ttl = $ttl;
+        $this->comment = $comment;
+    }
+
+    /**
      * @param string $class
      *
      * @throws ResourceRecordException
@@ -67,8 +89,8 @@ class ResourceRecord implements ResourceRecordInterface
      */
     public function setName($name)
     {
-        if (!Validator::validateFqdn($name, false)) {
-            throw new DNSException('The name is not a Fully Qualified Domain Name');
+        if (!Validator::rrName($name)) {
+            throw new DNSException(sprintf('"%s" is not a valid resource record name.', $name));
         }
 
         $this->name = (string) $name;

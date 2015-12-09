@@ -254,4 +254,52 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::validateFqdn($invalid_3, false));
         $this->assertFalse(Validator::validateFqdn($invalid_4, true));
     }
+
+    /**
+     *
+     */
+    public function testReverseIpv4()
+    {
+        $valid_01 = '10.IN-ADDR.ARPA.';
+        $valid_02 = '10.IN-ADDR.ARPA.';
+        $valid_03 = '18.IN-addr.ARPA.';
+        $valid_04 = '26.IN-ADdr.ArpA.';
+        $valid_05 = '22.0.2.10.IN-ADDR.ARPA.';
+        $valid_06 = '103.0.0.26.IN-ADDR.ARPA.';
+        $valid_07 = '77.0.0.10.IN-ADDR.ARPA.';
+        $valid_08 = '4.0.10.18.IN-ADDR.ARPA.';
+        $valid_09 = '103.0.3.26.IN-ADDR.ARPA.';
+        $valid_10 = '6.0.0.10.IN-ADDR.ARPA.';
+
+        $invalid_01 = '10.IN-ADDR.ARPA';
+        $invalid_02 = '10.20.ARPA.';
+        $invalid_03 = '10.123.0.1.INADDR.ARPA.';
+
+        $this->assertTrue(Validator::reverseIpv4($valid_01));
+        $this->assertTrue(Validator::reverseIpv4($valid_02));
+        $this->assertTrue(Validator::reverseIpv4($valid_03));
+        $this->assertTrue(Validator::reverseIpv4($valid_04));
+        $this->assertTrue(Validator::reverseIpv4($valid_05));
+        $this->assertTrue(Validator::reverseIpv4($valid_06));
+        $this->assertTrue(Validator::reverseIpv4($valid_07));
+        $this->assertTrue(Validator::reverseIpv4($valid_08));
+        $this->assertTrue(Validator::reverseIpv4($valid_09));
+        $this->assertTrue(Validator::reverseIpv4($valid_10));
+
+        $this->assertFalse(Validator::reverseIpv4($invalid_01));
+        $this->assertFalse(Validator::reverseIpv4($invalid_02));
+        $this->assertFalse(Validator::reverseIpv4($invalid_03));
+    }
+
+    /**
+     *
+     */
+    public function testReverseIpv6()
+    {
+        $valid_01 = 'b.a.9.8.7.6.5.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.';
+        $invalid_01 = 'b.a.9.8.7.6.5.0.0.g.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.';
+
+        $this->assertTrue(Validator::reverseIpv6($valid_01));
+        $this->assertFalse(Validator::reverseIpv6($invalid_01));
+    }
 }
