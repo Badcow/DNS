@@ -19,7 +19,7 @@ class ZoneBuilder implements ZoneBuilderInterface
     public function build(ZoneInterface $zone)
     {
         $master = '$ORIGIN ' . $zone->getName() . PHP_EOL .
-                  '$TTL ' . $zone->getDefaultTtl() . PHP_EOL;
+                    '$TTL ' . $zone->getDefaultTtl() . PHP_EOL;
 
         foreach ($zone->getResourceRecords() as $rr) {
             /* @var $rr ResourceRecord */

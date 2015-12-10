@@ -49,7 +49,7 @@ class AlignedBuilder implements ZoneBuilderInterface
     public function build(ZoneInterface $zone)
     {
         $master = '$ORIGIN ' . $zone->getName() . PHP_EOL .
-                  '$TTL ' . $zone->getDefaultTtl() . PHP_EOL;
+                    '$TTL ' . $zone->getDefaultTtl() . PHP_EOL;
 
         $rrs = $zone->getResourceRecords();
         $current = SoaRdata::TYPE;
