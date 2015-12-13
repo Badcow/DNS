@@ -63,8 +63,11 @@ class ResourceRecord implements ResourceRecordInterface
             $this->setClass($class);
         }
 
+        if (null !== $ttl) {
+            $this->setTtl($ttl);
+        }
+
         $this->rdata = $rdata;
-        $this->ttl = $ttl;
         $this->comment = $comment;
     }
 

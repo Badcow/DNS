@@ -40,7 +40,7 @@ $TTL 3600
 subdomain.au              A     192.168.1.2; This is a local ip.
 
 ; AAAA RECORDS
-ipv6domain                AAAA  ::1; This is an IPv6 domain.
+ipv6domain       3600  IN AAAA  ::1; This is an IPv6 domain.
 
 ; CNAME RECORDS
 alias                     CNAME subdomain.au.example.com.
@@ -108,10 +108,7 @@ DNS;
         $cname->setRdata(Factory::Cname('subdomain.au.example.com.'));
         $cname->setClass(Classes::INTERNET);
 
-        $aaaa = new ResourceRecord();
-        $aaaa->setName('ipv6domain');
-        $aaaa->setRdata(Factory::Aaaa('::1'));
-        $aaaa->setComment('This is an IPv6 domain.');
+        $aaaa = new ResourceRecord('ipv6domain', Factory::Aaaa('::1'), 3600);
 
         $mx1 = new ResourceRecord();
         $mx1->setName('@');
