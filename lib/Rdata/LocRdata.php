@@ -218,14 +218,14 @@ class LocRdata implements RdataInterface, FormattableInterface
      */
     public function outputFormatted()
     {
-        return ResourceRecord::MULTILINE_BEGIN . PHP_EOL .
-            $this->makeLine($this->getLatitude(self::FORMAT_DMS), 'LATITUDE') .
-            $this->makeLine($this->getLongitude(self::FORMAT_DMS), 'LONGITUDE') .
-            $this->makeLine(sprintf('%.2fm', $this->altitude), 'ALTITUDE') .
-            $this->makeLine(sprintf('%.2fm', $this->size), 'SIZE') .
-            $this->makeLine(sprintf('%.2fm', $this->horizontalPrecision), 'HORIZONTAL PRECISION') .
-            $this->makeLine(sprintf('%.2fm', $this->verticalPrecision), 'VERTICAL PRECISION') .
-            str_repeat(' ', $this->padding) . ResourceRecord::MULTILINE_END;
+        return ResourceRecord::MULTILINE_BEGIN.PHP_EOL.
+            $this->makeLine($this->getLatitude(self::FORMAT_DMS), 'LATITUDE').
+            $this->makeLine($this->getLongitude(self::FORMAT_DMS), 'LONGITUDE').
+            $this->makeLine(sprintf('%.2fm', $this->altitude), 'ALTITUDE').
+            $this->makeLine(sprintf('%.2fm', $this->size), 'SIZE').
+            $this->makeLine(sprintf('%.2fm', $this->horizontalPrecision), 'HORIZONTAL PRECISION').
+            $this->makeLine(sprintf('%.2fm', $this->verticalPrecision), 'VERTICAL PRECISION').
+            str_repeat(' ', $this->padding).ResourceRecord::MULTILINE_END;
     }
 
     /**

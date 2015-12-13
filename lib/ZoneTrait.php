@@ -113,7 +113,7 @@ trait ZoneTrait
         $out = [];
         foreach ($this->ctrlEntries as $entry) {
             if ($name === $entry['name']) {
-                $out[] = $entry;
+                $out[] = $entry['value'];
             }
         }
 

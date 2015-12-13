@@ -302,4 +302,49 @@ class ValidatorTest extends TestCase
         $this->assertTrue(Validator::reverseIpv6($valid_01));
         $this->assertFalse(Validator::reverseIpv6($invalid_01));
     }
+
+    /**
+     *
+     */
+    public function testRrName()
+    {
+        $case_1 = '*.';
+        $case_2 = '*.hello.com';
+        $case_3 = 'www.*.hello.com';
+
+        $this->assertFalse(Validator::rrName($case_1));
+        $this->assertTrue(Validator::rrName($case_2));
+        $this->assertFalse(Validator::rrName($case_3));
+    }
+
+    public function testFqdn()
+    {
+        //Pass cases
+        $fqdn1 = 'example.com.';
+        $fqdn2 = 'www.example.com.';
+        $fqdn3 = 'ex-ample.com.';
+        $fqdn4 = 'ex-ampl3.com.au.';
+        $fqdn5 = 'alt2.aspmx.l.google.com.';
+        $fqdn6 = 'www.eXAMple.cOm.';
+
+        //Fail cases
+        $fqdn7 = '3xample.com.';
+        $fqdn8 = '_example.com.';
+        $fqdn9 = '-example.com.';
+        $fqdn10 = 'example.com';
+        $fqdn11 = 'e&ample.com.';
+
+        $this->assertTrue(Validator::fqdn($fqdn1));
+        $this->assertTrue(Validator::fqdn($fqdn2));
+        $this->assertTrue(Validator::fqdn($fqdn3));
+        $this->assertTrue(Validator::fqdn($fqdn4));
+        $this->assertTrue(Validator::fqdn($fqdn5));
+        $this->assertTrue(Validator::fqdn($fqdn6));
+
+        $this->assertFalse(Validator::fqdn($fqdn7));
+        $this->assertFalse(Validator::fqdn($fqdn8));
+        $this->assertFalse(Validator::fqdn($fqdn9));
+        $this->assertFalse(Validator::fqdn($fqdn10));
+        $this->assertFalse(Validator::fqdn($fqdn11));
+    }
 }

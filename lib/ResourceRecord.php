@@ -133,6 +133,10 @@ class ResourceRecord implements ResourceRecordInterface
      */
     public function getType()
     {
+        if (null === $this->rdata) {
+            return;
+        }
+
         return $this->rdata->getType();
     }
 

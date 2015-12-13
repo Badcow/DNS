@@ -143,13 +143,16 @@ DNS;
     public function testBuild()
     {
         $zone = $this->buildTestZone();
-        $builder = new AlignedBuilder();
-        $zoneFile = $builder->build($zone);
-        if (true == $this->getEnvVariable(self::PHP_ENV_PRINT_TEST_ZONE)) {
-            $this->printBlock($zoneFile, 'ALIGNED TEST ZONE');
-        }
+        $zone->addResourceRecord(new ResourceRecord('null'));
 
-        $this->assertEquals($this->expected, $zoneFile);
+        $builder = new AlignedBuilder();
+        $output = $builder->build($zone);
+
+        $this->assertEquals($this->expected, $output);
+
+        if (true == $this->getEnvVariable(self::PHP_ENV_PRINT_TEST_ZONE)) {
+            $this->printBlock($builder->build($output), 'ALIGNED TEST ZONE');
+        }
     }
 
     public function testZoneFile()

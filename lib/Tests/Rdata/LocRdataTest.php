@@ -29,6 +29,30 @@ class LocRdataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $rdata->output());
     }
 
+    public function testSetLatitude()
+    {
+        $latitude = -35.3075;
+        $lat_dms = '35 18 27.000 S';
+
+        $rdata = new LocRdata();
+        $rdata->setLatitude($latitude);
+
+        $this->assertEquals($latitude, $rdata->getLatitude($latitude));
+        $this->assertEquals($lat_dms, $rdata->getLatitude(LocRdata::FORMAT_DMS));
+    }
+
+    public function testSetLongitude()
+    {
+        $longitude = 149.1244;
+        $lon_dms = '149 7 27.840 E';
+
+        $rdata = new LocRdata();
+        $rdata->setLongitude($longitude);
+
+        $this->assertEquals($longitude, $rdata->getLongitude($longitude));
+        $this->assertEquals($lon_dms, $rdata->getLongitude(LocRdata::FORMAT_DMS));
+    }
+
     /**
      * @expectedException \OutOfRangeException
      */
