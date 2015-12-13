@@ -72,6 +72,6 @@ class MxRdata implements RdataInterface
      */
     public function output()
     {
-        return $this->preference.' '.$this->exchange;
+        return $this->preference . ' ' . $this->exchange;
     }
 }

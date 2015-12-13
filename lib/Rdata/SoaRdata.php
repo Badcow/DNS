@@ -226,15 +226,15 @@ class SoaRdata implements RdataInterface, FormattableInterface
      */
     public function outputFormatted()
     {
-        return ResourceRecord::MULTILINE_BEGIN.PHP_EOL.
-            $this->makeLine($this->getMname(), 'MNAME').
-            $this->makeLine($this->getRname(), 'RNAME').
-            $this->makeLine($this->getSerial(), 'SERIAL').
-            $this->makeLine($this->getRefresh(), 'REFRESH').
-            $this->makeLine($this->getRetry(), 'RETRY').
-            $this->makeLine($this->getExpire(), 'EXPIRE').
-            $this->makeLine($this->getMinimum(), 'MINIMUM').
-            str_repeat(' ', $this->padding).ResourceRecord::MULTILINE_END;
+        return ResourceRecord::MULTILINE_BEGIN . PHP_EOL .
+            $this->makeLine($this->getMname(), 'MNAME') .
+            $this->makeLine($this->getRname(), 'RNAME') .
+            $this->makeLine($this->getSerial(), 'SERIAL') .
+            $this->makeLine($this->getRefresh(), 'REFRESH') .
+            $this->makeLine($this->getRetry(), 'RETRY') .
+            $this->makeLine($this->getExpire(), 'EXPIRE') .
+            $this->makeLine($this->getMinimum(), 'MINIMUM') .
+            str_repeat(' ', $this->padding) . ResourceRecord::MULTILINE_END;
     }
 
     /**
