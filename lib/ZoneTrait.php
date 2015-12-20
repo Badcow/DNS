@@ -21,7 +21,7 @@ trait ZoneTrait
     /**
      * @var ResourceRecord[]
      */
-    private $resourceRecords = array();
+    private $resourceRecords = [];
 
     /**
      * @var int

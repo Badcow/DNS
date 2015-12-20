@@ -20,7 +20,7 @@ class Zone implements ZoneInterface
      * @param string                    $defaultTtl
      * @param ResourceRecordInterface[] $resourceRecords
      */
-    public function __construct($name = null, $defaultTtl = null, array $resourceRecords = array())
+    public function __construct($name = null, $defaultTtl = null, array $resourceRecords = [])
     {
         if (null !== $name) {
             $this->setName($name);

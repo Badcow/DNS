@@ -153,9 +153,9 @@ class Validator
      */
     public static function validateIpv4Address($ipAddress)
     {
-        return (bool) filter_var($ipAddress, FILTER_VALIDATE_IP, array(
+        return (bool) filter_var($ipAddress, FILTER_VALIDATE_IP, [
             'flags' => FILTER_FLAG_IPV4,
-        ));
+        ]);
     }
 
     /**
@@ -169,9 +169,9 @@ class Validator
      */
     public static function validateIpv6Address($ipAddress)
     {
-        return (bool) filter_var($ipAddress, FILTER_VALIDATE_IP, array(
+        return (bool) filter_var($ipAddress, FILTER_VALIDATE_IP, [
             'flags' => FILTER_FLAG_IPV6,
-        ));
+        ]);
     }
 
     /**
@@ -221,7 +221,7 @@ class Validator
     {
         $number_soa = 0;
         $number_ns = 0;
-        $classes = array();
+        $classes = [];
 
         foreach ($zone->getResourceRecords() as $rr) {
             /* @var $rr ResourceRecordInterface */

@@ -171,7 +171,7 @@ DNS;
         $hinfo->setClass(Classes::INTERNET);
         $hinfo->setRdata(Factory::Hinfo('2.7GHz', 'Ubuntu 12.04'));
 
-        return new Zone('example.com.', 3600, array(
+        return new Zone('example.com.', 3600, [
             $soa,
             $ns1,
             $ns2,
@@ -185,7 +185,7 @@ DNS;
             $cname,
             $txt,
             $hinfo,
-        ));
+        ]);
     }
 
     /**

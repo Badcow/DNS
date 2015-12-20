@@ -20,11 +20,11 @@ class Classes
     /**
      * @var array
      */
-    public static $classes = array(
+    public static $classes = [
         self::CHAOS => 'CHAOS',
         self::HESIOD => 'Hesiod',
         self::INTERNET => 'Internet',
-    );
+    ];
 
     /**
      * Determine if a class is valid.

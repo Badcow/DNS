@@ -246,7 +246,7 @@ class SoaRdata implements RdataInterface, FormattableInterface
     {
         $l = 0;
 
-        foreach (array(
+        foreach ([
                     $this->getMname(),
                     $this->getRname(),
                     $this->getSerial(),
@@ -254,7 +254,7 @@ class SoaRdata implements RdataInterface, FormattableInterface
                     $this->getRetry(),
                     $this->getExpire(),
                     $this->getMinimum(),
-                ) as $var) {
+                ] as $var) {
             $l = ($l < strlen($var)) ? strlen($var) : $l;
         }
 

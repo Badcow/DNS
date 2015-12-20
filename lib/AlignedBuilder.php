@@ -30,7 +30,7 @@ class AlignedBuilder implements ZoneBuilderInterface
      *
      * @var array
      */
-    private static $order = array(
+    private static $order = [
         SoaRdata::TYPE,
         NsRdata::TYPE,
         ARdata::TYPE,
@@ -41,7 +41,7 @@ class AlignedBuilder implements ZoneBuilderInterface
         LocRdata::TYPE,
         HinfoRdata::TYPE,
         TxtRdata::TYPE,
-    );
+    ];
 
     /**
      * {@inheritdoc}

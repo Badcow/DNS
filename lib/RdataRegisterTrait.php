@@ -15,7 +15,7 @@ use Badcow\DNS\Rdata\RdataInterface;
 
 trait RdataRegisterTrait
 {
-    protected $rdataTypes = array(
+    protected $rdataTypes = [
         Rdata\CnameRdata::TYPE => '\\Badcow\\DNS\\Rdata\\CnameRdata',
         Rdata\DnameRdata::TYPE => '\\Badcow\\DNS\\Rdata\\DnameRdata',
         Rdata\HinfoRdata::TYPE => '\\Badcow\\DNS\\Rdata\\HinfoRdata',
@@ -26,7 +26,7 @@ trait RdataRegisterTrait
         Rdata\NsRdata::TYPE => '\\Badcow\\DNS\\Rdata\\NsRdata',
         Rdata\MxRdata::TYPE => '\\Badcow\\DNS\\Rdata\\MxRdata',
         Rdata\ARdata::TYPE => '\\Badcow\\DNS\\Rdata\\ARdata',
-    );
+    ];
 
     /**
      * @param string $type

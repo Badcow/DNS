@@ -80,7 +80,7 @@ TXT;
         $foo4 = new ResourceRecord('4', Factory::Ptr('foo4.example.com.'), null, Classes::INTERNET);
         $foo5 = new ResourceRecord('5', Factory::Ptr('foo5.example.com.'), null, Classes::INTERNET);
 
-        $zone = new Zone($origin, 14400, array(
+        $zone = new Zone($origin, 14400, [
             $soa,
             $ns1,
             $ns2,
@@ -89,7 +89,7 @@ TXT;
             $foo3,
             $foo4,
             $foo5,
-        ));
+        ]);
 
         $builder = new ZoneBuilder();
 
@@ -124,7 +124,7 @@ TXT;
         $foob = new ResourceRecord('b', Factory::Ptr('foob.example.com.'), null, Classes::INTERNET);
         $fooc = new ResourceRecord('c', Factory::Ptr('fooc.example.com.'), null, Classes::INTERNET);
 
-        $zone = new Zone($origin, 14400, array(
+        $zone = new Zone($origin, 14400, [
             $soa,
             $ns1,
             $ns2,
@@ -133,7 +133,7 @@ TXT;
             $fooa,
             $foob,
             $fooc,
-        ));
+        ]);
 
         $builder = new ZoneBuilder();
 

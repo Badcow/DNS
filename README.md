@@ -179,13 +179,13 @@ $foo = new ResourceRecord('1', Factory::Ptr('foo.example.com.'), null, Classes::
 $bar = new ResourceRecord('84', Factory::Ptr('bar.example.com.'), null, Classes::INTERNET);
 $foobar = new ResourceRecord('128', Factory::Ptr('foobar.example.com.'), null, Classes::INTERNET);
 
-$zone = new Zone($origin, 14400, array(
+$zone = new Zone($origin, 14400, [
     $soa,
     $ns,
     $foo,
     $bar,
     $foobar
-));
+]);
 
 $builder = new ZoneBuilder();
 echo $builder->build($zone);
@@ -234,7 +234,7 @@ $fooa = new ResourceRecord('a', Factory::Ptr('fooa.example.com.'), null, Classes
 $foob = new ResourceRecord('b', Factory::Ptr('foob.example.com.'), null, Classes::INTERNET);
 $fooc = new ResourceRecord('c', Factory::Ptr('fooc.example.com.'), null, Classes::INTERNET);
 
-$zone = new Zone($origin, 14400, array(
+$zone = new Zone($origin, 14400, [
     $soa,
     $ns1,
     $ns2,
@@ -243,7 +243,7 @@ $zone = new Zone($origin, 14400, array(
     $fooa,
     $foob,
     $fooc,
-));
+]);
 
 $builder = new \Badcow\DNS\ZoneBuilder();
 echo $builder->build($zone);

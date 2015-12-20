@@ -237,14 +237,14 @@ class LocRdata implements RdataInterface, FormattableInterface
     {
         $l = 0;
 
-        foreach (array(
+        foreach ([
                         $this->getLatitude(self::FORMAT_DMS),
                         $this->getLongitude(self::FORMAT_DMS),
                         sprintf('%.2fm', $this->altitude),
                         sprintf('%.2fm', $this->size),
                         sprintf('%.2fm', $this->horizontalPrecision),
                         sprintf('%.2fm', $this->verticalPrecision),
-                ) as $var) {
+                ] as $var) {
             $l = ($l < strlen($var)) ? strlen($var) : $l;
         }
 
