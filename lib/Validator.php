@@ -272,7 +272,7 @@ class Validator
      */
     public static function reverseIpv6($address)
     {
-        $pattern = '/^(?:[0-9a-f]\.){32}ip6\.arpa\.$/i';
+        $pattern = '/^(?:[0-9a-f]\.){1,32}ip6\.arpa\.$/i';
 
         return 1 === preg_match($pattern, $address);
     }

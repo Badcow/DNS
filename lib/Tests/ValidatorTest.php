@@ -297,9 +297,11 @@ class ValidatorTest extends TestCase
     public function testReverseIpv6()
     {
         $valid_01 = 'b.a.9.8.7.6.5.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.';
+        $valid_02 = '1.0.0.0.6.8.7.0.6.5.a.0.4.0.5.1.2.0.0.3.8.f.0.1.0.0.2.ip6.arpa.';
         $invalid_01 = 'b.a.9.8.7.6.5.0.0.g.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.';
 
         $this->assertTrue(Validator::reverseIpv6($valid_01));
+        $this->assertTrue(Validator::reverseIpv6($valid_02));
         $this->assertFalse(Validator::reverseIpv6($invalid_01));
     }
 
