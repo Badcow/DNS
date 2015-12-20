@@ -22,6 +22,7 @@ trait RdataRegisterTrait
         Rdata\AaaaRdata::TYPE => '\\Badcow\\DNS\\Rdata\\AaaaRdata',
         Rdata\SoaRdata::TYPE => '\\Badcow\\DNS\\Rdata\\SoaRdata',
         Rdata\LocRdata::TYPE => '\\Badcow\\DNS\\Rdata\\LocRdata',
+        Rdata\PtrRdata::TYPE => '\\Badcow\\DNS\\Rdata\\PtrRdata',
         Rdata\TxtRdata::TYPE => '\\Badcow\\DNS\\Rdata\\TxtRdata',
         Rdata\NsRdata::TYPE => '\\Badcow\\DNS\\Rdata\\NsRdata',
         Rdata\MxRdata::TYPE => '\\Badcow\\DNS\\Rdata\\MxRdata',
