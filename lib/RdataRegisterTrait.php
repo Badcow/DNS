@@ -37,7 +37,7 @@ trait RdataRegisterTrait
      */
     public function registerRdataType($type, $fqcn)
     {
-        if (!is_subclass_of($fqcn, '\\Badcow\\DNS\\Rdata\\RdataInterface')) {
+        if (false === (new \ReflectionClass($fqcn))->implementsInterface('\\Badcow\\DNS\\Rdata\\RdataInterface')) {
             throw new \InvalidArgumentException(sprintf(
                 'The class "%s" is not an instance of Badcow\DNS\Rdata\RdataInterface',
                 $fqcn

@@ -30,7 +30,7 @@ class RdataRegisterTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testRegisterRdataTypeException()
     {
-        $this->registerRdataType(DummyRdata::TYPE, '\\Badcow\\DNS\\Tests\\Rdata\\NoSuchClass');
+        $this->registerRdataType(DummyRdata::TYPE, '\\Badcow\\DNS\\Tests\\ClassesTest');
     }
 
     public function testRemoveRdataType()
