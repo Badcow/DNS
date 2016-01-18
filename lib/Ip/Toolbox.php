@@ -19,6 +19,7 @@ class Toolbox
      * Expands an IPv6 address to its full, non-short hand representation.
      *
      * @param $ip
+     * @throws \InvalidArgumentException
      *
      * @return string
      */
