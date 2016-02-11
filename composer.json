@@ -1,6 +1,6 @@
 {
     "name": "badcow/dns",
-    "description": "A PHP library for creating DNZ zone files based on RFC1035",
+    "description": "A PHP library for creating DNS zone files based on RFC1035",
     "stability": "dev",
     "authors": [
         {
