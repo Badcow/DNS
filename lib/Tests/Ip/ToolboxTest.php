@@ -30,6 +30,33 @@ class ToolboxTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($exp_2, Toolbox::expandIpv6($case_2));
     }
 
+    public function testContractIpv6()
+    {
+        $case_1 = '0000:0000:0000:0000:0000:0000:0000:0001';
+        $case_2 = '2001:0db8:0000:0000:0000:ff00:0042:8329';
+        $case_3 = '2001:0000:0000:acad:0000:0000:0000:0001';
+        $case_4 = '2001:db8::ff00:42:8329';
+        $case_5 = '0000:0000:0000:0000:0000:0000:0000:0000';
+        $case_6 = '2001:0000:0000:ab80:2390:0000:0000:000a';
+        $case_7 = '2001:db8:a:bac:8099:d:f:9';
+
+        $exp_1 = '::1';
+        $exp_2 = '2001:db8::ff00:42:8329';
+        $exp_3 = '2001:0:0:acad::1';
+        $exp_4 = '2001:db8::ff00:42:8329';
+        $exp_5 = '::';
+        $exp_6 = '2001:0:0:ab80:2390::a';
+        $exp_7 = '2001:db8:a:bac:8099:d:f:9';
+
+        $this->assertEquals($exp_1, Toolbox::contractIpv6($case_1));
+        $this->assertEquals($exp_2, Toolbox::contractIpv6($case_2));
+        $this->assertEquals($exp_3, Toolbox::contractIpv6($case_3));
+        $this->assertEquals($exp_4, Toolbox::contractIpv6($case_4));
+        $this->assertEquals($exp_5, Toolbox::contractIpv6($case_5));
+        $this->assertEquals($exp_6, Toolbox::contractIpv6($case_6));
+        $this->assertEquals($exp_7, Toolbox::contractIpv6($case_7));
+    }
+
     /**
      *
      */
