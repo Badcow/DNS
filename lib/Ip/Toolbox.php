@@ -16,7 +16,9 @@ use Badcow\DNS\Validator;
 class Toolbox
 {
     /**
-     * Expands an IPv6 address to its full, non-short hand representation.
+     * Expands an IPv6 address to its full, non-shorthand representation.
+     *
+     * E.g. 2001:db8:9a::42 -> 2001:0db8:009a:0000:0000:0000:0000:0042
      *
      * @param string $ip IPv6 address
      * @throws \InvalidArgumentException
@@ -30,27 +32,26 @@ class Toolbox
         }
 
         $hex = unpack('H*hex', inet_pton($ip));
-        $ip = substr(preg_replace('/([A-f0-9]{4})/', '$1:', $hex['hex']), 0, -1);
 
-        return $ip;
+        return substr(preg_replace('/([A-f0-9]{4})/', '$1:', $hex['hex']), 0, -1);
     }
 
     /**
      * This function will expand in incomplete IPv6 address.
-     * An incomplete IPv6 address is of the form `2001:db8:ffff:abcd`
+     * An incomplete IPv6 address is of the form `2001:db8:ff:abcd`
      * i.e. one where there is less than eight hextets.
      *
      * @param string $ip IPv6 address
+     *
      * @return string Expanded incomplete IPv6 address
      */
     public static function expandIncompleteIpv6($ip)
     {
-        $parts = explode(':', $ip);
-        foreach ($parts as $i => $part) {
-            $parts[$i] = str_pad($part, 4, '0', STR_PAD_LEFT);
-        }
+        $hextets = array_map(function ($hextet) {
+            return str_pad($hextet, 4, '0', STR_PAD_LEFT);
+        }, explode(':', $ip));
 
-        return implode(':', $parts);
+        return implode(':', $hextets);
     }
 
     /**
@@ -77,12 +78,7 @@ class Toolbox
         }
 
         $ip = self::expandIpv6($ip);
-        $hextets = explode(':', $ip);
-        $decimals = [];
-
-        foreach ($hextets as $hextet) {
-            $decimals[] = hexdec($hextet);
-        }
+        $decimals = array_map('hexdec', explode(':', $ip));
 
         $zeroes = [];
         $flag = false;
@@ -131,7 +127,6 @@ class Toolbox
             }
 
             $ip .= (string) dechex($decimal);
-
             $ip .= ($i < 7) ? ':' : '';
         }
 
@@ -141,26 +136,27 @@ class Toolbox
     /**
      * Creates a reverse IPv4 address.
      *
-     * @param $ip
+     * E.g. 192.168.1.213 -> 213.1.168.192.in-addr.arpa.
      *
-     * @return string
+     * @param string $ip Valid IPv4 address
+     *
+     * @return string Reversed IP address appended with ".in-addr.arpa."
      */
     public static function reverseIpv4($ip)
     {
-        $parts = array_reverse(explode('.', $ip));
+        $octets = array_reverse(explode('.', $ip));
 
-        $address = implode('.', $parts);
-        $address .= '.in-addr.arpa.';
-
-        return $address;
+        return implode('.', $octets) . '.in-addr.arpa.';
     }
 
     /**
      * Creates a reverse IPv6 address.
      *
-     * @param string $ip
+     * E.g. 2001:db8::567:89ab -> b.a.9.8.7.6.5.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.
      *
-     * @return string
+     * @param string $ip A full or partial IPv6 address
+     *
+     * @return string The reversed address appended with ".ip6.arpa."
      */
     public static function reverseIpv6($ip)
     {
@@ -172,9 +168,7 @@ class Toolbox
 
         $ip = str_replace(':', '', $ip);
         $ip = strrev($ip);
-        $address = implode('.', str_split($ip));
-        $address .= '.ip6.arpa.';
 
-        return $address;
+        return implode('.', str_split($ip)) . '.ip6.arpa.';
     }
 }
