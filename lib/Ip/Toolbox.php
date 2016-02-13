@@ -80,7 +80,7 @@ class Toolbox
         $ip = self::expandIpv6($ip);
         $decimals = array_map('hexdec', explode(':', $ip));
 
-        //Find the larget streak of zeroes
+        //Find the largest streak of zeroes
         $streak = $longestStreak = 0;
         $streak_i = $longestStreak_i = -1;
 
