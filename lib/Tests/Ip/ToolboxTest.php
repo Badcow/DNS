@@ -39,6 +39,7 @@ class ToolboxTest extends \PHPUnit_Framework_TestCase
         $case_5 = '0000:0000:0000:0000:0000:0000:0000:0000';
         $case_6 = '2001:0000:0000:ab80:2390:0000:0000:000a';
         $case_7 = '2001:db8:a:bac:8099:d:f:9';
+        $case_8 = '2001:db8:0:0:f:0:0:0';
 
         $exp_1 = '::1';
         $exp_2 = '2001:db8::ff00:42:8329';
@@ -47,6 +48,7 @@ class ToolboxTest extends \PHPUnit_Framework_TestCase
         $exp_5 = '::';
         $exp_6 = '2001:0:0:ab80:2390::a';
         $exp_7 = '2001:db8:a:bac:8099:d:f:9';
+        $exp_8 = '2001:db8:0:0:f::';
 
         $this->assertEquals($exp_1, Toolbox::contractIpv6($case_1));
         $this->assertEquals($exp_2, Toolbox::contractIpv6($case_2));
@@ -55,6 +57,7 @@ class ToolboxTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($exp_5, Toolbox::contractIpv6($case_5));
         $this->assertEquals($exp_6, Toolbox::contractIpv6($case_6));
         $this->assertEquals($exp_7, Toolbox::contractIpv6($case_7));
+        $this->assertEquals($exp_8, Toolbox::contractIpv6($case_8));
     }
 
     /**

@@ -80,48 +80,35 @@ class Toolbox
         $ip = self::expandIpv6($ip);
         $decimals = array_map('hexdec', explode(':', $ip));
 
-        $zeroes = [];
-        $flag = false;
+        //Find the larget streak of zeroes
+        $streak = $longestStreak = 0;
+        $streak_i = $longestStreak_i = -1;
 
-        foreach ($decimals as $i => $n) {
-            if (0 === $n) {
-                if (true === $flag) {
-                    $arg = end($zeroes);
-                    $arg['n'] += 1;
-                } else {
-                    $flag = true;
-                    $arg = ['i' => $i, 'n' => 1];
-                }
-
-                $zeroes[$arg['i']] = $arg;
+        foreach ($decimals as $i => $decimal) {
+            if (0 !== $decimal) {
+                $streak_i = -1;
+                $streak = 0;
 
                 continue;
             }
 
-            $flag = false;
-        }
+            $streak_i = ($streak_i === -1) ? $i : $streak_i;
+            $streak += 1;
 
-        $i_0 = -1;
-        $n_0 = 0;
-
-        if (count($zeroes) > 0) {
-            $n = 0;
-            foreach ($zeroes as $arg) {
-                if ($arg['n'] >= $n) {
-                    $i_0 = $arg['i'];
-                    $n_0 = $arg['n'];
-                }
+            if ($streak >= $longestStreak) {
+                $longestStreak = $streak;
+                $longestStreak_i = $streak_i;
             }
         }
 
         $ip = '';
 
         foreach ($decimals as $i => $decimal) {
-            if ($i > $i_0 && $i < $i_0 + $n_0) {
+            if ($i > $longestStreak_i && $i < $longestStreak_i + $longestStreak) {
                 continue;
             }
 
-            if ($i === $i_0) {
+            if ($i === $longestStreak_i) {
                 $ip .= '::';
                 continue;
             }
