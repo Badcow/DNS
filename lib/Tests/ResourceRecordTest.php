@@ -29,15 +29,8 @@ class ResourceRecordTest extends TestCase
     }
 
     /**
-     * @expectedException \Badcow\DNS\DNSException
-     * @expectedExceptionMessage "example?record.com." is not a valid resource record name.
+     * Tests the getter and setter methods
      */
-    public function testSetName()
-    {
-        $rr = new ResourceRecord();
-        $rr->setName('example?record.com.');
-    }
-
     public function testSettersAndGetters()
     {
         $rr = new ResourceRecord();

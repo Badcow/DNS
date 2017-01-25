@@ -92,10 +92,6 @@ class ResourceRecord implements ResourceRecordInterface
      */
     public function setName($name)
     {
-        if (!Validator::rrName($name)) {
-            throw new DNSException(sprintf('"%s" is not a valid resource record name.', $name));
-        }
-
         $this->name = (string) $name;
     }
 
