@@ -16,6 +16,18 @@ use Badcow\DNS\Rdata\SoaRdata;
 
 class Validator
 {
+    const ZONE_OKAY = 0;
+
+    const ZONE_NO_SOA = 1;
+
+    const ZONE_TOO_MANY_SOA = 2;
+
+    const ZONE_NO_NS = 4;
+
+    const ZONE_NO_CLASS = 8;
+
+    const ZONE_TOO_MANY_CLASSES = 16;
+
     /**
      * Validates if $string is suitable as an RR name.
      *
@@ -210,7 +222,9 @@ class Validator
      * RFC-1035 especially that:
      *   1) 5.2.1 All RRs in the file should be of the same class.
      *   2) 5.2.2 Exactly one SOA RR should be present at the top of the zone.
+     *   3) There is at least one NS record.
      *
+     * @deprecated
      * @param ZoneInterface $zone
      *
      * @throws ZoneException
@@ -219,38 +233,115 @@ class Validator
      */
     public static function validate(ZoneInterface $zone)
     {
-        $number_soa = 0;
-        $number_ns = 0;
+        $n_soa = self::countResourceRecords($zone, SoaRdata::TYPE);
+        $n_ns = self::countResourceRecords($zone, NsRdata::TYPE);
         $classes = [];
 
         foreach ($zone->getResourceRecords() as $rr) {
-            /* @var $rr ResourceRecordInterface */
-            if (SoaRdata::TYPE === $rr->getRdata()->getType()) {
-                $number_soa += 1;
-            }
-
-            if (NsRdata::TYPE === $rr->getRdata()->getType()) {
-                $number_ns += 1;
-            }
-
             if (null !== $rr->getClass()) {
                 $classes[$rr->getClass()] = null;
             }
         }
 
-        if ($number_soa !== 1) {
-            throw new ZoneException(sprintf('There must be exactly one SOA record, %s given.', $number_soa));
+        $n_class = count($classes);
+
+        if (1 !== $n_soa) {
+            throw new ZoneException(sprintf('There must be exactly one SOA record, %s given.', $n_soa));
         }
 
-        if ($number_ns < 1) {
-            throw new ZoneException(sprintf('There must be at least one NS record, %s given.', $number_ns));
+        if ($n_ns < 1) {
+            throw new ZoneException(sprintf('There must be at least one NS record, %s given.', $n_ns));
         }
 
-        if (1 !== $c = count($classes)) {
-            throw new ZoneException(sprintf('There must be exactly one type of class, %s given.', $c));
+        if (1 !== $n_class) {
+            throw new ZoneException(sprintf('There must be exactly one type of class, %s given.', $n_class));
         }
 
         return true;
+    }
+
+    /**
+     * Validates that the zone meets
+     * RFC-1035 especially that:
+     *   1) 5.2.1 All RRs in the file should be of the same class.
+     *   2) 5.2.2 Exactly one SOA RR should be present at the top of the zone.
+     *   3) There is at least one NS record.
+     *
+     * Return values are:
+     *   - ZONE_NO_SOA
+     *   - ZONE_TOO_MANY_SOA
+     *   - ZONE_NO_NS
+     *   - ZONE_NO_CLASS
+     *   - ZONE_TOO_MANY_CLASSES
+     *   - ZONE_OKAY
+     *
+     * You SHOULD compare these return values to the defined constants of this
+     * class rather than against integers directly.
+     *
+     * @param ZoneInterface $zone
+     *
+     * @return integer
+     */
+    public static function zone(ZoneInterface $zone)
+    {
+        $n_soa = self::countResourceRecords($zone, SoaRdata::TYPE);
+        $n_ns = self::countResourceRecords($zone, NsRdata::TYPE);
+        $classes = [];
+
+        foreach ($zone->getResourceRecords() as $rr) {
+            if (null !== $rr->getClass()) {
+                $classes[$rr->getClass()] = null;
+            }
+        }
+
+        $n_class = count($classes);
+
+        if ($n_soa < 1) {
+            return self::ZONE_NO_SOA;
+        }
+
+        if ($n_soa > 1) {
+            return self::ZONE_TOO_MANY_SOA;
+        }
+
+        if ($n_ns < 1) {
+            return self::ZONE_NO_NS;
+        }
+
+        if ($n_class < 1) {
+            return self::ZONE_NO_CLASS;
+        }
+
+        if ($n_class > 1) {
+            return self::ZONE_TOO_MANY_CLASSES;
+        }
+
+        return self::ZONE_OKAY;
+    }
+
+    /**
+     * @param ZoneInterface $zone
+     * @param null $type The ResourceRecord type to be counted. If NULL, then the method will return
+     *                   the total number of resource records.
+     *
+     * @return int The number of records to be counted.
+     */
+    public static function countResourceRecords(ZoneInterface $zone, $type = null)
+    {
+        if (null === $type) {
+            return count($zone->getResourceRecords());
+        }
+
+        $n = 0;
+
+        foreach ($zone->getResourceRecords() as $rr) {
+            /* @var $rr ResourceRecordInterface */
+            if ($type === $rr->getRdata()->getType()) {
+                $n += 1;
+            }
+        }
+
+        return $n;
     }
 
     /**

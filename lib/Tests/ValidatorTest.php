@@ -175,8 +175,10 @@ class ValidatorTest extends TestCase
             604800,
             3600
         ));
-
         $zone->addResourceRecord($soa);
+
+        $this->assertEquals(Validator::ZONE_TOO_MANY_SOA, Validator::zone($zone));
+
         Validator::validate($zone);
     }
 
@@ -199,8 +201,10 @@ class ValidatorTest extends TestCase
             604800,
             3600
         ));
-
         $zone->addResourceRecord($soa);
+
+        $this->assertEquals(Validator::ZONE_NO_NS, Validator::zone($zone));
+
         Validator::validate($zone);
     }
 
@@ -218,6 +222,8 @@ class ValidatorTest extends TestCase
         $a->setComment('This class does not belong here');
         $zone->addResourceRecord($a);
 
+        $this->assertEquals(Validator::ZONE_TOO_MANY_CLASSES, Validator::zone($zone));
+
         Validator::validate($zone);
     }
 
@@ -228,6 +234,15 @@ class ValidatorTest extends TestCase
     {
         $zone = $this->buildTestZone();
         $this->assertTrue(Validator::validate($zone));
+    }
+
+    /**
+     *
+     */
+    public function testZone()
+    {
+        $zone = $this->buildTestZone();
+        $this->assertEquals(Validator::ZONE_OKAY, Validator::zone($zone));
     }
 
     public function testWildcard()
