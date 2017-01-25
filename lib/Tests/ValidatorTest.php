@@ -274,6 +274,8 @@ class ValidatorTest extends TestCase
         $invalid_01 = '10.IN-ADDR.ARPA';
         $invalid_02 = '10.20.ARPA.';
         $invalid_03 = '10.123.0.1.INADDR.ARPA.';
+        $invalid_04 = '10.1.1.1.1.in-addr.arpa.';
+        $invalid_05 = '10.1.256.7.in-addr.arpa.';
 
         $this->assertTrue(Validator::reverseIpv4($valid_01));
         $this->assertTrue(Validator::reverseIpv4($valid_02));
@@ -289,6 +291,8 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::reverseIpv4($invalid_01));
         $this->assertFalse(Validator::reverseIpv4($invalid_02));
         $this->assertFalse(Validator::reverseIpv4($invalid_03));
+        $this->assertFalse(Validator::reverseIpv4($invalid_04));
+        $this->assertFalse(Validator::reverseIpv4($invalid_05));
     }
 
     /**

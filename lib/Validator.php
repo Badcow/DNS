@@ -260,9 +260,22 @@ class Validator
      */
     public static function reverseIpv4($address)
     {
-        $pattern = '/^(?:[0-9]+\.){1,4}in\-addr\.arpa\.$/i';
+        $pattern = '/^((?:[0-9]+\.){1,4})in\-addr\.arpa\.$/i';
 
-        return 1 === preg_match($pattern, $address);
+        if(1 !== preg_match($pattern, $address, $matches)) {
+            return false;
+        }
+
+        $octets = explode('.', $matches[1]);
+        array_pop($octets); //Remove the last decimal from the array
+
+        foreach ($octets as $octet) {
+            if ((int) $octet > 255) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
