@@ -11,6 +11,14 @@
 
 namespace Badcow\DNS\Rdata;
 
+/**
+ * Class SrvRdata
+ *
+ * SRV is defined in RFC 2782
+ * @link https://www.ietf.org/rfc/rfc2782.txt
+ *
+ * @author Samuel Williams <sam@badcow.co>
+ */
 class SrvRdata extends CnameRdata
 {
     const TYPE = 'SRV';

@@ -22,6 +22,7 @@ use Badcow\DNS\Rdata\MxRdata;
 use Badcow\DNS\Rdata\NsRdata;
 use Badcow\DNS\Rdata\PtrRdata;
 use Badcow\DNS\Rdata\SoaRdata;
+use Badcow\DNS\Rdata\SrvRdata;
 use Badcow\DNS\Rdata\TxtRdata;
 
 class AlignedBuilder implements ZoneBuilderInterface
@@ -43,6 +44,7 @@ class AlignedBuilder implements ZoneBuilderInterface
         HinfoRdata::TYPE,
         TxtRdata::TYPE,
         PtrRdata::TYPE,
+        SrvRdata::TYPE,
     ];
 
     /**
