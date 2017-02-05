@@ -9,7 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Badcow\DNS\Rdata;
+namespace Badcow\DNS\Rdata\DNSSEC;
+
+use Badcow\DNS\Rdata\RdataInterface;
+use Badcow\DNS\Rdata\RdataTrait;
 
 /**
  * Class DnskeyRdata
@@ -22,59 +25,30 @@ class DnskeyRdata implements RdataInterface
 {
     use RdataTrait;
 
-    /**
-     * RSA/MD5
-     */
-    const DNSSEC_RSAMD5 = 1;
-
-    /**
-     * Diffie-Hellman
-     */
-    const DNSSEC_DH = 2;
-
-    /**
-     * DSA/SHA-1
-     */
-    const DNSSEC_DSA = 3;
-
-    /**
-     * Elliptic Curve
-     */
-    const DNSSEC_ECC = 4;
-
-    /**
-     * RSA/SHA-1
-     */
-    const DNSSEC_RSASHA1 = 5;
-
-    /**
-     * Indirect
-     */
-    const DNSSEC_INDIRECT = 252;
-
-    /**
-     * Private
-     */
-    const DNSSEC_PRIVATEDNS = 253;
-
-    /**
-     * Private
-     */
-    const DNSSEC_PRIVATEOID = 254;
-
     const TYPE = 'DNSKEY';
 
     /**
+     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.1}
+     *
      * @var int
      */
     private $flags;
 
     /**
+     * The Protocol Field MUST have value 3, and the DNSKEY RR MUST be
+     * treated as invalid during signature verification if it is found to be
+     * some value other than 3.
+     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.2}
+     *
      * @var int
      */
     private $protocol = 3;
 
     /**
+     * The Algorithm field identifies the public key's cryptographic
+     * algorithm and determines the format of the Public Key field.
+     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.3}
+     *
      * @var int
      */
     private $algorithm;
@@ -82,6 +56,7 @@ class DnskeyRdata implements RdataInterface
     /**
      * The Public Key field is a Base64 encoding of the Public Key.
      * Whitespace is allowed within the Base64 text.
+     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.4}
      *
      * @var string
      */
