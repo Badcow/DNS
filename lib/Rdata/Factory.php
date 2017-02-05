@@ -10,6 +10,10 @@
  */
 
 namespace Badcow\DNS\Rdata;
+use Badcow\DNS\Rdata\DNSSEC\DnskeyRdata;
+use Badcow\DNS\Rdata\DNSSEC\DsRdata;
+use Badcow\DNS\Rdata\DNSSEC\NsecRdata;
+use Badcow\DNS\Rdata\DNSSEC\RrsigRdata;
 
 class Factory
 {
@@ -184,6 +188,86 @@ class Factory
     {
         $rdata = new PtrRdata();
         $rdata->setTarget($target);
+
+        return $rdata;
+    }
+
+    /**
+     * @param int $flags
+     * @param int $algorithm
+     * @param string $publicKey
+     *
+     * @return DnskeyRdata
+     */
+    public static function Dnskey($flags, $algorithm, $publicKey)
+    {
+        $rdata = new DnskeyRdata();
+        $rdata->setFlags($flags);
+        $rdata->setAlgorithm($algorithm);
+        $rdata->setPublicKey($publicKey);
+
+        return $rdata;
+    }
+
+    /**
+     * @param int $keyTag
+     * @param int $algorithm
+     * @param string $digest
+     *
+     * @return DsRdata
+     */
+    public static function Ds($keyTag, $algorithm, $digest)
+    {
+        $rdata = new DsRdata();
+        $rdata->setKeyTag($keyTag);
+        $rdata->setAlgorithm($algorithm);
+        $rdata->setDigest($digest);
+
+        return $rdata;
+    }
+
+    /**
+     * @param $nextDomainName
+     * @param array $typeBitMaps
+     *
+     * @return NsecRdata
+     */
+    public static function Nsec($nextDomainName, array $typeBitMaps)
+    {
+        $rdata = new NsecRdata();
+        $rdata->setNextDomainName($nextDomainName);
+        array_map([$rdata, 'addTypeBitMap'], $typeBitMaps);
+
+        return $rdata;
+    }
+
+    /**
+     * @param $typeCovered
+     * @param $algorithm
+     * @param $labels
+     * @param $originalTtl
+     * @param $signatureExpiration
+     * @param $signatureInception
+     * @param $keyTag
+     * @param $signersName
+     * @param $signature
+     *
+     * @return RrsigRdata
+     */
+    public function Rrsig($typeCovered, $algorithm, $labels, $originalTtl,
+                          $signatureExpiration, $signatureInception, $keyTag,
+                          $signersName, $signature)
+    {
+        $rdata = new RrsigRdata();
+        $rdata->setTypeCovered($typeCovered);
+        $rdata->setAlgorithm($algorithm);
+        $rdata->setLabels($labels);
+        $rdata->setOriginalTtl($originalTtl);
+        $rdata->setSignatureExpiration($signatureExpiration);
+        $rdata->setSignatureInception($signatureInception);
+        $rdata->setKeyTag($keyTag);
+        $rdata->setSignersName($signersName);
+        $rdata->setSignature($signature);
 
         return $rdata;
     }
