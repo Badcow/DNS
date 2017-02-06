@@ -11,8 +11,8 @@
 
 namespace Badcow\DNS;
 
-use Badcow\DNS\Rdata\NsRdata;
-use Badcow\DNS\Rdata\SoaRdata;
+use Badcow\DNS\Rdata\NS;
+use Badcow\DNS\Rdata\SOA;
 
 class Validator
 {
@@ -234,8 +234,8 @@ class Validator
      */
     public static function validate(ZoneInterface $zone)
     {
-        $n_soa = self::countResourceRecords($zone, SoaRdata::TYPE);
-        $n_ns = self::countResourceRecords($zone, NsRdata::TYPE);
+        $n_soa = self::countResourceRecords($zone, SOA::TYPE);
+        $n_ns = self::countResourceRecords($zone, NS::TYPE);
         $classes = [];
 
         foreach ($zone->getResourceRecords() as $rr) {
@@ -285,8 +285,8 @@ class Validator
      */
     public static function zone(ZoneInterface $zone)
     {
-        $n_soa = self::countResourceRecords($zone, SoaRdata::TYPE);
-        $n_ns = self::countResourceRecords($zone, NsRdata::TYPE);
+        $n_soa = self::countResourceRecords($zone, SOA::TYPE);
+        $n_ns = self::countResourceRecords($zone, NS::TYPE);
         $classes = [];
 
         foreach ($zone->getResourceRecords() as $rr) {

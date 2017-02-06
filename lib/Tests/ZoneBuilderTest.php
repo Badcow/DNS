@@ -25,12 +25,4 @@ class ZoneBuilderTest extends TestCase
             $this->printBlock($output, 'TEST ZONE FILE');
         }
     }
-
-    /**
-     * Test the Zone using Bind.
-     */
-    public function testZoneFile()
-    {
-        $this->bindTest($this->buildTestZone(), new ZoneBuilder());
-    }
 }

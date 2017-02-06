@@ -15,10 +15,6 @@ use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Classes;
 use Badcow\DNS\Zone;
-use Badcow\DNS\Validator;
-use Badcow\DNS\ZoneBuilderInterface;
-use Badcow\DNS\ZoneInterface;
-use Badcow\Common\TempFile;
 
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
@@ -60,7 +56,7 @@ DNS;
             return $var;
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -98,8 +94,7 @@ DNS;
             3600,
             14400,
             604800,
-            3600,
-            false
+            3600
         ));
 
         $ns1 = new ResourceRecord();
@@ -186,35 +181,5 @@ DNS;
             $txt,
             $hinfo,
         ]);
-    }
-
-    /**
-     * Tests a zone file using Bind's Check Zone feature. If CHECKZONE_PATH environment variable has been set.
-     *
-     * @param ZoneInterface        $zone
-     * @param ZoneBuilderInterface $builder
-     */
-    protected function bindTest(ZoneInterface $zone, ZoneBuilderInterface $builder)
-    {
-        if (null === $check_zone_path = $this->getEnvVariable(self::PHP_ENV_CHECKZONE_PATH)) {
-            $this->markTestSkipped('Bind checkzone path is not defined.');
-
-            return;
-        }
-
-        if (!`which $check_zone_path`) {
-            $this->markTestSkipped(sprintf('The checkzone path specified "%s" could not be found.', $check_zone_path));
-
-            return;
-        }
-
-        $zoneFile = $builder->build($zone);
-
-        $tmpFile = new TempFile('badcow_dns_test_');
-        $tmpFile->write($zoneFile);
-
-        $this->assertTrue(
-            Validator::validateZoneFile($zone->getName(), $tmpFile->getPath(), $check_zone_path)
-        );
     }
 }

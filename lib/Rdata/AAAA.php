@@ -11,13 +11,9 @@
 
 namespace Badcow\DNS\Rdata;
 
-/**
- * @deprecated
- */
-class NiceSoaRdata extends SoaRdata
+use Badcow\DNS\Validator;
+
+class AAAA extends A
 {
-    public function output()
-    {
-        return $this->outputFormatted();
-    }
+    const TYPE = 'AAAA';
 }

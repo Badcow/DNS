@@ -11,14 +11,14 @@
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Rdata\DnameRdata;
+use Badcow\DNS\Rdata\DNAME;
 
 class DnameRdataTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetTarget()
     {
         $target = 'foo.example.com.';
-        $dname = new DnameRdata();
+        $dname = new DNAME();
         $dname->setTarget($target);
 
         $this->assertEquals($target, $dname->getTarget());
@@ -27,7 +27,7 @@ class DnameRdataTest extends \PHPUnit_Framework_TestCase
     public function testOutput()
     {
         $target = 'foo.example.com.';
-        $dname = new DnameRdata();
+        $dname = new DNAME();
         $dname->setTarget($target);
 
         $this->assertEquals($target, $dname->output());

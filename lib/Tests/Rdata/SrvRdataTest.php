@@ -11,13 +11,13 @@
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Rdata\SrvRdata;
+use Badcow\DNS\Rdata\SRV;
 
 class SrvRdataTest extends \PHPUnit_Framework_TestCase
 {
     public function testOutput()
     {
-        $srv = new SrvRdata;
+        $srv = new SRV;
         $srv->setPort(666);
         $srv->setPriority(10);
         $srv->setWeight(20);

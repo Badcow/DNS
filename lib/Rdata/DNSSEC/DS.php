@@ -14,7 +14,7 @@ namespace Badcow\DNS\Rdata\DNSSEC;
 use Badcow\DNS\Rdata\RdataInterface;
 use Badcow\DNS\Rdata\RdataTrait;
 
-class DsRdata implements RdataInterface
+class DS implements RdataInterface
 {
     use RdataTrait;
 

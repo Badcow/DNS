@@ -13,7 +13,7 @@ namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\Validator;
 
-class MxRdata implements RdataInterface
+class MX implements RdataInterface
 {
     use RdataTrait;
 
@@ -31,15 +31,9 @@ class MxRdata implements RdataInterface
 
     /**
      * @param string $exchange
-     *
-     * @throws RdataException
      */
     public function setExchange($exchange)
     {
-        if (!Validator::validateFqdn($exchange)) {
-            throw new RdataException(sprintf('The exchange "%s" is not a Fully Qualified Domain Name', $exchange));
-        }
-
         $this->exchange = $exchange;
     }
 

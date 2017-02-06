@@ -12,13 +12,13 @@
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\Factory;
-use Badcow\DNS\Rdata\SoaRdata;
+use Badcow\DNS\Rdata\SOA;
 
 class SoaRdataTest extends \PHPUnit_Framework_TestCase
 {
     public function testSettersAndGetters()
     {
-        $soa = new SoaRdata();
+        $soa = new SOA();
         $mname = 'example.com.';
         $rname = 'post.example.com.';
         $serial = 1970010101;
@@ -44,26 +44,6 @@ class SoaRdataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($minimum, $soa->getMinimum());
     }
 
-    /**
-     * @expectedException \Badcow\DNS\Rdata\RdataException
-     */
-    public function testSetMnameException()
-    {
-        $target = 'foo.example.com';
-        $soa = new SoaRdata();
-        $soa->setMname($target);
-    }
-
-    /**
-     * @expectedException \Badcow\DNS\Rdata\RdataException
-     */
-    public function testSetRnameException()
-    {
-        $target = 'foo.example.com';
-        $soa = new SoaRdata();
-        $soa->setRname($target);
-    }
-
     public function testOutput()
     {
         $soa = Factory::Soa(
@@ -73,8 +53,7 @@ class SoaRdataTest extends \PHPUnit_Framework_TestCase
             3600,
             14400,
             604800,
-            3600,
-            false
+            3600
         );
 
         $expected = 'example.com. postmaster.example.com. 2015042101 3600 14400 604800 3600';

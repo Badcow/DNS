@@ -11,7 +11,7 @@
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Rdata\HinfoRdata;
+use Badcow\DNS\Rdata\HINFO;
 
 class HinfoRdataTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class HinfoRdataTest extends \PHPUnit_Framework_TestCase
         $cpu = '2.7GHz';
         $os = 'Ubuntu 12.04';
         $expectation = '"2.7GHz" "Ubuntu 12.04"';
-        $hinfo = new HinfoRdata();
+        $hinfo = new HINFO();
         $hinfo->setCpu($cpu);
         $hinfo->setOs($os);
 
@@ -31,7 +31,7 @@ class HinfoRdataTest extends \PHPUnit_Framework_TestCase
     {
         $cpu = '2.7GHz';
         $os = 'Ubuntu 12.04';
-        $hinfo = new HinfoRdata();
+        $hinfo = new HINFO();
         $hinfo->setCpu($cpu);
         $hinfo->setOs($os);
 

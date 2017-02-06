@@ -17,7 +17,7 @@ use Badcow\DNS\Validator;
 /**
  * @link http://www.ietf.org/rfc/rfc1035.text
  */
-class SoaRdata implements RdataInterface, FormattableInterface
+class SOA implements RdataInterface, FormattableInterface
 {
     use RdataTrait, FormattableTrait;
 
@@ -114,15 +114,9 @@ class SoaRdata implements RdataInterface, FormattableInterface
 
     /**
      * @param $mname
-     *
-     * @throws RdataException
      */
     public function setMname($mname)
     {
-        if (!Validator::validateFqdn($mname)) {
-            throw new RdataException(sprintf('MName "%s" is not a Fully Qualified Domain Name', $mname));
-        }
-
         $this->mname = $mname;
     }
 
@@ -168,15 +162,9 @@ class SoaRdata implements RdataInterface, FormattableInterface
 
     /**
      * @param $rname
-     *
-     * @throws RdataException
      */
     public function setRname($rname)
     {
-        if (!Validator::validateFqdn($rname)) {
-            throw new RdataException(sprintf('RName "%s" is not a Fully Qualified Domain Name', $rname));
-        }
-
         $this->rname = $rname;
     }
 

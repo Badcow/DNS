@@ -19,7 +19,7 @@ namespace Badcow\DNS\Rdata;
  *
  * @author Samuel Williams <sam@badcow.co>
  */
-class SrvRdata extends CnameRdata
+class SRV extends CNAME
 {
     const TYPE = 'SRV';
 

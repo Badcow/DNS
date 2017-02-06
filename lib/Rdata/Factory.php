@@ -10,10 +10,10 @@
  */
 
 namespace Badcow\DNS\Rdata;
-use Badcow\DNS\Rdata\DNSSEC\DnskeyRdata;
-use Badcow\DNS\Rdata\DNSSEC\DsRdata;
-use Badcow\DNS\Rdata\DNSSEC\NsecRdata;
-use Badcow\DNS\Rdata\DNSSEC\RrsigRdata;
+use Badcow\DNS\Rdata\DNSSEC\DNSKEY;
+use Badcow\DNS\Rdata\DNSSEC\DS;
+use Badcow\DNS\Rdata\DNSSEC\NSEC;
+use Badcow\DNS\Rdata\DNSSEC\RRSIG;
 
 class Factory
 {
@@ -22,11 +22,11 @@ class Factory
      *
      * @param string $address
      *
-     * @return AaaaRdata
+     * @return AAAA
      */
     public static function Aaaa($address)
     {
-        $rdata = new AaaaRdata();
+        $rdata = new AAAA();
         $rdata->setAddress($address);
 
         return $rdata;
@@ -37,11 +37,11 @@ class Factory
      *
      * @param string $address
      *
-     * @return ARdata
+     * @return A
      */
     public static function A($address)
     {
-        $rdata = new ARdata();
+        $rdata = new A();
         $rdata->setAddress($address);
 
         return $rdata;
@@ -52,11 +52,11 @@ class Factory
      *
      * @param string $cname
      *
-     * @return CnameRdata
+     * @return CNAME
      */
     public static function Cname($cname)
     {
-        $rdata = new CnameRdata();
+        $rdata = new CNAME();
         $rdata->setTarget($cname);
 
         return $rdata;
@@ -66,11 +66,11 @@ class Factory
      * @param string $cpu
      * @param string $os
      *
-     * @return HinfoRdata
+     * @return HINFO
      */
     public static function Hinfo($cpu, $os)
     {
-        $rdata = new HinfoRdata();
+        $rdata = new HINFO();
         $rdata->setCpu($cpu);
         $rdata->setOs($os);
 
@@ -81,11 +81,11 @@ class Factory
      * @param int    $preference
      * @param string $exchange
      *
-     * @return MxRdata
+     * @return MX
      */
     public static function Mx($preference, $exchange)
     {
-        $rdata = new MxRdata();
+        $rdata = new MX();
         $rdata->setPreference($preference);
         $rdata->setExchange($exchange);
 
@@ -101,11 +101,11 @@ class Factory
      * @param int    $expire
      * @param int    $minimum
      *
-     * @return SoaRdata
+     * @return SOA
      */
     public static function Soa($mname, $rname, $serial, $refresh, $retry, $expire, $minimum)
     {
-        $rdata = new SoaRdata();
+        $rdata = new SOA();
         $rdata->setMname($mname);
         $rdata->setRname($rname);
         $rdata->setSerial($serial);
@@ -120,11 +120,11 @@ class Factory
     /**
      * @param string $nsdname
      *
-     * @return NsRdata
+     * @return NS
      */
     public static function Ns($nsdname)
     {
-        $rdata = new NsRdata();
+        $rdata = new NS();
         $rdata->setTarget($nsdname);
 
         return $rdata;
@@ -133,11 +133,11 @@ class Factory
     /**
      * @param string $text
      *
-     * @return TxtRdata
+     * @return TXT
      */
     public static function txt($text)
     {
-        $rdata = new TxtRdata();
+        $rdata = new TXT();
         $rdata->setText($text);
 
         return $rdata;
@@ -146,11 +146,11 @@ class Factory
     /**
      * @param string $target
      *
-     * @return DnameRdata
+     * @return DNAME
      */
     public static function Dname($target)
     {
-        $rdata = new DnameRdata();
+        $rdata = new DNAME();
         $rdata->setTarget($target);
 
         return $rdata;
@@ -164,11 +164,11 @@ class Factory
      * @param float $hp
      * @param float $vp
      *
-     * @return LocRdata
+     * @return LOC
      */
     public static function Loc($lat, $lon, $alt = 0.0, $size = 1.0, $hp = 10000.0, $vp = 10.0)
     {
-        $rdata = new LocRdata();
+        $rdata = new LOC();
         $rdata->setLatitude($lat);
         $rdata->setLongitude($lon);
         $rdata->setAltitude($alt);
@@ -182,11 +182,11 @@ class Factory
     /**
      * @param string $target
      *
-     * @return PtrRdata
+     * @return PTR
      */
     public static function Ptr($target)
     {
-        $rdata = new PtrRdata();
+        $rdata = new PTR();
         $rdata->setTarget($target);
 
         return $rdata;
@@ -197,11 +197,11 @@ class Factory
      * @param int $algorithm
      * @param string $publicKey
      *
-     * @return DnskeyRdata
+     * @return DNSKEY
      */
     public static function Dnskey($flags, $algorithm, $publicKey)
     {
-        $rdata = new DnskeyRdata();
+        $rdata = new DNSKEY();
         $rdata->setFlags($flags);
         $rdata->setAlgorithm($algorithm);
         $rdata->setPublicKey($publicKey);
@@ -214,11 +214,11 @@ class Factory
      * @param int $algorithm
      * @param string $digest
      *
-     * @return DsRdata
+     * @return DS
      */
     public static function Ds($keyTag, $algorithm, $digest)
     {
-        $rdata = new DsRdata();
+        $rdata = new DS();
         $rdata->setKeyTag($keyTag);
         $rdata->setAlgorithm($algorithm);
         $rdata->setDigest($digest);
@@ -230,11 +230,11 @@ class Factory
      * @param $nextDomainName
      * @param array $typeBitMaps
      *
-     * @return NsecRdata
+     * @return NSEC
      */
     public static function Nsec($nextDomainName, array $typeBitMaps)
     {
-        $rdata = new NsecRdata();
+        $rdata = new NSEC();
         $rdata->setNextDomainName($nextDomainName);
         array_map([$rdata, 'addTypeBitMap'], $typeBitMaps);
 
@@ -252,13 +252,13 @@ class Factory
      * @param $signersName
      * @param $signature
      *
-     * @return RrsigRdata
+     * @return RRSIG
      */
     public function Rrsig($typeCovered, $algorithm, $labels, $originalTtl,
                           $signatureExpiration, $signatureInception, $keyTag,
                           $signersName, $signature)
     {
-        $rdata = new RrsigRdata();
+        $rdata = new RRSIG();
         $rdata->setTypeCovered($typeCovered);
         $rdata->setAlgorithm($algorithm);
         $rdata->setLabels($labels);

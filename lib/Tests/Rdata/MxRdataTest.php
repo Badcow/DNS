@@ -11,7 +11,7 @@
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Rdata\MxRdata;
+use Badcow\DNS\Rdata\MX;
 
 class MxRdataTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,7 +19,7 @@ class MxRdataTest extends \PHPUnit_Framework_TestCase
     {
         $target = 'foo.example.com.';
         $preference = 10;
-        $mx = new MxRdata();
+        $mx = new MX();
         $mx->setExchange($target);
         $mx->setPreference($preference);
 
@@ -27,20 +27,10 @@ class MxRdataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($preference, $mx->getPreference());
     }
 
-    /**
-     * @expectedException \Badcow\DNS\Rdata\RdataException
-     */
-    public function testSetTargetException()
-    {
-        $target = 'foo.example.com';
-        $mx = new MxRdata();
-        $mx->setExchange($target);
-    }
-
     public function testOutput()
     {
         $target = 'foo.example.com.';
-        $mx = new MxRdata();
+        $mx = new MX();
         $mx->SetExchange($target);
         $mx->setPreference(42);
 

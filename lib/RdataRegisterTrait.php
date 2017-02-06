@@ -16,17 +16,17 @@ use Badcow\DNS\Rdata\RdataInterface;
 trait RdataRegisterTrait
 {
     protected $rdataTypes = [
-        Rdata\CnameRdata::TYPE => '\\Badcow\\DNS\\Rdata\\CnameRdata',
-        Rdata\DnameRdata::TYPE => '\\Badcow\\DNS\\Rdata\\DnameRdata',
-        Rdata\HinfoRdata::TYPE => '\\Badcow\\DNS\\Rdata\\HinfoRdata',
-        Rdata\AaaaRdata::TYPE => '\\Badcow\\DNS\\Rdata\\AaaaRdata',
-        Rdata\SoaRdata::TYPE => '\\Badcow\\DNS\\Rdata\\SoaRdata',
-        Rdata\LocRdata::TYPE => '\\Badcow\\DNS\\Rdata\\LocRdata',
-        Rdata\PtrRdata::TYPE => '\\Badcow\\DNS\\Rdata\\PtrRdata',
-        Rdata\TxtRdata::TYPE => '\\Badcow\\DNS\\Rdata\\TxtRdata',
-        Rdata\NsRdata::TYPE => '\\Badcow\\DNS\\Rdata\\NsRdata',
-        Rdata\MxRdata::TYPE => '\\Badcow\\DNS\\Rdata\\MxRdata',
-        Rdata\ARdata::TYPE => '\\Badcow\\DNS\\Rdata\\ARdata',
+        Rdata\CNAME::TYPE => '\\Badcow\\DNS\\Rdata\\CnameRdata',
+        Rdata\DNAME::TYPE => '\\Badcow\\DNS\\Rdata\\DnameRdata',
+        Rdata\HINFO::TYPE => '\\Badcow\\DNS\\Rdata\\HinfoRdata',
+        Rdata\AAAA::TYPE => '\\Badcow\\DNS\\Rdata\\AaaaRdata',
+        Rdata\SOA::TYPE => '\\Badcow\\DNS\\Rdata\\SoaRdata',
+        Rdata\LOC::TYPE => '\\Badcow\\DNS\\Rdata\\LocRdata',
+        Rdata\PTR::TYPE => '\\Badcow\\DNS\\Rdata\\PtrRdata',
+        Rdata\TXT::TYPE => '\\Badcow\\DNS\\Rdata\\TxtRdata',
+        Rdata\NS::TYPE => '\\Badcow\\DNS\\Rdata\\NsRdata',
+        Rdata\MX::TYPE => '\\Badcow\\DNS\\Rdata\\MxRdata',
+        Rdata\A::TYPE => '\\Badcow\\DNS\\Rdata\\ARdata',
     ];
 
     /**

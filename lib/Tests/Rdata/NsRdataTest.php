@@ -11,14 +11,14 @@
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Rdata\NsRdata;
+use Badcow\DNS\Rdata\NS;
 
 class NsRdataTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetNsdname()
     {
         $nsdname = 'foo.example.com.';
-        $dname = new NsRdata();
+        $dname = new NS();
         $dname->setTarget($nsdname);
 
         $this->assertEquals($nsdname, $dname->getTarget());
@@ -27,7 +27,7 @@ class NsRdataTest extends \PHPUnit_Framework_TestCase
     public function testOutput()
     {
         $Nsdname = 'foo.example.com.';
-        $dname = new NsRdata();
+        $dname = new NS();
         $dname->setTarget($Nsdname);
 
         $this->assertEquals($Nsdname, $dname->output());
