@@ -12,10 +12,10 @@
 
 namespace Badcow\DNS\Tests\Rdata\DNSSEC;
 
-use Badcow\DNS\Rdata\ARdata;
-use Badcow\DNS\Rdata\DNSSEC\NsecRdata;
-use Badcow\DNS\Rdata\DNSSEC\RrsigRdata;
-use Badcow\DNS\Rdata\MxRdata;
+use Badcow\DNS\Rdata\A;
+use Badcow\DNS\Rdata\DNSSEC\NSEC;
+use Badcow\DNS\Rdata\DNSSEC\RRSIG;
+use Badcow\DNS\Rdata\MX;
 
 class NsecRdataTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,12 +23,12 @@ class NsecRdataTest extends \PHPUnit_Framework_TestCase
     {
         $expectation = 'host.example.com. A MX RRSIG NSEC';
 
-        $nsec = new NsecRdata();
+        $nsec = new NSEC();
         $nsec->setNextDomainName('host.example.com.');
-        $nsec->addTypeBitMap(ARdata::TYPE);
-        $nsec->addTypeBitMap(MxRdata::TYPE);
-        $nsec->addTypeBitMap(RrsigRdata::TYPE);
-        $nsec->addTypeBitMap(NsecRdata::TYPE);
+        $nsec->addTypeBitMap(A::TYPE);
+        $nsec->addTypeBitMap(MX::TYPE);
+        $nsec->addTypeBitMap(RRSIG::TYPE);
+        $nsec->addTypeBitMap(NSEC::TYPE);
 
         $this->assertEquals($expectation, $nsec->output());
     }

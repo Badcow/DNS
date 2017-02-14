@@ -14,7 +14,7 @@ namespace Badcow\DNS\Tests\Rdata\DNSSEC;
 
 
 use Badcow\DNS\Rdata\DNSSEC\Algorithms;
-use Badcow\DNS\Rdata\DNSSEC\RrsigRdata;
+use Badcow\DNS\Rdata\DNSSEC\RRSIG;
 
 class RrsigRdataTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +25,7 @@ class RrsigRdataTest extends \PHPUnit_Framework_TestCase
 
         $expectation = 'A 5 3 86400 20050322173103 20030220173103 2642 example.com. ' . $signature;
 
-        $rrsig = new RrsigRdata();
+        $rrsig = new RRSIG();
 
         $rrsig->setTypeCovered('A');
         $rrsig->setAlgorithm(Algorithms::RSASHA1);
