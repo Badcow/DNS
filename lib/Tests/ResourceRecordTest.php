@@ -18,7 +18,7 @@ use Badcow\DNS\ResourceRecord;
 class ResourceRecordTest extends TestCase
 {
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \UnexpectedValueException
      */
     public function testSetClass()
     {

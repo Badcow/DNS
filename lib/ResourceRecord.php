@@ -74,12 +74,12 @@ class ResourceRecord implements ResourceRecordInterface
     /**
      * @param string $class
      *
-     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     public function setClass($class)
     {
         if (!Classes::isValid($class)) {
-            throw new \InvalidArgumentException(sprintf('No such class as "%s"', $class));
+            throw new \UnexpectedValueException(sprintf('No such class as "%s"', $class));
         }
 
         $this->class = $class;
