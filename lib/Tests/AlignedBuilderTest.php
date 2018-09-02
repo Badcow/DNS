@@ -151,9 +151,4 @@ DNS;
             $this->printBlock($builder->build($output), 'ALIGNED TEST ZONE');
         }
     }
-
-    public function testZoneFile()
-    {
-        $this->bindTest($this->buildTestZone(), new AlignedBuilder());
-    }
 }

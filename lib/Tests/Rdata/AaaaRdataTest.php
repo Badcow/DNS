@@ -11,26 +11,17 @@
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Rdata\AaaaRdata;
+use Badcow\DNS\Rdata\AAAA;
 
-class AaaaRdataTest extends \PHPUnit_Framework_TestCase
+
+class AaaaRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetAddress()
     {
         $address = '2003:dead:beef:4dad:23:46:bb:101';
-        $aaaa = new AaaaRdata();
+        $aaaa = new AAAA();
         $aaaa->setAddress($address);
 
         $this->assertEquals($address, $aaaa->getAddress());
-    }
-
-    /**
-     * @expectedException \Badcow\DNS\Rdata\RdataException
-     */
-    public function testException()
-    {
-        $address = '2001::0234:C1ab::A0:aabc:003F';
-        $aaaa = new AaaaRdata();
-        $aaaa->setAddress($address);
     }
 }

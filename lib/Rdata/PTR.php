@@ -11,6 +11,7 @@
 
 namespace Badcow\DNS\Rdata;
 
-class RdataException extends \Exception
+class PTR extends CNAME
 {
+    const TYPE = 'PTR';
 }

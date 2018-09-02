@@ -29,11 +29,6 @@ trait ZoneTrait
     private $defaultTtl;
 
     /**
-     * @var array
-     */
-    private $ctrlEntries = [];
-
-    /**
      * @param ResourceRecordInterface[] $resourceRecord
      */
     public function setResourceRecords(array $resourceRecord)
@@ -78,8 +73,6 @@ trait ZoneTrait
 
     /**
      * @param string $name A fully qualified zone name
-     *
-     * @throws ZoneException
      */
     public function setName($name)
     {
@@ -92,39 +85,5 @@ trait ZoneTrait
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @param string $value
-     */
-    public function addControlEntry($name, $value)
-    {
-        $this->ctrlEntries[] = ['name' => $name, 'value' => $value];
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return array
-     */
-    public function getControlEntry($name)
-    {
-        $out = [];
-        foreach ($this->ctrlEntries as $entry) {
-            if ($name === $entry['name']) {
-                $out[] = $entry['value'];
-            }
-        }
-
-        return $out;
-    }
-
-    /**
-     * @return array
-     */
-    public function getControlEntries()
-    {
-        return $this->ctrlEntries;
     }
 }

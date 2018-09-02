@@ -21,7 +21,7 @@ namespace Badcow\DNS\Rdata;
  *
  * @link http://tools.ietf.org/html/rfc6672
  */
-class DnameRdata extends CnameRdata
+class DNAME extends CNAME
 {
     const TYPE = 'DNAME';
 }

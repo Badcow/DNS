@@ -11,8 +11,8 @@
 
 namespace Badcow\DNS;
 
-use Badcow\DNS\Rdata\NsRdata;
-use Badcow\DNS\Rdata\SoaRdata;
+use Badcow\DNS\Rdata\NS;
+use Badcow\DNS\Rdata\SOA;
 
 class Validator
 {
@@ -88,11 +88,12 @@ class Validator
     {
         $parts = explode('.', strtolower($string));
 
-        //Is there are trailing dot?
+        //Is there a trailing dot?
         if ('' !== end($parts)) {
             return false;
         }
 
+        //Remove the empty string at the end of the array.
         array_pop($parts);
 
         foreach ($parts as $part) {
@@ -225,49 +226,6 @@ class Validator
      *   2) 5.2.2 Exactly one SOA RR should be present at the top of the zone.
      *   3) There is at least one NS record.
      *
-     * @deprecated
-     * @param ZoneInterface $zone
-     *
-     * @throws ZoneException
-     *
-     * @return bool
-     */
-    public static function validate(ZoneInterface $zone)
-    {
-        $n_soa = self::countResourceRecords($zone, SoaRdata::TYPE);
-        $n_ns = self::countResourceRecords($zone, NsRdata::TYPE);
-        $classes = [];
-
-        foreach ($zone->getResourceRecords() as $rr) {
-            if (null !== $rr->getClass()) {
-                $classes[$rr->getClass()] = null;
-            }
-        }
-
-        $n_class = count($classes);
-
-        if (1 !== $n_soa) {
-            throw new ZoneException(sprintf('There must be exactly one SOA record, %s given.', $n_soa));
-        }
-
-        if ($n_ns < 1) {
-            throw new ZoneException(sprintf('There must be at least one NS record, %s given.', $n_ns));
-        }
-
-        if (1 !== $n_class) {
-            throw new ZoneException(sprintf('There must be exactly one type of class, %s given.', $n_class));
-        }
-
-        return true;
-    }
-
-    /**
-     * Validates that the zone meets
-     * RFC-1035 especially that:
-     *   1) 5.2.1 All RRs in the file should be of the same class.
-     *   2) 5.2.2 Exactly one SOA RR should be present at the top of the zone.
-     *   3) There is at least one NS record.
-     *
      * Return values are:
      *   - ZONE_NO_SOA
      *   - ZONE_TOO_MANY_SOA
@@ -285,8 +243,8 @@ class Validator
      */
     public static function zone(ZoneInterface $zone)
     {
-        $n_soa = self::countResourceRecords($zone, SoaRdata::TYPE);
-        $n_ns = self::countResourceRecords($zone, NsRdata::TYPE);
+        $n_soa = self::countResourceRecords($zone, SOA::TYPE);
+        $n_ns = self::countResourceRecords($zone, NS::TYPE);
         $classes = [];
 
         foreach ($zone->getResourceRecords() as $rr) {

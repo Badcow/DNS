@@ -11,7 +11,7 @@
 
 namespace Badcow\DNS\Rdata;
 
-class HinfoRdata implements RdataInterface
+class HINFO implements RdataInterface
 {
     use RdataTrait;
 

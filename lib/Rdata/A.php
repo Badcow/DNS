@@ -11,28 +11,33 @@
 
 namespace Badcow\DNS\Rdata;
 
-class TxtRdata implements RdataInterface
+use Badcow\DNS\Validator;
+
+class A implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'TXT';
+    const TYPE = 'A';
 
     /**
      * @var string
      */
-    private $text;
+    protected $address;
 
     /**
-     * @param $text
+     * @param string $address
      */
-    public function setText($text)
+    public function setAddress($address)
     {
-        $this->text = addslashes($text);
+        $this->address = $address;
     }
 
-    public function getText()
+    /**
+     * @return string
+     */
+    public function getAddress()
     {
-        return stripslashes($this->text);
+        return $this->address;
     }
 
     /**
@@ -40,6 +45,6 @@ class TxtRdata implements RdataInterface
      */
     public function output()
     {
-        return '"' . $this->text . '"';
+        return $this->address;
     }
 }

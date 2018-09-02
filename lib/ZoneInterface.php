@@ -14,11 +14,6 @@ namespace Badcow\DNS;
 interface ZoneInterface
 {
     /**
-     * @param ResourceRecordInterface[] $resourceRecord
-     */
-    public function setResourceRecords(array $resourceRecord);
-
-    /**
      * @param ResourceRecordInterface $resourceRecord
      */
     public function addResourceRecord(ResourceRecordInterface $resourceRecord);
@@ -47,22 +42,4 @@ interface ZoneInterface
      * @return string
      */
     public function getName();
-
-    /**
-     * @param string $name
-     * @param string $value
-     */
-    public function addControlEntry($name, $value);
-
-    /**
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function getControlEntry($name);
-
-    /**
-     * @return array
-     */
-    public function getControlEntries();
 }

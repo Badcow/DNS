@@ -11,29 +11,15 @@
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Rdata\CnameRdata;
+use Badcow\DNS\Rdata\CNAME;
 
-class CnameRdataTest extends \PHPUnit_Framework_TestCase
+
+class CnameRdataTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @expectedException \Badcow\DNS\Rdata\RdataException
-     * @expectedExceptionMessage The target "3xample.com." is not a Fully Qualified Domain Name
-     */
-    public function testSetTarget()
-    {
-        $target = 'foo.example.com.';
-        $cname = new CnameRdata();
-        $cname->setTarget($target);
-
-        $this->assertEquals($target, $cname->getTarget());
-
-        $cname->setTarget('3xample.com.');
-    }
-
     public function testOutput()
     {
         $target = 'foo.example.com.';
-        $cname = new CnameRdata();
+        $cname = new CNAME();
         $cname->setTarget($target);
 
         $this->assertEquals($target, $cname->output());

@@ -11,14 +11,15 @@
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Rdata\TxtRdata;
+use Badcow\DNS\Rdata\TXT;
 
-class TxtRdataTest extends \PHPUnit_Framework_TestCase
+
+class TxtRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetText()
     {
         $text = 'This is some text. It\'s a nice piece of text.';
-        $txt = new TxtRdata();
+        $txt = new TXT();
         $txt->setText($text);
 
         $this->assertEquals($text, $txt->getText());
@@ -28,7 +29,7 @@ class TxtRdataTest extends \PHPUnit_Framework_TestCase
     {
         $text = 'This is some text. It\'s a nice piece of text.';
         $expected = '"This is some text. It\\\'s a nice piece of text."';
-        $txt = new TxtRdata();
+        $txt = new TXT();
         $txt->setText($text);
 
         $this->assertEquals($expected, $txt->output());

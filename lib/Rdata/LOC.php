@@ -21,7 +21,7 @@ use Badcow\DNS\ResourceRecord;
  *
  * @link http://tools.ietf.org/html/rfc1876
  */
-class LocRdata implements RdataInterface, FormattableInterface
+class LOC implements RdataInterface, FormattableInterface
 {
     use RdataTrait, FormattableTrait;
 

@@ -13,7 +13,8 @@ namespace Badcow\DNS\Tests\Ip;
 
 use Badcow\DNS\Ip\Toolbox;
 
-class ToolboxTest extends \PHPUnit_Framework_TestCase
+
+class ToolboxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      *

@@ -15,13 +15,13 @@ use Badcow\DNS\Rdata\RdataInterface;
 use Badcow\DNS\Rdata\RdataTrait;
 
 /**
- * Class DnskeyRdata
+ * Class DNSKEY
  *
  * {@link https://tools.ietf.org/html/rfc4034#section-2.1}
  *
  * @package Badcow\DNS\Rdata
  */
-class DnskeyRdata implements RdataInterface
+class DNSKEY implements RdataInterface
 {
     use RdataTrait;
 

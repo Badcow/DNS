@@ -14,16 +14,16 @@ namespace Badcow\DNS\Tests\Rdata\DNSSEC;
 
 
 use Badcow\DNS\Rdata\DNSSEC\Algorithms;
-use Badcow\DNS\Rdata\DNSSEC\DsRdata;
+use Badcow\DNS\Rdata\DNSSEC\DS;
 
-class DsRdataTest extends \PHPUnit_Framework_TestCase
+class DsRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testOutput()
     {
         $digest = '2BB183AF5F22588179A53B0A98631FAD1A292118';
         $expectation = '60485 5 1 2BB183AF5F22588179A53B0A98631FAD1A292118';
 
-        $ds = new DsRdata();
+        $ds = new DS();
         $ds->setKeyTag(60485);
         $ds->setAlgorithm(Algorithms::RSASHA1);
         $ds->setDigestType(Algorithms::RSAMD5);

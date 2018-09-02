@@ -13,37 +13,31 @@ namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\Validator;
 
-class ARdata implements RdataInterface
+class CNAME implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'A';
+    const TYPE = 'CNAME';
 
     /**
      * @var string
      */
-    protected $address;
+    protected $target;
 
     /**
-     * @param string $address
-     *
-     * @throws RdataException
+     * @param $target
      */
-    public function setAddress($address)
+    public function setTarget($target)
     {
-        if (!Validator::validateIpv4Address($address)) {
-            throw new RdataException(sprintf('Address "%s" is not a valid IPv4 address', $address));
-        }
-
-        $this->address = $address;
+        $this->target = $target;
     }
 
     /**
      * @return string
      */
-    public function getAddress()
+    public function getTarget()
     {
-        return $this->address;
+        return $this->target;
     }
 
     /**
@@ -51,6 +45,6 @@ class ARdata implements RdataInterface
      */
     public function output()
     {
-        return $this->address;
+        return $this->target;
     }
 }

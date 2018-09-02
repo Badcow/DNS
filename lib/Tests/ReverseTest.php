@@ -94,8 +94,6 @@ TXT;
         $builder = new ZoneBuilder();
 
         $this->assertEquals($this->expectedIpv4Record, $builder->build($zone));
-
-        $this->bindTest($zone, $builder);
     }
 
     /**
@@ -138,7 +136,5 @@ TXT;
         $builder = new ZoneBuilder();
 
         $this->assertEquals($this->expectedIpv6Record, $builder->build($zone));
-
-        $this->bindTest($zone, $builder);
     }
 }

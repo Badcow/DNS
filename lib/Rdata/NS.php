@@ -9,11 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Badcow\DNS;
+namespace Badcow\DNS\Rdata;
 
-/**
- * Class ZoneException.
- */
-class ZoneException extends \ErrorException
+class NS extends CNAME
 {
+    const TYPE = 'NS';
 }

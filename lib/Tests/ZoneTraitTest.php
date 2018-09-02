@@ -11,10 +11,11 @@
 
 namespace Badcow\DNS\Tests;
 
-class ZoneTraitTest extends \PHPUnit_Framework_TestCase
+class ZoneTraitTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return \Badcow\DNS\ZoneInterface
+     * @throws \ReflectionException
      */
     private function getZone()
     {
@@ -36,22 +37,5 @@ class ZoneTraitTest extends \PHPUnit_Framework_TestCase
         $zone = $this->getZone();
         $zone->setDefaultTtl($ttl);
         $this->assertEquals($ttl, $zone->getDefaultTtl());
-    }
-
-    public function testCtrlEntry()
-    {
-        $zone = $this->getZone();
-        $zone->addControlEntry('test1', 1234);
-        $zone->addControlEntry('test1', 4321);
-        $zone->addControlEntry('test2', 5678);
-        $zone->addControlEntry('test3', 9865);
-
-        $this->assertEquals([1234, 4321], $zone->getControlEntry('test1'));
-        $this->assertEquals([
-            ['name' => 'test1', 'value' => 1234],
-            ['name' => 'test1', 'value' => 4321],
-            ['name' => 'test2', 'value' => 5678],
-            ['name' => 'test3', 'value' => 9865],
-        ], $zone->getControlEntries());
     }
 }

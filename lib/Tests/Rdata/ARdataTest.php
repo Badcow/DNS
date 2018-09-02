@@ -11,18 +11,19 @@
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Rdata\ARdata;
+use Badcow\DNS\Rdata\A;
 
-class ARdataTest extends \PHPUnit_Framework_TestCase
+
+class ARdataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ARdata
+     * @var A
      */
     private $aRdata;
 
     public function setUp()
     {
-        $this->aRdata = new ARdata();
+        $this->aRdata = new A();
     }
 
     public function testGetType()
@@ -36,15 +37,6 @@ class ARdataTest extends \PHPUnit_Framework_TestCase
         $this->aRdata->setAddress($address);
 
         $this->assertEquals($address, $this->aRdata->getAddress());
-    }
-
-    /**
-     * @expectedException \Badcow\DNS\Rdata\RdataException
-     */
-    public function testException()
-    {
-        $invalidAddress = '192.168.256.1';
-        $this->aRdata->setAddress($invalidAddress);
     }
 
     public function testOutput()

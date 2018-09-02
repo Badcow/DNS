@@ -11,19 +11,19 @@
 
 namespace Badcow\DNS;
 
-use Badcow\DNS\Rdata\AaaaRdata;
-use Badcow\DNS\Rdata\ARdata;
-use Badcow\DNS\Rdata\CnameRdata;
-use Badcow\DNS\Rdata\DnameRdata;
+use Badcow\DNS\Rdata\AAAA;
+use Badcow\DNS\Rdata\A;
+use Badcow\DNS\Rdata\CNAME;
+use Badcow\DNS\Rdata\DNAME;
 use Badcow\DNS\Rdata\FormattableInterface;
-use Badcow\DNS\Rdata\HinfoRdata;
-use Badcow\DNS\Rdata\LocRdata;
-use Badcow\DNS\Rdata\MxRdata;
-use Badcow\DNS\Rdata\NsRdata;
-use Badcow\DNS\Rdata\PtrRdata;
-use Badcow\DNS\Rdata\SoaRdata;
-use Badcow\DNS\Rdata\SrvRdata;
-use Badcow\DNS\Rdata\TxtRdata;
+use Badcow\DNS\Rdata\HINFO;
+use Badcow\DNS\Rdata\LOC;
+use Badcow\DNS\Rdata\MX;
+use Badcow\DNS\Rdata\NS;
+use Badcow\DNS\Rdata\PTR;
+use Badcow\DNS\Rdata\SOA;
+use Badcow\DNS\Rdata\SRV;
+use Badcow\DNS\Rdata\TXT;
 
 class AlignedBuilder implements ZoneBuilderInterface
 {
@@ -33,18 +33,18 @@ class AlignedBuilder implements ZoneBuilderInterface
      * @var array
      */
     private static $order = [
-        SoaRdata::TYPE,
-        NsRdata::TYPE,
-        ARdata::TYPE,
-        AaaaRdata::TYPE,
-        CnameRdata::TYPE,
-        DnameRdata::TYPE,
-        MxRdata::TYPE,
-        LocRdata::TYPE,
-        HinfoRdata::TYPE,
-        TxtRdata::TYPE,
-        PtrRdata::TYPE,
-        SrvRdata::TYPE,
+        SOA::TYPE,
+        NS::TYPE,
+        A::TYPE,
+        AAAA::TYPE,
+        CNAME::TYPE,
+        DNAME::TYPE,
+        MX::TYPE,
+        LOC::TYPE,
+        HINFO::TYPE,
+        TXT::TYPE,
+        PTR::TYPE,
+        SRV::TYPE,
     ];
 
     /**
@@ -56,7 +56,7 @@ class AlignedBuilder implements ZoneBuilderInterface
                     '$TTL ' . $zone->getDefaultTtl() . PHP_EOL;
 
         $rrs = $zone->getResourceRecords();
-        $current = SoaRdata::TYPE;
+        $current = SOA::TYPE;
         $namePadding = $ttlPadding = $typePadding = 0;
         usort($rrs, 'self::compareResourceRecords');
 
