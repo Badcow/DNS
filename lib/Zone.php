@@ -15,15 +15,18 @@ use Badcow\DNS\Ip\Toolbox;
 use Badcow\DNS\Rdata\AAAA;
 use Badcow\DNS\Rdata\CNAME;
 use Badcow\DNS\Rdata\MX;
+use http\Exception\InvalidArgumentException;
 
 class Zone implements ZoneInterface
 {
     use ZoneTrait;
 
     /**
-     * @param string                    $name
-     * @param string                    $defaultTtl
-     * @param ResourceRecordInterface[] $resourceRecords
+     * Zone constructor.
+     * @param string $name
+     * @param integer $defaultTtl
+     * @param array $resourceRecords
+     * @throws \InvalidArgumentException
      */
     public function __construct($name = null, $defaultTtl = null, array $resourceRecords = [])
     {
@@ -38,12 +41,12 @@ class Zone implements ZoneInterface
     /**
      * @param string $name A fully qualified zone name
      *
-     * @throws ZoneException
+     * @throws \InvalidArgumentException
      */
     public function setName($name)
     {
         if (!Validator::rrName($name, true)) {
-            throw new ZoneException(sprintf('Zone "%s" is not a fully qualified domain name.', $name));
+            throw new \InvalidArgumentException(sprintf('Zone "%s" is not a fully qualified domain name.', $name));
         }
 
         $this->name = $name;
