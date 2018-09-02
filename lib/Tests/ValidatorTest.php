@@ -157,7 +157,6 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException \Badcow\DNS\ZoneException
      * @expectedExceptionMessage There must be exactly one SOA record, 2 given.
      */
     public function testValidateNumberOfSoa()
@@ -178,12 +177,9 @@ class ValidatorTest extends TestCase
         $zone->addResourceRecord($soa);
 
         $this->assertEquals(Validator::ZONE_TOO_MANY_SOA, Validator::zone($zone));
-
-        Validator::validate($zone);
     }
 
     /**
-     * @expectedException \Badcow\DNS\ZoneException
      * @expectedExceptionMessage There must be at least one NS record, 0 given.
      */
     public function testValidateNumberOfNs()
@@ -204,12 +200,9 @@ class ValidatorTest extends TestCase
         $zone->addResourceRecord($soa);
 
         $this->assertEquals(Validator::ZONE_NO_NS, Validator::zone($zone));
-
-        Validator::validate($zone);
     }
 
     /**
-     * @expectedException \Badcow\DNS\ZoneException
      * @expectedExceptionMessage There must be exactly one type of class, 2 given.
      */
     public function testValidateNumberOfClasses()
@@ -223,17 +216,6 @@ class ValidatorTest extends TestCase
         $zone->addResourceRecord($a);
 
         $this->assertEquals(Validator::ZONE_TOO_MANY_CLASSES, Validator::zone($zone));
-
-        Validator::validate($zone);
-    }
-
-    /**
-     *
-     */
-    public function testValidate()
-    {
-        $zone = $this->buildTestZone();
-        $this->assertTrue(Validator::validate($zone));
     }
 
     /**

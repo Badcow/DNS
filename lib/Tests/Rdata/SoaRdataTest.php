@@ -14,7 +14,8 @@ namespace Badcow\DNS\Tests\Rdata;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\SOA;
 
-class SoaRdataTest extends \PHPUnit_Framework_TestCase
+
+class SoaRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testSettersAndGetters()
     {

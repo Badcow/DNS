@@ -14,7 +14,8 @@ namespace Badcow\DNS\Tests;
 use Badcow\DNS\RdataRegisterTrait;
 use Badcow\DNS\Tests\Rdata\DummyRdata;
 
-class RdataRegisterTraitTest extends \PHPUnit_Framework_TestCase
+
+class RdataRegisterTraitTest extends \PHPUnit\Framework\TestCase
 {
     use RdataRegisterTrait;
 

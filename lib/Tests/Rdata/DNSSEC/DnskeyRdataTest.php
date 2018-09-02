@@ -16,7 +16,7 @@ namespace Badcow\DNS\Tests\Rdata\DNSSEC;
 use Badcow\DNS\Rdata\DNSSEC\Algorithms;
 use Badcow\DNS\Rdata\DNSSEC\DNSKEY;
 
-class DnskeyRdataTest extends \PHPUnit_Framework_TestCase
+class DnskeyRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testOutput()
     {

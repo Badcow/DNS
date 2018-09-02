@@ -13,7 +13,8 @@ namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\Classes;
 
-class ClassesTest extends \PHPUnit_Framework_TestCase
+
+class ClassesTest extends \PHPUnit\Framework\TestCase
 {
     public function testIsValidClass()
     {

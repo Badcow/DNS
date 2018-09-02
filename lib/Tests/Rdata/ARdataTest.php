@@ -13,7 +13,8 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\A;
 
-class ARdataTest extends \PHPUnit_Framework_TestCase
+
+class ARdataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var A

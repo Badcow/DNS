@@ -17,7 +17,7 @@ use Badcow\DNS\Rdata\DNSSEC\NSEC;
 use Badcow\DNS\Rdata\DNSSEC\RRSIG;
 use Badcow\DNS\Rdata\MX;
 
-class NsecRdataTest extends \PHPUnit_Framework_TestCase
+class NsecRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testOutput()
     {

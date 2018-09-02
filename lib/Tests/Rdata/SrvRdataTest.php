@@ -13,7 +13,8 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\SRV;
 
-class SrvRdataTest extends \PHPUnit_Framework_TestCase
+
+class SrvRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testOutput()
     {

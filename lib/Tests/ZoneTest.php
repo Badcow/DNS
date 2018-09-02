@@ -19,7 +19,7 @@ use Badcow\DNS\Rdata\Factory;
 class ZoneTest extends TestCase
 {
     /**
-     * @expectedException \Badcow\DNS\ZoneException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Zone "example.com" is not a fully qualified domain name.
      */
     public function testSetName()

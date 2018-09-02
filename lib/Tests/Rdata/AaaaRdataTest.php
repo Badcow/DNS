@@ -13,7 +13,8 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\AAAA;
 
-class AaaaRdataTest extends \PHPUnit_Framework_TestCase
+
+class AaaaRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetAddress()
     {

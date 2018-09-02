@@ -13,7 +13,8 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\CNAME;
 
-class CnameRdataTest extends \PHPUnit_Framework_TestCase
+
+class CnameRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testOutput()
     {

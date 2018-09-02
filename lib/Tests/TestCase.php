@@ -16,7 +16,7 @@ use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Classes;
 use Badcow\DNS\Zone;
 
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     const PHP_ENV_CHECKZONE_PATH = 'CHECKZONE_PATH';
     const PHP_ENV_PRINT_TEST_ZONE = 'PRINT_TEST_ZONE';
