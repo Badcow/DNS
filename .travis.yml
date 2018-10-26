@@ -3,9 +3,8 @@ language: php
 php:
   - 7.1
   - 7.2
-  - hhvm
 
-install: composer install --no-interaction --prefer-source
+install: composer install
 
 script:
   - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
