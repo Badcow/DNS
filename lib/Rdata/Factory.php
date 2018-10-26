@@ -271,4 +271,23 @@ class Factory
 
         return $rdata;
     }
+
+    /**
+     * @param $priority
+     * @param $weight
+     * @param $port
+     * @param $target
+     *
+     * @return SRV
+     */
+    public function Srv($priority, $weight, $port, $target)
+    {
+        $rdata = new SRV();
+        $rdata->setPriority($priority);
+        $rdata->setWeight($weight);
+        $rdata->setPort($port);
+        $rdata->setTarget($target);
+
+        return $rdata;
+    }
 }
