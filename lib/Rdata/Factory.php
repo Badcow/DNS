@@ -254,7 +254,7 @@ class Factory
      *
      * @return RRSIG
      */
-    public function Rrsig($typeCovered, $algorithm, $labels, $originalTtl,
+    public static function Rrsig($typeCovered, $algorithm, $labels, $originalTtl,
                           $signatureExpiration, $signatureInception, $keyTag,
                           $signersName, $signature)
     {
@@ -280,7 +280,7 @@ class Factory
      *
      * @return SRV
      */
-    public function Srv($priority, $weight, $port, $target)
+    public static function Srv($priority, $weight, $port, $target)
     {
         $rdata = new SRV();
         $rdata->setPriority($priority);
