@@ -18,6 +18,40 @@ use Badcow\DNS\Rdata\DNSSEC\RRSIG;
 class Factory
 {
     /**
+     * Creates a new RData object from a name
+     *
+     * @param string $name
+     * @return RdataInterface
+     */
+    public static function newRdataFromName(string $name): RdataInterface
+    {
+        if (!self::isTypeImplemented($name)) {
+            throw new \InvalidArgumentException(sprintf('Rdata "%s" is not implemented.', $name));
+        }
+
+        $namespace = '\\Badcow\\DNS\\Rdata\\';
+        $className = $namespace.strtoupper($name);
+
+        if (!class_exists($className)) {
+            $className = $namespace.'DNSSEC\\'.strtoupper($name);
+        }
+
+        return new $className;
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public static function isTypeImplemented(string $name): bool
+    {
+        $namespace = '\\Badcow\\DNS\\Rdata\\';
+        $name = strtoupper($name);
+
+        return class_exists($namespace.$name) || class_exists($namespace.'DNSSEC\\'.$name);
+    }
+
+    /**
      * Create a new AAAA R-Data object.
      *
      * @param string $address
