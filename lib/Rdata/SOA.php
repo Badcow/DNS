@@ -12,10 +12,9 @@
 namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\ResourceRecord;
-use Badcow\DNS\Validator;
 
 /**
- * @link http://www.ietf.org/rfc/rfc1035.text
+ * @see http://www.ietf.org/rfc/rfc1035.text
  */
 class SOA implements RdataInterface, FormattableInterface
 {
@@ -214,15 +213,15 @@ class SOA implements RdataInterface, FormattableInterface
      */
     public function outputFormatted()
     {
-        return ResourceRecord::MULTILINE_BEGIN . PHP_EOL .
-            $this->makeLine($this->getMname(), 'MNAME') .
-            $this->makeLine($this->getRname(), 'RNAME') .
-            $this->makeLine($this->getSerial(), 'SERIAL') .
-            $this->makeLine($this->getRefresh(), 'REFRESH') .
-            $this->makeLine($this->getRetry(), 'RETRY') .
-            $this->makeLine($this->getExpire(), 'EXPIRE') .
-            $this->makeLine($this->getMinimum(), 'MINIMUM') .
-            str_repeat(' ', $this->padding) . ResourceRecord::MULTILINE_END;
+        return ResourceRecord::MULTILINE_BEGIN.PHP_EOL.
+            $this->makeLine($this->getMname(), 'MNAME').
+            $this->makeLine($this->getRname(), 'RNAME').
+            $this->makeLine($this->getSerial(), 'SERIAL').
+            $this->makeLine($this->getRefresh(), 'REFRESH').
+            $this->makeLine($this->getRetry(), 'RETRY').
+            $this->makeLine($this->getExpire(), 'EXPIRE').
+            $this->makeLine($this->getMinimum(), 'MINIMUM').
+            str_repeat(' ', $this->padding).ResourceRecord::MULTILINE_END;
     }
 
     /**

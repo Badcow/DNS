@@ -13,7 +13,6 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\MX;
 
-
 class MxRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetters()

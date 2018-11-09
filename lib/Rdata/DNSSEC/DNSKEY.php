@@ -15,11 +15,9 @@ use Badcow\DNS\Rdata\RdataInterface;
 use Badcow\DNS\Rdata\RdataTrait;
 
 /**
- * Class DNSKEY
+ * Class DNSKEY.
  *
  * {@link https://tools.ietf.org/html/rfc4034#section-2.1}
- *
- * @package Badcow\DNS\Rdata
  */
 class DNSKEY implements RdataInterface
 {
@@ -28,7 +26,7 @@ class DNSKEY implements RdataInterface
     const TYPE = 'DNSKEY';
 
     /**
-     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.1}
+     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.1}.
      *
      * @var int
      */
@@ -38,7 +36,7 @@ class DNSKEY implements RdataInterface
      * The Protocol Field MUST have value 3, and the DNSKEY RR MUST be
      * treated as invalid during signature verification if it is found to be
      * some value other than 3.
-     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.2}
+     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.2}.
      *
      * @var int
      */
@@ -47,7 +45,7 @@ class DNSKEY implements RdataInterface
     /**
      * The Algorithm field identifies the public key's cryptographic
      * algorithm and determines the format of the Public Key field.
-     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.3}
+     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.3}.
      *
      * @var int
      */
@@ -56,7 +54,7 @@ class DNSKEY implements RdataInterface
     /**
      * The Public Key field is a Base64 encoding of the Public Key.
      * Whitespace is allowed within the Base64 text.
-     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.4}
+     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.4}.
      *
      * @var string
      */

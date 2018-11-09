@@ -19,7 +19,7 @@ use Badcow\DNS\ResourceRecord;
  * Mechanism to allow the DNS to carry location
  * information about hosts, networks, and subnets.
  *
- * @link http://tools.ietf.org/html/rfc1876
+ * @see http://tools.ietf.org/html/rfc1876
  */
 class LOC implements RdataInterface, FormattableInterface
 {
@@ -70,7 +70,7 @@ class LOC implements RdataInterface, FormattableInterface
      */
     public function setLatitude($latitude)
     {
-        $this->latitude = (double) $latitude;
+        $this->latitude = (float) $latitude;
     }
 
     /**
@@ -80,7 +80,7 @@ class LOC implements RdataInterface, FormattableInterface
      */
     public function getLatitude($format = self::FORMAT_DECIMAL)
     {
-        if ($format === self::FORMAT_DMS) {
+        if (self::FORMAT_DMS === $format) {
             return $this->toDms($this->latitude, self::LATITUDE);
         }
 
@@ -92,7 +92,7 @@ class LOC implements RdataInterface, FormattableInterface
      */
     public function setLongitude($longitude)
     {
-        $this->longitude = (double) $longitude;
+        $this->longitude = (float) $longitude;
     }
 
     /**
@@ -102,7 +102,7 @@ class LOC implements RdataInterface, FormattableInterface
      */
     public function getLongitude($format = self::FORMAT_DECIMAL)
     {
-        if ($format === self::FORMAT_DMS) {
+        if (self::FORMAT_DMS === $format) {
             return $this->toDms($this->longitude, self::LONGITUDE);
         }
 
@@ -120,7 +120,7 @@ class LOC implements RdataInterface, FormattableInterface
             throw new \OutOfRangeException('The altitude must be on [-100000.00, 42849672.95].');
         }
 
-        $this->altitude = (double) $altitude;
+        $this->altitude = (float) $altitude;
     }
 
     /**
@@ -142,7 +142,7 @@ class LOC implements RdataInterface, FormattableInterface
             throw new \OutOfRangeException('The horizontal precision must be on [0, 90000000.0].');
         }
 
-        $this->horizontalPrecision = (double) $horizontalPrecision;
+        $this->horizontalPrecision = (float) $horizontalPrecision;
     }
 
     /**
@@ -164,7 +164,7 @@ class LOC implements RdataInterface, FormattableInterface
             throw new \OutOfRangeException('The size must be on [0, 90000000.0].');
         }
 
-        $this->size = (double) $size;
+        $this->size = (float) $size;
     }
 
     /**
@@ -218,14 +218,14 @@ class LOC implements RdataInterface, FormattableInterface
      */
     public function outputFormatted()
     {
-        return ResourceRecord::MULTILINE_BEGIN . PHP_EOL .
-            $this->makeLine($this->getLatitude(self::FORMAT_DMS), 'LATITUDE') .
-            $this->makeLine($this->getLongitude(self::FORMAT_DMS), 'LONGITUDE') .
-            $this->makeLine(sprintf('%.2fm', $this->altitude), 'ALTITUDE') .
-            $this->makeLine(sprintf('%.2fm', $this->size), 'SIZE') .
-            $this->makeLine(sprintf('%.2fm', $this->horizontalPrecision), 'HORIZONTAL PRECISION') .
-            $this->makeLine(sprintf('%.2fm', $this->verticalPrecision), 'VERTICAL PRECISION') .
-            str_repeat(' ', $this->padding) . ResourceRecord::MULTILINE_END;
+        return ResourceRecord::MULTILINE_BEGIN.PHP_EOL.
+            $this->makeLine($this->getLatitude(self::FORMAT_DMS), 'LATITUDE').
+            $this->makeLine($this->getLongitude(self::FORMAT_DMS), 'LONGITUDE').
+            $this->makeLine(sprintf('%.2fm', $this->altitude), 'ALTITUDE').
+            $this->makeLine(sprintf('%.2fm', $this->size), 'SIZE').
+            $this->makeLine(sprintf('%.2fm', $this->horizontalPrecision), 'HORIZONTAL PRECISION').
+            $this->makeLine(sprintf('%.2fm', $this->verticalPrecision), 'VERTICAL PRECISION').
+            str_repeat(' ', $this->padding).ResourceRecord::MULTILINE_END;
     }
 
     /**
@@ -264,7 +264,7 @@ class LOC implements RdataInterface, FormattableInterface
         $d = (int) floor(abs($decimal));
         $m = (int) floor((abs($decimal) - $d) * 60);
         $s = ((abs($decimal) - $d) * 60 - $m) * 60;
-        if ($axis === self::LATITUDE) {
+        if (self::LATITUDE === $axis) {
             $h = ($decimal < 0) ? 'S' : 'N';
         } else {
             $h = ($decimal < 0) ? 'W' : 'E';

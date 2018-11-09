@@ -13,7 +13,6 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\DNAME;
 
-
 class DnameRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetTarget()

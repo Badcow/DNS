@@ -10,6 +10,7 @@
  */
 
 namespace Badcow\DNS\Rdata;
+
 use Badcow\DNS\Rdata\DNSSEC\DNSKEY;
 use Badcow\DNS\Rdata\DNSSEC\DS;
 use Badcow\DNS\Rdata\DNSSEC\NSEC;
@@ -18,15 +19,18 @@ use Badcow\DNS\Rdata\DNSSEC\RRSIG;
 class Factory
 {
     /**
-     * Creates a new RData object from a name
+     * Creates a new RData object from a name.
      *
      * @param string $name
+     *
+     * @throws UnsupportedTypeException
+     *
      * @return RdataInterface
      */
     public static function newRdataFromName(string $name): RdataInterface
     {
         if (!self::isTypeImplemented($name)) {
-            throw new \InvalidArgumentException(sprintf('Rdata "%s" is not implemented.', $name));
+            throw new UnsupportedTypeException($name);
         }
 
         $namespace = '\\Badcow\\DNS\\Rdata\\';
@@ -36,11 +40,12 @@ class Factory
             $className = $namespace.'DNSSEC\\'.strtoupper($name);
         }
 
-        return new $className;
+        return new $className();
     }
 
     /**
      * @param string $name
+     *
      * @return bool
      */
     public static function isTypeImplemented(string $name): bool
@@ -227,8 +232,8 @@ class Factory
     }
 
     /**
-     * @param int $flags
-     * @param int $algorithm
+     * @param int    $flags
+     * @param int    $algorithm
      * @param string $publicKey
      *
      * @return DNSKEY
@@ -244,8 +249,8 @@ class Factory
     }
 
     /**
-     * @param int $keyTag
-     * @param int $algorithm
+     * @param int    $keyTag
+     * @param int    $algorithm
      * @param string $digest
      *
      * @return DS

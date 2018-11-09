@@ -38,14 +38,14 @@ class Validator
      */
     public static function rrName($string, $mustHaveTrailingDot = false)
     {
-        if ($string === '@' ||
+        if ('@' === $string ||
             self::reverseIpv4($string) ||
             self::reverseIpv6($string)
         ) {
             return true;
         }
 
-        if ($string === '*.') {
+        if ('*.' === $string) {
             return false;
         }
 
@@ -118,16 +118,16 @@ class Validator
      */
     public static function validateFqdn($string, $trailingDot = true)
     {
-        if ($string === '@') {
+        if ('@' === $string) {
             return true;
         }
 
-        if ($string === '*.') {
+        if ('*.' === $string) {
             return false;
         }
 
         $parts = explode('.', strtolower($string));
-        $hasTrailingDot = (end($parts) === '');
+        $hasTrailingDot = ('' === end($parts));
 
         if ($trailingDot && !$hasTrailingDot) {
             return false;
@@ -205,6 +205,7 @@ class Validator
      * Validates a zone file.
      *
      * @deprecated
+     *
      * @param string $zonename
      * @param string $directory
      * @param string $named_checkzonePath
@@ -216,7 +217,7 @@ class Validator
         $command = sprintf('%s -q %s %s', $named_checkzonePath, $zonename, $directory);
         exec($command, $output, $exit_status);
 
-        return $exit_status === 0;
+        return 0 === $exit_status;
     }
 
     /**
@@ -239,7 +240,7 @@ class Validator
      *
      * @param ZoneInterface $zone
      *
-     * @return integer
+     * @return int
      */
     public static function zone(ZoneInterface $zone)
     {
@@ -282,10 +283,10 @@ class Validator
      * Counts the number of Resource Records of a particular type ($type) in a Zone.
      *
      * @param ZoneInterface $zone
-     * @param null $type The ResourceRecord type to be counted. If NULL, then the method will return
-     *                   the total number of resource records.
+     * @param null          $type The ResourceRecord type to be counted. If NULL, then the method will return
+     *                            the total number of resource records.
      *
-     * @return int The number of records to be counted.
+     * @return int the number of records to be counted
      */
     public static function countResourceRecords(ZoneInterface $zone, $type = null)
     {
@@ -298,7 +299,7 @@ class Validator
         foreach ($zone->getResourceRecords() as $rr) {
             /* @var $rr ResourceRecordInterface */
             if ($type === $rr->getRdata()->getType()) {
-                $n += 1;
+                ++$n;
             }
         }
 
@@ -316,7 +317,7 @@ class Validator
     {
         $pattern = '/^((?:[0-9]+\.){1,4})in\-addr\.arpa\.$/i';
 
-        if(1 !== preg_match($pattern, $address, $matches)) {
+        if (1 !== preg_match($pattern, $address, $matches)) {
             return false;
         }
 

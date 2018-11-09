@@ -13,12 +13,8 @@ namespace Badcow\DNS\Tests\Ip;
 
 use Badcow\DNS\Ip\Toolbox;
 
-
 class ToolboxTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     *
-     */
     public function testExpandIpv6()
     {
         $case_1 = '::1';
@@ -61,9 +57,6 @@ class ToolboxTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($exp_8, Toolbox::contractIpv6($case_8));
     }
 
-    /**
-     *
-     */
     public function testReverseIpv4()
     {
         $case_1 = '192.168.1.213';
@@ -72,9 +65,6 @@ class ToolboxTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($exp_1, Toolbox::reverseIpv4($case_1));
     }
 
-    /**
-     *
-     */
     public function testReverseIpv6()
     {
         $case_1 = '2001:db8::567:89ab';

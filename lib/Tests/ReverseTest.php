@@ -54,9 +54,6 @@ c IN PTR fooc.example.com.
 
 TXT;
 
-    /**
-     *
-     */
     public function testReverseIpv4Record()
     {
         $origin = Toolbox::reverseIpv4('192.168.8');
@@ -96,9 +93,6 @@ TXT;
         $this->assertEquals($this->expectedIpv4Record, $builder->build($zone));
     }
 
-    /**
-     *
-     */
     public function testReverseIpv6Record()
     {
         $origin = Toolbox::reverseIpv6('2001:f83:21');

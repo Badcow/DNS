@@ -12,47 +12,47 @@
 namespace Badcow\DNS\Rdata\DNSSEC;
 
 /**
- * Algorithms listed in {@link https://tools.ietf.org/html/rfc4034#appendix-A.1}
+ * Algorithms listed in {@link https://tools.ietf.org/html/rfc4034#appendix-A.1}.
  */
 class Algorithms
 {
     /**
-     * RSA/MD5
+     * RSA/MD5.
      */
     const RSAMD5 = 1;
 
     /**
-     * Diffie-Hellman
+     * Diffie-Hellman.
      */
     const DH = 2;
 
     /**
-     * DSA/SHA-1
+     * DSA/SHA-1.
      */
     const DSA = 3;
 
     /**
-     * Elliptic Curve
+     * Elliptic Curve.
      */
     const ECC = 4;
 
     /**
-     * RSA/SHA-1
+     * RSA/SHA-1.
      */
     const RSASHA1 = 5;
 
     /**
-     * Indirect
+     * Indirect.
      */
     const INDIRECT = 252;
 
     /**
-     * Private
+     * Private.
      */
     const PRIVATEDNS = 253;
 
     /**
-     * Private
+     * Private.
      */
     const PRIVATEOID = 254;
 
@@ -71,6 +71,7 @@ class Algorithms
      * Get the associated mnemonic of an algorithm.
      *
      * @param int $algorithmId
+     *
      * @return string
      */
     public static function getMnemonic($algorithmId)

@@ -126,15 +126,15 @@ DNS;
         $dummy->setName('example.com.');
         $dummy->setRdata(new DummyRdata());
 
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($soa,   $ns1)   < 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($aaaa,  $cname) < 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1,   $mx2)   < 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1,   $mx2)   < 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1,   $dummy) < 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($soa, $ns1) < 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($aaaa, $cname) < 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $mx2) < 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $mx2) < 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $dummy) < 0);
 
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1,   $a)     > 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($ns2,   $ns1)   > 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($dummy, $txt)   > 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $a) > 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($ns2, $ns1) > 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($dummy, $txt) > 0);
     }
 
     public function testBuild()

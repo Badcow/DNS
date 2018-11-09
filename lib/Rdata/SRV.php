@@ -12,10 +12,11 @@
 namespace Badcow\DNS\Rdata;
 
 /**
- * Class SrvRdata
+ * Class SrvRdata.
  *
  * SRV is defined in RFC 2782
- * @link https://www.ietf.org/rfc/rfc2782.txt
+ *
+ * @see https://www.ietf.org/rfc/rfc2782.txt
  *
  * @author Samuel Williams <sam@badcow.co>
  */
@@ -51,7 +52,7 @@ class SRV extends CNAME
 
     /**
      * The port on this target host of this service. The range is
-     * 0-65535. This is a 16 bit unsigned integer
+     * 0-65535. This is a 16 bit unsigned integer.
      *
      * @var int
      */
@@ -67,6 +68,7 @@ class SRV extends CNAME
 
     /**
      * @param int $priority
+     *
      * @throws \InvalidArgumentException
      */
     public function setPriority($priority)
@@ -75,7 +77,7 @@ class SRV extends CNAME
             throw new \InvalidArgumentException('Priority must be an unsigned integer on the range [0-65535]');
         }
 
-        $this->priority = (int)$priority;
+        $this->priority = (int) $priority;
     }
 
     /**
@@ -88,6 +90,7 @@ class SRV extends CNAME
 
     /**
      * @param int $weight
+     *
      * @throws \InvalidArgumentException
      */
     public function setWeight($weight)
@@ -109,6 +112,7 @@ class SRV extends CNAME
 
     /**
      * @param int $port
+     *
      * @throws \InvalidArgumentException
      */
     public function setPort($port)

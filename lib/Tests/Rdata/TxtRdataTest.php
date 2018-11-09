@@ -13,7 +13,6 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\TXT;
 
-
 class TxtRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetText()

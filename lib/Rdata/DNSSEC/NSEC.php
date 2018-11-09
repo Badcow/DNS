@@ -24,7 +24,7 @@ class NSEC implements RdataInterface
      * The Next Domain field contains the next owner name (in the canonical
      * ordering of the zone) that has authoritative data or contains a
      * delegation point NS RRset.
-     * {@link https://tools.ietf.org/html/rfc4034#section-4.1.1}
+     * {@link https://tools.ietf.org/html/rfc4034#section-4.1.1}.
      *
      * @var string
      */
@@ -60,7 +60,7 @@ class NSEC implements RdataInterface
     }
 
     /**
-     * Clears the types from the RDATA
+     * Clears the types from the RDATA.
      */
     public function clearTypeMap()
     {

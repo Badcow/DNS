@@ -30,7 +30,7 @@ class DS implements RdataInterface
     /**
      * The Algorithm field lists the algorithm number of the DNSKEY RR
      * referred to by the DS record.
-     * {@link https://tools.ietf.org/html/rfc4034#section-5.1.2}
+     * {@link https://tools.ietf.org/html/rfc4034#section-5.1.2}.
      *
      * @var int
      */

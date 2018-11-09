@@ -11,8 +11,6 @@
 
 namespace Badcow\DNS\Rdata;
 
-use Badcow\DNS\Validator;
-
 class MX implements RdataInterface
 {
     use RdataTrait;
@@ -66,6 +64,6 @@ class MX implements RdataInterface
      */
     public function output()
     {
-        return $this->preference . ' ' . $this->exchange;
+        return $this->preference.' '.$this->exchange;
     }
 }

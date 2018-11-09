@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Badcow\DNS\Tests\Rdata\DNSSEC;
 
 use Badcow\DNS\Rdata\A;

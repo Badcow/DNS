@@ -52,8 +52,8 @@ class AlignedBuilder implements ZoneBuilderInterface
      */
     public function build(ZoneInterface $zone)
     {
-        $master = '$ORIGIN ' . $zone->getName() . PHP_EOL .
-                    '$TTL ' . $zone->getDefaultTtl() . PHP_EOL;
+        $master = '$ORIGIN '.$zone->getName().PHP_EOL.
+                    '$TTL '.$zone->getDefaultTtl().PHP_EOL;
 
         $rrs = $zone->getResourceRecords();
         $current = SOA::TYPE;
@@ -74,7 +74,7 @@ class AlignedBuilder implements ZoneBuilderInterface
             }
 
             if ($rr->getType() !== $current) {
-                $master .= PHP_EOL . ResourceRecord::COMMENT_DELIMINATOR . $rr->getType() . ' RECORDS' . PHP_EOL;
+                $master .= PHP_EOL.ResourceRecord::COMMENT_DELIMINATOR.$rr->getType().' RECORDS'.PHP_EOL;
                 $current = $rr->getType();
             }
 
@@ -93,7 +93,7 @@ class AlignedBuilder implements ZoneBuilderInterface
             );
 
             if (null != $rr->getComment()) {
-                $master .= ResourceRecord::COMMENT_DELIMINATOR . $rr->getComment();
+                $master .= ResourceRecord::COMMENT_DELIMINATOR.$rr->getComment();
             }
 
             $master .= PHP_EOL;
@@ -113,17 +113,17 @@ class AlignedBuilder implements ZoneBuilderInterface
     public static function compareResourceRecords(ResourceRecord $a, ResourceRecord $b)
     {
         if ($a->getType() === $b->getType()) {
-            return strcmp($a->getName() . $a->getRdata()->output(), $b->getName() . $b->getRdata()->output());
+            return strcmp($a->getName().$a->getRdata()->output(), $b->getName().$b->getRdata()->output());
         }
 
         $_a = array_search($a->getType(), self::$order);
         $_b = array_search($b->getType(), self::$order);
 
-        if ($_a !== false && $_b !== false) {
+        if (false !== $_a && false !== $_b) {
             return $_a - $_b;
         }
 
-        if ($_a === false) {
+        if (false === $_a) {
             return 1;
         }
 

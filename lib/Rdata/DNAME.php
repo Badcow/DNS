@@ -19,7 +19,7 @@ namespace Badcow\DNS\Rdata;
  * suffix are redirected to another part of the DNS.
  * Based on RFC6672
  *
- * @link http://tools.ietf.org/html/rfc6672
+ * @see http://tools.ietf.org/html/rfc6672
  */
 class DNAME extends CNAME
 {

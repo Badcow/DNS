@@ -218,9 +218,6 @@ class ValidatorTest extends TestCase
         $this->assertEquals(Validator::ZONE_TOO_MANY_CLASSES, Validator::zone($zone));
     }
 
-    /**
-     *
-     */
     public function testZone()
     {
         $zone = $this->buildTestZone();
@@ -252,9 +249,6 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::validateFqdn($invalid_4, true));
     }
 
-    /**
-     *
-     */
     public function testReverseIpv4()
     {
         $valid_01 = '10.IN-ADDR.ARPA.';
@@ -292,9 +286,6 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::reverseIpv4($invalid_05));
     }
 
-    /**
-     *
-     */
     public function testReverseIpv6()
     {
         $valid_01 = 'b.a.9.8.7.6.5.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.';
@@ -306,9 +297,6 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::reverseIpv6($invalid_01));
     }
 
-    /**
-     *
-     */
     public function testRrName()
     {
         $case_1 = '*.';

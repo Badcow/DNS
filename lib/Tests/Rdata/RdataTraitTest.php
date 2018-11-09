@@ -13,7 +13,6 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\RdataTrait;
 
-
 class RdataTraitTest extends \PHPUnit\Framework\TestCase
 {
     use RdataTrait;

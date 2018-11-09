@@ -15,7 +15,6 @@ use Badcow\DNS\Ip\Toolbox;
 use Badcow\DNS\Rdata\AAAA;
 use Badcow\DNS\Rdata\CNAME;
 use Badcow\DNS\Rdata\MX;
-use http\Exception\InvalidArgumentException;
 
 class Zone implements ZoneInterface
 {
@@ -23,9 +22,11 @@ class Zone implements ZoneInterface
 
     /**
      * Zone constructor.
+     *
      * @param string $name
-     * @param integer $defaultTtl
-     * @param array $resourceRecords
+     * @param int    $defaultTtl
+     * @param array  $resourceRecords
+     *
      * @throws \InvalidArgumentException
      */
     public function __construct($name = null, $defaultTtl = null, array $resourceRecords = [])
@@ -60,14 +61,13 @@ class Zone implements ZoneInterface
         $class = $this->determineClass();
 
         foreach ($this->resourceRecords as &$rr) {
-            /** @var ResourceRecord $rr  */
-
+            /** @var ResourceRecord $rr */
             if ('@' === $rr->getName()) {
                 $rr->setName($this->name);
             }
 
             if (!Validator::fqdn($rr->getName())) {
-                $rr->setName($rr->getName() . '.' . $this->name);
+                $rr->setName($rr->getName().'.'.$this->name);
             }
 
             if (null === $rr->getTtl()) {
@@ -80,7 +80,7 @@ class Zone implements ZoneInterface
                 }
 
                 if (!Validator::fqdn($rr->getRdata()->getTarget())) {
-                    $rr->getRdata()->setTarget($rr->getRdata()->getTarget() . '.' . $this->name);
+                    $rr->getRdata()->setTarget($rr->getRdata()->getTarget().'.'.$this->name);
                 }
             }
 
@@ -90,7 +90,7 @@ class Zone implements ZoneInterface
                 }
 
                 if (!Validator::fqdn($rr->getRdata()->getExchange())) {
-                    $rr->getRdata()->setExchange($rr->getRdata()->getExchange() . '.' . $this->name);
+                    $rr->getRdata()->setExchange($rr->getRdata()->getExchange().'.'.$this->name);
                 }
             }
 

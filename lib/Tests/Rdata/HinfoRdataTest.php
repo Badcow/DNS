@@ -13,7 +13,6 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\HINFO;
 
-
 class HinfoRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testOutput()

@@ -31,7 +31,7 @@ class RRSIG implements RdataInterface
     /**
      * The Algorithm field identifies the public key's cryptographic
      * algorithm and determines the format of the Public Key field.
-     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.2}
+     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.2}.
      *
      * @var int
      */
@@ -40,7 +40,7 @@ class RRSIG implements RdataInterface
     /**
      * The Labels field specifies the number of labels in the original RRSIG
      * RR owner name.
-     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.3}
+     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.3}.
      *
      * @var
      */
@@ -49,7 +49,7 @@ class RRSIG implements RdataInterface
     /**
      * The Original TTL field specifies the TTL of the covered RRset as it
      * appears in the authoritative zone.
-     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.4}
+     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.4}.
      *
      * @var int
      */
@@ -57,7 +57,7 @@ class RRSIG implements RdataInterface
 
     /**
      * 32-bit unsigned integer specifying the expiration date of a signature.
-     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.5}
+     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.5}.
      *
      * @var int
      */
@@ -65,7 +65,7 @@ class RRSIG implements RdataInterface
 
     /**
      * 32-bit unsigned integer specifying the inception date of a signature.
-     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.5}
+     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.5}.
      *
      * @var int
      */
@@ -74,7 +74,7 @@ class RRSIG implements RdataInterface
     /**
      * The Key Tag field contains the key tag value of the DNSKEY RR that
      * validates this signature, in network byte order.
-     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.6}
+     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.6}.
      *
      * @var int
      */
@@ -85,7 +85,7 @@ class RRSIG implements RdataInterface
      * RR that a validator is supposed to use to validate this signature.
      * The Signer's Name field MUST contain the name of the zone of the
      * covered RRset.
-     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.7}
+     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.7}.
      *
      * @var string
      */
@@ -96,7 +96,7 @@ class RRSIG implements RdataInterface
      * the RRSIG RDATA (excluding the Signature field) and the RRset
      * specified by the RRSIG owner name, RRSIG class, and RRSIG Type
      * Covered field.
-     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.8}
+     * {@link https://tools.ietf.org/html/rfc4034#section-3.1.8}.
      *
      * @var string
      */

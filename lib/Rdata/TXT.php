@@ -40,6 +40,6 @@ class TXT implements RdataInterface
      */
     public function output()
     {
-        return '"' . $this->text . '"';
+        return '"'.$this->text.'"';
     }
 }

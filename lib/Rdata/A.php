@@ -11,8 +11,6 @@
 
 namespace Badcow\DNS\Rdata;
 
-use Badcow\DNS\Validator;
-
 class A implements RdataInterface
 {
     use RdataTrait;

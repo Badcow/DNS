@@ -21,6 +21,7 @@ class Toolbox
      * E.g. 2001:db8:9a::42 -> 2001:0db8:009a:0000:0000:0000:0000:0042
      *
      * @param string $ip IPv6 address
+     *
      * @throws \InvalidArgumentException
      *
      * @return string
@@ -67,6 +68,7 @@ class Toolbox
      * E.g.: 2001:0000:0000:ab80:2390:0000:0000:000a -> 2001:0:0:ab80:2390::a
      *
      * @param string $ip IPv6 address
+     *
      * @throws \InvalidArgumentException
      *
      * @return string Contracted IPv6 address
@@ -92,8 +94,8 @@ class Toolbox
                 continue;
             }
 
-            $streak_i = ($streak_i === -1) ? $i : $streak_i;
-            $streak += 1;
+            $streak_i = (-1 === $streak_i) ? $i : $streak_i;
+            ++$streak;
 
             if ($streak >= $longestStreak) {
                 $longestStreak = $streak;
@@ -133,7 +135,7 @@ class Toolbox
     {
         $octets = array_reverse(explode('.', $ip));
 
-        return implode('.', $octets) . '.in-addr.arpa.';
+        return implode('.', $octets).'.in-addr.arpa.';
     }
 
     /**
@@ -156,6 +158,6 @@ class Toolbox
         $ip = str_replace(':', '', $ip);
         $ip = strrev($ip);
 
-        return implode('.', str_split($ip)) . '.ip6.arpa.';
+        return implode('.', str_split($ip)).'.ip6.arpa.';
     }
 }

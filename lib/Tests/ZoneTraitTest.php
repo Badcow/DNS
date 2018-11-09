@@ -15,6 +15,7 @@ class ZoneTraitTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return \Badcow\DNS\ZoneInterface
+     *
      * @throws \ReflectionException
      */
     private function getZone()

@@ -13,7 +13,6 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\NS;
 
-
 class NsRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetNsdname()

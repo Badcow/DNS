@@ -29,7 +29,7 @@ class ResourceRecordTest extends TestCase
     }
 
     /**
-     * Tests the getter and setter methods
+     * Tests the getter and setter methods.
      */
     public function testSettersAndGetters()
     {

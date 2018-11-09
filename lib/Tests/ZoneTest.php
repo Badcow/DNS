@@ -49,7 +49,7 @@ class ZoneTest extends TestCase
         $zone->expand();
 
         /**
-         * @var ResourceRecord $a
+         * @var ResourceRecord
          * @var ResourceRecord $a4
          * @var ResourceRecord $mx1
          * @var ResourceRecord $mx2
