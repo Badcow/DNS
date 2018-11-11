@@ -43,6 +43,17 @@ example.net. IN TXT "v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all"
 
 DNS;
 
+    protected function setUp()
+    {
+        $this->normaliseLineFeeds($this->expected);
+    }
+
+    protected function normaliseLineFeeds(string &$string)
+    {
+        $string = str_replace("\r\n", "\n", $string);
+        $string = str_replace("\n", PHP_EOL, $string);
+    }
+    
     /**
      * Get an environment variable.
      *

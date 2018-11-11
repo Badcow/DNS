@@ -54,6 +54,12 @@ c IN PTR fooc.example.com.
 
 TXT;
 
+    protected function setUp()
+    {
+        $this->normaliseLineFeeds($this->expectedIpv4Record);
+        $this->normaliseLineFeeds($this->expectedIpv6Record);
+    }
+
     public function testReverseIpv4Record()
     {
         $origin = Toolbox::reverseIpv4('192.168.8');
