@@ -329,4 +329,24 @@ class Factory
 
         return $rdata;
     }
+
+    /**
+     * @param \IPBlock[] $includedRanges
+     * @param \IPBlock[] $excludedRanges
+     * @return APL
+     */
+    public static function Apl(array $includedRanges = [], array $excludedRanges = []): APL
+    {
+        $rdata = new APL();
+
+        foreach ($includedRanges as $ipBlock) {
+            $rdata->addAddressRange($ipBlock, true);
+        }
+
+        foreach ($excludedRanges as $ipBlock) {
+            $rdata->addAddressRange($ipBlock, false);
+        }
+
+        return $rdata;
+    }
 }
