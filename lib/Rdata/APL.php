@@ -2,7 +2,6 @@
 
 namespace Badcow\DNS\Rdata;
 
-
 use Badcow\DNS\ResourceRecord;
 
 class APL implements RdataInterface, FormattableInterface
@@ -24,8 +23,8 @@ class APL implements RdataInterface, FormattableInterface
 
     /**
      * @param \IPBlock $ipBlock
-     * @param bool $included True if the resource exists within the range, False if the resource
-     * is not within the range. I.E. the negation.
+     * @param bool     $included True if the resource exists within the range, False if the resource
+     *                           is not within the range. I.E. the negation.
      */
     public function addAddressRange(\IPBlock $ipBlock, $included = true)
     {
@@ -59,12 +58,12 @@ class APL implements RdataInterface, FormattableInterface
     {
         $string = '';
         foreach ($this->includedAddressRanges as $ipBlock) {
-            $string .= (4 === $ipBlock->getVersion())? '1:' : '2:';
+            $string .= (4 === $ipBlock->getVersion()) ? '1:' : '2:';
             $string .= (string) $ipBlock.' ';
         }
 
         foreach ($this->excludedAddressRanges as $ipBlock) {
-            $string .= (4 === $ipBlock->getVersion())? '!1:' : '!2:';
+            $string .= (4 === $ipBlock->getVersion()) ? '!1:' : '!2:';
             $string .= (string) $ipBlock.' ';
         }
 

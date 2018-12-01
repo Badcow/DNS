@@ -333,6 +333,7 @@ class Factory
     /**
      * @param \IPBlock[] $includedRanges
      * @param \IPBlock[] $excludedRanges
+     *
      * @return APL
      */
     public static function Apl(array $includedRanges = [], array $excludedRanges = []): APL

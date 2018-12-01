@@ -13,7 +13,7 @@ namespace Badcow\DNS;
 
 use Badcow\DNS\Rdata\RdataInterface;
 
-class ResourceRecord implements ResourceRecordInterface
+class ResourceRecord
 {
     const COMMENT_DELIMINATOR = '; ';
 
@@ -24,7 +24,7 @@ class ResourceRecord implements ResourceRecordInterface
     /**
      * @var string
      */
-    private $class;
+    private $class = Classes::INTERNET;
 
     /**
      * @var RdataInterface
@@ -49,36 +49,31 @@ class ResourceRecord implements ResourceRecordInterface
     /**
      * @param string         $name
      * @param RdataInterface $rdata
-     * @param string         $ttl
+     * @param int         $ttl
      * @param string         $class
      * @param string         $comment
      */
-    public function __construct($name = null, RdataInterface $rdata = null, $ttl = null, $class = null, $comment = null)
+    public function __construct(string $name = null, RdataInterface $rdata = null, int $ttl = null, string $class = null, string $comment = null)
     {
-        if (null !== $name) {
-            $this->setName($name);
-        }
-
-        if (null !== $class) {
-            $this->setClass($class);
-        }
-
-        if (null !== $ttl) {
-            $this->setTtl($ttl);
-        }
-
+        $this->name = $name;
+        $this->rdata = $rdata;
+        $this->ttl = $ttl;
+        $this->setClass($class);
         $this->rdata = $rdata;
         $this->comment = $comment;
     }
 
     /**
+     * Set the class for the resource record
+     * Usually one of IN, HS, or CH.
+     *
      * @param string $class
      *
      * @throws \UnexpectedValueException
      */
-    public function setClass($class)
+    public function setClass(?string $class)
     {
-        if (!Classes::isValid($class)) {
+        if (null !== $class && !Classes::isValid($class)) {
             throw new \UnexpectedValueException(sprintf('No such class as "%s"', $class));
         }
 
@@ -86,17 +81,20 @@ class ResourceRecord implements ResourceRecordInterface
     }
 
     /**
-     * @param string $name
+     * Set the name for the resource record.
+     * Eg. "subdomain.example.com.".
+     *
+     * @param $name
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
-        $this->name = (string) $name;
+        $this->name = $name;
     }
 
     /**
      * @param RdataInterface $rdata
      */
-    public function setRdata(RdataInterface $rdata)
+    public function setRdata(RdataInterface $rdata): void
     {
         $this->rdata = $rdata;
     }
@@ -104,23 +102,25 @@ class ResourceRecord implements ResourceRecordInterface
     /**
      * @return string
      */
-    public function getClass()
+    public function getClass(): ?string
     {
         return $this->class;
     }
 
     /**
+     * Set the time to live.
+     *
      * @param int $ttl
      */
-    public function setTtl($ttl)
+    public function setTtl(int $ttl)
     {
-        $this->ttl = (int) $ttl;
+        $this->ttl = $ttl;
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -128,10 +128,10 @@ class ResourceRecord implements ResourceRecordInterface
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): ?string
     {
         if (null === $this->rdata) {
-            return;
+            return null;
         }
 
         return $this->rdata->getType();
@@ -140,7 +140,7 @@ class ResourceRecord implements ResourceRecordInterface
     /**
      * @return RdataInterface
      */
-    public function getRdata()
+    public function getRdata(): ?RdataInterface
     {
         return $this->rdata;
     }
@@ -148,7 +148,7 @@ class ResourceRecord implements ResourceRecordInterface
     /**
      * @return int
      */
-    public function getTtl()
+    public function getTtl(): ?int
     {
         return $this->ttl;
     }
@@ -158,9 +158,8 @@ class ResourceRecord implements ResourceRecordInterface
      *
      * @param string $comment
      */
-    public function setComment($comment)
+    public function setComment(string $comment): void
     {
-        $comment = preg_replace('/(?:\n|\r)/', '', $comment);
         $this->comment = $comment;
     }
 
@@ -169,7 +168,7 @@ class ResourceRecord implements ResourceRecordInterface
      *
      * @return string
      */
-    public function getComment()
+    public function getComment(): ?string
     {
         return $this->comment;
     }

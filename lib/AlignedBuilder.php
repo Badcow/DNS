@@ -25,7 +25,7 @@ use Badcow\DNS\Rdata\SOA;
 use Badcow\DNS\Rdata\SRV;
 use Badcow\DNS\Rdata\TXT;
 
-class AlignedBuilder implements ZoneBuilderInterface
+class AlignedBuilder
 {
     /**
      * The order in which Resource Records should appear in a zone.
@@ -50,7 +50,7 @@ class AlignedBuilder implements ZoneBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(ZoneInterface $zone)
+    public static function build(Zone $zone)
     {
         $master = '$ORIGIN '.$zone->getName().PHP_EOL.
                     '$TTL '.$zone->getDefaultTtl().PHP_EOL;

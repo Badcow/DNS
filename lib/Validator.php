@@ -238,17 +238,17 @@ class Validator
      * You SHOULD compare these return values to the defined constants of this
      * class rather than against integers directly.
      *
-     * @param ZoneInterface $zone
+     * @param Zone $zone
      *
      * @return int
      */
-    public static function zone(ZoneInterface $zone)
+    public static function zone(Zone $zone)
     {
         $n_soa = self::countResourceRecords($zone, SOA::TYPE);
         $n_ns = self::countResourceRecords($zone, NS::TYPE);
         $classes = [];
 
-        foreach ($zone->getResourceRecords() as $rr) {
+        foreach ($zone as $rr) {
             if (null !== $rr->getClass()) {
                 $classes[$rr->getClass()] = null;
             }
@@ -282,13 +282,13 @@ class Validator
     /**
      * Counts the number of Resource Records of a particular type ($type) in a Zone.
      *
-     * @param ZoneInterface $zone
+     * @param Zone  $zone
      * @param null          $type The ResourceRecord type to be counted. If NULL, then the method will return
      *                            the total number of resource records.
      *
      * @return int the number of records to be counted
      */
-    public static function countResourceRecords(ZoneInterface $zone, $type = null)
+    public static function countResourceRecords(Zone $zone, $type = null)
     {
         if (null === $type) {
             return count($zone->getResourceRecords());
