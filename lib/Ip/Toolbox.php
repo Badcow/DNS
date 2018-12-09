@@ -28,7 +28,7 @@ class Toolbox
      */
     public static function expandIpv6($ip)
     {
-        if (!Validator::validateIpv6Address($ip)) {
+        if (!Validator::ipv6($ip)) {
             throw new \InvalidArgumentException(sprintf('"%s" is not a valid IPv6 address.', $ip));
         }
 
@@ -75,7 +75,7 @@ class Toolbox
      */
     public static function contractIpv6($ip)
     {
-        if (!Validator::validateIpv6Address($ip)) {
+        if (!Validator::ipv6($ip)) {
             throw new \InvalidArgumentException(sprintf('"%s" is not a valid IPv6 address.', $ip));
         }
 

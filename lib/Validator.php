@@ -29,130 +29,112 @@ class Validator
     const ZONE_TOO_MANY_CLASSES = 16;
 
     /**
-     * Validates if $string is suitable as an RR name.
+     * Validate the string as a valid hostname in accordance with RFC 952 {@link https://tools.ietf.org/html/rfc952}
+     * and RFC 1123 {@link https://tools.ietf.org/html/rfc1123}.
      *
-     * @param string $string
-     * @param bool   $mustHaveTrailingDot
+     * @param string $name
      *
      * @return bool
      */
-    public static function rrName($string, $mustHaveTrailingDot = false)
+    public static function hostName(string $name): bool
     {
-        if ('@' === $string ||
-            self::reverseIpv4($string) ||
-            self::reverseIpv6($string)
-        ) {
-            return true;
-        }
-
-        if ('*.' === $string) {
-            return false;
-        }
-
-        $parts = explode('.', strtolower($string));
-
-        if ('' !== end($parts) && $mustHaveTrailingDot) {
-            return false;
-        }
-
-        if ('' === end($parts)) {
-            array_pop($parts);
-        }
-
-        foreach ($parts as $i => $part) {
-            //Does the string begin with a non alphanumeric char?
-            if (1 === preg_match('/^[^a-z0-9]/', $part)) {
-                if ('*' === $part && 0 === $i) {
-                    continue;
-                }
-
-                return false;
-            }
-
-            if (1 !== preg_match('/^[a-z0-9_\-]+$/i', $part)) {
-                return false;
-            }
-        }
-
-        return true;
+        return self::fullyQualifiedDomainName(rtrim($name, '.').'.');
     }
 
     /**
-     * Validate the string as a Fully Qualified Domain Name.
+     * Validate the string is a Fully Qualified Domain Name.
      *
-     * @param string $string
+     * @param string $name
      *
      * @return bool
      */
-    public static function fqdn($string)
+    public static function fullyQualifiedDomainName(string $name): bool
     {
-        $parts = explode('.', strtolower($string));
-
         //Is there a trailing dot?
-        if ('' !== end($parts)) {
+        if ('.' !== substr($name, -1, 1)) {
             return false;
         }
 
-        //Remove the empty string at the end of the array.
-        array_pop($parts);
-
-        foreach ($parts as $part) {
-            //Does the string begin with a non alpha char?
-            if (1 === preg_match('/^[^a-z]/i', $part)) {
-                return false;
-            }
-
-            if (1 !== preg_match('/^[a-z0-9_\-]+$/i', $part)) {
-                return false;
-            }
+        if (strlen($name) > 255) {
+            return false;
         }
 
-        return true;
+        $labels = explode('.', rtrim($name, '.'));
+
+        //Are there more than 127 levels?
+        if (count($labels) > 127) {
+            return false;
+        }
+
+        $isValid = true;
+        foreach ($labels as $label) {
+            //Does the label start with a hyphen?
+            $isValid &= ('-' !== substr($label, 0, 1));
+
+            //Does the label end with a hyphen?
+            $isValid &= ('-' !== substr($label, -1, 1));
+
+            //Does the label contain anything other than alphanumeric characters or hyphens?
+            $isValid &= (1 === preg_match('/^[a-zA-Z0-9\-]+$/i', $label));
+
+            //Is the length of the label between 1 and 63 characters?
+            $isValid &= strlen($label) > 0 && strlen($label) < 64;
+        }
+
+        return $isValid;
     }
 
     /**
-     * @param string $string
-     * @param bool   $trailingDot Require trailing dot
+     * Validate the name for a Resource Record. This is distinct from validating a hostname in that this function
+     * will permit '@' and wildcards as well as underscores used in SRV records.
+     *
+     * @param string $name
      *
      * @return bool
      */
-    public static function validateFqdn($string, $trailingDot = true)
+    public static function resourceRecordName(string $name): bool
     {
-        if ('@' === $string) {
+        if ('@' === $name) {
             return true;
         }
 
-        if ('*.' === $string) {
+        if ('*.' === $name) {
             return false;
         }
 
-        $parts = explode('.', strtolower($string));
-        $hasTrailingDot = ('' === end($parts));
-
-        if ($trailingDot && !$hasTrailingDot) {
+        if (strlen($name) > 255) {
             return false;
         }
 
-        if ($hasTrailingDot) {
-            array_pop($parts);
+        $labels = explode('.', rtrim($name, '.'));
+
+        //Are there more than 127 levels?
+        if (count($labels) > 127) {
+            return false;
         }
 
-        foreach ($parts as $i => $part) {
-            //Does the string begin with a non alpha char?
-            if (1 === preg_match('/^[^a-z]/', $part)) {
-                if ('*' === $part && 0 === $i) {
-                    continue;
-                }
-
-                return false;
+        $isValid = true;
+        foreach ($labels as $i => $label) {
+            //Is the first label a wildcard?
+            if (0 === $i && '*' === $label) {
+                $isValid &= true;
+                continue;
             }
 
-            if (1 !== preg_match('/^[a-z0-9_\-]+$/', $part)) {
-                return false;
-            }
+            //Does the label start with a hyphen?
+            $isValid &= ('-' !== substr($label, 0, 1));
+
+            //Does the label end with a hyphen?
+            $isValid &= ('-' !== substr($label, -1, 1));
+
+            //Does the label contain anything other than alphanumeric characters, underscores or hyphens?
+            $isValid &= (1 === preg_match('/^[a-zA-Z0-9\-_]+$/i', $label));
+
+            //Is the length of the label between 1 and 63 characters?
+            $isValid &= strlen($label) > 0 && strlen($label) < 64;
         }
 
-        return true;
+        return $isValid;
     }
 
     /**
@@ -160,13 +142,13 @@ class Validator
      *
      * @static
      *
-     * @param string $ipAddress
+     * @param string $address
      *
      * @return bool
      */
-    public static function validateIpv4Address($ipAddress)
+    public static function ipv4(string $address): bool
     {
-        return (bool) filter_var($ipAddress, FILTER_VALIDATE_IP, [
+        return (bool) filter_var($address, FILTER_VALIDATE_IP, [
             'flags' => FILTER_FLAG_IPV4,
         ]);
     }
@@ -176,13 +158,13 @@ class Validator
      *
      * @static
      *
-     * @param string $ipAddress
+     * @param string $address
      *
      * @return bool
      */
-    public static function validateIpv6Address($ipAddress)
+    public static function ipv6(string $address): bool
     {
-        return (bool) filter_var($ipAddress, FILTER_VALIDATE_IP, [
+        return (bool) filter_var($address, FILTER_VALIDATE_IP, [
             'flags' => FILTER_FLAG_IPV6,
         ]);
     }
@@ -192,32 +174,13 @@ class Validator
      *
      * @static
      *
-     * @param $ipAddress
+     * @param $address
      *
      * @return bool
      */
-    public static function validateIpAddress($ipAddress)
+    public static function ipAddress(string $address): bool
     {
-        return (bool) filter_var($ipAddress, FILTER_VALIDATE_IP);
-    }
-
-    /**
-     * Validates a zone file.
-     *
-     * @deprecated
-     *
-     * @param string $zonename
-     * @param string $directory
-     * @param string $named_checkzonePath
-     *
-     * @return bool
-     */
-    public static function validateZoneFile($zonename, $directory, $named_checkzonePath = 'named-checkzone')
-    {
-        $command = sprintf('%s -q %s %s', $named_checkzonePath, $zonename, $directory);
-        exec($command, $output, $exit_status);
-
-        return 0 === $exit_status;
+        return (bool) filter_var($address, FILTER_VALIDATE_IP);
     }
 
     /**
@@ -242,7 +205,7 @@ class Validator
      *
      * @return int
      */
-    public static function zone(Zone $zone)
+    public static function zone(Zone $zone): int
     {
         $n_soa = self::countResourceRecords($zone, SOA::TYPE);
         $n_ns = self::countResourceRecords($zone, NS::TYPE);
@@ -255,52 +218,45 @@ class Validator
         }
 
         $n_class = count($classes);
+        $errors = 0;
 
         if ($n_soa < 1) {
-            return self::ZONE_NO_SOA;
+            $errors += self::ZONE_NO_SOA;
         }
 
         if ($n_soa > 1) {
-            return self::ZONE_TOO_MANY_SOA;
+            $errors += self::ZONE_TOO_MANY_SOA;
         }
 
         if ($n_ns < 1) {
-            return self::ZONE_NO_NS;
+            $errors += self::ZONE_NO_NS;
         }
 
         if ($n_class < 1) {
-            return self::ZONE_NO_CLASS;
+            $errors += self::ZONE_NO_CLASS;
         }
 
         if ($n_class > 1) {
-            return self::ZONE_TOO_MANY_CLASSES;
+            $errors += self::ZONE_TOO_MANY_CLASSES;
         }
 
-        return self::ZONE_OKAY;
+        return $errors;
     }
 
     /**
      * Counts the number of Resource Records of a particular type ($type) in a Zone.
      *
      * @param Zone  $zone
-     * @param null          $type The ResourceRecord type to be counted. If NULL, then the method will return
-     *                            the total number of resource records.
+     * @param string          $type The ResourceRecord type to be counted. If NULL, then the method will return
+     *                            the number of records without RData.
      *
      * @return int the number of records to be counted
      */
-    public static function countResourceRecords(Zone $zone, $type = null)
+    public static function countResourceRecords(Zone $zone, ?string $type = null): int
     {
-        if (null === $type) {
-            return count($zone->getResourceRecords());
-        }
-
         $n = 0;
-
-        foreach ($zone->getResourceRecords() as $rr) {
-            /* @var $rr ResourceRecordInterface */
-            if ($type === $rr->getRdata()->getType()) {
-                ++$n;
-            }
+        foreach ($zone as $rr) {
+            $n += (int) ($type === $rr->getType());
         }
 
         return $n;
@@ -313,7 +269,7 @@ class Validator
      *
      * @return bool
      */
-    public static function reverseIpv4($address)
+    public static function reverseIpv4(string $address): bool
     {
         $pattern = '/^((?:[0-9]+\.){1,4})in\-addr\.arpa\.$/i';
 
@@ -340,7 +296,7 @@ class Validator
      *
      * @return bool
      */
-    public static function reverseIpv6($address)
+    public static function reverseIpv6(string $address): bool
     {
         $pattern = '/^(?:[0-9a-f]\.){1,32}ip6\.arpa\.$/i';
 

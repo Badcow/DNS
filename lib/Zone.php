@@ -51,7 +51,7 @@ class Zone implements \Countable, \IteratorAggregate
      */
     public function setName(string $name): void
     {
-        if (!Validator::rrName($name, true)) {
+        if (!Validator::fullyQualifiedDomainName($name)) {
             throw new \InvalidArgumentException(sprintf('Zone "%s" is not a fully qualified domain name.', $name));
         }
 
