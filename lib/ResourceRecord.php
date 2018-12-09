@@ -15,12 +15,6 @@ use Badcow\DNS\Rdata\RdataInterface;
 
 class ResourceRecord
 {
-    const COMMENT_DELIMINATOR = '; ';
-
-    const MULTILINE_BEGIN = '(';
-
-    const MULTILINE_END = ')';
-
     /**
      * @var string
      */

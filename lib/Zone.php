@@ -45,7 +45,7 @@ class Zone implements \Countable, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $name
      *
      * @throws \InvalidArgumentException
      */
@@ -59,7 +59,7 @@ class Zone implements \Countable, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getName(): string
     {
@@ -67,7 +67,7 @@ class Zone implements \Countable, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * @return int
      */
     public function getDefaultTtl(): int
     {
@@ -75,7 +75,7 @@ class Zone implements \Countable, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $defaultTtl
      */
     public function setDefaultTtl(int $defaultTtl): void
     {
@@ -83,7 +83,7 @@ class Zone implements \Countable, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * @return ResourceRecord[]
      */
     public function getResourceRecords(): array
     {

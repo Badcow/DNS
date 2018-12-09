@@ -4,10 +4,9 @@ namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\ResourceRecord;
 
-class APL implements RdataInterface, FormattableInterface
+class APL implements RdataInterface
 {
     use RdataTrait;
-    use FormattableTrait;
 
     const TYPE = 'APL';
 
@@ -68,31 +67,5 @@ class APL implements RdataInterface, FormattableInterface
         }
 
         return rtrim($string, ' ');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function outputFormatted()
-    {
-        $string = ResourceRecord::MULTILINE_BEGIN.PHP_EOL;
-        foreach (explode(' ', $this->output()) as $block) {
-            $string .= $this->makeLine($block);
-        }
-
-        return $string.str_repeat(' ', $this->padding).ResourceRecord::MULTILINE_END;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function longestVarLength()
-    {
-        $l = 0;
-        foreach (explode(' ', $this->output()) as $block) {
-            $l = ($l < strlen($block)) ? strlen($block) : $l;
-        }
-
-        return $l;
     }
 }

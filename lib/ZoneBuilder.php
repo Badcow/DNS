@@ -33,7 +33,7 @@ class ZoneBuilder
             }
 
             if (null !== $rr->getComment()) {
-                $master .= ResourceRecord::COMMENT_DELIMINATOR.$rr->getComment();
+                $master .= '; '.$rr->getComment();
             }
 
             $master .= PHP_EOL;

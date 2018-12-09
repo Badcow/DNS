@@ -21,9 +21,9 @@ use Badcow\DNS\ResourceRecord;
  *
  * @see http://tools.ietf.org/html/rfc1876
  */
-class LOC implements RdataInterface, FormattableInterface
+class LOC implements RdataInterface
 {
-    use RdataTrait, FormattableTrait;
+    use RdataTrait;
 
     const TYPE = 'LOC';
 
@@ -211,44 +211,6 @@ class LOC implements RdataInterface, FormattableInterface
                 $this->horizontalPrecision,
                 $this->verticalPrecision
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function outputFormatted()
-    {
-        return ResourceRecord::MULTILINE_BEGIN.PHP_EOL.
-            $this->makeLine($this->getLatitude(self::FORMAT_DMS), 'LATITUDE').
-            $this->makeLine($this->getLongitude(self::FORMAT_DMS), 'LONGITUDE').
-            $this->makeLine(sprintf('%.2fm', $this->altitude), 'ALTITUDE').
-            $this->makeLine(sprintf('%.2fm', $this->size), 'SIZE').
-            $this->makeLine(sprintf('%.2fm', $this->horizontalPrecision), 'HORIZONTAL PRECISION').
-            $this->makeLine(sprintf('%.2fm', $this->verticalPrecision), 'VERTICAL PRECISION').
-            str_repeat(' ', $this->padding).ResourceRecord::MULTILINE_END;
-    }
-
-    /**
-     * Determines the longest variable.
-     *
-     * @return int
-     */
-    public function longestVarLength()
-    {
-        $l = 0;
-
-        foreach ([
-                        $this->getLatitude(self::FORMAT_DMS),
-                        $this->getLongitude(self::FORMAT_DMS),
-                        sprintf('%.2fm', $this->altitude),
-                        sprintf('%.2fm', $this->size),
-                        sprintf('%.2fm', $this->horizontalPrecision),
-                        sprintf('%.2fm', $this->verticalPrecision),
-                ] as $var) {
-            $l = ($l < strlen($var)) ? strlen($var) : $l;
-        }
-
-        return $l;
     }
 
     /**

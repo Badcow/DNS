@@ -16,9 +16,9 @@ use Badcow\DNS\ResourceRecord;
 /**
  * @see http://www.ietf.org/rfc/rfc1035.text
  */
-class SOA implements RdataInterface, FormattableInterface
+class SOA implements RdataInterface
 {
-    use RdataTrait, FormattableTrait;
+    use RdataTrait;
 
     const TYPE = 'SOA';
 
@@ -206,45 +206,5 @@ class SOA implements RdataInterface, FormattableInterface
             $this->expire,
             $this->minimum
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function outputFormatted()
-    {
-        return ResourceRecord::MULTILINE_BEGIN.PHP_EOL.
-            $this->makeLine($this->getMname(), 'MNAME').
-            $this->makeLine($this->getRname(), 'RNAME').
-            $this->makeLine($this->getSerial(), 'SERIAL').
-            $this->makeLine($this->getRefresh(), 'REFRESH').
-            $this->makeLine($this->getRetry(), 'RETRY').
-            $this->makeLine($this->getExpire(), 'EXPIRE').
-            $this->makeLine($this->getMinimum(), 'MINIMUM').
-            str_repeat(' ', $this->padding).ResourceRecord::MULTILINE_END;
-    }
-
-    /**
-     * Determines the longest variable.
-     *
-     * @return int
-     */
-    public function longestVarLength()
-    {
-        $l = 0;
-
-        foreach ([
-                    $this->getMname(),
-                    $this->getRname(),
-                    $this->getSerial(),
-                    $this->getRefresh(),
-                    $this->getRetry(),
-                    $this->getExpire(),
-                    $this->getMinimum(),
-                ] as $var) {
-            $l = ($l < strlen($var)) ? strlen($var) : $l;
-        }
-
-        return $l;
     }
 }
