@@ -55,12 +55,14 @@ class AlignedBuilder
     ];
 
     /**
-     * {@inheritdoc}
+     * @param Zone $zone
+     *
+     * @return string
      */
-    public static function build(Zone $zone)
+    public static function build(Zone $zone): string
     {
         $master = '$ORIGIN '.$zone->getName().PHP_EOL.
-                    '$TTL '.$zone->getDefaultTtl().PHP_EOL;
+            '$TTL '.$zone->getDefaultTtl().PHP_EOL;
 
         $rrs = $zone->getResourceRecords();
         $current = SOA::TYPE;
@@ -133,7 +135,8 @@ class AlignedBuilder
 
     /**
      * @param RdataInterface $rdata
-     * @param int $padding
+     * @param int            $padding
+     *
      * @return string
      */
     private static function generateRdataOutput(RdataInterface $rdata, int $padding): string
@@ -156,6 +159,7 @@ class AlignedBuilder
     /**
      * @param SOA $rdata
      * @param int $padding
+     *
      * @return string
      */
     private static function outputSoa(SOA $rdata, int $padding): string
@@ -186,6 +190,7 @@ class AlignedBuilder
     /**
      * @param APL $rdata
      * @param int $padding
+     *
      * @return string
      */
     private static function outputApl(APL $rdata, int $padding): string
@@ -193,7 +198,7 @@ class AlignedBuilder
         $blocks = explode(' ', $rdata->output());
         $longestVarLength = max(array_map('strlen', $blocks));
         $string = self::MULTILINE_BEGIN.PHP_EOL;
-        
+
         foreach ($blocks as $block) {
             $string .= self::makeLine($block, null, $longestVarLength, $padding);
         }
@@ -204,6 +209,7 @@ class AlignedBuilder
     /**
      * @param LOC $rdata
      * @param int $padding
+     *
      * @return string
      */
     private static function outputLoc(LOC $rdata, int $padding): string
@@ -234,8 +240,8 @@ class AlignedBuilder
      *
      * @param string $text
      * @param string $comment
-     * @param int $longestVarLength
-     * @param int $padding
+     * @param int    $longestVarLength
+     * @param int    $padding
      *
      * @return string
      */

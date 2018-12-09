@@ -246,9 +246,9 @@ class Validator
     /**
      * Counts the number of Resource Records of a particular type ($type) in a Zone.
      *
-     * @param Zone  $zone
-     * @param string          $type The ResourceRecord type to be counted. If NULL, then the method will return
-     *                            the number of records without RData.
+     * @param Zone   $zone
+     * @param string $type The ResourceRecord type to be counted. If NULL, then the method will return
+     *                     the number of records without RData.
      *
      * @return int the number of records to be counted
      */

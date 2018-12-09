@@ -11,8 +11,6 @@
 
 namespace Badcow\DNS\Rdata;
 
-use Badcow\DNS\ResourceRecord;
-
 /**
  * @see http://www.ietf.org/rfc/rfc1035.text
  */

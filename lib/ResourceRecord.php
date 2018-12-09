@@ -43,7 +43,7 @@ class ResourceRecord
     /**
      * @param string         $name
      * @param RdataInterface $rdata
-     * @param int         $ttl
+     * @param int            $ttl
      * @param string         $class
      * @param string         $comment
      */

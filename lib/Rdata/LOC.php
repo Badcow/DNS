@@ -11,8 +11,6 @@
 
 namespace Badcow\DNS\Rdata;
 
-use Badcow\DNS\ResourceRecord;
-
 /**
  * Class LocRdata.
  *

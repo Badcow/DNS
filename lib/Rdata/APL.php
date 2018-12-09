@@ -2,8 +2,6 @@
 
 namespace Badcow\DNS\Rdata;
 
-use Badcow\DNS\ResourceRecord;
-
 class APL implements RdataInterface
 {
     use RdataTrait;

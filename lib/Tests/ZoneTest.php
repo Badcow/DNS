@@ -11,10 +11,7 @@
 
 namespace Badcow\DNS\Tests;
 
-use Badcow\DNS\Classes;
-use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
-use Badcow\DNS\Rdata\Factory;
 
 class ZoneTest extends TestCase
 {

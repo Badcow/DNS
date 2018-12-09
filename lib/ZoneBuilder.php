@@ -14,12 +14,14 @@ namespace Badcow\DNS;
 class ZoneBuilder
 {
     /**
-     * {@inheritdoc}
+     * @param Zone $zone
+     *
+     * @return string
      */
-    public static function build(Zone $zone)
+    public static function build(Zone $zone): string
     {
         $master = '$ORIGIN '.$zone->getName().PHP_EOL.
-                    '$TTL '.$zone->getDefaultTtl().PHP_EOL;
+            '$TTL '.$zone->getDefaultTtl().PHP_EOL;
 
         foreach ($zone as $rr) {
             if (null !== $rr->getRdata()) {

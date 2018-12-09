@@ -142,6 +142,7 @@ class Zone implements \Countable, \IteratorAggregate
 
     /**
      * @param ResourceRecord $resourceRecord
+     *
      * @return bool
      */
     public function contains(ResourceRecord $resourceRecord): bool
@@ -157,6 +158,7 @@ class Zone implements \Countable, \IteratorAggregate
 
     /**
      * @param ResourceRecord $resourceRecord
+     *
      * @return bool
      */
     public function remove(ResourceRecord $resourceRecord): bool
