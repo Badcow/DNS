@@ -16,12 +16,12 @@ interface RdataInterface
     /**
      * @return string
      */
-    public function output();
+    public function output(): string;
 
     /**
      * Get the R-Data type.
      *
      * @return string
      */
-    public function getType();
+    public function getType(): string;
 }

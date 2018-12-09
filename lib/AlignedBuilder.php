@@ -113,7 +113,7 @@ class AlignedBuilder
      *
      * @return int
      */
-    public static function compareResourceRecords(ResourceRecord $a, ResourceRecord $b)
+    public static function compareResourceRecords(ResourceRecord $a, ResourceRecord $b): int
     {
         if ($a->getType() === $b->getType()) {
             return strcmp($a->getName().$a->getRdata()->output(), $b->getName().$b->getRdata()->output());

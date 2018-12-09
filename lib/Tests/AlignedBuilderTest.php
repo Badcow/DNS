@@ -148,7 +148,7 @@ DNS;
         $this->assertEquals($this->expected, $output);
 
         if (true == $this->getEnvVariable(self::PHP_ENV_PRINT_TEST_ZONE)) {
-            $this->printBlock($builder->build($output), 'ALIGNED TEST ZONE');
+            $this->printBlock($output, 'ALIGNED TEST ZONE');
         }
     }
 }

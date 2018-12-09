@@ -23,7 +23,7 @@ class DummyRdata implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output()
+    public function output(): string
     {
         return 'co.badcow.dns.test.dummy';
     }

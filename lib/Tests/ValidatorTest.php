@@ -16,7 +16,6 @@ use Badcow\DNS\Rdata\NS;
 use Badcow\DNS\Validator;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
-use Badcow\DNS\Zone;
 
 class ValidatorTest extends TestCase
 {

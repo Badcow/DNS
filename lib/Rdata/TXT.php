@@ -25,12 +25,12 @@ class TXT implements RdataInterface
     /**
      * @param $text
      */
-    public function setText($text)
+    public function setText(string $text): void
     {
         $this->text = addslashes($text);
     }
 
-    public function getText()
+    public function getText(): string
     {
         return stripslashes($this->text);
     }
@@ -38,7 +38,7 @@ class TXT implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output()
+    public function output(): string
     {
         return '"'.$this->text.'"';
     }

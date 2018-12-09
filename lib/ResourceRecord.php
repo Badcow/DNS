@@ -65,7 +65,7 @@ class ResourceRecord
      *
      * @throws \UnexpectedValueException
      */
-    public function setClass(?string $class)
+    public function setClass(?string $class): void
     {
         if (null !== $class && !Classes::isValid($class)) {
             throw new \UnexpectedValueException(sprintf('No such class as "%s"', $class));
@@ -106,7 +106,7 @@ class ResourceRecord
      *
      * @param int $ttl
      */
-    public function setTtl(int $ttl)
+    public function setTtl(int $ttl): void
     {
         $this->ttl = $ttl;
     }

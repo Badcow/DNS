@@ -61,7 +61,7 @@ class SRV extends CNAME
     /**
      * @return int
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return $this->priority;
     }
@@ -71,19 +71,19 @@ class SRV extends CNAME
      *
      * @throws \InvalidArgumentException
      */
-    public function setPriority($priority)
+    public function setPriority(int $priority): void
     {
         if ($priority < 0 || $priority > static::MAX_PRIORITY) {
             throw new \InvalidArgumentException('Priority must be an unsigned integer on the range [0-65535]');
         }
 
-        $this->priority = (int) $priority;
+        $this->priority = $priority;
     }
 
     /**
      * @return int
      */
-    public function getWeight()
+    public function getWeight(): int
     {
         return $this->weight;
     }
@@ -93,7 +93,7 @@ class SRV extends CNAME
      *
      * @throws \InvalidArgumentException
      */
-    public function setWeight($weight)
+    public function setWeight(int $weight): void
     {
         if ($weight < 0 || $weight > static::MAX_WEIGHT) {
             throw new \InvalidArgumentException('Weight must be an unsigned integer on the range [0-65535]');
@@ -105,7 +105,7 @@ class SRV extends CNAME
     /**
      * @return int
      */
-    public function getPort()
+    public function getPort(): int
     {
         return $this->port;
     }
@@ -115,7 +115,7 @@ class SRV extends CNAME
      *
      * @throws \InvalidArgumentException
      */
-    public function setPort($port)
+    public function setPort(int $port): void
     {
         if ($port < 0 || $port > static::HIGHEST_PORT) {
             throw new \InvalidArgumentException('Port must be an unsigned integer on the range [0-65535]');
@@ -127,7 +127,7 @@ class SRV extends CNAME
     /**
      * {@inheritdoc}
      */
-    public function output()
+    public function output(): string
     {
         return sprintf('%s %s %s %s',
             $this->priority,

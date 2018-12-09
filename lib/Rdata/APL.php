@@ -23,7 +23,7 @@ class APL implements RdataInterface
      * @param bool     $included True if the resource exists within the range, False if the resource
      *                           is not within the range. I.E. the negation.
      */
-    public function addAddressRange(\IPBlock $ipBlock, $included = true)
+    public function addAddressRange(\IPBlock $ipBlock, $included = true): void
     {
         if ($included) {
             $this->includedAddressRanges[] = $ipBlock;
@@ -51,7 +51,7 @@ class APL implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output()
+    public function output(): string
     {
         $string = '';
         foreach ($this->includedAddressRanges as $ipBlock) {

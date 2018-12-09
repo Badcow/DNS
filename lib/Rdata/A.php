@@ -25,7 +25,7 @@ class A implements RdataInterface
     /**
      * @param string $address
      */
-    public function setAddress($address)
+    public function setAddress(string $address)
     {
         $this->address = $address;
     }
@@ -33,7 +33,7 @@ class A implements RdataInterface
     /**
      * @return string
      */
-    public function getAddress()
+    public function getAddress(): string
     {
         return $this->address;
     }
@@ -41,7 +41,7 @@ class A implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output()
+    public function output(): string
     {
         return $this->address;
     }
