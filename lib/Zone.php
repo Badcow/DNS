@@ -117,11 +117,11 @@ class Zone implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @return ResourceRecordIterator
+     * @return \ArrayIterator
      */
-    public function getIterator(): ResourceRecordIterator
+    public function getIterator(): \ArrayIterator
     {
-        return new ResourceRecordIterator($this);
+        return new \ArrayIterator($this->resourceRecords);
     }
 
     /**
