@@ -11,7 +11,20 @@
 
 namespace Badcow\DNS;
 
-use Badcow\DNS\Rdata\{A, AAAA, APL, CNAME, DNAME, HINFO, LOC, MX, NS, PTR, SOA, SRV, TXT, RdataInterface};
+use Badcow\DNS\Rdata\A;
+use Badcow\DNS\Rdata\AAAA;
+use Badcow\DNS\Rdata\APL;
+use Badcow\DNS\Rdata\CNAME;
+use Badcow\DNS\Rdata\DNAME;
+use Badcow\DNS\Rdata\HINFO;
+use Badcow\DNS\Rdata\LOC;
+use Badcow\DNS\Rdata\MX;
+use Badcow\DNS\Rdata\NS;
+use Badcow\DNS\Rdata\PTR;
+use Badcow\DNS\Rdata\SOA;
+use Badcow\DNS\Rdata\SRV;
+use Badcow\DNS\Rdata\TXT;
+use Badcow\DNS\Rdata\RdataInterface;
 
 class AlignedBuilder
 {

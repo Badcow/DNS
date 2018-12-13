@@ -11,7 +11,10 @@
 
 namespace Badcow\DNS;
 
-use Badcow\DNS\Rdata\{CNAME, MX, AAAA, SOA};
+use Badcow\DNS\Rdata\CNAME;
+use Badcow\DNS\Rdata\MX;
+use Badcow\DNS\Rdata\AAAA;
+use Badcow\DNS\Rdata\SOA;
 use Badcow\DNS\Ip\Toolbox;
 
 class ZoneBuilder
@@ -52,7 +55,7 @@ class ZoneBuilder
     /**
      * Fills out all of the data of each resource record. The function will add the parent domain to all non-qualified
      * sub-domains, replace '@' with the zone name, ensure the class and TTL are on each record.
-     * 
+     *
      * @param Zone $zone
      */
     public static function fillOutZone(Zone $zone)
@@ -94,6 +97,7 @@ class ZoneBuilder
      *
      * @param string $subdomain
      * @param string $parent
+     *
      * @return string
      */
     private static function fullyQualify(string $subdomain, string $parent): string
