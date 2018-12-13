@@ -212,29 +212,19 @@ class Validator
         }
 
         $n_class = count($classes);
-        $errors = 0;
+        $totalError = 0;
 
-        if ($n_soa < 1) {
-            $errors += self::ZONE_NO_SOA;
-        }
+        $incrementError = function (bool $errorCondition, int $errorOrdinal) use (&$totalError) {
+            $totalError += $errorCondition ? $errorOrdinal : 0;
+        };
 
-        if ($n_soa > 1) {
-            $errors += self::ZONE_TOO_MANY_SOA;
-        }
+        $incrementError($n_soa < 1, self::ZONE_NO_SOA);
+        $incrementError($n_soa > 1, self::ZONE_TOO_MANY_SOA);
+        $incrementError($n_ns < 1, self::ZONE_NO_NS);
+        $incrementError($n_class < 1, self::ZONE_NO_CLASS);
+        $incrementError($n_class > 1, self::ZONE_TOO_MANY_CLASSES);
 
-        if ($n_ns < 1) {
-            $errors += self::ZONE_NO_NS;
-        }
-
-        if ($n_class < 1) {
-            $errors += self::ZONE_NO_CLASS;
-        }
-
-        if ($n_class > 1) {
-            $errors += self::ZONE_TOO_MANY_CLASSES;
-        }
-
-        return $errors;
+        return $totalError;
     }
 
     /**
