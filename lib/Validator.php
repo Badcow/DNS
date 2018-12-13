@@ -50,32 +50,8 @@ class Validator
      */
     public static function fullyQualifiedDomainName(string $name): bool
     {
-        $labels = explode('.', rtrim($name, '.'));
-
-        $isValid = true;
-
-        //Is there a trailing dot?
-        $isValid &= ('.' === substr($name, -1, 1));
-
-        //Are there less than 254 characters?
-        $isValid &= strlen($name) < 254;
-
-        //Are there less than 128 levels?
-        $isValid &= count($labels) < 128;
-
-        foreach ($labels as $label) {
-            //Does the label start with a hyphen?
-            $isValid &= ('-' !== substr($label, 0, 1));
-
-            //Does the label end with a hyphen?
-            $isValid &= ('-' !== substr($label, -1, 1));
-
-            //Does the label contain anything other than alphanumeric characters or hyphens?
-            $isValid &= (1 === preg_match('/^[a-zA-Z0-9\-]+$/i', $label));
-
-            //Is the length of the label between 1 and 63 characters?
-            $isValid &= strlen($label) > 0 && strlen($label) < 64;
-        }
+        $isValid = strlen($name) < 254;
+        $isValid &= 1 === preg_match('/^(?:(?!-)[a-z0-9\-]{1,63}(?<!-)\.){1,127}$/i', $name);
 
         return $isValid;
     }
@@ -90,43 +66,8 @@ class Validator
      */
     public static function resourceRecordName(string $name): bool
     {
-        if ('@' === $name) {
-            return true;
-        }
-
-        if ('*.' === $name) {
-            return false;
-        }
-
-        $labels = explode('.', rtrim($name, '.'));
-
-        $isValid = true;
-
-        //Are there less than 254 characters?
-        $isValid &= strlen($name) < 254;
-
-        //Are there less than 128 levels?
-        $isValid &= count($labels) < 128;
-
-        foreach ($labels as $i => $label) {
-            //Is the first label a wildcard?
-            if (0 === $i && '*' === $label) {
-                $isValid &= true;
-                continue;
-            }
-
-            //Does the label start with a hyphen?
-            $isValid &= ('-' !== substr($label, 0, 1));
-
-            //Does the label end with a hyphen?
-            $isValid &= ('-' !== substr($label, -1, 1));
-
-            //Does the label contain anything other than alphanumeric characters, underscores or hyphens?
-            $isValid &= (1 === preg_match('/^[a-zA-Z0-9\-_]+$/i', $label));
-
-            //Is the length of the label between 1 and 63 characters?
-            $isValid &= strlen($label) > 0 && strlen($label) < 64;
-        }
+        $isValid = strlen($name) < 254;
+        $isValid &= 1 === preg_match('/(?:^(?:\*\.)?((?!-)[a-z0-9_\-]{1,63}(?<!-)\.?){1,127}$)|^@$|^\*$/i', $name);
 
         return $isValid;
     }
@@ -203,15 +144,8 @@ class Validator
     {
         $n_soa = self::countResourceRecords($zone, SOA::TYPE);
         $n_ns = self::countResourceRecords($zone, NS::TYPE);
-        $classes = [];
+        $n_class = self::countClasses($zone);
 
-        foreach ($zone as $rr) {
-            if (null !== $rr->getClass()) {
-                $classes[$rr->getClass()] = null;
-            }
-        }
-
-        $n_class = count($classes);
         $totalError = 0;
 
         $incrementError = function (bool $errorCondition, int $errorOrdinal) use (&$totalError) {
@@ -285,5 +219,24 @@ class Validator
         $pattern = '/^(?:[0-9a-f]\.){1,32}ip6\.arpa\.$/i';
 
         return 1 === preg_match($pattern, $address);
+    }
+
+    /**
+     * Determine the number of unique non-null classes is a Zone. In a valid zone this MUST be 1.
+     *
+     * @param Zone $zone
+     * @return int
+     */
+    private static function countClasses(Zone $zone): int
+    {
+        $classes = [];
+
+        foreach ($zone as $rr) {
+            if (null !== $rr->getClass()) {
+                $classes[$rr->getClass()] = null;
+            }
+        }
+
+        return count($classes);
     }
 }

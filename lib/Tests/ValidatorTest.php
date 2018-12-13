@@ -302,8 +302,8 @@ class ValidatorTest extends TestCase
         $this->assertTrue(Validator::reverseIpv6($valid_02));
         $this->assertFalse(Validator::reverseIpv6($invalid_01));
 
-        $this->assertTrue(Validator::hostName($valid_01));
-        $this->assertTrue(Validator::hostName($valid_02));
+        $this->assertTrue(Validator::fullyQualifiedDomainName($valid_01));
+        $this->assertTrue(Validator::fullyQualifiedDomainName($valid_02));
     }
 
     public function testResourceRecordName()

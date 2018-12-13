@@ -62,7 +62,8 @@ class ZoneBuilder
     {
         $class = Classes::INTERNET;
         foreach ($zone as $rr) {
-            if (null !== $class = $rr->getClass()) {
+            if (null !== $rr->getClass()) {
+                $class = $rr->getClass();
                 break;
             }
         }
