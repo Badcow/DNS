@@ -50,23 +50,19 @@ class Validator
      */
     public static function fullyQualifiedDomainName(string $name): bool
     {
-        //Is there a trailing dot?
-        if ('.' !== substr($name, -1, 1)) {
-            return false;
-        }
-
-        if (strlen($name) > 255) {
-            return false;
-        }
-
         $labels = explode('.', rtrim($name, '.'));
 
-        //Are there more than 127 levels?
-        if (count($labels) > 127) {
-            return false;
-        }
-
         $isValid = true;
+
+        //Is there a trailing dot?
+        $isValid &= ('.' === substr($name, -1, 1));
+
+        //Are there less than 254 characters?
+        $isValid &= strlen($name) < 254;
+
+        //Are there less than 128 levels?
+        $isValid &= count($labels) < 128;
+
         foreach ($labels as $label) {
             //Does the label start with a hyphen?
             $isValid &= ('-' !== substr($label, 0, 1));
@@ -102,18 +98,16 @@ class Validator
             return false;
         }
 
-        if (strlen($name) > 255) {
-            return false;
-        }
-
         $labels = explode('.', rtrim($name, '.'));
 
-        //Are there more than 127 levels?
-        if (count($labels) > 127) {
-            return false;
-        }
-
         $isValid = true;
+
+        //Are there less than 254 characters?
+        $isValid &= strlen($name) < 254;
+
+        //Are there less than 128 levels?
+        $isValid &= count($labels) < 128;
+
         foreach ($labels as $i => $label) {
             //Is the first label a wildcard?
             if (0 === $i && '*' === $label) {
