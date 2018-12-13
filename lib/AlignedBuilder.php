@@ -68,14 +68,9 @@ class AlignedBuilder
 
         $rrs = $zone->getResourceRecords();
         $current = SOA::TYPE;
-        $namePadding = $ttlPadding = $typePadding = 0;
         usort($rrs, 'self::compareResourceRecords');
 
-        foreach ($zone as $resourceRecord) {
-            $namePadding = (strlen($resourceRecord->getName()) > $namePadding) ? strlen($resourceRecord->getName()) : $namePadding;
-            $ttlPadding = (strlen($resourceRecord->getTtl()) > $ttlPadding) ? strlen($resourceRecord->getTtl()) : $ttlPadding;
-            $typePadding = (strlen($resourceRecord->getType()) > $typePadding) ? strlen($resourceRecord->getType()) : $typePadding;
-        }
+        list($namePadding, $ttlPadding, $typePadding, $rdataPadding) = self::getPadding($zone);
 
         foreach ($rrs as $resourceRecord) {
             if (null == $resourceRecord->getRdata()) {
@@ -86,8 +81,6 @@ class AlignedBuilder
                 $master .= PHP_EOL.self::COMMENT_DELIMINATOR.$resourceRecord->getType().' RECORDS'.PHP_EOL;
                 $current = $resourceRecord->getType();
             }
-
-            $rdataPadding = $namePadding + $ttlPadding + $typePadding + 6;
 
             $master .= sprintf('%s %s %s %s %s',
                 str_pad($resourceRecord->getName(), $namePadding, ' ', STR_PAD_RIGHT),
@@ -256,5 +249,30 @@ class AlignedBuilder
         }
 
         return $output.PHP_EOL;
+    }
+
+    /**
+     * Get the padding required for a zone.
+     *
+     * @param Zone $zone
+     *
+     * @return array Array order: name, ttl, type, rdata
+     */
+    private static function getPadding(Zone $zone)
+    {
+        $name = $ttl = $type = 0;
+
+        foreach ($zone as $resourceRecord) {
+            $name = max($name, strlen($resourceRecord->getName()));
+            $ttl = max($ttl, strlen($resourceRecord->getTtl()));
+            $type = max($type, strlen($resourceRecord->getType()));
+        }
+
+        $padding[] = $name;
+        $padding[] = $ttl;
+        $padding[] = $type;
+        $padding[] = array_sum($padding) + 6;
+
+        return $padding;
     }
 }

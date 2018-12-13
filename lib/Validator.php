@@ -225,6 +225,7 @@ class Validator
      * Determine the number of unique non-null classes is a Zone. In a valid zone this MUST be 1.
      *
      * @param Zone $zone
+     *
      * @return int
      */
     private static function countClasses(Zone $zone): int
