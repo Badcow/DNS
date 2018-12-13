@@ -11,20 +11,7 @@
 
 namespace Badcow\DNS;
 
-use Badcow\DNS\Rdata\AAAA;
-use Badcow\DNS\Rdata\A;
-use Badcow\DNS\Rdata\APL;
-use Badcow\DNS\Rdata\CNAME;
-use Badcow\DNS\Rdata\DNAME;
-use Badcow\DNS\Rdata\HINFO;
-use Badcow\DNS\Rdata\LOC;
-use Badcow\DNS\Rdata\MX;
-use Badcow\DNS\Rdata\NS;
-use Badcow\DNS\Rdata\PTR;
-use Badcow\DNS\Rdata\RdataInterface;
-use Badcow\DNS\Rdata\SOA;
-use Badcow\DNS\Rdata\SRV;
-use Badcow\DNS\Rdata\TXT;
+use Badcow\DNS\Rdata\{A, AAAA, APL, CNAME, DNAME, HINFO, LOC, MX, NS, PTR, SOA, SRV, TXT, RdataInterface};
 
 class AlignedBuilder
 {
@@ -61,8 +48,10 @@ class AlignedBuilder
      */
     public static function build(Zone $zone): string
     {
-        $master = '$ORIGIN '.$zone->getName().PHP_EOL.
-            '$TTL '.$zone->getDefaultTtl().PHP_EOL;
+        $master = '$ORIGIN '.$zone->getName().PHP_EOL;
+        if (null !== $zone->getDefaultTtl()) {
+            $master .= '$TTL '.$zone->getDefaultTtl().PHP_EOL;
+        }
 
         $rrs = $zone->getResourceRecords();
         $current = SOA::TYPE;
@@ -245,7 +234,7 @@ class AlignedBuilder
      *
      * @return string
      */
-    private static function makeLine(string $text, string $comment, int $longestVarLength, int $padding): string
+    private static function makeLine(string $text, ?string $comment, int $longestVarLength, int $padding): string
     {
         $output = str_repeat(' ', $padding).str_pad($text, $longestVarLength);
 

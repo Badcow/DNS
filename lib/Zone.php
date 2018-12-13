@@ -69,7 +69,7 @@ class Zone implements \Countable, \IteratorAggregate
     /**
      * @return int
      */
-    public function getDefaultTtl(): int
+    public function getDefaultTtl(): ?int
     {
         return $this->defaultTtl;
     }
@@ -77,7 +77,7 @@ class Zone implements \Countable, \IteratorAggregate
     /**
      * @param int $defaultTtl
      */
-    public function setDefaultTtl(int $defaultTtl): void
+    public function setDefaultTtl(?int $defaultTtl): void
     {
         $this->defaultTtl = $defaultTtl;
     }
@@ -91,7 +91,7 @@ class Zone implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @param array $resourceRecords
+     * @param ResourceRecord[] $resourceRecords
      */
     public function fromArray(array $resourceRecords)
     {
