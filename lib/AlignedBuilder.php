@@ -268,11 +268,11 @@ class AlignedBuilder
             $type = max($type, strlen($resourceRecord->getType()));
         }
 
-        $padding[] = $name;
-        $padding[] = $ttl;
-        $padding[] = $type;
-        $padding[] = array_sum($padding) + 6;
-
-        return $padding;
+        return [
+            $name,
+            $ttl,
+            $type,
+            $name + $ttl + $type + 6,
+        ];
     }
 }
