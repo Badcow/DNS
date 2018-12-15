@@ -1,0 +1,44 @@
+$ORIGIN example.com.
+$TTL 3600
+example.com.             3600 IN SOA  (
+                                      example.com.      ; MNAME
+                                      post.example.com. ; RNAME
+                                      2014110501        ; SERIAL
+                                      3600              ; REFRESH
+                                      14400             ; RETRY
+                                      604800            ; EXPIRE
+                                      3600              ; MINIMUM
+                                      )
+
+; NS RECORDS
+example.com.             3600 IN NS   ns1.nameserver.com.
+example.com.             3600 IN NS   ns2.nameserver.com.
+
+; A RECORDS
+sub.domain.example.com.  3600 IN A    192.168.1.42; This is a local ip.
+
+; AAAA RECORDS
+ipv6.domain.example.com. 3600 IN AAAA 0000:0000:0000:0000:0000:0000:0000:0001; This is an IPv6 domain.
+
+; MX RECORDS
+example.com.             3600 IN MX   10 mail-gw1.example.net.
+example.com.             3600 IN MX   20 mail-gw2.example.net.
+example.com.             3600 IN MX   30 mail-gw3.example.net.
+
+; LOC RECORDS
+canberra.example.com.    3600 IN LOC  (
+                                      35 18 27.000 S ; LATITUDE
+                                      149 7 27.840 E ; LONGITUDE
+                                      500.00m        ; ALTITUDE
+                                      20.12m         ; SIZE
+                                      200.30m        ; HORIZONTAL PRECISION
+                                      300.10m        ; VERTICAL PRECISION
+                                      ); This is Canberra
+
+; APL RECORDS
+multicast.example.com.   3600 IN APL  (
+                                      1:192.168.0.0/23     
+                                      2:2001:acad:1::/112  
+                                      !1:192.168.1.64/28   
+                                      !2:2001:acad:1::8/128
+                                      )
