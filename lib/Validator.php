@@ -29,130 +29,47 @@ class Validator
     const ZONE_TOO_MANY_CLASSES = 16;
 
     /**
-     * Validates if $string is suitable as an RR name.
+     * Validate the string as a valid hostname in accordance with RFC 952 {@link https://tools.ietf.org/html/rfc952}
+     * and RFC 1123 {@link https://tools.ietf.org/html/rfc1123}.
      *
-     * @param string $string
-     * @param bool   $mustHaveTrailingDot
+     * @param string $name
      *
      * @return bool
      */
-    public static function rrName($string, $mustHaveTrailingDot = false)
+    public static function hostName(string $name): bool
     {
-        if ('@' === $string ||
-            self::reverseIpv4($string) ||
-            self::reverseIpv6($string)
-        ) {
-            return true;
-        }
-
-        if ('*.' === $string) {
-            return false;
-        }
-
-        $parts = explode('.', strtolower($string));
-
-        if ('' !== end($parts) && $mustHaveTrailingDot) {
-            return false;
-        }
-
-        if ('' === end($parts)) {
-            array_pop($parts);
-        }
-
-        foreach ($parts as $i => $part) {
-            //Does the string begin with a non alphanumeric char?
-            if (1 === preg_match('/^[^a-z0-9]/', $part)) {
-                if ('*' === $part && 0 === $i) {
-                    continue;
-                }
-
-                return false;
-            }
-
-            if (1 !== preg_match('/^[a-z0-9_\-]+$/i', $part)) {
-                return false;
-            }
-        }
-
-        return true;
+        return self::fullyQualifiedDomainName(rtrim($name, '.').'.');
     }
 
     /**
-     * Validate the string as a Fully Qualified Domain Name.
+     * Validate the string is a Fully Qualified Domain Name.
      *
-     * @param string $string
+     * @param string $name
      *
      * @return bool
      */
-    public static function fqdn($string)
+    public static function fullyQualifiedDomainName(string $name): bool
     {
-        $parts = explode('.', strtolower($string));
+        $isValid = strlen($name) < 254;
+        $isValid &= 1 === preg_match('/^(?:(?!-)[a-z0-9\-]{1,63}(?<!-)\.){1,127}$/i', $name);
 
-        //Is there a trailing dot?
-        if ('' !== end($parts)) {
-            return false;
-        }
-
-        //Remove the empty string at the end of the array.
-        array_pop($parts);
-
-        foreach ($parts as $part) {
-            //Does the string begin with a non alpha char?
-            if (1 === preg_match('/^[^a-z]/i', $part)) {
-                return false;
-            }
-
-            if (1 !== preg_match('/^[a-z0-9_\-]+$/i', $part)) {
-                return false;
-            }
-        }
-
-        return true;
+        return $isValid;
     }
 
     /**
-     * @param string $string
-     * @param bool   $trailingDot Require trailing dot
+     * Validate the name for a Resource Record. This is distinct from validating a hostname in that this function
+     * will permit '@' and wildcards as well as underscores used in SRV records.
+     *
+     * @param string $name
      *
      * @return bool
      */
-    public static function validateFqdn($string, $trailingDot = true)
+    public static function resourceRecordName(string $name): bool
     {
-        if ('@' === $string) {
-            return true;
-        }
+        $isValid = strlen($name) < 254;
+        $isValid &= 1 === preg_match('/(?:^(?:\*\.)?((?!-)[a-z0-9_\-]{1,63}(?<!-)\.?){1,127}$)|^@$|^\*$/i', $name);
 
-        if ('*.' === $string) {
-            return false;
-        }
-
-        $parts = explode('.', strtolower($string));
-        $hasTrailingDot = ('' === end($parts));
-
-        if ($trailingDot && !$hasTrailingDot) {
-            return false;
-        }
-
-        if ($hasTrailingDot) {
-            array_pop($parts);
-        }
-
-        foreach ($parts as $i => $part) {
-            //Does the string begin with a non alpha char?
-            if (1 === preg_match('/^[^a-z]/', $part)) {
-                if ('*' === $part && 0 === $i) {
-                    continue;
-                }
-
-                return false;
-            }
-
-            if (1 !== preg_match('/^[a-z0-9_\-]+$/', $part)) {
-                return false;
-            }
-        }
-
-        return true;
+        return $isValid;
     }
 
     /**
@@ -160,13 +77,13 @@ class Validator
      *
      * @static
      *
-     * @param string $ipAddress
+     * @param string $address
      *
      * @return bool
      */
-    public static function validateIpv4Address($ipAddress)
+    public static function ipv4(string $address): bool
     {
-        return (bool) filter_var($ipAddress, FILTER_VALIDATE_IP, [
+        return (bool) filter_var($address, FILTER_VALIDATE_IP, [
             'flags' => FILTER_FLAG_IPV4,
         ]);
     }
@@ -176,13 +93,13 @@ class Validator
      *
      * @static
      *
-     * @param string $ipAddress
+     * @param string $address
      *
      * @return bool
      */
-    public static function validateIpv6Address($ipAddress)
+    public static function ipv6(string $address): bool
     {
-        return (bool) filter_var($ipAddress, FILTER_VALIDATE_IP, [
+        return (bool) filter_var($address, FILTER_VALIDATE_IP, [
             'flags' => FILTER_FLAG_IPV6,
         ]);
     }
@@ -192,32 +109,13 @@ class Validator
      *
      * @static
      *
-     * @param $ipAddress
+     * @param $address
      *
      * @return bool
      */
-    public static function validateIpAddress($ipAddress)
+    public static function ipAddress(string $address): bool
     {
-        return (bool) filter_var($ipAddress, FILTER_VALIDATE_IP);
-    }
-
-    /**
-     * Validates a zone file.
-     *
-     * @deprecated
-     *
-     * @param string $zonename
-     * @param string $directory
-     * @param string $named_checkzonePath
-     *
-     * @return bool
-     */
-    public static function validateZoneFile($zonename, $directory, $named_checkzonePath = 'named-checkzone')
-    {
-        $command = sprintf('%s -q %s %s', $named_checkzonePath, $zonename, $directory);
-        exec($command, $output, $exit_status);
-
-        return 0 === $exit_status;
+        return (bool) filter_var($address, FILTER_VALIDATE_IP);
     }
 
     /**
@@ -238,69 +136,45 @@ class Validator
      * You SHOULD compare these return values to the defined constants of this
      * class rather than against integers directly.
      *
-     * @param ZoneInterface $zone
+     * @param Zone $zone
      *
      * @return int
      */
-    public static function zone(ZoneInterface $zone)
+    public static function zone(Zone $zone): int
     {
         $n_soa = self::countResourceRecords($zone, SOA::TYPE);
         $n_ns = self::countResourceRecords($zone, NS::TYPE);
-        $classes = [];
+        $n_class = self::countClasses($zone);
 
-        foreach ($zone->getResourceRecords() as $rr) {
-            if (null !== $rr->getClass()) {
-                $classes[$rr->getClass()] = null;
-            }
-        }
+        $totalError = 0;
 
-        $n_class = count($classes);
+        $incrementError = function (bool $errorCondition, int $errorOrdinal) use (&$totalError) {
+            $totalError += $errorCondition ? $errorOrdinal : 0;
+        };
 
-        if ($n_soa < 1) {
-            return self::ZONE_NO_SOA;
-        }
+        $incrementError($n_soa < 1, self::ZONE_NO_SOA);
+        $incrementError($n_soa > 1, self::ZONE_TOO_MANY_SOA);
+        $incrementError($n_ns < 1, self::ZONE_NO_NS);
+        $incrementError($n_class < 1, self::ZONE_NO_CLASS);
+        $incrementError($n_class > 1, self::ZONE_TOO_MANY_CLASSES);
 
-        if ($n_soa > 1) {
-            return self::ZONE_TOO_MANY_SOA;
-        }
-
-        if ($n_ns < 1) {
-            return self::ZONE_NO_NS;
-        }
-
-        if ($n_class < 1) {
-            return self::ZONE_NO_CLASS;
-        }
-
-        if ($n_class > 1) {
-            return self::ZONE_TOO_MANY_CLASSES;
-        }
-
-        return self::ZONE_OKAY;
+        return $totalError;
     }
 
     /**
      * Counts the number of Resource Records of a particular type ($type) in a Zone.
      *
-     * @param ZoneInterface $zone
-     * @param null          $type The ResourceRecord type to be counted. If NULL, then the method will return
-     *                            the total number of resource records.
+     * @param Zone   $zone
+     * @param string $type The ResourceRecord type to be counted. If NULL, then the method will return
+     *                     the number of records without RData.
      *
      * @return int the number of records to be counted
      */
-    public static function countResourceRecords(ZoneInterface $zone, $type = null)
+    public static function countResourceRecords(Zone $zone, ?string $type = null): int
     {
-        if (null === $type) {
-            return count($zone->getResourceRecords());
-        }
-
         $n = 0;
-
-        foreach ($zone->getResourceRecords() as $rr) {
-            /* @var $rr ResourceRecordInterface */
-            if ($type === $rr->getRdata()->getType()) {
-                ++$n;
-            }
+        foreach ($zone as $rr) {
+            $n += (int) ($type === $rr->getType());
         }
 
         return $n;
@@ -313,7 +187,7 @@ class Validator
      *
      * @return bool
      */
-    public static function reverseIpv4($address)
+    public static function reverseIpv4(string $address): bool
     {
         $pattern = '/^((?:[0-9]+\.){1,4})in\-addr\.arpa\.$/i';
 
@@ -340,10 +214,30 @@ class Validator
      *
      * @return bool
      */
-    public static function reverseIpv6($address)
+    public static function reverseIpv6(string $address): bool
     {
         $pattern = '/^(?:[0-9a-f]\.){1,32}ip6\.arpa\.$/i';
 
         return 1 === preg_match($pattern, $address);
+    }
+
+    /**
+     * Determine the number of unique non-null classes is a Zone. In a valid zone this MUST be 1.
+     *
+     * @param Zone $zone
+     *
+     * @return int
+     */
+    private static function countClasses(Zone $zone): int
+    {
+        $classes = [];
+
+        foreach ($zone as $rr) {
+            if (null !== $rr->getClass()) {
+                $classes[$rr->getClass()] = null;
+            }
+        }
+
+        return count($classes);
     }
 }

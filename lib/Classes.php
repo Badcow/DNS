@@ -33,7 +33,7 @@ class Classes
      *
      * @return bool
      */
-    public static function isValid($class)
+    public static function isValid(string $class): bool
     {
         return array_key_exists($class, self::$classes);
     }

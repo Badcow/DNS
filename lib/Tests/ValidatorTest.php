@@ -12,14 +12,14 @@
 namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\Classes;
+use Badcow\DNS\Rdata\NS;
 use Badcow\DNS\Validator;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
-use Badcow\DNS\Zone;
 
 class ValidatorTest extends TestCase
 {
-    public function testValidateFqdn()
+    public function testValidateResourceRecordName()
     {
         //Pass cases
         $fqdn1 = 'example.com.';
@@ -29,10 +29,10 @@ class ValidatorTest extends TestCase
         $fqdn5 = '@';
         $fqdn6 = 'alt2.aspmx.l.google.com.';
         $fqdn7 = 'www.eXAMple.cOm.';
-
-        //Fail cases
         $fqdn8 = '3xample.com.';
         $fqdn9 = '_example.com.';
+
+        //Fail cases
         $fqdn10 = '-example.com.';
 
         //Pass cases
@@ -45,38 +45,29 @@ class ValidatorTest extends TestCase
         //Fail cases
         $uqdn6 = 'exam*ple.com';
         $uqdn7 = 'wheres-wally?.com';
-        $uqdn8 = '_example.com.';
         $uqdn9 = '-example.com.';
-        $uqdn10 = '3xample.com.';
 
-        $this->assertTrue(Validator::validateFqdn($fqdn1));
-        $this->assertTrue(Validator::validateFqdn($fqdn2));
-        $this->assertTrue(Validator::validateFqdn($fqdn3));
-        $this->assertTrue(Validator::validateFqdn($fqdn4));
-        $this->assertTrue(Validator::validateFqdn($fqdn5));
-        $this->assertTrue(Validator::validateFqdn($fqdn6));
-        $this->assertTrue(Validator::validateFqdn($fqdn7));
+        $this->assertTrue(Validator::resourceRecordName($fqdn1));
+        $this->assertTrue(Validator::resourceRecordName($fqdn2));
+        $this->assertTrue(Validator::resourceRecordName($fqdn3));
+        $this->assertTrue(Validator::resourceRecordName($fqdn4));
+        $this->assertTrue(Validator::resourceRecordName($fqdn5));
+        $this->assertTrue(Validator::resourceRecordName($fqdn6));
+        $this->assertTrue(Validator::resourceRecordName($fqdn7));
+        $this->assertTrue(Validator::resourceRecordName($fqdn8));
+        $this->assertTrue(Validator::resourceRecordName($fqdn9));
 
-        $this->assertFalse(Validator::validateFqdn($fqdn8));
-        $this->assertFalse(Validator::validateFqdn($fqdn9));
-        $this->assertFalse(Validator::validateFqdn($fqdn10));
+        $this->assertFalse(Validator::resourceRecordName($fqdn10));
 
-        $this->assertFalse(Validator::validateFqdn($uqdn1));
-        $this->assertFalse(Validator::validateFqdn($uqdn2));
-        $this->assertFalse(Validator::validateFqdn($uqdn3));
-        $this->assertFalse(Validator::validateFqdn($uqdn5));
+        $this->assertTrue(Validator::resourceRecordName($uqdn1));
+        $this->assertTrue(Validator::resourceRecordName($uqdn2));
+        $this->assertTrue(Validator::resourceRecordName($uqdn3));
+        $this->assertTrue(Validator::resourceRecordName($uqdn4));
+        $this->assertTrue(Validator::resourceRecordName($uqdn5));
 
-        $this->assertTrue(Validator::validateFqdn($uqdn1, false));
-        $this->assertTrue(Validator::validateFqdn($uqdn2, false));
-        $this->assertTrue(Validator::validateFqdn($uqdn3, false));
-        $this->assertTrue(Validator::validateFqdn($uqdn4, false));
-        $this->assertTrue(Validator::validateFqdn($uqdn5, false));
-
-        $this->assertFalse(Validator::validateFqdn($uqdn6, false));
-        $this->assertFalse(Validator::validateFqdn($uqdn7, false));
-        $this->assertFalse(Validator::validateFqdn($uqdn8, false));
-        $this->assertFalse(Validator::validateFqdn($uqdn9, false));
-        $this->assertFalse(Validator::validateFqdn($uqdn10, false));
+        $this->assertFalse(Validator::resourceRecordName($uqdn6));
+        $this->assertFalse(Validator::resourceRecordName($uqdn7));
+        $this->assertFalse(Validator::resourceRecordName($uqdn9));
     }
 
     public function testValidateIpv4Address()
@@ -92,16 +83,16 @@ class ValidatorTest extends TestCase
         $invalid4 = '::1';
         $invalid5 = '2001:db8::ff00:42:8329';
 
-        $this->assertTrue(Validator::validateIpv4Address($valid1));
-        $this->assertTrue(Validator::validateIpv4Address($valid2));
-        $this->assertTrue(Validator::validateIpv4Address($valid3));
-        $this->assertTrue(Validator::validateIpv4Address($valid4));
+        $this->assertTrue(Validator::ipv4($valid1));
+        $this->assertTrue(Validator::ipv4($valid2));
+        $this->assertTrue(Validator::ipv4($valid3));
+        $this->assertTrue(Validator::ipv4($valid4));
 
-        $this->assertFalse(Validator::validateIpv4Address($invalid1));
-        $this->assertFalse(Validator::validateIpv4Address($invalid2));
-        $this->assertFalse(Validator::validateIpv4Address($invalid3));
-        $this->assertFalse(Validator::validateIpv4Address($invalid4));
-        $this->assertFalse(Validator::validateIpv4Address($invalid5));
+        $this->assertFalse(Validator::ipv4($invalid1));
+        $this->assertFalse(Validator::ipv4($invalid2));
+        $this->assertFalse(Validator::ipv4($invalid3));
+        $this->assertFalse(Validator::ipv4($invalid4));
+        $this->assertFalse(Validator::ipv4($invalid5));
     }
 
     public function testValidateIpv6Address()
@@ -115,14 +106,14 @@ class ValidatorTest extends TestCase
         $invalid2 = '172.10.255.1';
         $invalid3 = '192.168.0.0';
 
-        $this->assertTrue(Validator::validateIpv6Address($valid1));
-        $this->assertTrue(Validator::validateIpv6Address($valid2));
-        $this->assertTrue(Validator::validateIpv6Address($valid3));
-        $this->assertTrue(Validator::validateIpv6Address($valid4));
+        $this->assertTrue(Validator::ipv6($valid1));
+        $this->assertTrue(Validator::ipv6($valid2));
+        $this->assertTrue(Validator::ipv6($valid3));
+        $this->assertTrue(Validator::ipv6($valid4));
 
-        $this->assertFalse(Validator::validateIpv6Address($invalid1));
-        $this->assertFalse(Validator::validateIpv6Address($invalid2));
-        $this->assertFalse(Validator::validateIpv6Address($invalid3));
+        $this->assertFalse(Validator::ipv6($invalid1));
+        $this->assertFalse(Validator::ipv6($invalid2));
+        $this->assertFalse(Validator::ipv6($invalid3));
     }
 
     public function testValidateIpAddress()
@@ -141,19 +132,19 @@ class ValidatorTest extends TestCase
         $invalid3 = '255.244';
         $invalid4 = 'fffff:0db8:0000:0000:0000:ff00:0042:8329';
 
-        $this->assertTrue(Validator::validateIpAddress($valid1));
-        $this->assertTrue(Validator::validateIpAddress($valid2));
-        $this->assertTrue(Validator::validateIpAddress($valid3));
-        $this->assertTrue(Validator::validateIpAddress($valid4));
-        $this->assertTrue(Validator::validateIpAddress($valid5));
-        $this->assertTrue(Validator::validateIpAddress($valid6));
-        $this->assertTrue(Validator::validateIpAddress($valid7));
-        $this->assertTrue(Validator::validateIpAddress($valid8));
+        $this->assertTrue(Validator::ipAddress($valid1));
+        $this->assertTrue(Validator::ipAddress($valid2));
+        $this->assertTrue(Validator::ipAddress($valid3));
+        $this->assertTrue(Validator::ipAddress($valid4));
+        $this->assertTrue(Validator::ipAddress($valid5));
+        $this->assertTrue(Validator::ipAddress($valid6));
+        $this->assertTrue(Validator::ipAddress($valid7));
+        $this->assertTrue(Validator::ipAddress($valid8));
 
-        $this->assertFalse(Validator::validateIpAddress($invalid1));
-        $this->assertFalse(Validator::validateIpAddress($invalid2));
-        $this->assertFalse(Validator::validateIpAddress($invalid3));
-        $this->assertFalse(Validator::validateIpAddress($invalid4));
+        $this->assertFalse(Validator::ipAddress($invalid1));
+        $this->assertFalse(Validator::ipAddress($invalid2));
+        $this->assertFalse(Validator::ipAddress($invalid3));
+        $this->assertFalse(Validator::ipAddress($invalid4));
     }
 
     /**
@@ -180,29 +171,6 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedExceptionMessage There must be at least one NS record, 0 given.
-     */
-    public function testValidateNumberOfNs()
-    {
-        $zone = new Zone('example.com.', 3600);
-        $soa = new ResourceRecord();
-        $soa->setClass(Classes::INTERNET);
-        $soa->setName('@');
-        $soa->setRdata(Factory::Soa(
-            'example.com.',
-            'postmaster.example.com.',
-            date('Ymd01'),
-            3600,
-            14400,
-            604800,
-            3600
-        ));
-        $zone->addResourceRecord($soa);
-
-        $this->assertEquals(Validator::ZONE_NO_NS, Validator::zone($zone));
-    }
-
-    /**
      * @expectedExceptionMessage There must be exactly one type of class, 2 given.
      */
     public function testValidateNumberOfClasses()
@@ -216,6 +184,44 @@ class ValidatorTest extends TestCase
         $zone->addResourceRecord($a);
 
         $this->assertEquals(Validator::ZONE_TOO_MANY_CLASSES, Validator::zone($zone));
+    }
+
+    public function testValidateZone()
+    {
+        $zone = $this->buildTestZone();
+
+        //Remove the NS records.
+        foreach ($zone as $resourceRecord) {
+            if (NS::TYPE === $resourceRecord->getType()) {
+                $zone->remove($resourceRecord);
+            }
+        }
+
+        $soa = new ResourceRecord();
+        $soa->setClass(Classes::INTERNET);
+        $soa->setName('@');
+        $soa->setRdata(Factory::Soa(
+            'example.com.',
+            'postmaster.example.com.',
+            date('Ymd01'),
+            3600,
+            14400,
+            604800,
+            3600
+        ));
+        $a = new ResourceRecord();
+        $a->setName('test');
+        $a->setClass(Classes::CHAOS);
+        $a->setRdata(Factory::A('192.168.0.1'));
+        $a->setComment('This class does not belong here');
+
+        $zone->addResourceRecord($a);
+        $zone->addResourceRecord($soa);
+
+        $this->assertTrue((bool) (Validator::ZONE_TOO_MANY_CLASSES & Validator::zone($zone)));
+        $this->assertTrue((bool) (Validator::ZONE_NO_NS & Validator::zone($zone)));
+        $expectation = Validator::ZONE_NO_NS | Validator::ZONE_TOO_MANY_CLASSES | Validator::ZONE_TOO_MANY_SOA;
+        $this->assertEquals($expectation, Validator::zone($zone));
     }
 
     public function testZone()
@@ -237,16 +243,16 @@ class ValidatorTest extends TestCase
         $invalid_3 = 'example.com.*';
         $invalid_4 = '*.';
 
-        $this->assertTrue(Validator::validateFqdn($valid_1, true));
-        $this->assertTrue(Validator::validateFqdn($valid_2, false));
-        $this->assertTrue(Validator::validateFqdn($valid_3, false));
-        $this->assertTrue(Validator::validateFqdn($valid_4, false));
-        $this->assertTrue(Validator::validateFqdn($valid_5, true));
+        $this->assertTrue(Validator::resourceRecordName($valid_1));
+        $this->assertTrue(Validator::resourceRecordName($valid_2));
+        $this->assertTrue(Validator::resourceRecordName($valid_3));
+        $this->assertTrue(Validator::resourceRecordName($valid_4));
+        $this->assertTrue(Validator::resourceRecordName($valid_5));
 
-        $this->assertFalse(Validator::validateFqdn($invalid_1, true));
-        $this->assertFalse(Validator::validateFqdn($invalid_2, true));
-        $this->assertFalse(Validator::validateFqdn($invalid_3, false));
-        $this->assertFalse(Validator::validateFqdn($invalid_4, true));
+        $this->assertFalse(Validator::resourceRecordName($invalid_1));
+        $this->assertFalse(Validator::resourceRecordName($invalid_2));
+        $this->assertFalse(Validator::resourceRecordName($invalid_3));
+        $this->assertFalse(Validator::resourceRecordName($invalid_4));
     }
 
     public function testReverseIpv4()
@@ -295,17 +301,20 @@ class ValidatorTest extends TestCase
         $this->assertTrue(Validator::reverseIpv6($valid_01));
         $this->assertTrue(Validator::reverseIpv6($valid_02));
         $this->assertFalse(Validator::reverseIpv6($invalid_01));
+
+        $this->assertTrue(Validator::fullyQualifiedDomainName($valid_01));
+        $this->assertTrue(Validator::fullyQualifiedDomainName($valid_02));
     }
 
-    public function testRrName()
+    public function testResourceRecordName()
     {
         $case_1 = '*.';
         $case_2 = '*.hello.com';
         $case_3 = 'www.*.hello.com';
 
-        $this->assertFalse(Validator::rrName($case_1));
-        $this->assertTrue(Validator::rrName($case_2));
-        $this->assertFalse(Validator::rrName($case_3));
+        $this->assertFalse(Validator::resourceRecordName($case_1));
+        $this->assertTrue(Validator::resourceRecordName($case_2));
+        $this->assertFalse(Validator::resourceRecordName($case_3));
     }
 
     public function testFqdn()
@@ -317,25 +326,25 @@ class ValidatorTest extends TestCase
         $fqdn4 = 'ex-ampl3.com.au.';
         $fqdn5 = 'alt2.aspmx.l.google.com.';
         $fqdn6 = 'www.eXAMple.cOm.';
+        $fqdn7 = '3xample.com.';
 
         //Fail cases
-        $fqdn7 = '3xample.com.';
         $fqdn8 = '_example.com.';
         $fqdn9 = '-example.com.';
         $fqdn10 = 'example.com';
         $fqdn11 = 'e&ample.com.';
 
-        $this->assertTrue(Validator::fqdn($fqdn1));
-        $this->assertTrue(Validator::fqdn($fqdn2));
-        $this->assertTrue(Validator::fqdn($fqdn3));
-        $this->assertTrue(Validator::fqdn($fqdn4));
-        $this->assertTrue(Validator::fqdn($fqdn5));
-        $this->assertTrue(Validator::fqdn($fqdn6));
+        $this->assertTrue(Validator::fullyQualifiedDomainName($fqdn1));
+        $this->assertTrue(Validator::fullyQualifiedDomainName($fqdn2));
+        $this->assertTrue(Validator::fullyQualifiedDomainName($fqdn3));
+        $this->assertTrue(Validator::fullyQualifiedDomainName($fqdn4));
+        $this->assertTrue(Validator::fullyQualifiedDomainName($fqdn5));
+        $this->assertTrue(Validator::fullyQualifiedDomainName($fqdn6));
+        $this->assertTrue(Validator::fullyQualifiedDomainName($fqdn7));
 
-        $this->assertFalse(Validator::fqdn($fqdn7));
-        $this->assertFalse(Validator::fqdn($fqdn8));
-        $this->assertFalse(Validator::fqdn($fqdn9));
-        $this->assertFalse(Validator::fqdn($fqdn10));
-        $this->assertFalse(Validator::fqdn($fqdn11));
+        $this->assertFalse(Validator::fullyQualifiedDomainName($fqdn8));
+        $this->assertFalse(Validator::fullyQualifiedDomainName($fqdn9));
+        $this->assertFalse(Validator::fullyQualifiedDomainName($fqdn10));
+        $this->assertFalse(Validator::fullyQualifiedDomainName($fqdn11));
     }
 }

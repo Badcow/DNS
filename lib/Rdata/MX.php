@@ -30,7 +30,7 @@ class MX implements RdataInterface
     /**
      * @param string $exchange
      */
-    public function setExchange($exchange)
+    public function setExchange(string $exchange): void
     {
         $this->exchange = $exchange;
     }
@@ -38,7 +38,7 @@ class MX implements RdataInterface
     /**
      * @return string
      */
-    public function getExchange()
+    public function getExchange(): string
     {
         return $this->exchange;
     }
@@ -46,15 +46,15 @@ class MX implements RdataInterface
     /**
      * @param int $preference
      */
-    public function setPreference($preference)
+    public function setPreference(int $preference): void
     {
-        $this->preference = (int) $preference;
+        $this->preference = $preference;
     }
 
     /**
      * @return int
      */
-    public function getPreference()
+    public function getPreference(): int
     {
         return $this->preference;
     }
@@ -62,7 +62,7 @@ class MX implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output()
+    public function output(): string
     {
         return $this->preference.' '.$this->exchange;
     }

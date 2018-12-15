@@ -11,14 +11,22 @@
 
 namespace Badcow\DNS;
 
-use Badcow\DNS\Ip\Toolbox;
-use Badcow\DNS\Rdata\AAAA;
-use Badcow\DNS\Rdata\CNAME;
-use Badcow\DNS\Rdata\MX;
-
-class Zone implements ZoneInterface
+class Zone implements \Countable, \IteratorAggregate
 {
-    use ZoneTrait;
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var int
+     */
+    protected $defaultTtl;
+
+    /**
+     * @var ResourceRecord[]
+     */
+    private $resourceRecords = [];
 
     /**
      * Zone constructor.
@@ -29,24 +37,21 @@ class Zone implements ZoneInterface
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($name = null, $defaultTtl = null, array $resourceRecords = [])
+    public function __construct(string $name = null, int $defaultTtl = null, array $resourceRecords = [])
     {
-        if (null !== $name) {
-            $this->setName($name);
-        }
-
-        $this->setDefaultTtl($defaultTtl);
-        $this->setResourceRecords($resourceRecords);
+        $this->name = $name;
+        $this->defaultTtl = $defaultTtl;
+        $this->fromArray($resourceRecords);
     }
 
     /**
-     * @param string $name A fully qualified zone name
+     * @param string $name
      *
      * @throws \InvalidArgumentException
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
-        if (!Validator::rrName($name, true)) {
+        if (!Validator::fullyQualifiedDomainName($name)) {
             throw new \InvalidArgumentException(sprintf('Zone "%s" is not a fully qualified domain name.', $name));
         }
 
@@ -54,67 +59,118 @@ class Zone implements ZoneInterface
     }
 
     /**
-     * Fills out all of the data of each resource record.
+     * @return string
      */
-    public function expand()
+    public function getName(): string
     {
-        $class = $this->determineClass();
+        return $this->name;
+    }
 
-        foreach ($this->resourceRecords as &$rr) {
-            /** @var ResourceRecord $rr */
-            if ('@' === $rr->getName()) {
-                $rr->setName($this->name);
-            }
+    /**
+     * @return int
+     */
+    public function getDefaultTtl(): ?int
+    {
+        return $this->defaultTtl;
+    }
 
-            if (!Validator::fqdn($rr->getName())) {
-                $rr->setName($rr->getName().'.'.$this->name);
-            }
+    /**
+     * @param int $defaultTtl
+     */
+    public function setDefaultTtl(?int $defaultTtl): void
+    {
+        $this->defaultTtl = $defaultTtl;
+    }
 
-            if (null === $rr->getTtl()) {
-                $rr->setTtl($this->getDefaultTtl());
-            }
+    /**
+     * @return ResourceRecord[]
+     */
+    public function getResourceRecords(): array
+    {
+        return $this->resourceRecords;
+    }
 
-            if ($rr->getRdata() instanceof CNAME) {
-                if ('@' === $rr->getRdata()->getTarget()) {
-                    $rr->getRdata()->setTarget($this->name);
-                }
-
-                if (!Validator::fqdn($rr->getRdata()->getTarget())) {
-                    $rr->getRdata()->setTarget($rr->getRdata()->getTarget().'.'.$this->name);
-                }
-            }
-
-            if ($rr->getRdata() instanceof MX) {
-                if ('@' === $rr->getRdata()->getExchange()) {
-                    $rr->getRdata()->setExchange($this->name);
-                }
-
-                if (!Validator::fqdn($rr->getRdata()->getExchange())) {
-                    $rr->getRdata()->setExchange($rr->getRdata()->getExchange().'.'.$this->name);
-                }
-            }
-
-            if ($rr->getRdata() instanceof AAAA) {
-                $rr->getRdata()->setAddress(Toolbox::expandIpv6($rr->getRdata()->getAddress()));
-            }
-
-            $rr->setClass($class);
+    /**
+     * @param ResourceRecord[] $resourceRecords
+     */
+    public function fromArray(array $resourceRecords)
+    {
+        foreach ($resourceRecords as $resourceRecord) {
+            $this->addResourceRecord($resourceRecord);
         }
     }
 
     /**
-     * Determine in which class the zone resides. Returns `IN` as the default.
-     *
-     * @return string
+     * @param ResourceRecord ...$resourceRecords
      */
-    private function determineClass()
+    public function fromList(ResourceRecord ...$resourceRecords): void
     {
-        foreach ($this->resourceRecords as $rr) {
-            if (null !== $rr->getClass()) {
-                return $rr->getClass();
+        $this->fromArray($resourceRecords);
+    }
+
+    /**
+     * @param ResourceRecord $resourceRecord
+     */
+    public function addResourceRecord(ResourceRecord $resourceRecord): void
+    {
+        $this->resourceRecords[] = $resourceRecord;
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getIterator(): \ArrayIterator
+    {
+        return new \ArrayIterator($this->resourceRecords);
+    }
+
+    /**
+     * @return int
+     */
+    public function count(): int
+    {
+        return \count($this->resourceRecords);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return empty($this->resourceRecords);
+    }
+
+    /**
+     * @param ResourceRecord $resourceRecord
+     *
+     * @return bool
+     */
+    public function contains(ResourceRecord $resourceRecord): bool
+    {
+        foreach ($this->resourceRecords as $_item) {
+            if ($_item === $resourceRecord) {
+                return true;
             }
         }
 
-        return Classes::INTERNET;
+        return false;
+    }
+
+    /**
+     * @param ResourceRecord $resourceRecord
+     *
+     * @return bool
+     */
+    public function remove(ResourceRecord $resourceRecord): bool
+    {
+        foreach ($this->resourceRecords as $key => $_item) {
+            if ($_item === $resourceRecord) {
+                unset($this->resourceRecords[$key]);
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }

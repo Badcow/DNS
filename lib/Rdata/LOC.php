@@ -11,8 +11,6 @@
 
 namespace Badcow\DNS\Rdata;
 
-use Badcow\DNS\ResourceRecord;
-
 /**
  * Class LocRdata.
  *
@@ -21,9 +19,9 @@ use Badcow\DNS\ResourceRecord;
  *
  * @see http://tools.ietf.org/html/rfc1876
  */
-class LOC implements RdataInterface, FormattableInterface
+class LOC implements RdataInterface
 {
-    use RdataTrait, FormattableTrait;
+    use RdataTrait;
 
     const TYPE = 'LOC';
 
@@ -68,7 +66,7 @@ class LOC implements RdataInterface, FormattableInterface
     /**
      * @param float $latitude
      */
-    public function setLatitude($latitude)
+    public function setLatitude(float $latitude): void
     {
         $this->latitude = (float) $latitude;
     }
@@ -78,7 +76,7 @@ class LOC implements RdataInterface, FormattableInterface
      *
      * @return float|string
      */
-    public function getLatitude($format = self::FORMAT_DECIMAL)
+    public function getLatitude(string $format = self::FORMAT_DECIMAL)
     {
         if (self::FORMAT_DMS === $format) {
             return $this->toDms($this->latitude, self::LATITUDE);
@@ -90,7 +88,7 @@ class LOC implements RdataInterface, FormattableInterface
     /**
      * @param float $longitude
      */
-    public function setLongitude($longitude)
+    public function setLongitude(float $longitude): void
     {
         $this->longitude = (float) $longitude;
     }
@@ -100,7 +98,7 @@ class LOC implements RdataInterface, FormattableInterface
      *
      * @return float|string
      */
-    public function getLongitude($format = self::FORMAT_DECIMAL)
+    public function getLongitude(string $format = self::FORMAT_DECIMAL)
     {
         if (self::FORMAT_DMS === $format) {
             return $this->toDms($this->longitude, self::LONGITUDE);
@@ -114,7 +112,7 @@ class LOC implements RdataInterface, FormattableInterface
      *
      * @throws \OutOfRangeException
      */
-    public function setAltitude($altitude)
+    public function setAltitude(float $altitude): void
     {
         if ($altitude < -100000.00 || $altitude > 42849672.95) {
             throw new \OutOfRangeException('The altitude must be on [-100000.00, 42849672.95].');
@@ -126,7 +124,7 @@ class LOC implements RdataInterface, FormattableInterface
     /**
      * @return float
      */
-    public function getAltitude()
+    public function getAltitude(): float
     {
         return $this->altitude;
     }
@@ -136,7 +134,7 @@ class LOC implements RdataInterface, FormattableInterface
      *
      * @throws \OutOfRangeException
      */
-    public function setHorizontalPrecision($horizontalPrecision)
+    public function setHorizontalPrecision(float $horizontalPrecision): void
     {
         if ($horizontalPrecision < 0 || $horizontalPrecision > 90000000.0) {
             throw new \OutOfRangeException('The horizontal precision must be on [0, 90000000.0].');
@@ -148,7 +146,7 @@ class LOC implements RdataInterface, FormattableInterface
     /**
      * @return float
      */
-    public function getHorizontalPrecision()
+    public function getHorizontalPrecision(): float
     {
         return $this->horizontalPrecision;
     }
@@ -158,7 +156,7 @@ class LOC implements RdataInterface, FormattableInterface
      *
      * @throws \OutOfRangeException
      */
-    public function setSize($size)
+    public function setSize(float $size): void
     {
         if ($size < 0 || $size > 90000000.0) {
             throw new \OutOfRangeException('The size must be on [0, 90000000.0].');
@@ -170,7 +168,7 @@ class LOC implements RdataInterface, FormattableInterface
     /**
      * @return float
      */
-    public function getSize()
+    public function getSize(): float
     {
         return $this->size;
     }
@@ -180,7 +178,7 @@ class LOC implements RdataInterface, FormattableInterface
      *
      * @throws \OutOfRangeException
      */
-    public function setVerticalPrecision($verticalPrecision)
+    public function setVerticalPrecision(float $verticalPrecision): void
     {
         if ($verticalPrecision < 0 || $verticalPrecision > 90000000.0) {
             throw new \OutOfRangeException('The vertical precision must be on [0, 90000000.0].');
@@ -192,7 +190,7 @@ class LOC implements RdataInterface, FormattableInterface
     /**
      * @return float
      */
-    public function getVerticalPrecision()
+    public function getVerticalPrecision(): float
     {
         return $this->verticalPrecision;
     }
@@ -200,7 +198,7 @@ class LOC implements RdataInterface, FormattableInterface
     /**
      * {@inheritdoc}
      */
-    public function output()
+    public function output(): string
     {
         return sprintf(
                 '%s %s %.2fm %.2fm %.2fm %.2fm',
@@ -214,52 +212,14 @@ class LOC implements RdataInterface, FormattableInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function outputFormatted()
-    {
-        return ResourceRecord::MULTILINE_BEGIN.PHP_EOL.
-            $this->makeLine($this->getLatitude(self::FORMAT_DMS), 'LATITUDE').
-            $this->makeLine($this->getLongitude(self::FORMAT_DMS), 'LONGITUDE').
-            $this->makeLine(sprintf('%.2fm', $this->altitude), 'ALTITUDE').
-            $this->makeLine(sprintf('%.2fm', $this->size), 'SIZE').
-            $this->makeLine(sprintf('%.2fm', $this->horizontalPrecision), 'HORIZONTAL PRECISION').
-            $this->makeLine(sprintf('%.2fm', $this->verticalPrecision), 'VERTICAL PRECISION').
-            str_repeat(' ', $this->padding).ResourceRecord::MULTILINE_END;
-    }
-
-    /**
-     * Determines the longest variable.
-     *
-     * @return int
-     */
-    public function longestVarLength()
-    {
-        $l = 0;
-
-        foreach ([
-                        $this->getLatitude(self::FORMAT_DMS),
-                        $this->getLongitude(self::FORMAT_DMS),
-                        sprintf('%.2fm', $this->altitude),
-                        sprintf('%.2fm', $this->size),
-                        sprintf('%.2fm', $this->horizontalPrecision),
-                        sprintf('%.2fm', $this->verticalPrecision),
-                ] as $var) {
-            $l = ($l < strlen($var)) ? strlen($var) : $l;
-        }
-
-        return $l;
-    }
-
-    /**
      * Determine the degree minute seconds value from decimal.
      *
-     * @param $decimal
+     * @param float  $decimal
      * @param string $axis
      *
      * @return string
      */
-    private function toDms($decimal, $axis = self::LATITUDE)
+    private function toDms(float $decimal, string $axis = self::LATITUDE): string
     {
         $d = (int) floor(abs($decimal));
         $m = (int) floor((abs($decimal) - $d) * 60);

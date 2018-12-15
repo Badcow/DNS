@@ -53,7 +53,7 @@ DNS;
         $string = str_replace("\r\n", "\n", $string);
         $string = str_replace("\n", PHP_EOL, $string);
     }
-    
+
     /**
      * Get an environment variable.
      *

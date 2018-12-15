@@ -38,7 +38,7 @@ class NSEC implements RdataInterface
     /**
      * @return string
      */
-    public function getNextDomainName()
+    public function getNextDomainName(): string
     {
         return $this->nextDomainName;
     }
@@ -46,7 +46,7 @@ class NSEC implements RdataInterface
     /**
      * @param string $nextDomainName
      */
-    public function setNextDomainName($nextDomainName)
+    public function setNextDomainName(string $nextDomainName): void
     {
         $this->nextDomainName = $nextDomainName;
     }
@@ -62,7 +62,7 @@ class NSEC implements RdataInterface
     /**
      * Clears the types from the RDATA.
      */
-    public function clearTypeMap()
+    public function clearTypeMap(): void
     {
         $this->typeBitMaps = [];
     }
@@ -70,7 +70,7 @@ class NSEC implements RdataInterface
     /**
      * @return array
      */
-    public function getTypeBitMaps()
+    public function getTypeBitMaps(): array
     {
         return $this->typeBitMaps;
     }
@@ -78,7 +78,7 @@ class NSEC implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output()
+    public function output(): string
     {
         return sprintf(
             '%s %s',

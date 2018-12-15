@@ -49,7 +49,7 @@ class DS implements RdataInterface
     /**
      * @return int
      */
-    public function getKeyTag()
+    public function getKeyTag(): int
     {
         return $this->keyTag;
     }
@@ -57,15 +57,15 @@ class DS implements RdataInterface
     /**
      * @param int $keyTag
      */
-    public function setKeyTag($keyTag)
+    public function setKeyTag(int $keyTag): void
     {
-        $this->keyTag = (int) $keyTag;
+        $this->keyTag = $keyTag;
     }
 
     /**
      * @return int
      */
-    public function getAlgorithm()
+    public function getAlgorithm(): int
     {
         return $this->algorithm;
     }
@@ -73,15 +73,15 @@ class DS implements RdataInterface
     /**
      * @param int $algorithm
      */
-    public function setAlgorithm($algorithm)
+    public function setAlgorithm(int $algorithm): void
     {
-        $this->algorithm = (int) $algorithm;
+        $this->algorithm = $algorithm;
     }
 
     /**
      * @return int
      */
-    public function getDigestType()
+    public function getDigestType(): int
     {
         return $this->digestType;
     }
@@ -89,15 +89,15 @@ class DS implements RdataInterface
     /**
      * @param int $digestType
      */
-    public function setDigestType($digestType)
+    public function setDigestType(int $digestType): void
     {
-        $this->digestType = (int) $digestType;
+        $this->digestType = $digestType;
     }
 
     /**
      * @return string
      */
-    public function getDigest()
+    public function getDigest(): string
     {
         return $this->digest;
     }
@@ -105,7 +105,7 @@ class DS implements RdataInterface
     /**
      * @param string $digest
      */
-    public function setDigest($digest)
+    public function setDigest(string $digest): void
     {
         $this->digest = $digest;
     }
@@ -113,7 +113,7 @@ class DS implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output()
+    public function output(): string
     {
         return sprintf(
             '%s %s %s %s',

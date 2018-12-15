@@ -11,14 +11,12 @@
 
 namespace Badcow\DNS\Rdata;
 
-use Badcow\DNS\ResourceRecord;
-
 /**
  * @see http://www.ietf.org/rfc/rfc1035.text
  */
-class SOA implements RdataInterface, FormattableInterface
+class SOA implements RdataInterface
 {
-    use RdataTrait, FormattableTrait;
+    use RdataTrait;
 
     const TYPE = 'SOA';
 
@@ -80,41 +78,41 @@ class SOA implements RdataInterface, FormattableInterface
     private $minimum;
 
     /**
-     * @param $expire
+     * @param int $expire
      */
-    public function setExpire($expire)
+    public function setExpire(int $expire): void
     {
-        $this->expire = (int) $expire;
+        $this->expire = $expire;
     }
 
     /**
      * @return int
      */
-    public function getExpire()
+    public function getExpire(): int
     {
         return $this->expire;
     }
 
     /**
-     * @param $minimum
+     * @param int $minimum
      */
-    public function setMinimum($minimum)
+    public function setMinimum(int $minimum): void
     {
-        $this->minimum = (int) $minimum;
+        $this->minimum = $minimum;
     }
 
     /**
      * @return int
      */
-    public function getMinimum()
+    public function getMinimum(): int
     {
         return $this->minimum;
     }
 
     /**
-     * @param $mname
+     * @param string $mname
      */
-    public function setMname($mname)
+    public function setMname(string $mname): void
     {
         $this->mname = $mname;
     }
@@ -122,31 +120,31 @@ class SOA implements RdataInterface, FormattableInterface
     /**
      * @return string
      */
-    public function getMname()
+    public function getMname(): string
     {
         return $this->mname;
     }
 
     /**
-     * @param $refresh
+     * @param int $refresh
      */
-    public function setRefresh($refresh)
+    public function setRefresh(int $refresh): void
     {
-        $this->refresh = (int) $refresh;
+        $this->refresh = $refresh;
     }
 
     /**
      * @return int
      */
-    public function getRefresh()
+    public function getRefresh(): int
     {
         return $this->refresh;
     }
 
     /**
-     * @param $retry
+     * @param int $retry
      */
-    public function setRetry($retry)
+    public function setRetry(int $retry): void
     {
         $this->retry = (int) $retry;
     }
@@ -154,7 +152,7 @@ class SOA implements RdataInterface, FormattableInterface
     /**
      * @return int
      */
-    public function getRetry()
+    public function getRetry(): int
     {
         return $this->retry;
     }
@@ -162,7 +160,7 @@ class SOA implements RdataInterface, FormattableInterface
     /**
      * @param $rname
      */
-    public function setRname($rname)
+    public function setRname(string $rname): void
     {
         $this->rname = $rname;
     }
@@ -170,7 +168,7 @@ class SOA implements RdataInterface, FormattableInterface
     /**
      * @return string
      */
-    public function getRname()
+    public function getRname(): string
     {
         return $this->rname;
     }
@@ -178,15 +176,15 @@ class SOA implements RdataInterface, FormattableInterface
     /**
      * @param int $serial
      */
-    public function setSerial($serial)
+    public function setSerial(int $serial): void
     {
-        $this->serial = (int) $serial;
+        $this->serial = $serial;
     }
 
     /**
      * @return int
      */
-    public function getSerial()
+    public function getSerial(): int
     {
         return $this->serial;
     }
@@ -194,7 +192,7 @@ class SOA implements RdataInterface, FormattableInterface
     /**
      * {@inheritdoc}
      */
-    public function output()
+    public function output(): string
     {
         return sprintf(
             '%s %s %s %s %s %s %s',
@@ -206,45 +204,5 @@ class SOA implements RdataInterface, FormattableInterface
             $this->expire,
             $this->minimum
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function outputFormatted()
-    {
-        return ResourceRecord::MULTILINE_BEGIN.PHP_EOL.
-            $this->makeLine($this->getMname(), 'MNAME').
-            $this->makeLine($this->getRname(), 'RNAME').
-            $this->makeLine($this->getSerial(), 'SERIAL').
-            $this->makeLine($this->getRefresh(), 'REFRESH').
-            $this->makeLine($this->getRetry(), 'RETRY').
-            $this->makeLine($this->getExpire(), 'EXPIRE').
-            $this->makeLine($this->getMinimum(), 'MINIMUM').
-            str_repeat(' ', $this->padding).ResourceRecord::MULTILINE_END;
-    }
-
-    /**
-     * Determines the longest variable.
-     *
-     * @return int
-     */
-    public function longestVarLength()
-    {
-        $l = 0;
-
-        foreach ([
-                    $this->getMname(),
-                    $this->getRname(),
-                    $this->getSerial(),
-                    $this->getRefresh(),
-                    $this->getRetry(),
-                    $this->getExpire(),
-                    $this->getMinimum(),
-                ] as $var) {
-            $l = ($l < strlen($var)) ? strlen($var) : $l;
-        }
-
-        return $l;
     }
 }
