@@ -26,7 +26,7 @@ class Toolbox
      *
      * @return string
      */
-    public static function expandIpv6($ip)
+    public static function expandIpv6(string $ip): string
     {
         if (!Validator::ipv6($ip)) {
             throw new \InvalidArgumentException(sprintf('"%s" is not a valid IPv6 address.', $ip));
@@ -46,7 +46,7 @@ class Toolbox
      *
      * @return string Expanded incomplete IPv6 address
      */
-    public static function expandIncompleteIpv6($ip)
+    public static function expandIncompleteIpv6(string $ip): string
     {
         $hextets = array_map(function ($hextet) {
             return str_pad($hextet, 4, '0', STR_PAD_LEFT);
@@ -73,7 +73,7 @@ class Toolbox
      *
      * @return string Contracted IPv6 address
      */
-    public static function contractIpv6($ip)
+    public static function contractIpv6(string $ip): string
     {
         if (!Validator::ipv6($ip)) {
             throw new \InvalidArgumentException(sprintf('"%s" is not a valid IPv6 address.', $ip));
@@ -131,7 +131,7 @@ class Toolbox
      *
      * @return string Reversed IP address appended with ".in-addr.arpa."
      */
-    public static function reverseIpv4($ip)
+    public static function reverseIpv4(string $ip): string
     {
         $octets = array_reverse(explode('.', $ip));
 
@@ -143,11 +143,12 @@ class Toolbox
      *
      * E.g. 2001:db8::567:89ab -> b.a.9.8.7.6.5.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.
      *
-     * @param string $ip A full or partial IPv6 address
+     * @param string $ip           A full or partial IPv6 address
+     * @param bool   $appendSuffix Whether or not to append ".ip6.arpa.' suffix.
      *
      * @return string The reversed address appended with ".ip6.arpa."
      */
-    public static function reverseIpv6($ip)
+    public static function reverseIpv6(string $ip, bool $appendSuffix = true): string
     {
         try {
             $ip = self::expandIpv6($ip);
@@ -157,7 +158,9 @@ class Toolbox
 
         $ip = str_replace(':', '', $ip);
         $ip = strrev($ip);
+        $ip = implode('.', str_split($ip));
+        $ip .= $appendSuffix ? '.ip6.arpa.' : '';
 
-        return implode('.', str_split($ip)).'.ip6.arpa.';
+        return $ip;
     }
 }
