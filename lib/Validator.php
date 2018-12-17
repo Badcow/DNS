@@ -222,7 +222,7 @@ class Validator
     }
 
     /**
-     * Determine the number of unique non-null classes is a Zone. In a valid zone this MUST be 1.
+     * Determine the number of unique non-null classes in a Zone. In a valid zone this MUST be 1.
      *
      * @param Zone $zone
      *
