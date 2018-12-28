@@ -61,18 +61,14 @@ class AlignedBuilder
      */
     public static function build(Zone $zone): string
     {
-        $master = '$ORIGIN '.$zone->getName().PHP_EOL;
-        if (null !== $zone->getDefaultTtl()) {
-            $master .= '$TTL '.$zone->getDefaultTtl().PHP_EOL;
-        }
-
-        $rrs = $zone->getResourceRecords();
+        $master = self::generateControlEntries($zone);
+        $resourceRecords = $zone->getResourceRecords();
         $current = SOA::TYPE;
-        usort($rrs, 'self::compareResourceRecords');
+        usort($resourceRecords, 'self::compareResourceRecords');
 
         list($namePadding, $ttlPadding, $typePadding, $rdataPadding) = self::getPadding($zone);
 
-        foreach ($rrs as $resourceRecord) {
+        foreach ($resourceRecords as $resourceRecord) {
             if (null == $resourceRecord->getRdata()) {
                 continue;
             }
@@ -90,14 +86,30 @@ class AlignedBuilder
                 self::generateRdataOutput($resourceRecord->getRdata(), $rdataPadding)
             );
 
-            if (null != $resourceRecord->getComment()) {
-                $master .= self::COMMENT_DELIMINATOR.$resourceRecord->getComment();
-            }
-
+            $master .= self::generateComment($resourceRecord);
             $master .= PHP_EOL;
         }
 
         return $master;
+    }
+
+    private static function generateControlEntries(Zone $zone): string
+    {
+        $master = '$ORIGIN '.$zone->getName().PHP_EOL;
+        if (null !== $zone->getDefaultTtl()) {
+            $master .= '$TTL '.$zone->getDefaultTtl().PHP_EOL;
+        }
+
+        return $master;
+    }
+
+    private static function generateComment(ResourceRecord $resourceRecord): string
+    {
+        if (null != $resourceRecord->getComment()) {
+            return self::COMMENT_DELIMINATOR.$resourceRecord->getComment();
+        }
+
+        return '';
     }
 
     /**
