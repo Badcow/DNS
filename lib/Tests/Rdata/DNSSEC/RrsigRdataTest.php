@@ -18,6 +18,10 @@ class RrsigRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testOutput()
     {
+        if (2147483647 === PHP_INT_MAX) {
+            $this->markTestSkipped('RRSIG test does not work on 32-bit systems.');
+        }
+
         $signature = 'oJB1W6WNGv+ldvQ3WDG0MQkg5IEhjRip8WTrPYGv07h108dUKGMeDPKijVCHX3DDKdfb+v6oB9wfuh3DTJXUAfI/M0zmO/z'.
             'z8bW0Rznl8O3tGNazPwQKkRN20XPXV6nwwfoXmJQbsLNrLfkGJ5D6fwFm8nN+6pBzeDQfsS3Ap3o=';
 
