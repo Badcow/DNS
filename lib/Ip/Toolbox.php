@@ -75,19 +75,15 @@ class Toolbox
      */
     public static function contractIpv6(string $ip): string
     {
-        if (!Validator::ipv6($ip)) {
-            throw new \InvalidArgumentException(sprintf('"%s" is not a valid IPv6 address.', $ip));
-        }
-
         $ip = self::expandIpv6($ip);
-        $decimals = array_map('hexdec', explode(':', $ip));
+        $hextets = array_map('hexdec', explode(':', $ip));
 
         //Find the largest streak of zeroes
         $streak = $longestStreak = 0;
         $streak_i = $longestStreak_i = -1;
 
-        foreach ($decimals as $i => $decimal) {
-            if (0 !== $decimal) {
+        foreach ($hextets as $i => $hextet) {
+            if (0 !== $hextet) {
                 $streak_i = -1;
                 $streak = 0;
 
@@ -103,23 +99,11 @@ class Toolbox
             }
         }
 
-        $ip = '';
-
-        foreach ($decimals as $i => $decimal) {
-            if ($i > $longestStreak_i && $i < $longestStreak_i + $longestStreak) {
-                continue;
-            }
-
-            if ($i === $longestStreak_i) {
-                $ip .= '::';
-                continue;
-            }
-
-            $ip .= (string) dechex($decimal);
-            $ip .= ($i < 7) ? ':' : '';
+        if (0 < $longestStreak) {
+            array_splice($hextets, $longestStreak_i, $longestStreak, '::');
         }
 
-        return preg_replace('/\:{3}/', '::', $ip);
+        return self::hextetsToIp($hextets);
     }
 
     /**
@@ -162,5 +146,23 @@ class Toolbox
         $ip .= $appendSuffix ? '.ip6.arpa.' : '';
 
         return $ip;
+    }
+
+    /**
+     * @param array $hextets
+     *
+     * @return string Contracted IPv6 address.
+     */
+    private static function hextetsToIp(array $hextets): string
+    {
+        $hextets = array_map(function($hex) {
+            if ('::' === $hex) {
+                return '::';
+            }
+
+            return (string) dechex($hex);
+        }, $hextets);
+
+        return preg_replace('/\:{2,}/', '::', implode(':', $hextets), 1);
     }
 }

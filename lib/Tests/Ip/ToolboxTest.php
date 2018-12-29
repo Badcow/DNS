@@ -37,6 +37,8 @@ class ToolboxTest extends \PHPUnit\Framework\TestCase
         $case_6 = '2001:0000:0000:ab80:2390:0000:0000:000a';
         $case_7 = '2001:db8:a:bac:8099:d:f:9';
         $case_8 = '2001:db8:0:0:f:0:0:0';
+        $case_9 = '0000:0000:aaaa:0000:0000:aaaa:0000:0000';
+        $case_10 = '0001:0000:0000:0000:0000:0000:0000:0000';
 
         $exp_1 = '::1';
         $exp_2 = '2001:db8::ff00:42:8329';
@@ -46,6 +48,8 @@ class ToolboxTest extends \PHPUnit\Framework\TestCase
         $exp_6 = '2001:0:0:ab80:2390::a';
         $exp_7 = '2001:db8:a:bac:8099:d:f:9';
         $exp_8 = '2001:db8:0:0:f::';
+        $exp_9 = '0:0:aaaa:0:0:aaaa::';
+        $exp_10 = '1::';
 
         $this->assertEquals($exp_1, Toolbox::contractIpv6($case_1));
         $this->assertEquals($exp_2, Toolbox::contractIpv6($case_2));
@@ -55,6 +59,8 @@ class ToolboxTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($exp_6, Toolbox::contractIpv6($case_6));
         $this->assertEquals($exp_7, Toolbox::contractIpv6($case_7));
         $this->assertEquals($exp_8, Toolbox::contractIpv6($case_8));
+        $this->assertEquals($exp_9, Toolbox::contractIpv6($case_9));
+        $this->assertEquals($exp_10, Toolbox::contractIpv6($case_10));
     }
 
     public function testReverseIpv4()
