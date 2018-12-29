@@ -347,4 +347,9 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::fullyQualifiedDomainName($fqdn10));
         $this->assertFalse(Validator::fullyQualifiedDomainName($fqdn11));
     }
+
+    public function testHostName()
+    {
+        $this->assertTrue(Validator::hostName('ya-hoo123'));
+    }
 }

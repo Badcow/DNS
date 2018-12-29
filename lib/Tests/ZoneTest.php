@@ -94,8 +94,7 @@ class ZoneTest extends TestCase
         ));
         $loc->setComment('This is Canberra');
 
-        $zone->addResourceRecord($loc);
-        $zone->addResourceRecord($mx2);
+        $zone->fromList($loc, $mx2);
         $zone->addResourceRecord($soa);
         $zone->addResourceRecord($ns1);
         $zone->addResourceRecord($mx3);
@@ -118,5 +117,17 @@ class ZoneTest extends TestCase
         $expectation = file_get_contents(__DIR__.'/Resources/example.com_filled-out.txt');
 
         $this->assertEquals($expectation, AlignedBuilder::build($zone));
+    }
+
+    public function testOtherFunctions()
+    {
+        $zone = $this->buildTestZone();
+        $this->assertCount(13, $zone);
+        $this->assertFalse($zone->isEmpty());
+
+        $rr = $zone->getResourceRecords()[0];
+        $this->assertTrue($zone->contains($rr));
+        $this->assertTrue($zone->remove($rr));
+        $this->assertFalse($zone->remove($rr));
     }
 }
