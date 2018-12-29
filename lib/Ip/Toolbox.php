@@ -80,17 +80,17 @@ class Toolbox
 
         //Find the largest streak of zeroes
         $streak = $longestStreak = 0;
-        $streak_i = $longestStreak_i = -1;
+        $streak_i = $longestStreak_i = null;
 
         foreach ($hextets as $i => $hextet) {
             if (0 !== $hextet) {
-                $streak_i = -1;
+                $streak_i = null;
                 $streak = 0;
 
                 continue;
             }
 
-            $streak_i = (-1 === $streak_i) ? $i : $streak_i;
+            $streak_i = $streak_i ?? $i;
             ++$streak;
 
             if ($streak >= $longestStreak) {
