@@ -37,7 +37,7 @@ class Zone implements \Countable, \IteratorAggregate
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(string $name = null, int $defaultTtl = null, array $resourceRecords = [])
+    public function __construct(?string $name = null, ?int $defaultTtl = null, array $resourceRecords = [])
     {
         $this->name = $name;
         $this->defaultTtl = $defaultTtl;
@@ -172,5 +172,21 @@ class Zone implements \Countable, \IteratorAggregate
         }
 
         return false;
+    }
+
+    /**
+     * Return the class of the zone, defaults to 'IN'.
+     *
+     * @return string
+     */
+    public function getClass(): string
+    {
+        foreach ($this->resourceRecords as $resourceRecord) {
+            if (null !== $resourceRecord->getClass()) {
+                return $resourceRecord->getClass();
+            }
+        }
+
+        return Classes::INTERNET;
     }
 }

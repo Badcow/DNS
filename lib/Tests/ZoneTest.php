@@ -129,5 +129,6 @@ class ZoneTest extends TestCase
         $this->assertTrue($zone->contains($rr));
         $this->assertTrue($zone->remove($rr));
         $this->assertFalse($zone->remove($rr));
+        $this->assertFalse($zone->contains($rr));
     }
 }

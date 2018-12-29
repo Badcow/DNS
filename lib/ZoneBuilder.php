@@ -60,33 +60,28 @@ class ZoneBuilder
      */
     public static function fillOutZone(Zone $zone)
     {
-        $class = Classes::INTERNET;
-        foreach ($zone as $rr) {
-            if (null !== $rr->getClass()) {
-                $class = $rr->getClass();
-                break;
-            }
-        }
+        $class = $zone->getClass();
 
         foreach ($zone as &$rr) {
             $rr->setName(self::fullyQualify($rr->getName(), $zone->getName()));
             $rr->setTtl($rr->getTtl() ?? $zone->getDefaultTtl());
+            $rdata = $rr->getRdata();
 
-            if ($rr->getRdata() instanceof SOA) {
-                $rr->getRdata()->setMname(self::fullyQualify($rr->getRdata()->getMname(), $zone->getName()));
-                $rr->getRdata()->setRname(self::fullyQualify($rr->getRdata()->getRname(), $zone->getName()));
+            if ($rdata instanceof SOA) {
+                $rdata->setMname(self::fullyQualify($rdata->getMname(), $zone->getName()));
+                $rdata->setRname(self::fullyQualify($rdata->getRname(), $zone->getName()));
             }
 
-            if ($rr->getRdata() instanceof CNAME) {
-                $rr->getRdata()->setTarget(self::fullyQualify($rr->getRdata()->getTarget(), $zone->getName()));
+            if ($rdata instanceof CNAME) {
+                $rdata->setTarget(self::fullyQualify($rdata->getTarget(), $zone->getName()));
             }
 
-            if ($rr->getRdata() instanceof MX) {
-                $rr->getRdata()->setExchange(self::fullyQualify($rr->getRdata()->getExchange(), $zone->getName()));
+            if ($rdata instanceof MX) {
+                $rdata->setExchange(self::fullyQualify($rdata->getExchange(), $zone->getName()));
             }
 
-            if ($rr->getRdata() instanceof AAAA) {
-                $rr->getRdata()->setAddress(Toolbox::expandIpv6($rr->getRdata()->getAddress()));
+            if ($rdata instanceof AAAA) {
+                $rdata->setAddress(Toolbox::expandIpv6($rdata->getAddress()));
             }
 
             $rr->setClass($class);
