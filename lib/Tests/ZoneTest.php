@@ -11,6 +11,7 @@
 
 namespace Badcow\DNS\Tests;
 
+use Badcow\DNS\Classes;
 use Badcow\DNS\Zone;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Rdata\Factory;
@@ -130,5 +131,20 @@ class ZoneTest extends TestCase
         $this->assertTrue($zone->remove($rr));
         $this->assertFalse($zone->remove($rr));
         $this->assertFalse($zone->contains($rr));
+    }
+
+    public function testGetClassReturnsDefaultClass()
+    {
+        $h1 = new ResourceRecord('host1');
+        $h2 = new ResourceRecord('host2');
+        $h3 = new ResourceRecord('host3');
+        $zone = new Zone('example.com.');
+        $zone->fromList($h1, $h2, $h3);
+
+        $this->assertNull($h1->getClass());
+        $this->assertNull($h2->getClass());
+        $this->assertNull($h3->getClass());
+
+        $this->assertEquals(Classes::INTERNET, $zone->getClass());
     }
 }
