@@ -56,6 +56,9 @@ class Algorithms
      */
     const PRIVATEOID = 254;
 
+    /**
+     * @var array
+     */
     private static $mnemonic = [
         self::RSAMD5 => 'RSAMD5',
         self::DH => 'DH',
@@ -73,9 +76,15 @@ class Algorithms
      * @param int $algorithmId
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException
      */
-    public static function getMnemonic($algorithmId)
+    public static function getMnemonic(int $algorithmId)
     {
+        if (!array_key_exists($algorithmId, self::$mnemonic)) {
+            throw new \InvalidArgumentException(sprintf('"%d" id not a valid algorithm.', $algorithmId));
+        }
+
         return self::$mnemonic[$algorithmId];
     }
 }

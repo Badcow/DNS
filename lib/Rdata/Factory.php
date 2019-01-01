@@ -252,26 +252,28 @@ class Factory
      * @param int    $keyTag
      * @param int    $algorithm
      * @param string $digest
+     * @param int    $digestType
      *
      * @return DS
      */
-    public static function Ds($keyTag, $algorithm, $digest)
+    public static function Ds(int $keyTag, int $algorithm, string $digest, int $digestType = DS::DIGEST_SHA1)
     {
         $rdata = new DS();
         $rdata->setKeyTag($keyTag);
         $rdata->setAlgorithm($algorithm);
         $rdata->setDigest($digest);
+        $rdata->setDigestType($digestType);
 
         return $rdata;
     }
 
     /**
-     * @param $nextDomainName
-     * @param array $typeBitMaps
+     * @param string $nextDomainName
+     * @param array  $typeBitMaps
      *
      * @return NSEC
      */
-    public static function Nsec($nextDomainName, array $typeBitMaps)
+    public static function Nsec(string $nextDomainName, array $typeBitMaps)
     {
         $rdata = new NSEC();
         $rdata->setNextDomainName($nextDomainName);
@@ -312,14 +314,14 @@ class Factory
     }
 
     /**
-     * @param $priority
-     * @param $weight
-     * @param $port
-     * @param $target
+     * @param int    $priority
+     * @param int    $weight
+     * @param int    $port
+     * @param string $target
      *
      * @return SRV
      */
-    public static function Srv($priority, $weight, $port, $target)
+    public static function Srv(int $priority, int $weight, int $port, string $target)
     {
         $rdata = new SRV();
         $rdata->setPriority($priority);
