@@ -65,6 +65,7 @@ class ZoneBuilder
         foreach ($zone as &$rr) {
             $rr->setName(self::fullyQualify($rr->getName(), $zone->getName()));
             $rr->setTtl($rr->getTtl() ?? $zone->getDefaultTtl());
+            $rr->setClass($class);
             $rdata = $rr->getRdata();
 
             if ($rdata instanceof SOA) {
@@ -83,8 +84,6 @@ class ZoneBuilder
             if ($rdata instanceof AAAA) {
                 $rdata->setAddress(Toolbox::expandIpv6($rdata->getAddress()));
             }
-
-            $rr->setClass($class);
         }
     }
 
