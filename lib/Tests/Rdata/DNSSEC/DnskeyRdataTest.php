@@ -42,6 +42,7 @@ class DnskeyRdataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(256, $dnskey->getFlags());
         $this->assertEquals(5, $dnskey->getAlgorithm());
         $this->assertEquals(self::$publicKey, $dnskey->getPublicKey());
+        $this->assertEquals(3, $dnskey->getProtocol());
         $this->assertEquals($output, $dnskey->output());
     }
 }
