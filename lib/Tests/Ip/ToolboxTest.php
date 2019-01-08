@@ -15,52 +15,48 @@ use Badcow\DNS\Ip\Toolbox;
 
 class ToolboxTest extends \PHPUnit\Framework\TestCase
 {
-    public function testExpandIpv6()
+    public function provider_expandIPv6(): array
     {
-        $case_1 = '::1';
-        $case_2 = '2001:db8::ff00:42:8329';
-
-        $exp_1 = '0000:0000:0000:0000:0000:0000:0000:0001';
-        $exp_2 = '2001:0db8:0000:0000:0000:ff00:0042:8329';
-
-        $this->assertEquals($exp_1, Toolbox::expandIpv6($case_1));
-        $this->assertEquals($exp_2, Toolbox::expandIpv6($case_2));
+        return [
+            ['0000:0000:0000:0000:0000:0000:0000:0001', '::1'],
+            ['2001:0db8:0000:0000:0000:ff00:0042:8329', '2001:db8::ff00:42:8329'],
+            ['2001:0000:0000:acad:0000:0000:0000:0001', '2001:0:0:acad::1'],
+            ['0000:0000:0000:0000:0000:0000:0000:0000', '::'],
+            ['2001:0000:0000:ab80:2390:0000:0000:000a', '2001::ab80:2390:0:0:a'],
+            ['0000:0000:aaaa:0000:0000:aaaa:0000:0000', '::aaaa:0:0:aaaa:0:0'],
+            ['0001:0000:0000:0000:0000:0000:0000:0000', '1::'],
+        ];
     }
 
-    public function testContractIpv6()
+    public function provider_contractIPv6(): array
     {
-        $case_1 = '0000:0000:0000:0000:0000:0000:0000:0001';
-        $case_2 = '2001:0db8:0000:0000:0000:ff00:0042:8329';
-        $case_3 = '2001:0000:0000:acad:0000:0000:0000:0001';
-        $case_4 = '2001:db8::ff00:42:8329';
-        $case_5 = '0000:0000:0000:0000:0000:0000:0000:0000';
-        $case_6 = '2001:0000:0000:ab80:2390:0000:0000:000a';
-        $case_7 = '2001:db8:a:bac:8099:d:f:9';
-        $case_8 = '2001:db8:0:0:f:0:0:0';
-        $case_9 = '0000:0000:aaaa:0000:0000:aaaa:0000:0000';
-        $case_10 = '0001:0000:0000:0000:0000:0000:0000:0000';
+        return array_merge($this->provider_expandIPv6(), [
+            ['2001:db8:0:0:f:0:0:0', '2001:db8:0:0:f::'],
+            ['2001:db8::ff00:42:8329', '2001:db8::ff00:42:8329'],
+            ['2001:db8:a:bac:8099:d:f:9', '2001:db8:a:bac:8099:d:f:9'],
+        ]);
+    }
 
-        $exp_1 = '::1';
-        $exp_2 = '2001:db8::ff00:42:8329';
-        $exp_3 = '2001:0:0:acad::1';
-        $exp_4 = '2001:db8::ff00:42:8329';
-        $exp_5 = '::';
-        $exp_6 = '2001:0:0:ab80:2390::a';
-        $exp_7 = '2001:db8:a:bac:8099:d:f:9';
-        $exp_8 = '2001:db8:0:0:f::';
-        $exp_9 = '0:0:aaaa:0:0:aaaa::';
-        $exp_10 = '1::';
+    /**
+     * @param string $expectation
+     * @param string $ip
+     *
+     * @dataProvider provider_expandIPv6
+     */
+    public function testExpandIpv6(string $expectation, string $ip)
+    {
+        $this->assertEquals($expectation, Toolbox::expandIpv6($ip));
+    }
 
-        $this->assertEquals($exp_1, Toolbox::contractIpv6($case_1));
-        $this->assertEquals($exp_2, Toolbox::contractIpv6($case_2));
-        $this->assertEquals($exp_3, Toolbox::contractIpv6($case_3));
-        $this->assertEquals($exp_4, Toolbox::contractIpv6($case_4));
-        $this->assertEquals($exp_5, Toolbox::contractIpv6($case_5));
-        $this->assertEquals($exp_6, Toolbox::contractIpv6($case_6));
-        $this->assertEquals($exp_7, Toolbox::contractIpv6($case_7));
-        $this->assertEquals($exp_8, Toolbox::contractIpv6($case_8));
-        $this->assertEquals($exp_9, Toolbox::contractIpv6($case_9));
-        $this->assertEquals($exp_10, Toolbox::contractIpv6($case_10));
+    /**
+     * @param string $ip
+     * @param string $expectation
+     *
+     * @dataProvider provider_contractIPv6
+     */
+    public function testContractIpv6(string $ip, string $expectation)
+    {
+        $this->assertEquals($expectation, Toolbox::contractIpv6($ip));
     }
 
     public function testReverseIpv4()

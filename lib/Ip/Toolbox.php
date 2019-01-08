@@ -34,7 +34,7 @@ class Toolbox
 
         $hex = unpack('H*hex', inet_pton($ip));
 
-        return substr(preg_replace('/([A-f0-9]{4})/', '$1:', $hex['hex']), 0, -1);
+        return implode(':', str_split($hex['hex'], 4));
     }
 
     /**
@@ -63,7 +63,7 @@ class Toolbox
      *
      * Note: If there is more than one set of consecutive hextets, the function
      * will favour the larger of the sets. If both sets of zeroes are the same
-     * the second will be favoured in the omission of zeroes.
+     * the first will be favoured in the omission of zeroes.
      *
      * E.g.: 2001:0000:0000:ab80:2390:0000:0000:000a -> 2001:0:0:ab80:2390::a
      *
@@ -75,35 +75,11 @@ class Toolbox
      */
     public static function contractIpv6(string $ip): string
     {
-        $ip = self::expandIpv6($ip);
-        $hextets = array_map('hexdec', explode(':', $ip));
-
-        //Find the largest streak of zeroes
-        $streak = $longestStreak = 0;
-        $streak_i = $longestStreak_i = null;
-
-        foreach ($hextets as $i => $hextet) {
-            if (0 !== $hextet) {
-                $streak_i = null;
-                $streak = 0;
-
-                continue;
-            }
-
-            $streak_i = $streak_i ?? $i;
-            ++$streak;
-
-            if ($streak >= $longestStreak) {
-                $longestStreak = $streak;
-                $longestStreak_i = $streak_i;
-            }
+        if (!Validator::ipv6($ip)) {
+            throw new \InvalidArgumentException(sprintf('"%s" is not a valid IPv6 address.', $ip));
         }
 
-        if (0 < $longestStreak) {
-            array_splice($hextets, $longestStreak_i, $longestStreak, '::');
-        }
-
-        return self::hextetsToIp($hextets);
+        return inet_ntop(inet_pton($ip));
     }
 
     /**
@@ -146,23 +122,5 @@ class Toolbox
         $ip .= $appendSuffix ? '.ip6.arpa.' : '';
 
         return $ip;
-    }
-
-    /**
-     * @param array $hextets
-     *
-     * @return string Contracted IPv6 address.
-     */
-    private static function hextetsToIp(array $hextets): string
-    {
-        $hextets = array_map(function($hex) {
-            if ('::' === $hex) {
-                return '::';
-            }
-
-            return (string) dechex($hex);
-        }, $hextets);
-
-        return preg_replace('/\:{2,}/', '::', implode(':', $hextets), 1);
     }
 }
