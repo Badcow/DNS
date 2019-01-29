@@ -74,7 +74,7 @@ class LOC implements RdataInterface
     /**
      * @param string $format
      *
-     * @return float|string
+     * @return float|string|null
      */
     public function getLatitude(string $format = self::FORMAT_DECIMAL)
     {
@@ -96,7 +96,7 @@ class LOC implements RdataInterface
     /**
      * @param string $format
      *
-     * @return float|string
+     * @return float|string|null
      */
     public function getLongitude(string $format = self::FORMAT_DECIMAL)
     {

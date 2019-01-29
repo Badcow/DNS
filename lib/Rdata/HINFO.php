@@ -38,7 +38,7 @@ class HINFO implements RdataInterface
     /**
      * @return string
      */
-    public function getCpu(): string
+    public function getCpu(): ?string
     {
         return $this->cpu;
     }
@@ -54,7 +54,7 @@ class HINFO implements RdataInterface
     /**
      * @return string
      */
-    public function getOs(): string
+    public function getOs(): ?string
     {
         return $this->os;
     }

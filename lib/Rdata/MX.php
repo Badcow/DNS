@@ -38,7 +38,7 @@ class MX implements RdataInterface
     /**
      * @return string
      */
-    public function getExchange(): string
+    public function getExchange(): ?string
     {
         return $this->exchange;
     }
@@ -54,7 +54,7 @@ class MX implements RdataInterface
     /**
      * @return int
      */
-    public function getPreference(): int
+    public function getPreference(): ?int
     {
         return $this->preference;
     }
