@@ -16,7 +16,7 @@ namespace Badcow\DNS\Rdata;
  *
  * SRV is defined in RFC 2782
  *
- * @see https://www.ietf.org/rfc/rfc2782.txt
+ * @see https://tools.ietf.org/html/rfc2782
  *
  * @author Samuel Williams <sam@badcow.co>
  */

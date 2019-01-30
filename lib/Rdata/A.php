@@ -11,6 +11,9 @@
 
 namespace Badcow\DNS\Rdata;
 
+/**
+ * @see https://tools.ietf.org/html/rfc1035#section-3.4.1
+ */
 class A implements RdataInterface
 {
     use RdataTrait;
