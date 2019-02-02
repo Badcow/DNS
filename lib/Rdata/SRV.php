@@ -61,7 +61,7 @@ class SRV extends CNAME
     /**
      * @return int
      */
-    public function getPriority(): int
+    public function getPriority(): ?int
     {
         return $this->priority;
     }
@@ -83,7 +83,7 @@ class SRV extends CNAME
     /**
      * @return int
      */
-    public function getWeight(): int
+    public function getWeight(): ?int
     {
         return $this->weight;
     }
@@ -105,7 +105,7 @@ class SRV extends CNAME
     /**
      * @return int
      */
-    public function getPort(): int
+    public function getPort(): ?int
     {
         return $this->port;
     }

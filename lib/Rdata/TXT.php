@@ -33,7 +33,7 @@ class TXT implements RdataInterface
         $this->text = addslashes($text);
     }
 
-    public function getText(): string
+    public function getText(): ?string
     {
         return stripslashes($this->text);
     }

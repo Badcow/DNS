@@ -61,7 +61,7 @@ class Zone implements \Countable, \IteratorAggregate
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
