@@ -11,6 +11,9 @@
 
 namespace Badcow\DNS\Rdata;
 
+/**
+ * @see https://tools.ietf.org/html/rfc3596#section-2.1
+ */
 class AAAA extends A
 {
     const TYPE = 'AAAA';

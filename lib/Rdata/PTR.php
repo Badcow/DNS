@@ -11,6 +11,9 @@
 
 namespace Badcow\DNS\Rdata;
 
+/**
+ * @see https://tools.ietf.org/html/rfc1035#section-3.3.12
+ */
 class PTR extends CNAME
 {
     const TYPE = 'PTR';

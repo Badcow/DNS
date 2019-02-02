@@ -2,6 +2,9 @@
 
 namespace Badcow\DNS\Rdata;
 
+/**
+ * @see https://tools.ietf.org/html/rfc3123
+ */
 class APL implements RdataInterface
 {
     use RdataTrait;

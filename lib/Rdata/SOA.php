@@ -12,7 +12,7 @@
 namespace Badcow\DNS\Rdata;
 
 /**
- * @see http://www.ietf.org/rfc/rfc1035.text
+ * @see https://tools.ietf.org/html/rfc1035#section-3.3.13
  */
 class SOA implements RdataInterface
 {
