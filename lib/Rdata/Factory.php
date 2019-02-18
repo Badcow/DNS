@@ -352,4 +352,21 @@ class Factory
 
         return $rdata;
     }
+
+    /**
+     * @param integer $flag
+     * @param string  $tag
+     * @param string  $target
+     *
+     * @return CAA
+     */
+    public static function Caa($flag, $tag, $target)
+    {
+        $rdata = new CAA();
+        $rdata->setFlag($flag);
+        $rdata->setTag($tag);
+        $rdata->setTarget($target);
+
+        return $rdata;
+    }
 }
