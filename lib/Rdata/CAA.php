@@ -98,7 +98,7 @@ class CAA extends CNAME
         return sprintf('%s %s "%s"',
             $this->flag,
             $this->tag,
-            $this->target
+            preg_replace('/"|\'/', '', $this->target)
         );
     }
 }
