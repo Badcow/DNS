@@ -356,16 +356,16 @@ class Factory
     /**
      * @param integer $flag
      * @param string  $tag
-     * @param string  $target
+     * @param string  $value
      *
      * @return CAA
      */
-    public static function Caa($flag, $tag, $target)
+    public static function Caa($flag, $tag, $value): CAA
     {
         $rdata = new CAA();
         $rdata->setFlag($flag);
         $rdata->setTag($tag);
-        $rdata->setTarget($target);
+        $rdata->setValue($value);
 
         return $rdata;
     }

@@ -20,13 +20,21 @@ namespace Badcow\DNS\Rdata;
  *
  * @author Samuel Williams <sam@badcow.co>
  */
-class CAA extends CNAME
+class CAA implements RdataInterface
 {
+    use RdataTrait;
+
     const TYPE = 'CAA';
 
     const MAX_FLAG = 255;
 
-    const ALLOWED_TAGS = ['issue', 'issuewild', 'iodef'];
+    const TAG_ISSUE = 'issue';
+
+    const TAG_ISSUEWILD = 'issuewild';
+
+    const TAG_IODEF = 'iodef';
+
+    const ALLOWED_TAGS = [self::TAG_ISSUE, self::TAG_ISSUEWILD, self::TAG_IODEF];
 
     /**
      * It is currently used to represent the critical flag
@@ -45,6 +53,11 @@ class CAA extends CNAME
      * @var string
      */
     private $tag;
+
+    /**
+     * @var string
+     */
+    private $value;
 
     /**
      * @return int
@@ -69,7 +82,7 @@ class CAA extends CNAME
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getTag(): ?string
     {
@@ -77,7 +90,7 @@ class CAA extends CNAME
     }
 
     /**
-     * @param int $tag
+     * @param string $tag
      *
      * @throws \InvalidArgumentException
      */
@@ -91,6 +104,22 @@ class CAA extends CNAME
     }
 
     /**
+     * @return string
+     */
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param string $value
+     */
+    public function setValue(string $value): void
+    {
+        $this->value = $value;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function output(): string
@@ -98,7 +127,7 @@ class CAA extends CNAME
         return sprintf('%s %s "%s"',
             $this->flag,
             $this->tag,
-            $this->target
+            $this->value
         );
     }
 }

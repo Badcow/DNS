@@ -44,4 +44,9 @@ class CaaRdataTest extends \PHPUnit\Framework\TestCase
         $srv = new CAA();
         $srv->setTag('not_exist');
     }
+
+    public function testGetType()
+    {
+        $this->assertEquals('CAA', (new CAA)->getType());
+    }
 }
