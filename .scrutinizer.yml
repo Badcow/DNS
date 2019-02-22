@@ -1,5 +1,5 @@
 filter:
-    excluded_paths: [lib/Tests/*]
+    excluded_paths: [tests/*]
 checks:
     php:
         code_rating: true
