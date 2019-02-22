@@ -106,10 +106,17 @@ class RdataHandlers
         return Rdata\Factory::txt((string) $txt);
     }
 
+    /**
+     * Returns RData instances for types that do not have explicitly declared handler methods.
+     *
+     * @param string $type
+     * @param \ArrayIterator $iterator
+     * @return Rdata\RdataInterface
+     */
     public static function catchAll(string $type, \ArrayIterator $iterator): Rdata\RdataInterface
     {
         if (!Rdata\Factory::isTypeImplemented($type)) {
-            return new PolymorphicRdata($type, implode(Tokens::SPACE, self::getAllRemaining($iterator)));
+            return new Rdata\PolymorphicRdata($type, implode(Tokens::SPACE, self::getAllRemaining($iterator)));
         }
 
         return call_user_func_array([Rdata\Factory::class, $type], self::getAllRemaining($iterator));

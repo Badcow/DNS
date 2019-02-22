@@ -9,10 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Badcow\DNS\Parser;
+namespace Badcow\DNS\Rdata;
 
-use Badcow\DNS\Rdata\RdataInterface;
-
+/**
+ * Used to create RData of types that have not yet been implemented in the library.
+ */
 class PolymorphicRdata implements RdataInterface
 {
     /**
