@@ -170,11 +170,15 @@ ipv6.domain  IN AAAA ::1; This is an IPv6 domain.
 
 ## Parsing BIND Records
 
-BIND Records can be parsed into PHP objects using [Badcow DNS Parser](https://github.com/Badcow/DNS-Parser).
+BIND Records can be parsed into PHP objects using `Badcow\DNS\Parser\Parser`
 
 `composer require "badcow/dns-parser"`
 
 ```php
 $file = file_get_contents('/path/to/example.com.txt');
-$zone = Badcow\DNS\Parser\Parser::parse('example.com.', $file); // Returns Badcow\DNS\Zone
-``` 
+$zone = Badcow\DNS\Parser\Parser::parse('example.com.', $file); //Badcow Zone Object
+```
+
+Simple as that.
+
+More examples can be found in the [The Docs](docs/Parser)
