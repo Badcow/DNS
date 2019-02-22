@@ -18,9 +18,6 @@ use Badcow\DNS\Zone;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
-    const PHP_ENV_CHECKZONE_PATH = 'CHECKZONE_PATH';
-    const PHP_ENV_PRINT_TEST_ZONE = 'PRINT_TEST_ZONE';
-
     /**
      * @var string
      */
@@ -68,26 +65,6 @@ DNS;
         }
 
         return null;
-    }
-
-    /**
-     * Print out a block of text.
-     *
-     * @param string $text
-     * @param string $title
-     */
-    protected function printBlock($text, $title = '')
-    {
-        $output =
-            PHP_EOL.PHP_EOL.
-            '====================================='.$title.'====================================='.
-            PHP_EOL.
-            $text.
-            PHP_EOL.
-            '====================================='.$title.'====================================='.
-            PHP_EOL.PHP_EOL;
-
-        echo $output;
     }
 
     /**

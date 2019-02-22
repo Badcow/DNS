@@ -152,6 +152,7 @@ ipv6.domain  IN AAAA ::1; This is an IPv6 domain.
 * `AAAA`
 * `APL`
 * `CNAME`
+* `CAA`
 * `DNAME`
 * `HINFO`
 * `LOC`

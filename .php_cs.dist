@@ -13,6 +13,7 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__.'/lib')
     ->in(__DIR__.'/tests')
     ->exclude(__DIR__.'/tests/Resources')
+    ->exclude(__DIR__.'/tests/Parser/Resources')
 ;
 
 $config = PhpCsFixer\Config::create()

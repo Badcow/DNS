@@ -1,0 +1,21 @@
+$ORIGIN example.com.
+$TTL 3600
+
+ ; NS RECORDS
+@               NS   ns1.nameserver.com.
+@               NS   ns2.nameserver.com.
+
+info            TXT "This is some additional \"information\""
+
+ ; A RECORDS
+sub.domain      A    192.168.1.42 ; This is a local ip.
+
+ ; AAAA RECORDS
+ipv6.domain    AAAA ::1 ; This is an IPv6 domain.
+
+ ; MX RECORDS
+@               MX   10 mail-gw1.example.net.;This is the primary sever; and some more stuff.
+@               MX   20 mail-gw2.example.net.
+@               MX   30 mail-gw3.example.net.
+
+mail     IN    TXT  "THIS IS SOME TEXT; WITH A SEMICOLON"

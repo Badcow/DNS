@@ -20,9 +20,5 @@ class ZoneBuilderTest extends TestCase
         $zone = $this->buildTestZone();
         $zoneBuilder = new ZoneBuilder();
         $this->assertEquals($this->expected, $output = $zoneBuilder->build($zone));
-
-        if (true == $this->getEnvVariable(self::PHP_ENV_PRINT_TEST_ZONE)) {
-            $this->printBlock($output, 'TEST ZONE FILE');
-        }
     }
 }
