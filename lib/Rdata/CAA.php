@@ -37,7 +37,7 @@ class CAA implements RdataInterface
     const ALLOWED_TAGS = [self::TAG_ISSUE, self::TAG_ISSUEWILD, self::TAG_IODEF];
 
     /**
-     * It is currently used to represent the critical flag
+     * It is currently used to represent the critical flag.
      *
      * @var int
      */

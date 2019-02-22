@@ -12,11 +12,17 @@
         "rlanvin/php-ip": "~1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~7.5"
+        "phpunit/phpunit": "~7.5",
+        "friendsofphp/php-cs-fixer": "~2.1"
     },
     "autoload": {
         "psr-4": {
             "Badcow\\DNS\\": "lib/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Badcow\\DNS\\Tests\\": "tests/"
         }
     }
 }

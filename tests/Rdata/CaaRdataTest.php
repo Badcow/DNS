@@ -47,6 +47,6 @@ class CaaRdataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetType()
     {
-        $this->assertEquals('CAA', (new CAA)->getType());
+        $this->assertEquals('CAA', (new CAA())->getType());
     }
 }

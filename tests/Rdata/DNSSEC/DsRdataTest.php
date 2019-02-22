@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of Badcow-DNS.
+ * This file is part of Badcow DNS Library.
  *
  * (c) Samuel Williams <sam@badcow.co>
  *

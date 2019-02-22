@@ -8,3 +8,4 @@ CHANGELOG for 2.x
 `foreach ($zone as $rr){}`.
 * `Zone::expand()` method has been moved to `ZoneBuilder` and renamed as `ZoneBuilder::fillOutZone()`.
 * Methods in `Validator` have been renamed to better reflect what they are validating.
+* Added CAA Rdata type.

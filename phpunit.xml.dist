@@ -12,14 +12,14 @@
     </php>
     <testsuites>
         <testsuite name="Badcow DNS Zone Test Suite">
-            <directory>./lib/Tests</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
             <directory>./lib</directory>
             <exclude>
-                <directory>./lib/Tests</directory>
+                <directory>./tests</directory>
                 <directory>./vendor</directory>
             </exclude>
         </whitelist>

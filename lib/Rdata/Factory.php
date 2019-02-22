@@ -354,9 +354,9 @@ class Factory
     }
 
     /**
-     * @param integer $flag
-     * @param string  $tag
-     * @param string  $value
+     * @param int    $flag
+     * @param string $tag
+     * @param string $value
      *
      * @return CAA
      */
