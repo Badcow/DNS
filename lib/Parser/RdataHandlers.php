@@ -15,12 +15,21 @@ use Badcow\DNS\Rdata;
 
 class RdataHandlers
 {
+    /**
+     * Mappings of RData type to its handler method.
+     *
+     * @var array
+     */
     private static $handlers = [
         Rdata\LOC::TYPE => __CLASS__.'::handleLocRdata',
         Rdata\TXT::TYPE => __CLASS__.'::handleTxtRdata',
         Rdata\APL::TYPE => __CLASS__.'::handleAplRdata',
+        Rdata\CAA::TYPE => __CLASS__.'::handleCaaRdata',
     ];
 
+    /**
+     * @return array
+     */
     public static function getHandlers(): array
     {
         return self::$handlers;
@@ -104,6 +113,22 @@ class RdataHandlers
         }
 
         return Rdata\Factory::txt((string) $txt);
+    }
+
+    /**
+     * @param \ArrayIterator $iterator
+     * @return Rdata\CAA
+     */
+    public static function handleCaaRdata(\ArrayIterator $iterator): Rdata\CAA
+    {
+        $flag = (int) self::pop($iterator);
+        $tag = (string) self::pop($iterator);
+        $value = new StringIterator();
+
+        $string = new StringIterator(implode(Tokens::SPACE, self::getAllRemaining($iterator)));
+        self::handleTxt($string, $value);
+
+        return Rdata\Factory::caa($flag, $tag, $value);
     }
 
     /**

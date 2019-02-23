@@ -15,6 +15,7 @@ use Badcow\DNS\Classes;
 use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
 use Badcow\DNS\Rdata\APL;
+use Badcow\DNS\Rdata\CAA;
 use Badcow\DNS\Rdata\UnsupportedTypeException;
 use Badcow\DNS\Zone;
 use Badcow\DNS\Rdata\Factory;
@@ -199,6 +200,28 @@ class ParserTest extends TestCase
 
         $this->assertEquals('192.168.0.0/23', (string) $apl->getIncludedAddressRanges()[0]);
         $this->assertEquals('2001:acad:1::8/128', (string) $apl->getExcludedAddressRanges()[1]);
+    }
+
+    /**
+     * @throws ParseException
+     */
+    public function testParserCanHandleCaaRecords()
+    {
+        $text = <<<'TXT'
+$ORIGIN EXAMPLE.COM.
+$TTL 3600
+@ 10800 IN CAA 0 issue "letsencrypt.org"
+TXT;
+
+        $zone = Parser::parse('example.com.', $text);
+        $this->assertCount(1, $zone);
+        /** @var CAA $caa */
+        $caa = $zone->getResourceRecords()[0]->getRdata();
+
+        $this->assertEquals('CAA', $caa->getType());
+        $this->assertEquals(0, $caa->getFlag());
+        $this->assertEquals('issue', $caa->getTag());
+        $this->assertEquals('letsencrypt.org', $caa->getValue());
     }
 
     /**
