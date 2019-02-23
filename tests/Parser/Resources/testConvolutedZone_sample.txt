@@ -1,0 +1,39 @@
+$origin example.com.
+$ttl 3600
+@ 300 IN SOA (
+ns1.beget.ru. hostmaster.beget.ru. 2015060403
+ 300 600 86400 300
+)
+@ 600 IN A 5.101.153.38
+@ 600 IN AAAA ::ffff:a.b.c.d
+@ 300 IN NS ns1.beget.ru.
+_xmpp-server._tcp.icq.beget.ru 600 IN SRV 10 0 5247 jabber
+autoconfig 600 IN CNAME cf-ssl00000-protected.example.com.
+arhangelsk 600 IN MX 10 mx2.beget.ru.
+@ 600 IN TXT "Some text" " another Some text"
+test 600 IN TXT (;11111
+"Some text" ; or like this
+" another Some text"
+)
+testtxt 600 IN TXT ("v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDZKI3U+9acu3NfEy0NJHIPydxnPLPpnAJ7"
+"k2JdrsLqAK1uouMudHI20pgE8RMldB/TeWKXYoRidcGCZWXleUzldDTwZAMDQNpdH1uuxym0VhoZpPbI1RXwpgHRTbCk49VqlC")
+testmx 600    IN MX 20 @;345345
+300 IN MX 30 mail.com.
+IN MX 35 mail-gw3
+MX 40 mail-gw4
+testmx2 600 IN MX 20 .;23''33'123;;123;
+_domainkeytxt 600 IN TXT "t=y;o=~;\0";312
+www 600 IN TXT "@ A 79.125.10.157 "
+txt3 600 IN TXT    "www CNAME ;;;;'werwerwer'\0010"
+nstest 300 IN NS ns1
+nstest2   300 IN NS 85.249.229.194;111
+xn----7sbfndkfpirgcajeli2a4pnc.xn----7sbbfcqfo2cfcagacemif0ap5q 300 IN NS 1.1.1.1
+casino 600 IN NS @;234
+bonus 600 IN CNAME @;111
+;234234;234;234234234234
+* 600 IN CNAME s;111
+@ 600 IN SRV 10 0 5269 @ ;wer;wer;wer;wer;;
+xmpp 600 IN SRV 10 0 5222 81.211.107.230. ;;;werwerwer
+www222  0      IN   CNAME   lifun.ru.
+46.20.191.35 3600 IN PTR office;1231
+;qqq 300 IN OLE "omg"

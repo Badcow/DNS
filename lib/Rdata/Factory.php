@@ -360,7 +360,7 @@ class Factory
      *
      * @return CAA
      */
-    public static function Caa($flag, $tag, $value): CAA
+    public static function Caa(int $flag, string $tag, string $value): CAA
     {
         $rdata = new CAA();
         $rdata->setFlag($flag);

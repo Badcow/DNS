@@ -1,7 +1,8 @@
 Badcow DNS Zone Library
 =======================
-
-This library constructs DNS zone records based on [RFC1035](https://tools.ietf.org/html/rfc1035) and subsequent standards.
+The aim of this project is to create abstract object representations of DNS records in PHP. The project consists of various
+classes representing DNS objects (such as `Zone`, `ResourceRecord`, and various `RData` types), a parser to convert BIND
+style text files to the PHP objects, and builders to create aesthetically pleasing BIND records.
 
 ## Build Status
 [![Build Status](https://travis-ci.org/Badcow/DNS.png)](https://travis-ci.org/Badcow/DNS) [![Code Coverage](https://scrutinizer-ci.com/g/Badcow/DNS/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Badcow/DNS/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=master)
@@ -152,6 +153,7 @@ ipv6.domain  IN AAAA ::1; This is an IPv6 domain.
 * `AAAA`
 * `APL`
 * `CNAME`
+* `CAA`
 * `DNAME`
 * `HINFO`
 * `LOC`
@@ -169,11 +171,13 @@ ipv6.domain  IN AAAA ::1; This is an IPv6 domain.
 
 ## Parsing BIND Records
 
-BIND Records can be parsed into PHP objects using [Badcow DNS Parser](https://github.com/Badcow/DNS-Parser).
-
-`composer require "badcow/dns-parser"`
+BIND Records can be parsed into PHP objects using `Badcow\DNS\Parser\Parser`
 
 ```php
 $file = file_get_contents('/path/to/example.com.txt');
-$zone = Badcow\DNS\Parser\Parser::parse('example.com.', $file); // Returns Badcow\DNS\Zone
-``` 
+$zone = Badcow\DNS\Parser\Parser::parse('example.com.', $file); //Badcow Zone Object
+```
+
+Simple as that.
+
+More examples can be found in the [The Docs](docs/Parser)
