@@ -218,7 +218,11 @@ class Parser
         $iterator->next();
 
         if (array_key_exists($type, $this->rdataHandlers)) {
-            return call_user_func($this->rdataHandlers[$type], $iterator);
+            try {
+                return call_user_func($this->rdataHandlers[$type], $iterator);
+            } catch (\Exception $exception) {
+                throw new ParseException($exception->getMessage(), null, $exception);
+            }
         }
 
         return RdataHandlers::catchAll($type, $iterator);

@@ -16,7 +16,6 @@ use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
 use Badcow\DNS\Rdata\APL;
 use Badcow\DNS\Rdata\CAA;
-use Badcow\DNS\Rdata\UnsupportedTypeException;
 use Badcow\DNS\Zone;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
@@ -109,7 +108,6 @@ class ParserTest extends TestCase
      * Parser creates valid dns object.
      *
      * @throws \Badcow\DNS\Parser\ParseException
-     * @throws UnsupportedTypeException
      */
     public function testParserCreatesValidDnsObject()
     {
@@ -128,7 +126,6 @@ class ParserTest extends TestCase
      * Parser ignores control entries other than TTL.
      *
      * @throws ParseException
-     * @throws UnsupportedTypeException
      */
     public function testParserIgnoresControlEntriesOtherThanTtl()
     {
@@ -144,7 +141,6 @@ class ParserTest extends TestCase
      * Parser can handle convoluted zone record.
      *
      * @throws \Badcow\DNS\Parser\ParseException
-     * @throws \Badcow\DNS\Rdata\UnsupportedTypeException
      */
     public function testParserCanHandleConvolutedZoneRecord()
     {
@@ -172,7 +168,6 @@ class ParserTest extends TestCase
 
     /**
      * @throws ParseException
-     * @throws UnsupportedTypeException
      */
     public function testCanHandlePolymorphicRdata()
     {
@@ -186,7 +181,6 @@ class ParserTest extends TestCase
 
     /**
      * @throws ParseException
-     * @throws UnsupportedTypeException
      */
     public function testParserCanHandleAplRecords()
     {
@@ -229,7 +223,6 @@ TXT;
      * @expectedExceptionMessage "3:192.168.0.64/30" is not a valid IP range.
      *
      * @throws ParseException
-     * @throws UnsupportedTypeException
      */
     public function testMalformedAplRecordThrowsException1()
     {
@@ -243,7 +236,6 @@ TXT;
      * @expectedExceptionMessage "!1-192.168.0.64/30" is not a valid IP range.
      *
      * @throws ParseException
-     * @throws UnsupportedTypeException
      */
     public function testMalformedAplRecordThrowsException2()
     {

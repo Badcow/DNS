@@ -23,15 +23,16 @@ class ParseException extends \Exception
      *
      * @param string              $message
      * @param StringIterator|null $stringIterator
+     * @param \Throwable|null     $previous
      */
-    public function __construct(string $message = '', StringIterator $stringIterator = null)
+    public function __construct(string $message = '', StringIterator $stringIterator = null, \Throwable $previous = null)
     {
         if (null !== $stringIterator) {
             $this->stringIterator = $stringIterator;
             $message .= sprintf(' [Line no: %d]', $this->getLineNumber());
         }
 
-        parent::__construct($message);
+        parent::__construct($message, 0, $previous);
     }
 
     /**
