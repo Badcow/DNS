@@ -11,6 +11,7 @@
 
 namespace Badcow\DNS;
 
+use Badcow\DNS\Rdata\CNAME;
 use Badcow\DNS\Rdata\NS;
 use Badcow\DNS\Rdata\SOA;
 
@@ -239,5 +240,27 @@ class Validator
         }
 
         return count($classes);
+    }
+
+    /**
+     * Check if the record could be inserted in the zone by checking the CNAME aliases.
+     *
+     * @see https://tools.ietf.org/html/rfc1034#section-3.6.2
+     *
+     * @param Zone           $zone
+     * @param ResourceRecord $newRecord
+     *
+     * @return bool
+     */
+    public static function record(Zone $zone, ResourceRecord $newRecord): bool
+    {
+        foreach ($zone as $rr) {
+            if (CNAME::TYPE === $rr->getType()
+                && $newRecord->getName() === $rr->getName()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
