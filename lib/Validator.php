@@ -243,7 +243,11 @@ class Validator
     }
 
     /**
-     * Check if the record could be inserted in the zone by checking the CNAME aliases.
+     * Ensure $zone does not contain existing CNAME alias corresponding to $newRecord's name.
+     *
+     * E.g.
+     *      www IN CNAME example.com.
+     *      www IN TXT "This is a violation of DNS specifications."
      *
      * @see https://tools.ietf.org/html/rfc1034#section-3.6.2
      *
@@ -252,7 +256,7 @@ class Validator
      *
      * @return bool
      */
-    public static function record(Zone $zone, ResourceRecord $newRecord): bool
+    public static function noAliasInZone(Zone $zone, ResourceRecord $newRecord): bool
     {
         foreach ($zone as $rr) {
             if (CNAME::TYPE === $rr->getType()

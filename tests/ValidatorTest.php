@@ -353,7 +353,7 @@ class ValidatorTest extends TestCase
         $this->assertTrue(Validator::hostName('ya-hoo123'));
     }
 
-    public function testRecordInsertion()
+    public function testNoAliasInZone()
     {
         //Pass case
         $txt1 = new ResourceRecord();
@@ -369,8 +369,8 @@ class ValidatorTest extends TestCase
 
         $zone = $this->buildTestZone();
 
-        $this->assertTrue(Validator::record($zone, $txt1));
+        $this->assertTrue(Validator::noAliasInZone($zone, $txt1));
 
-        $this->assertFalse(Validator::record($zone, $txt2));
+        $this->assertFalse(Validator::noAliasInZone($zone, $txt2));
     }
 }
