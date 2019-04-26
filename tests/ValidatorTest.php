@@ -352,4 +352,25 @@ class ValidatorTest extends TestCase
     {
         $this->assertTrue(Validator::hostName('ya-hoo123'));
     }
+
+    public function testRecordInsertion()
+    {
+        //Pass case
+        $txt1 = new ResourceRecord();
+        $txt1->setName('www');
+        $txt1->setRdata(Factory::txt('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
+        $txt1->setClass(Classes::INTERNET);
+
+        //Fail case
+        $txt2 = new ResourceRecord();
+        $txt2->setName('alias');
+        $txt2->setRdata(Factory::txt('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
+        $txt2->setClass(Classes::INTERNET);
+
+        $zone = $this->buildTestZone();
+
+        $this->assertTrue(Validator::record($zone, $txt1));
+
+        $this->assertFalse(Validator::record($zone, $txt2));
+    }
 }
