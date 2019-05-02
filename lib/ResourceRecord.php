@@ -106,7 +106,7 @@ class ResourceRecord
      *
      * @param int $ttl
      */
-    public function setTtl(int $ttl): void
+    public function setTtl(?int $ttl): void
     {
         $this->ttl = $ttl;
     }
