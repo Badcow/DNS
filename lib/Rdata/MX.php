@@ -64,9 +64,19 @@ class MX implements RdataInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException Throws exception if preference or exchange have not been set.
      */
     public function output(): string
     {
+        if (null === $this->preference) {
+            throw new \InvalidArgumentException('No preference has been set on MX object.');
+        }
+
+        if (null === $this->exchange) {
+            throw new \InvalidArgumentException('No exchange has been set on MX object.');
+        }
+
         return $this->preference.' '.$this->exchange;
     }
 }
