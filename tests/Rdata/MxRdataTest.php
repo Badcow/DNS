@@ -12,6 +12,7 @@
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\MX;
+use Badcow\DNS\ResourceRecord;
 
 class MxRdataTest extends \PHPUnit\Framework\TestCase
 {
@@ -35,5 +36,25 @@ class MxRdataTest extends \PHPUnit\Framework\TestCase
         $mx->setPreference(42);
 
         $this->assertEquals('42 foo.example.com.', $mx->output());
+    }
+
+    public function testOutputThrowsExceptionWhenMissingPreference()
+    {
+        $mx = new MX();
+        $mx->setExchange('mail.google.com.');
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('No preference has been set on MX object.');
+        $mx->output();
+    }
+
+    public function testOutputThrowsExceptionWhenMissingExchange()
+    {
+        $mx = new MX();
+        $mx->setPreference(15);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('No exchange has been set on MX object.');
+        $mx->output();
     }
 }
