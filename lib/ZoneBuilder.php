@@ -14,6 +14,7 @@ namespace Badcow\DNS;
 use Badcow\DNS\Rdata\CNAME;
 use Badcow\DNS\Rdata\MX;
 use Badcow\DNS\Rdata\AAAA;
+use Badcow\DNS\Rdata\RdataInterface;
 use Badcow\DNS\Rdata\SOA;
 use Badcow\DNS\Ip\Toolbox;
 
@@ -67,23 +68,7 @@ class ZoneBuilder
             $rr->setTtl($rr->getTtl() ?? $zone->getDefaultTtl());
             $rr->setClass($class);
             $rdata = $rr->getRdata();
-
-            if ($rdata instanceof SOA) {
-                $rdata->setMname(self::fullyQualify($rdata->getMname(), $zone->getName()));
-                $rdata->setRname(self::fullyQualify($rdata->getRname(), $zone->getName()));
-            }
-
-            if ($rdata instanceof CNAME) {
-                $rdata->setTarget(self::fullyQualify($rdata->getTarget(), $zone->getName()));
-            }
-
-            if ($rdata instanceof MX) {
-                $rdata->setExchange(self::fullyQualify($rdata->getExchange(), $zone->getName()));
-            }
-
-            if ($rdata instanceof AAAA) {
-                $rdata->setAddress(Toolbox::expandIpv6($rdata->getAddress()));
-            }
+            static::fillOutRdata($rdata, $zone);
         }
     }
 
@@ -106,5 +91,66 @@ class ZoneBuilder
         }
 
         return $subDomain;
+    }
+
+    /**
+     * @param RdataInterface $rdata
+     * @param Zone           $zone
+     */
+    private static function fillOutRdata(RdataInterface $rdata, Zone $zone): void
+    {
+        $mappings = [
+            SOA::class => 'static::fillOutSoa',
+            Cname::class => 'static::fillOutCname',
+            MX::class => 'static::fillOutMx',
+            AAAA::class => 'static::fillOutAaaa',
+        ];
+
+        foreach ($mappings as $class => $callable) {
+            if (!is_callable($callable)) {
+                throw new \InvalidArgumentException(sprintf('The argument "%s" is not callable.', $callable));
+            }
+
+            if ($rdata instanceof $class) {
+                call_user_func($callable, $rdata, $zone);
+            }
+        }
+    }
+
+    /**
+     * @param SOA  $rdata
+     * @param Zone $zone
+     */
+    private static function fillOutSoa(SOA $rdata, Zone $zone): void
+    {
+        $rdata->setMname(self::fullyQualify($rdata->getMname(), $zone->getName()));
+        $rdata->setRname(self::fullyQualify($rdata->getRname(), $zone->getName()));
+    }
+
+    /**
+     * @param CNAME $rdata
+     * @param Zone  $zone
+     */
+    private static function fillOutCname(Cname $rdata, Zone $zone): void
+    {
+        $rdata->setTarget(self::fullyQualify($rdata->getTarget(), $zone->getName()));
+    }
+
+    /**
+     * @param MX   $rdata
+     * @param Zone $zone
+     */
+    private static function fillOutMx(MX $rdata, Zone $zone): void
+    {
+        $rdata->setExchange(self::fullyQualify($rdata->getExchange(), $zone->getName()));
+    }
+
+    /**
+     * @param AAAA $rdata
+     * @param Zone $zone
+     */
+    private static function fillOutAaaa(AAAA $rdata, Zone $zone): void
+    {
+        $rdata->setAddress(Toolbox::expandIpv6($rdata->getAddress()));
     }
 }

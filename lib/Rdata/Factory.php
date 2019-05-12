@@ -296,8 +296,8 @@ class Factory
      * @return RRSIG
      */
     public static function Rrsig(string $typeCovered, int $algorithm, int $labels, int $originalTtl,
-                          int $signatureExpiration, int $signatureInception, int $keyTag,
-                          string $signersName, string $signature)
+                            int $signatureExpiration, int $signatureInception, int $keyTag,
+                            string $signersName, string $signature)
     {
         $rdata = new RRSIG();
         $rdata->setTypeCovered($typeCovered);

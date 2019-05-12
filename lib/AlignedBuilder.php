@@ -106,7 +106,7 @@ class AlignedBuilder
 
     private static function generateComment(ResourceRecord $resourceRecord): string
     {
-        if (null != $resourceRecord->getComment()) {
+        if (null !== $resourceRecord->getComment()) {
             return self::COMMENT_DELIMINATOR.$resourceRecord->getComment();
         }
 
@@ -123,15 +123,8 @@ class AlignedBuilder
      */
     public static function compareResourceRecords(ResourceRecord $a, ResourceRecord $b): int
     {
-        $a_rdata = $b_rdata = '';
-
-        if (null !== $a->getRdata()) {
-            $a_rdata = $a->getRdata()->output();
-        }
-
-        if (null !== $b->getRdata()) {
-            $b_rdata = $b->getRdata()->output();
-        }
+        $a_rdata = (null === $a->getRdata()) ? '' : $a->getRdata()->output();
+        $b_rdata = (null === $b->getRdata()) ? '' : $b->getRdata()->output();
 
         if ($a->getType() === $b->getType()) {
             return strcmp($a->getName().$a_rdata, $b->getName().$b_rdata);
@@ -279,9 +272,9 @@ class AlignedBuilder
      *
      * @param Zone $zone
      *
-     * @return array Array order: name, ttl, type, rdata
+     * @return int[] Array order: name, ttl, type, rdata
      */
-    private static function getPadding(Zone $zone)
+    private static function getPadding(Zone $zone): array
     {
         $name = $ttl = $type = 0;
 
