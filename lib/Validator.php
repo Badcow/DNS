@@ -51,10 +51,8 @@ class Validator
      */
     public static function fullyQualifiedDomainName(string $name): bool
     {
-        $isValid = strlen($name) < 254;
-        $isValid &= 1 === preg_match('/^(?:(?!-)[a-z0-9\-]{1,63}(?<!-)\.){1,127}$/i', $name);
-
-        return $isValid;
+        return strlen($name) < 254 &&
+            (1 === preg_match('/^(?:(?!-)[a-z0-9\-]{1,63}(?<!-)\.){1,127}$/i', $name));
     }
 
     /**
@@ -67,10 +65,8 @@ class Validator
      */
     public static function resourceRecordName(string $name): bool
     {
-        $isValid = strlen($name) < 254;
-        $isValid &= 1 === preg_match('/(?:^(?:\*\.)?((?!-)[a-z0-9_\-]{1,63}(?<!-)\.?){1,127}$)|^@$|^\*$/i', $name);
-
-        return $isValid;
+        return strlen($name) < 254 &&
+            (1 === preg_match('/(?:^(?:\*\.)?((?!-)[a-z0-9_\-]{1,63}(?<!-)\.?){1,127}$)|^@$|^\*$/i', $name));
     }
 
     /**
@@ -110,7 +106,7 @@ class Validator
      *
      * @static
      *
-     * @param $address
+     * @param string $address
      *
      * @return bool
      */

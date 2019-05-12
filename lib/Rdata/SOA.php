@@ -158,7 +158,7 @@ class SOA implements RdataInterface
     }
 
     /**
-     * @param $rname
+     * @param string $rname
      */
     public function setRname(string $rname): void
     {

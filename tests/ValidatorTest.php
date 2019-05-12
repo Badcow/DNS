@@ -159,7 +159,7 @@ class ValidatorTest extends TestCase
         $soa->setRdata(Factory::Soa(
             'example.com.',
             'postmaster.example.com.',
-            date('Ymd01'),
+            (int) date('Ymd01'),
             3600,
             14400,
             604800,
@@ -203,7 +203,7 @@ class ValidatorTest extends TestCase
         $soa->setRdata(Factory::Soa(
             'example.com.',
             'postmaster.example.com.',
-            date('Ymd01'),
+            (int) date('Ymd01'),
             3600,
             14400,
             604800,

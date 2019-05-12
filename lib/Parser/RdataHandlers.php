@@ -140,11 +140,13 @@ class RdataHandlers
      */
     public static function catchAll(string $type, \ArrayIterator $iterator): Rdata\RdataInterface
     {
-        if (!Rdata\Factory::isTypeImplemented($type)) {
+        $rdataFactoryMethod = [Rdata\Factory::class, $type];
+
+        if (!is_callable($rdataFactoryMethod)) {
             return new Rdata\PolymorphicRdata($type, implode(Tokens::SPACE, self::getAllRemaining($iterator)));
         }
 
-        return call_user_func_array([Rdata\Factory::class, $type], self::getAllRemaining($iterator));
+        return call_user_func_array($rdataFactoryMethod, self::getAllRemaining($iterator));
     }
 
     /**

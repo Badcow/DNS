@@ -64,14 +64,14 @@ class Parser
     }
 
     /**
-     * @param $name
-     * @param $string
+     * @param string $name
+     * @param string $string
      *
      * @return Zone
      *
      * @throws ParseException
      */
-    public function makeZone($name, $string): Zone
+    public function makeZone(string $name, string $string): Zone
     {
         $this->zone = new Zone($name);
         $this->string = Normaliser::normalise($string);
@@ -208,7 +208,7 @@ class Parser
     /**
      * @param \ArrayIterator $iterator
      *
-     * @return RData\RDataInterface
+     * @return RData\RdataInterface
      *
      * @throws ParseException
      */

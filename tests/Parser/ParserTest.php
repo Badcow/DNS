@@ -39,7 +39,7 @@ class ParserTest extends TestCase
         $soa->setRdata(Factory::Soa(
             'example.com.',
             'post.example.com.',
-            '2014110501',
+            2014110501,
             3600,
             14400,
             604800,
@@ -125,11 +125,11 @@ class ParserTest extends TestCase
     /**
      * Parser ignores control entries other than TTL.
      *
-     * @throws ParseException
+     * @throws ParseException|\Exception
      */
     public function testParserIgnoresControlEntriesOtherThanTtl()
     {
-        $file = file_get_contents(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
+        $file = NormaliserTest::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $zone = Parser::parse('example.com.', $file);
 
         $this->assertEquals('example.com.', $zone->getName());
@@ -140,11 +140,11 @@ class ParserTest extends TestCase
     /**
      * Parser can handle convoluted zone record.
      *
-     * @throws \Badcow\DNS\Parser\ParseException
+     * @throws \Badcow\DNS\Parser\ParseException|\Exception
      */
     public function testParserCanHandleConvolutedZoneRecord()
     {
-        $file = file_get_contents(__DIR__.'/Resources/testConvolutedZone_sample.txt');
+        $file = NormaliserTest::readFile(__DIR__.'/Resources/testConvolutedZone_sample.txt');
         $zone = Parser::parse('example.com.', $file);
         $this->assertEquals(3600, $zone->getDefaultTtl());
         $this->assertCount(28, $zone->getResourceRecords());
@@ -175,16 +175,24 @@ class ParserTest extends TestCase
         $zone = Parser::parse('example.com.', $string);
         $rr = $zone->getResourceRecords()[0];
 
-        $this->assertEquals('A6', $rr->getRdata()->getType());
-        $this->assertEquals('2001:acad::1337', $rr->getRdata()->output());
+        $rdata = $rr->getRdata();
+
+        $this->assertNotNull($rdata);
+
+        if (null === $rdata) {
+            return;
+        }
+
+        $this->assertEquals('A6', $rdata->getType());
+        $this->assertEquals('2001:acad::1337', $rdata->output());
     }
 
     /**
-     * @throws ParseException
+     * @throws ParseException|\Exception
      */
     public function testParserCanHandleAplRecords()
     {
-        $file = file_get_contents(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
+        $file = NormaliserTest::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $zone = Parser::parse('example.com.', $file);
 
         /** @var APL $apl */
@@ -247,12 +255,12 @@ TXT;
     /**
      * Find all records in a Zone named $name.
      *
-     * @param string $name
-     * @param Zone   $zone
+     * @param null|string $name
+     * @param Zone        $zone
      *
      * @return array
      */
-    private function findRecord(string $name, Zone $zone): array
+    private function findRecord(?string $name, Zone $zone): array
     {
         $records = [];
 

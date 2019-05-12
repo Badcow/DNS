@@ -32,7 +32,11 @@ class Toolbox
             throw new \InvalidArgumentException(sprintf('"%s" is not a valid IPv6 address.', $ip));
         }
 
-        $hex = unpack('H*hex', inet_pton($ip));
+        if (false === $packed = inet_pton($ip)) {
+            throw new \InvalidArgumentException(sprintf('"%s" is not a valid IPv6 address.', $ip));
+        }
+
+        $hex = unpack('H*hex', $packed);
 
         return implode(':', str_split($hex['hex'], 4));
     }
@@ -75,11 +79,19 @@ class Toolbox
      */
     public static function contractIpv6(string $ip): string
     {
-        if (!Validator::ipv6($ip)) {
+        $packed = inet_pton($ip);
+
+        if (!Validator::ipv6($ip) || false === $packed) {
             throw new \InvalidArgumentException(sprintf('"%s" is not a valid IPv6 address.', $ip));
         }
 
-        return inet_ntop(inet_pton($ip));
+        $unpacked = inet_ntop($packed);
+
+        if (false === $unpacked) {
+            throw new \InvalidArgumentException(sprintf('"%s" could not be contracted.', $ip));
+        }
+
+        return $unpacked;
     }
 
     /**

@@ -196,8 +196,8 @@ class Factory
     }
 
     /**
-     * @param $lat
-     * @param $lon
+     * @param float $lat
+     * @param float $lon
      * @param float $alt
      * @param float $size
      * @param float $hp
@@ -205,7 +205,7 @@ class Factory
      *
      * @return LOC
      */
-    public static function Loc($lat, $lon, $alt = 0.0, $size = 1.0, $hp = 10000.0, $vp = 10.0)
+    public static function Loc(float $lat, float $lon, $alt = 0.0, $size = 1.0, $hp = 10000.0, $vp = 10.0)
     {
         $rdata = new LOC();
         $rdata->setLatitude($lat);
@@ -283,21 +283,21 @@ class Factory
     }
 
     /**
-     * @param $typeCovered
-     * @param $algorithm
-     * @param $labels
-     * @param $originalTtl
-     * @param $signatureExpiration
-     * @param $signatureInception
-     * @param $keyTag
-     * @param $signersName
-     * @param $signature
+     * @param string $typeCovered
+     * @param int $algorithm
+     * @param int $labels
+     * @param int $originalTtl
+     * @param int $signatureExpiration
+     * @param int $signatureInception
+     * @param int $keyTag
+     * @param string $signersName
+     * @param string $signature
      *
      * @return RRSIG
      */
-    public static function Rrsig($typeCovered, $algorithm, $labels, $originalTtl,
-                          $signatureExpiration, $signatureInception, $keyTag,
-                          $signersName, $signature)
+    public static function Rrsig(string $typeCovered, int $algorithm, int $labels, int $originalTtl,
+                          int $signatureExpiration, int $signatureInception, int $keyTag,
+                          string $signersName, string $signature)
     {
         $rdata = new RRSIG();
         $rdata->setTypeCovered($typeCovered);

@@ -31,7 +31,7 @@ class HINFO implements RdataInterface
     private $os;
 
     /**
-     * @param $cpu
+     * @param string $cpu
      */
     public function setCpu(string $cpu): void
     {

@@ -90,21 +90,21 @@ class ZoneBuilder
     /**
      * Add the parent domain to the sub-domain if the sub-domain if it is not fully qualified.
      *
-     * @param string $subdomain
+     * @param null|string $subDomain
      * @param string $parent
      *
      * @return string
      */
-    private static function fullyQualify(string $subdomain, string $parent): string
+    private static function fullyQualify(?string $subDomain, string $parent): string
     {
-        if ('@' === $subdomain) {
+        if ('@' === $subDomain || null === $subDomain) {
             return $parent;
         }
 
-        if ('.' !== substr($subdomain, -1, 1)) {
-            return $subdomain.'.'.$parent;
+        if ('.' !== substr($subDomain, -1, 1)) {
+            return $subDomain.'.'.$parent;
         }
 
-        return $subdomain;
+        return $subDomain;
     }
 }
