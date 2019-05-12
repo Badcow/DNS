@@ -31,8 +31,8 @@ class PolymorphicRdata implements RdataInterface
     /**
      * PolymorphicRdata constructor.
      *
-     * @param null|string $type
-     * @param null|string $data
+     * @param string|null $type
+     * @param string|null $data
      */
     public function __construct(?string $type = null, ?string $data = null)
     {

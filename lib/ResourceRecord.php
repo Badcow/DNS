@@ -16,12 +16,12 @@ use Badcow\DNS\Rdata\RdataInterface;
 class ResourceRecord
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $class = Classes::INTERNET;
 
     /**
-     * @var null|RdataInterface
+     * @var RdataInterface|null
      */
     private $rdata;
 
@@ -36,7 +36,7 @@ class ResourceRecord
     private $name;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $comment;
 

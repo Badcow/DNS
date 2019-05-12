@@ -21,12 +21,12 @@ class TXT implements RdataInterface
     const TYPE = 'TXT';
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $text;
 
     /**
-     * @param null|string $text
+     * @param string|null $text
      */
     public function setText(?string $text): void
     {
@@ -40,7 +40,7 @@ class TXT implements RdataInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getText(): ?string
     {

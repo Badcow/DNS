@@ -65,7 +65,7 @@ class MX implements RdataInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \InvalidArgumentException Throws exception if preference or exchange have not been set.
+     * @throws \InvalidArgumentException throws exception if preference or exchange have not been set
      */
     public function output(): string
     {

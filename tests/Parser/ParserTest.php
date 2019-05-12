@@ -255,7 +255,7 @@ TXT;
     /**
      * Find all records in a Zone named $name.
      *
-     * @param null|string $name
+     * @param string|null $name
      * @param Zone        $zone
      *
      * @return array

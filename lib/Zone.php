@@ -31,9 +31,9 @@ class Zone implements \Countable, \IteratorAggregate
     /**
      * Zone constructor.
      *
-     * @param null|string $name
-     * @param int|null $defaultTtl
-     * @param array $resourceRecords
+     * @param string|null $name
+     * @param int|null    $defaultTtl
+     * @param array       $resourceRecords
      */
     public function __construct(?string $name = null, ?int $defaultTtl = null, array $resourceRecords = [])
     {

@@ -97,6 +97,7 @@ TXT;
 
     /**
      * @param string $filename
+     *
      * @return string
      *
      * @throws \Exception

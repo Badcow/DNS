@@ -284,12 +284,12 @@ class Factory
 
     /**
      * @param string $typeCovered
-     * @param int $algorithm
-     * @param int $labels
-     * @param int $originalTtl
-     * @param int $signatureExpiration
-     * @param int $signatureInception
-     * @param int $keyTag
+     * @param int    $algorithm
+     * @param int    $labels
+     * @param int    $originalTtl
+     * @param int    $signatureExpiration
+     * @param int    $signatureInception
+     * @param int    $keyTag
      * @param string $signersName
      * @param string $signature
      *

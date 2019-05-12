@@ -90,8 +90,8 @@ class ZoneBuilder
     /**
      * Add the parent domain to the sub-domain if the sub-domain if it is not fully qualified.
      *
-     * @param null|string $subDomain
-     * @param string $parent
+     * @param string|null $subDomain
+     * @param string      $parent
      *
      * @return string
      */

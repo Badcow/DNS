@@ -117,6 +117,7 @@ class RdataHandlers
 
     /**
      * @param \ArrayIterator $iterator
+     *
      * @return Rdata\CAA
      */
     public static function handleCaaRdata(\ArrayIterator $iterator): Rdata\CAA
@@ -134,8 +135,9 @@ class RdataHandlers
     /**
      * Returns RData instances for types that do not have explicitly declared handler methods.
      *
-     * @param string $type
+     * @param string         $type
      * @param \ArrayIterator $iterator
+     *
      * @return Rdata\RdataInterface
      */
     public static function catchAll(string $type, \ArrayIterator $iterator): Rdata\RdataInterface
