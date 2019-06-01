@@ -12,8 +12,11 @@
 namespace Badcow\DNS;
 
 use Badcow\DNS\Rdata\CNAME;
+use Badcow\DNS\Rdata\DNAME;
 use Badcow\DNS\Rdata\MX;
 use Badcow\DNS\Rdata\AAAA;
+use Badcow\DNS\Rdata\NS;
+use Badcow\DNS\Rdata\PTR;
 use Badcow\DNS\Rdata\RdataInterface;
 use Badcow\DNS\Rdata\SOA;
 use Badcow\DNS\Ip\Toolbox;
@@ -80,7 +83,7 @@ class ZoneBuilder
      *
      * @return string
      */
-    private static function fullyQualify(?string $subDomain, string $parent): string
+    protected static function fullyQualify(?string $subDomain, string $parent): string
     {
         if ('@' === $subDomain || null === $subDomain) {
             return $parent;
@@ -97,31 +100,32 @@ class ZoneBuilder
      * @param RdataInterface $rdata
      * @param Zone           $zone
      */
-    private static function fillOutRdata(RdataInterface $rdata, Zone $zone): void
+    protected static function fillOutRdata(RdataInterface $rdata, Zone $zone): void
     {
         $mappings = [
-            SOA::class => 'static::fillOutSoa',
-            Cname::class => 'static::fillOutCname',
-            MX::class => 'static::fillOutMx',
-            AAAA::class => 'static::fillOutAaaa',
+            SOA::TYPE => 'static::fillOutSoa',
+            CNAME::TYPE => 'static::fillOutCname',
+            DNAME::TYPE => 'static::fillOutCname',
+            NS::TYPE => 'static::fillOutCname',
+            PTR::TYPE => 'static::fillOutCname',
+            MX::TYPE => 'static::fillOutMx',
+            AAAA::TYPE => 'static::fillOutAaaa',
         ];
 
-        foreach ($mappings as $class => $callable) {
-            if (!is_callable($callable)) {
-                throw new \InvalidArgumentException(sprintf('The argument "%s" is not callable.', $callable));
-            }
-
-            if ($rdata instanceof $class) {
-                call_user_func($callable, $rdata, $zone);
-            }
+        if (!array_key_exists($rdata->getType(), $mappings)) {
+            return;
         }
+
+        /** @var callable $callable */
+        $callable = $mappings[$rdata->getType()];
+        call_user_func($callable, $rdata, $zone);
     }
 
     /**
      * @param SOA  $rdata
      * @param Zone $zone
      */
-    private static function fillOutSoa(SOA $rdata, Zone $zone): void
+    protected static function fillOutSoa(SOA $rdata, Zone $zone): void
     {
         $rdata->setMname(self::fullyQualify($rdata->getMname(), $zone->getName()));
         $rdata->setRname(self::fullyQualify($rdata->getRname(), $zone->getName()));
@@ -131,7 +135,7 @@ class ZoneBuilder
      * @param CNAME $rdata
      * @param Zone  $zone
      */
-    private static function fillOutCname(Cname $rdata, Zone $zone): void
+    protected static function fillOutCname(Cname $rdata, Zone $zone): void
     {
         $rdata->setTarget(self::fullyQualify($rdata->getTarget(), $zone->getName()));
     }
@@ -140,7 +144,7 @@ class ZoneBuilder
      * @param MX   $rdata
      * @param Zone $zone
      */
-    private static function fillOutMx(MX $rdata, Zone $zone): void
+    protected static function fillOutMx(MX $rdata, Zone $zone): void
     {
         $rdata->setExchange(self::fullyQualify($rdata->getExchange(), $zone->getName()));
     }
@@ -149,7 +153,7 @@ class ZoneBuilder
      * @param AAAA $rdata
      * @param Zone $zone
      */
-    private static function fillOutAaaa(AAAA $rdata, Zone $zone): void
+    protected static function fillOutAaaa(AAAA $rdata, Zone $zone): void
     {
         $rdata->setAddress(Toolbox::expandIpv6($rdata->getAddress()));
     }
