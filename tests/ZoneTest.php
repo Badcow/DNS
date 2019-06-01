@@ -44,7 +44,7 @@ class ZoneTest extends TestCase
         $soa->setRdata(Factory::Soa(
             '@',
             'post',
-            '2014110501',
+            2014110501,
             3600,
             14400,
             604800,

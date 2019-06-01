@@ -51,7 +51,7 @@ class ResourceRecordTest extends TestCase
         $this->assertEquals($comment, $rr->getComment());
         $this->assertEquals($a->getType(), $rr->getType());
     }
-    
+
     public function testUnsetTtl()
     {
         $rr = new ResourceRecord('example.com.');

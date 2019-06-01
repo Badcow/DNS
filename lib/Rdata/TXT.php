@@ -21,21 +21,30 @@ class TXT implements RdataInterface
     const TYPE = 'TXT';
 
     /**
-     * @var string
+     * @var string|null
      */
     private $text;
 
     /**
-     * @param $text
+     * @param string|null $text
      */
-    public function setText(string $text): void
+    public function setText(?string $text): void
     {
+        if (null === $text) {
+            $this->text = null;
+
+            return;
+        }
+
         $this->text = addslashes($text);
     }
 
+    /**
+     * @return string|null
+     */
     public function getText(): ?string
     {
-        return stripslashes($this->text);
+        return stripslashes((string) $this->text);
     }
 
     /**
@@ -43,6 +52,6 @@ class TXT implements RdataInterface
      */
     public function output(): string
     {
-        return '"'.$this->text.'"';
+        return sprintf('"%s"', $this->text);
     }
 }

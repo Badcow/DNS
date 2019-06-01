@@ -31,16 +31,20 @@ class Zone implements \Countable, \IteratorAggregate
     /**
      * Zone constructor.
      *
-     * @param string $name
-     * @param int    $defaultTtl
-     * @param array  $resourceRecords
-     *
-     * @throws \InvalidArgumentException
+     * @param string|null $name
+     * @param int|null    $defaultTtl
+     * @param array       $resourceRecords
      */
     public function __construct(?string $name = null, ?int $defaultTtl = null, array $resourceRecords = [])
     {
-        $this->name = $name;
-        $this->defaultTtl = $defaultTtl;
+        if (null !== $name) {
+            $this->setName($name);
+        }
+
+        if (null !== $defaultTtl) {
+            $this->setDefaultTtl($defaultTtl);
+        }
+
         $this->fromArray($resourceRecords);
     }
 
@@ -61,7 +65,7 @@ class Zone implements \Countable, \IteratorAggregate
     /**
      * @return string
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -77,7 +81,7 @@ class Zone implements \Countable, \IteratorAggregate
     /**
      * @param int $defaultTtl
      */
-    public function setDefaultTtl(?int $defaultTtl): void
+    public function setDefaultTtl(int $defaultTtl): void
     {
         $this->defaultTtl = $defaultTtl;
     }

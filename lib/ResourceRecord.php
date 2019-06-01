@@ -16,17 +16,17 @@ use Badcow\DNS\Rdata\RdataInterface;
 class ResourceRecord
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $class = Classes::INTERNET;
 
     /**
-     * @var RdataInterface
+     * @var RdataInterface|null
      */
     private $rdata;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $ttl;
 
@@ -36,7 +36,7 @@ class ResourceRecord
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $comment;
 
@@ -49,12 +49,23 @@ class ResourceRecord
      */
     public function __construct(string $name = null, RdataInterface $rdata = null, int $ttl = null, string $class = null, string $comment = null)
     {
-        $this->name = $name;
-        $this->rdata = $rdata;
-        $this->ttl = $ttl;
+        if (null !== $name) {
+            $this->setName($name);
+        }
+
+        if (null !== $rdata) {
+            $this->setRdata($rdata);
+        }
+
+        if (null !== $ttl) {
+            $this->setTtl($ttl);
+        }
+
         $this->setClass($class);
-        $this->rdata = $rdata;
-        $this->comment = $comment;
+
+        if (null !== $comment) {
+            $this->setComment($comment);
+        }
     }
 
     /**
@@ -78,7 +89,7 @@ class ResourceRecord
      * Set the name for the resource record.
      * Eg. "subdomain.example.com.".
      *
-     * @param $name
+     * @param string $name
      */
     public function setName(string $name): void
     {
@@ -88,7 +99,7 @@ class ResourceRecord
     /**
      * @param RdataInterface $rdata
      */
-    public function setRdata(RdataInterface $rdata): void
+    public function setRdata(?RdataInterface $rdata): void
     {
         $this->rdata = $rdata;
     }
@@ -152,7 +163,7 @@ class ResourceRecord
      *
      * @param string $comment
      */
-    public function setComment(string $comment): void
+    public function setComment(?string $comment): void
     {
         $this->comment = $comment;
     }

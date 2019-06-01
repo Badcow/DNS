@@ -37,7 +37,8 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
         $rdata = new LOC();
         $rdata->setLatitude($latitude);
 
-        $this->assertEquals($latitude, $rdata->getLatitude($latitude));
+        $this->assertEquals($latitude, $rdata->getLatitude());
+        $this->assertEquals($latitude, $rdata->getLatitude(LOC::FORMAT_DECIMAL));
         $this->assertEquals($lat_dms, $rdata->getLatitude(LOC::FORMAT_DMS));
     }
 
@@ -49,7 +50,8 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
         $rdata = new LOC();
         $rdata->setLongitude($longitude);
 
-        $this->assertEquals($longitude, $rdata->getLongitude($longitude));
+        $this->assertEquals($longitude, $rdata->getLongitude());
+        $this->assertEquals($longitude, $rdata->getLongitude(LOC::FORMAT_DECIMAL));
         $this->assertEquals($lon_dms, $rdata->getLongitude(LOC::FORMAT_DMS));
     }
 

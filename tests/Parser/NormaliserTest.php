@@ -31,24 +31,26 @@ example.com. IN SOA (
 TXT;
 
     /**
-     * @throws \Badcow\DNS\Parser\ParseException
+     * @throws \Badcow\DNS\Parser\ParseException|\Exception
      */
     public function testRemovesComments()
     {
-        $zone = file_get_contents(__DIR__.'/Resources/testClearComments_sample.txt');
-        $expectation = str_replace("\r\n", "\n", file_get_contents(__DIR__.'/Resources/testClearComments_expectation.txt'));
+        $zone = self::readFile(__DIR__.'/Resources/testClearComments_sample.txt');
+        $expectation = self::readFile(__DIR__.'/Resources/testClearComments_expectation.txt');
+
         $this->assertEquals($expectation, Normaliser::normalise($zone));
     }
 
     /**
      * Multi-line records collapse onto single line.
      *
-     * @throws \Badcow\DNS\Parser\ParseException
+     * @throws \Badcow\DNS\Parser\ParseException|\Exception
      */
     public function testMultilineRecordsCollapseOntoSingleLine()
     {
-        $zone = file_get_contents(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
-        $expectation = str_replace("\r\n", "\n", file_get_contents(__DIR__.'/Resources/testCollapseMultilines_expectation.txt'));
+        $zone = self::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
+        $expectation = self::readFile(__DIR__.'/Resources/testCollapseMultilines_expectation.txt');
+
         $this->assertEquals($expectation, Normaliser::normalise($zone));
     }
 
@@ -91,5 +93,26 @@ TXT;
     {
         $string = "www IN CNAME @\n     mail IN TXT \"Some \nstring\"";
         Normaliser::normalise($string);
+    }
+
+    /**
+     * @param string $filename
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    public static function readFile(string $filename): string
+    {
+        $file = file_get_contents($filename);
+
+        if (false === $file) {
+            throw new \Exception(sprintf('Unable to read file "%s".', $filename));
+        }
+
+        //Remove Windows carriage returns.
+        $file = str_replace("\r", '', $file);
+
+        return $file;
     }
 }

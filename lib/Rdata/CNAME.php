@@ -26,7 +26,7 @@ class CNAME implements RdataInterface
     protected $target;
 
     /**
-     * @param $target
+     * @param string $target
      */
     public function setTarget(string $target)
     {

@@ -42,7 +42,7 @@ class RRSIG implements RdataInterface
      * RR owner name.
      * {@link https://tools.ietf.org/html/rfc4034#section-3.1.3}.
      *
-     * @var
+     * @var int
      */
     private $labels;
 
@@ -135,17 +135,17 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getLabels()
+    public function getLabels(): int
     {
         return $this->labels;
     }
 
     /**
-     * @param mixed $labels
+     * @param int $labels
      */
-    public function setLabels($labels)
+    public function setLabels(int $labels)
     {
         $this->labels = $labels;
     }

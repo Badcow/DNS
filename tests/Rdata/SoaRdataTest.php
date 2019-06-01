@@ -49,7 +49,7 @@ class SoaRdataTest extends \PHPUnit\Framework\TestCase
         $soa = Factory::Soa(
             'example.com.',
             'postmaster.example.com.',
-            '2015042101',
+            2015042101,
             3600,
             14400,
             604800,

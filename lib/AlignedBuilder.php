@@ -64,12 +64,13 @@ class AlignedBuilder
         $master = self::generateControlEntries($zone);
         $resourceRecords = $zone->getResourceRecords();
         $current = SOA::TYPE;
-        usort($resourceRecords, 'self::compareResourceRecords');
+        usort($resourceRecords, [__CLASS__, 'compareResourceRecords']);
 
         list($namePadding, $ttlPadding, $typePadding, $rdataPadding) = self::getPadding($zone);
 
         foreach ($resourceRecords as $resourceRecord) {
-            if (null == $resourceRecord->getRdata()) {
+            $rdata = $resourceRecord->getRdata();
+            if (null == $rdata) {
                 continue;
             }
 
@@ -79,11 +80,11 @@ class AlignedBuilder
             }
 
             $master .= sprintf('%s %s %s %s %s',
-                str_pad($resourceRecord->getName(), $namePadding, ' ', STR_PAD_RIGHT),
-                str_pad($resourceRecord->getTtl(), $ttlPadding, ' ', STR_PAD_RIGHT),
-                str_pad($resourceRecord->getClass(), 2, ' ', STR_PAD_RIGHT),
-                str_pad($resourceRecord->getType(), $typePadding, ' ', STR_PAD_RIGHT),
-                self::generateRdataOutput($resourceRecord->getRdata(), $rdataPadding)
+                str_pad((string) $resourceRecord->getName(), $namePadding, ' ', STR_PAD_RIGHT),
+                str_pad((string) $resourceRecord->getTtl(), $ttlPadding, ' ', STR_PAD_RIGHT),
+                str_pad((string) $resourceRecord->getClass(), 2, ' ', STR_PAD_RIGHT),
+                str_pad($rdata->getType(), $typePadding, ' ', STR_PAD_RIGHT),
+                self::generateRdataOutput($rdata, $rdataPadding)
             );
 
             $master .= self::generateComment($resourceRecord);
@@ -105,7 +106,7 @@ class AlignedBuilder
 
     private static function generateComment(ResourceRecord $resourceRecord): string
     {
-        if (null != $resourceRecord->getComment()) {
+        if (null !== $resourceRecord->getComment()) {
             return self::COMMENT_DELIMINATOR.$resourceRecord->getComment();
         }
 
@@ -122,14 +123,17 @@ class AlignedBuilder
      */
     public static function compareResourceRecords(ResourceRecord $a, ResourceRecord $b): int
     {
+        $a_rdata = (null === $a->getRdata()) ? '' : $a->getRdata()->output();
+        $b_rdata = (null === $b->getRdata()) ? '' : $b->getRdata()->output();
+
         if ($a->getType() === $b->getType()) {
-            return strcmp($a->getName().$a->getRdata()->output(), $b->getName().$b->getRdata()->output());
+            return strcmp($a->getName().$a_rdata, $b->getName().$b_rdata);
         }
 
         $_a = array_search($a->getType(), self::$order);
         $_b = array_search($b->getType(), self::$order);
 
-        if (false !== $_a && false !== $_b) {
+        if (is_int($_a) && is_int($_b)) {
             return $_a - $_b;
         }
 
@@ -184,13 +188,13 @@ class AlignedBuilder
         $longestVarLength = max(array_map('strlen', $vars));
 
         return self::MULTILINE_BEGIN.PHP_EOL.
-        self::makeLine($rdata->getMname(), 'MNAME', $longestVarLength, $padding).
-        self::makeLine($rdata->getRname(), 'RNAME', $longestVarLength, $padding).
-        self::makeLine($rdata->getSerial(), 'SERIAL', $longestVarLength, $padding).
-        self::makeLine($rdata->getRefresh(), 'REFRESH', $longestVarLength, $padding).
-        self::makeLine($rdata->getRetry(), 'RETRY', $longestVarLength, $padding).
-        self::makeLine($rdata->getExpire(), 'EXPIRE', $longestVarLength, $padding).
-        self::makeLine($rdata->getMinimum(), 'MINIMUM', $longestVarLength, $padding).
+        self::makeLine((string) $rdata->getMname(), 'MNAME', $longestVarLength, $padding).
+        self::makeLine((string) $rdata->getRname(), 'RNAME', $longestVarLength, $padding).
+        self::makeLine((string) $rdata->getSerial(), 'SERIAL', $longestVarLength, $padding).
+        self::makeLine((string) $rdata->getRefresh(), 'REFRESH', $longestVarLength, $padding).
+        self::makeLine((string) $rdata->getRetry(), 'RETRY', $longestVarLength, $padding).
+        self::makeLine((string) $rdata->getExpire(), 'EXPIRE', $longestVarLength, $padding).
+        self::makeLine((string) $rdata->getMinimum(), 'MINIMUM', $longestVarLength, $padding).
         str_repeat(' ', $padding).self::MULTILINE_END;
     }
 
@@ -233,8 +237,8 @@ class AlignedBuilder
         $longestVarLength = max(array_map('strlen', $parts));
 
         return self::MULTILINE_BEGIN.PHP_EOL.
-            self::makeLine($rdata->getLatitude(LOC::FORMAT_DMS), 'LATITUDE', $longestVarLength, $padding).
-            self::makeLine($rdata->getLongitude(LOC::FORMAT_DMS), 'LONGITUDE', $longestVarLength, $padding).
+            self::makeLine((string) $rdata->getLatitude(LOC::FORMAT_DMS), 'LATITUDE', $longestVarLength, $padding).
+            self::makeLine((string) $rdata->getLongitude(LOC::FORMAT_DMS), 'LONGITUDE', $longestVarLength, $padding).
             self::makeLine(sprintf('%.2fm', $rdata->getAltitude()), 'ALTITUDE', $longestVarLength, $padding).
             self::makeLine(sprintf('%.2fm', $rdata->getSize()), 'SIZE', $longestVarLength, $padding).
             self::makeLine(sprintf('%.2fm', $rdata->getHorizontalPrecision()), 'HORIZONTAL PRECISION', $longestVarLength, $padding).
@@ -268,9 +272,9 @@ class AlignedBuilder
      *
      * @param Zone $zone
      *
-     * @return array Array order: name, ttl, type, rdata
+     * @return int[] Array order: name, ttl, type, rdata
      */
-    private static function getPadding(Zone $zone)
+    private static function getPadding(Zone $zone): array
     {
         $name = $ttl = $type = 0;
 

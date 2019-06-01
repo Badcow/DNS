@@ -12,7 +12,6 @@
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\MX;
-use Badcow\DNS\ResourceRecord;
 
 class MxRdataTest extends \PHPUnit\Framework\TestCase
 {

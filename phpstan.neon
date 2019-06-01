@@ -1,0 +1,7 @@
+parameters:
+  level: max
+  paths:
+    - lib/
+    - tests/
+  autoload_files:
+    - %currentWorkingDirectory%/vendor/autoload.php

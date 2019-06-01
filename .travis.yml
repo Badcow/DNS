@@ -8,6 +8,7 @@ php:
 install: composer install
 
 script:
+  - vendor/bin/phpstan analyse --no-interaction --no-progress
   - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
 
 after_script:

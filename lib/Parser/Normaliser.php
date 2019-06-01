@@ -148,10 +148,17 @@ class Normaliser
 
     /**
      * Remove superfluous whitespace characters from string.
+     *
+     * @throws \UnexpectedValueException
      */
     private function removeWhitespace(): void
     {
         $string = preg_replace('/ {2,}/', Tokens::SPACE, $this->normalisedString);
+
+        if (!is_string($string)) {
+            throw new \UnexpectedValueException('Unexpected value returned from \preg_replace()/.');
+        }
+
         $lines = [];
 
         foreach (explode(Tokens::LINE_FEED, $string) as $line) {
