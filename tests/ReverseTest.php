@@ -11,12 +11,12 @@
 
 namespace Badcow\DNS\Tests;
 
-use Badcow\DNS\ZoneBuilder;
-use Badcow\DNS\Zone;
+use Badcow\DNS\Classes;
 use Badcow\DNS\Ip\Toolbox;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
-use Badcow\DNS\Classes;
+use Badcow\DNS\Zone;
+use Badcow\DNS\ZoneBuilder;
 
 class ReverseTest extends TestCase
 {

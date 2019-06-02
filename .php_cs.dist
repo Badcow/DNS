@@ -18,11 +18,12 @@ $finder = PhpCsFixer\Finder::create()
 
 $config = PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
-    ->setRules(array(
+    ->setRules([
         '@Symfony' => true,
-        'header_comment' => array('header' => $header),
-        'array_syntax' => array('syntax' => 'short'),
-    ))
+        'header_comment' => ['header' => $header],
+        'array_syntax' => ['syntax' => 'short'],
+        'ordered_imports' => ['sort_algorithm' => 'alpha'],
+    ])
     ->setFinder($finder)
 ;
 

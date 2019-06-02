@@ -21,10 +21,10 @@ use Badcow\DNS\Rdata\LOC;
 use Badcow\DNS\Rdata\MX;
 use Badcow\DNS\Rdata\NS;
 use Badcow\DNS\Rdata\PTR;
+use Badcow\DNS\Rdata\RdataInterface;
 use Badcow\DNS\Rdata\SOA;
 use Badcow\DNS\Rdata\SRV;
 use Badcow\DNS\Rdata\TXT;
-use Badcow\DNS\Rdata\RdataInterface;
 
 class AlignedBuilder
 {

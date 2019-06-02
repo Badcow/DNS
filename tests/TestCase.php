@@ -11,9 +11,9 @@
 
 namespace Badcow\DNS\Tests;
 
-use Badcow\DNS\ResourceRecord;
-use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Classes;
+use Badcow\DNS\Rdata\Factory;
+use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase

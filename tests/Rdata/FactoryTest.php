@@ -11,9 +11,9 @@
 
 namespace Badcow\DNS\Tests\Rdata;
 
+use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\UnsupportedTypeException;
 use PHPUnit\Framework\TestCase;
-use Badcow\DNS\Rdata\Factory;
 
 class FactoryTest extends TestCase
 {

@@ -11,15 +11,15 @@
 
 namespace Badcow\DNS;
 
+use Badcow\DNS\Ip\Toolbox;
+use Badcow\DNS\Rdata\AAAA;
 use Badcow\DNS\Rdata\CNAME;
 use Badcow\DNS\Rdata\DNAME;
 use Badcow\DNS\Rdata\MX;
-use Badcow\DNS\Rdata\AAAA;
 use Badcow\DNS\Rdata\NS;
 use Badcow\DNS\Rdata\PTR;
 use Badcow\DNS\Rdata\RdataInterface;
 use Badcow\DNS\Rdata\SOA;
-use Badcow\DNS\Ip\Toolbox;
 
 class ZoneBuilder
 {

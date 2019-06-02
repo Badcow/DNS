@@ -13,8 +13,8 @@ namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\AlignedBuilder;
 use Badcow\DNS\Classes;
-use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Rdata\Factory;
+use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Tests\Rdata\DummyRdata;
 
 class AlignedBuilderTest extends TestCase

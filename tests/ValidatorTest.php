@@ -12,10 +12,10 @@
 namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\Classes;
-use Badcow\DNS\Rdata\NS;
-use Badcow\DNS\Validator;
 use Badcow\DNS\Rdata\Factory;
+use Badcow\DNS\Rdata\NS;
 use Badcow\DNS\ResourceRecord;
+use Badcow\DNS\Validator;
 
 class ValidatorTest extends TestCase
 {

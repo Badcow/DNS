@@ -12,9 +12,9 @@
 namespace Badcow\DNS\Parser;
 
 use Badcow\DNS\Classes;
+use Badcow\DNS\Rdata;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
-use Badcow\DNS\Rdata;
 
 class Parser
 {

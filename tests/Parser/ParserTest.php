@@ -11,15 +11,15 @@
 
 namespace Badcow\DNS\Tests\Parser;
 
+use Badcow\DNS\AlignedBuilder;
 use Badcow\DNS\Classes;
 use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
 use Badcow\DNS\Rdata\APL;
 use Badcow\DNS\Rdata\CAA;
-use Badcow\DNS\Zone;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
-use Badcow\DNS\AlignedBuilder;
+use Badcow\DNS\Zone;
 use PHPUnit\Framework\TestCase;
 
 class ParserTest extends TestCase
