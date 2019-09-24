@@ -15,9 +15,14 @@ use Badcow\DNS\AlignedBuilder;
 use Badcow\DNS\Classes;
 use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
+use Badcow\DNS\Rdata\A;
+use Badcow\DNS\Rdata\AAAA;
 use Badcow\DNS\Rdata\APL;
 use Badcow\DNS\Rdata\CAA;
+use Badcow\DNS\Rdata\CNAME;
 use Badcow\DNS\Rdata\Factory;
+use Badcow\DNS\Rdata\MX;
+use Badcow\DNS\Rdata\TXT;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
 use PHPUnit\Framework\TestCase;
@@ -253,12 +258,54 @@ TXT;
     }
 
     /**
+     * @throws \Exception|ParseException
+     */
+    public function testAmbiguousRecordsParse()
+    {
+        $file = NormaliserTest::readFile(__DIR__.'/Resources/ambiguous.acme.org.txt');
+        $zone = Parser::parse('example.com.', $file);
+        $mxRecords = $this->findRecord('mx', $zone);
+        $a4Records = $this->findRecord('aaaa', $zone);
+
+        $this->assertCount(3, $mxRecords);
+        foreach ($mxRecords as $rr) {
+            switch ($rr->getType()) {
+                case A::TYPE:
+                    $this->assertEquals(900, $rr->getTtl());
+                    $this->assertEquals('200.100.50.35', $rr->getRdata()->getAddress());
+                    break;
+                case CNAME::TYPE:
+                    $this->assertEquals(null, $rr->getTtl());
+                    $this->assertEquals('aaaa', $rr->getRdata()->getTarget());
+                    break;
+                case TXT::TYPE:
+                    $this->assertEquals(null, $rr->getTtl());
+                    $this->assertEquals('Mail Exchange IPv6 Address', $rr->getRdata()->getText());
+                    break;
+            }
+        }
+
+        foreach ($a4Records as $rr) {
+            switch ($rr->getType()) {
+                case AAAA::TYPE:
+                    $this->assertEquals(null, $rr->getTtl());
+                    $this->assertEquals('2001:acdc:5889::35', $rr->getRdata()->getAddress());
+                    break;
+                case TXT::TYPE:
+                    $this->assertEquals(3600, $rr->getTtl());
+                    $this->assertEquals('This name is silly.', $rr->getRdata()->getText());
+                    break;
+            }
+        }
+    }
+
+    /**
      * Find all records in a Zone named $name.
      *
      * @param string|null $name
      * @param Zone        $zone
      *
-     * @return array
+     * @return ResourceRecord[]
      */
     private function findRecord(?string $name, Zone $zone): array
     {
