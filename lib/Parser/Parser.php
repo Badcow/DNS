@@ -233,7 +233,7 @@ class Parser
 
     private function isType(ResourceRecordIterator $iterator): bool
     {
-        return RDataTypes::isValid(strtoupper($iterator->current()));
+        return RDataTypes::isValid(strtoupper($iterator->current())) || array_key_exists($iterator->current(), $this->rdataHandlers);
     }
 
     /**
