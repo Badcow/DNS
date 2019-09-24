@@ -24,11 +24,6 @@ class Parser
     private $string;
 
     /**
-     * @var string
-     */
-    private $previousName;
-
-    /**
      * @var Zone
      */
     private $zone;
@@ -39,6 +34,26 @@ class Parser
      * @var array
      */
     private $rdataHandlers = [];
+
+    /**
+     * @var ResourceRecord
+     */
+    private $currentResourceRecord;
+
+    /**
+     * @var string
+     */
+    private $lastStatedDomain;
+
+    /**
+     * @var int
+     */
+    private $lastStatedTtl;
+
+    /**
+     * @var string
+     */
+    private $lastStatedClass;
 
     /**
      * Parser constructor.
@@ -90,7 +105,7 @@ class Parser
      */
     private function processLine(string $line): void
     {
-        $iterator = new \ArrayIterator(explode(Tokens::SPACE, $line));
+        $iterator = new ResourceRecordIterator($line);
 
         if ($this->isControlEntry($iterator)) {
             $this->processControlEntry($iterator);
@@ -98,22 +113,64 @@ class Parser
             return;
         }
 
-        $resourceRecord = new ResourceRecord();
+        $this->currentResourceRecord = new ResourceRecord();
+        $this->processEntry($iterator);
+        $this->zone->addResourceRecord($this->currentResourceRecord);
+    }
 
-        $this->processResourceName($iterator, $resourceRecord);
-        $this->processTtl($iterator, $resourceRecord);
-        $this->processClass($iterator, $resourceRecord);
-        $resourceRecord->setRdata($this->extractRdata($iterator));
+    /**
+     * @param ResourceRecordIterator $iterator
+     *
+     * @throws ParseException
+     */
+    private function processEntry(ResourceRecordIterator $iterator): void
+    {
+        if ($this->isTTL($iterator)) {
+            $this->currentResourceRecord->setTtl((int) $iterator->current());
+            $this->lastStatedTtl = (int) $iterator->current();
+            $iterator->next();
+            $this->processEntry($iterator);
 
-        $this->zone->addResourceRecord($resourceRecord);
+            return;
+        }
+
+        if ($this->isClass($iterator)) {
+            $this->currentResourceRecord->setClass(strtoupper($iterator->current()));
+            $this->lastStatedClass = strtoupper($iterator->current());
+            $iterator->next();
+            $this->processEntry($iterator);
+
+            return;
+        }
+
+        if ($this->isResourceName($iterator) && null === $this->currentResourceRecord->getName()) {
+            $this->currentResourceRecord->setName($iterator->current());
+            $this->lastStatedDomain = $iterator->current();
+            $iterator->next();
+            $this->processEntry($iterator);
+
+            return;
+        }
+
+        if ($this->isType($iterator)) {
+            $this->currentResourceRecord->setRdata($this->extractRdata($iterator));
+
+            if (null === $this->currentResourceRecord->getName()) {
+                $this->currentResourceRecord->setName($this->lastStatedDomain);
+            }
+
+            return;
+        }
+
+        throw new ParseException(sprintf('Could not parse entry "%s".', implode(' ', $iterator->getArrayCopy())));
     }
 
     /**
      * Processes control entries at the top of a BIND record, i.e. $ORIGIN, $TTL, $INCLUDE, etc.
      *
-     * @param \ArrayIterator $iterator
+     * @param ResourceRecordIterator $iterator
      */
-    private function processControlEntry(\ArrayIterator $iterator): void
+    private function processControlEntry(ResourceRecordIterator $iterator): void
     {
         if ('$TTL' === strtoupper($iterator->current())) {
             $iterator->next();
@@ -122,73 +179,54 @@ class Parser
     }
 
     /**
-     * Processes a ResourceRecord name.
-     *
-     * @param \ArrayIterator $iterator
-     * @param ResourceRecord $resourceRecord
-     */
-    private function processResourceName(\ArrayIterator $iterator, ResourceRecord $resourceRecord): void
-    {
-        if ($this->isResourceName($iterator)) {
-            $this->previousName = $iterator->current();
-            $iterator->next();
-        }
-
-        $resourceRecord->setName($this->previousName);
-    }
-
-    /**
-     * Set RR's TTL if there is one.
-     *
-     * @param \ArrayIterator $iterator
-     * @param ResourceRecord $resourceRecord
-     */
-    private function processTtl(\ArrayIterator $iterator, ResourceRecord $resourceRecord): void
-    {
-        if ($this->isTTL($iterator)) {
-            $resourceRecord->setTtl($iterator->current());
-            $iterator->next();
-        }
-    }
-
-    /**
-     * Set RR's class if there is one.
-     *
-     * @param \ArrayIterator $iterator
-     * @param ResourceRecord $resourceRecord
-     */
-    private function processClass(\ArrayIterator $iterator, ResourceRecord $resourceRecord): void
-    {
-        if (Classes::isValid(strtoupper($iterator->current()))) {
-            $resourceRecord->setClass(strtoupper($iterator->current()));
-            $iterator->next();
-        }
-    }
-
-    /**
      * Determine if iterant is a resource name.
      *
-     * @param \ArrayIterator $iterator
+     * @param ResourceRecordIterator $iterator
      *
      * @return bool
      */
-    private function isResourceName(\ArrayIterator $iterator): bool
+    private function isResourceName(ResourceRecordIterator $iterator): bool
     {
-        return !(
-            $this->isTTL($iterator) ||
-            Classes::isValid(strtoupper($iterator->current())) ||
-            RDataTypes::isValid(strtoupper($iterator->current()))
-        );
+        $iterator->next();
+
+        if (!$iterator->valid()) {
+            return false;
+        }
+
+        $isName = $this->isTTL($iterator) ||
+            $this->isClass($iterator) ||
+            $this->isType($iterator);
+        $iterator->prev();
+
+        return $isName;
+    }
+
+    private function isClass(ResourceRecordIterator $iterator): bool
+    {
+        if (!Classes::isValid($iterator->current())) {
+            return false;
+        }
+
+        $iterator->next();
+        $isClass = $this->isTTL($iterator) || $this->isType($iterator);
+        $iterator->prev();
+
+        return $isClass;
+    }
+
+    private function isType(ResourceRecordIterator $iterator): bool
+    {
+        return RDataTypes::isValid(strtoupper($iterator->current()));
     }
 
     /**
      * Determine if iterant is a control entry such as $TTL, $ORIGIN, $INCLUDE, etcetera.
      *
-     * @param \ArrayIterator $iterator
+     * @param ResourceRecordIterator $iterator
      *
      * @return bool
      */
-    private function isControlEntry(\ArrayIterator $iterator): bool
+    private function isControlEntry(ResourceRecordIterator $iterator): bool
     {
         return 1 === preg_match('/^\$[A-Z0-9]+/i', $iterator->current());
     }
@@ -196,23 +234,31 @@ class Parser
     /**
      * Determine if the iterant is a TTL (i.e. it is an integer).
      *
-     * @param \ArrayIterator $iterator
+     * @param ResourceRecordIterator $iterator
      *
      * @return bool
      */
-    private function isTTL(\ArrayIterator $iterator): bool
+    private function isTTL(ResourceRecordIterator $iterator): bool
     {
-        return 1 === preg_match('/^\d+$/', $iterator->current());
+        if (1 !== preg_match('/^\d+$/', $iterator->current())) {
+            return false;
+        }
+
+        $iterator->next();
+        $isTtl = $this->isClass($iterator) || $this->isType($iterator);
+        $iterator->prev();
+
+        return $isTtl;
     }
 
     /**
-     * @param \ArrayIterator $iterator
+     * @param ResourceRecordIterator $iterator
      *
      * @return RData\RdataInterface
      *
      * @throws ParseException
      */
-    private function extractRdata(\ArrayIterator $iterator): Rdata\RdataInterface
+    private function extractRdata(ResourceRecordIterator $iterator): Rdata\RdataInterface
     {
         $type = strtoupper($iterator->current());
         $iterator->next();

@@ -21,7 +21,6 @@ use Badcow\DNS\Rdata\APL;
 use Badcow\DNS\Rdata\CAA;
 use Badcow\DNS\Rdata\CNAME;
 use Badcow\DNS\Rdata\Factory;
-use Badcow\DNS\Rdata\MX;
 use Badcow\DNS\Rdata\TXT;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
@@ -176,7 +175,7 @@ class ParserTest extends TestCase
      */
     public function testCanHandlePolymorphicRdata()
     {
-        $string = 'example.com. 7200 IN A6 2001:acad::1337; This is invalid.';
+        $string = 'example.com. 7200 IN SSHFP 2001:acad::1337; This is invalid.';
         $zone = Parser::parse('example.com.', $string);
         $rr = $zone->getResourceRecords()[0];
 
@@ -188,7 +187,7 @@ class ParserTest extends TestCase
             return;
         }
 
-        $this->assertEquals('A6', $rdata->getType());
+        $this->assertEquals('SSHFP', $rdata->getType());
         $this->assertEquals('2001:acad::1337', $rdata->output());
     }
 
@@ -246,6 +245,19 @@ TXT;
 
     /**
      * @expectedException \Badcow\DNS\Parser\ParseException
+     * @expectedExceptionMessage Could not parse entry "resource 3600 IN A6 f080:3024:a::1".
+     *
+     * @throws ParseException
+     */
+    public function testUnknownRdataTypeThrowsException()
+    {
+        $zone = 'resource 3600 IN A6 f080:3024:a::1';
+
+        Parser::parse('acme.com.', $zone);
+    }
+
+    /**
+     * @expectedException \Badcow\DNS\Parser\ParseException
      * @expectedExceptionMessage "!1-192.168.0.64/30" is not a valid IP range.
      *
      * @throws ParseException
@@ -263,11 +275,12 @@ TXT;
     public function testAmbiguousRecordsParse()
     {
         $file = NormaliserTest::readFile(__DIR__.'/Resources/ambiguous.acme.org.txt');
-        $zone = Parser::parse('example.com.', $file);
+        $zone = Parser::parse('ambiguous.acme.org.', $file);
         $mxRecords = $this->findRecord('mx', $zone);
         $a4Records = $this->findRecord('aaaa', $zone);
 
         $this->assertCount(3, $mxRecords);
+        $this->assertCount(2, $a4Records);
         foreach ($mxRecords as $rr) {
             switch ($rr->getType()) {
                 case A::TYPE:
@@ -297,6 +310,20 @@ TXT;
                     break;
             }
         }
+    }
+
+    /**
+     * @throws ParseException
+     */
+    public function testAmbiguousRecord()
+    {
+        $record = 'mx cname aaaa';
+        $zone = Parser::parse('acme.com.', $record);
+        $mx = $zone->getResourceRecords()[0];
+
+        $this->assertEquals(CNAME::TYPE, $mx->getType());
+        $this->assertEquals('mx', $mx->getName());
+        $this->assertEquals('aaaa', $mx->getRdata()->getTarget());
     }
 
     /**
