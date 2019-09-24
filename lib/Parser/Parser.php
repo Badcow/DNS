@@ -154,15 +154,32 @@ class Parser
 
         if ($this->isType($iterator)) {
             $this->currentResourceRecord->setRdata($this->extractRdata($iterator));
-
-            if (null === $this->currentResourceRecord->getName()) {
-                $this->currentResourceRecord->setName($this->lastStatedDomain);
-            }
+            $this->populateWithLastStated();
 
             return;
         }
 
         throw new ParseException(sprintf('Could not parse entry "%s".', implode(' ', $iterator->getArrayCopy())));
+    }
+
+    /**
+     * If no domain-name, TTL, or class is set on the record, populate object with last stated value.
+     *
+     * @see https://www.ietf.org/rfc/rfc1035 Section 5.1
+     */
+    private function populateWithLastStated(): void
+    {
+        if (null === $this->currentResourceRecord->getName()) {
+            $this->currentResourceRecord->setName($this->lastStatedDomain);
+        }
+
+        if (null === $this->currentResourceRecord->getTtl()) {
+            $this->currentResourceRecord->setTtl($this->lastStatedTtl);
+        }
+
+        if (null === $this->currentResourceRecord->getClass()) {
+            $this->currentResourceRecord->setClass($this->lastStatedClass);
+        }
     }
 
     /**

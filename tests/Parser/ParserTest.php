@@ -288,11 +288,11 @@ TXT;
                     $this->assertEquals('200.100.50.35', $rr->getRdata()->getAddress());
                     break;
                 case CNAME::TYPE:
-                    $this->assertEquals(null, $rr->getTtl());
+                    $this->assertEquals(3600, $rr->getTtl());
                     $this->assertEquals('aaaa', $rr->getRdata()->getTarget());
                     break;
                 case TXT::TYPE:
-                    $this->assertEquals(null, $rr->getTtl());
+                    $this->assertEquals(3600, $rr->getTtl());
                     $this->assertEquals('Mail Exchange IPv6 Address', $rr->getRdata()->getText());
                     break;
             }
@@ -301,7 +301,7 @@ TXT;
         foreach ($a4Records as $rr) {
             switch ($rr->getType()) {
                 case AAAA::TYPE:
-                    $this->assertEquals(null, $rr->getTtl());
+                    $this->assertEquals(900, $rr->getTtl());
                     $this->assertEquals('2001:acdc:5889::35', $rr->getRdata()->getAddress());
                     break;
                 case TXT::TYPE:
