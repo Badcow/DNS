@@ -49,6 +49,7 @@ class CustomHandlerTest extends TestCase
         $this->assertEquals('example.com.', $rr->getName());
         $this->assertEquals(7200, $rr->getTtl());
         $this->assertEquals(Classes::INTERNET, $rr->getClass());
+        $this->assertNotNull($rr->getRdata());
         $this->assertEquals('v=spf1 a mx ip4:69.64.153.131 include:_spf.google.com ~all', $rr->getRdata()->getText());
     }
 }

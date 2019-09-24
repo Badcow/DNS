@@ -29,7 +29,7 @@ class ResourceRecordIterator extends \ArrayIterator
             return;
         }
 
-        $this->seek($this->key() - 1);
+        $this->seek((int) $this->key() - 1);
     }
 
     /**
