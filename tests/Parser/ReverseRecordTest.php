@@ -44,18 +44,42 @@ class ReverseRecordTest extends TestCase
         $parentRecords = ParserTest::findRecord('@', $zone);
         $_1Records = ParserTest::findRecord('1', $zone);
         $_50Records = ParserTest::findRecord('50', $zone);
+        $_150Records = ParserTest::findRecord('150', $zone);
+        $_170Records = ParserTest::findRecord('170', $zone);
 
+        $this->assertCount(11, $zone);
         $this->assertCount(3, $parentRecords);
-
-        $this->assertCount(1, $_50Records);
         $this->assertCount(2, $_1Records);
+        $this->assertCount(1, $_50Records);
+        $this->assertCount(1, $_150Records);
 
         $_1 = $_1Records[0];
         $_50 = $_50Records[0];
+        $_150 = $_150Records[0];
+        $_170 = $_170Records[0];
 
+        $this->assertEquals('1', $_1->getName());
+        $this->assertEquals(1080, $_1->getTtl());
+        $this->assertEquals(Classes::INTERNET, $_1->getClass());
+        $this->assertEquals(PTR::TYPE, $_1->getType());
+        $this->assertEquals('gw01.core.acme.com.', $_1->getRdata()->getTarget());
+
+        $this->assertEquals('50', $_50->getName());
         $this->assertEquals(1080, $_50->getTtl());
-        $this->assertEquals(PTR::TYPE, $_50->getType());
         $this->assertEquals(Classes::INTERNET, $_50->getClass());
+        $this->assertEquals(PTR::TYPE, $_50->getType());
         $this->assertEquals('mx1.acme.com.', $_50->getRdata()->getTarget());
+
+        $this->assertEquals('150', $_150->getName());
+        $this->assertEquals(200, $_150->getTtl());
+        $this->assertEquals(Classes::INTERNET, $_150->getClass());
+        $this->assertEquals(PTR::TYPE, $_150->getType());
+        $this->assertEquals('smtp.example.com.', $_150->getRdata()->getTarget());
+
+        $this->assertEquals('170', $_170->getName());
+        $this->assertEquals(150, $_170->getTtl());
+        $this->assertEquals(Classes::INTERNET, $_170->getClass());
+        $this->assertEquals(PTR::TYPE, $_170->getType());
+        $this->assertEquals('netscape.com.', $_170->getRdata()->getTarget());
     }
 }
