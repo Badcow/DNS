@@ -1,0 +1,28 @@
+$ORIGIN 50.100.200.in-addr.arpa.
+$TTL 3600
+
+@            IN SOA  (
+                     ns.acme.com.       ; MNAME
+                     noc.acme.com.      ; RNAME
+                     2014110501         ; SERIAL
+                     3600               ; REFRESH
+                     14400              ; RETRY
+                     604800             ; EXPIRE
+                     3600               ; MINIMUM
+                     )
+
+ ; NS RECORDS
+@               NS   ns1.acme.com.
+@               NS   ns2.acme.com.
+
+1   IN  1080    PTR  gw01.core.acme.com.
+1   IN  1080    PTR  gw02.core.acme.com.
+
+50  IN          PTR  mx1.acme.com.
+52  IN          PTR  mx2.acme.com.
+
+70  7200  IN    PTR  ns1.acme.com.
+72  7200  IN    PTR  ns2.acme.com.
+
+150 200         PTR  smtp.example.com.
+170 150   IN    PTR  netscape.com.

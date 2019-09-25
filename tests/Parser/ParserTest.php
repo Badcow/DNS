@@ -137,7 +137,7 @@ class ParserTest extends TestCase
         $zone = Parser::parse('example.com.', $file);
 
         $this->assertEquals('example.com.', $zone->getName());
-        $this->assertEquals('::1', $this->findRecord('ipv6.domain', $zone)[0]->getRdata()->getAddress());
+        $this->assertEquals('::1', self::findRecord('ipv6.domain', $zone)[0]->getRdata()->getAddress());
         $this->assertEquals(1337, $zone->getDefaultTtl());
     }
 
@@ -164,10 +164,10 @@ class ParserTest extends TestCase
 
         $txt2 = 'Some text another Some text';
 
-        $this->assertEquals($txt, $this->findRecord($txt->getName(), $zone)[0]);
-        $this->assertEquals($txt2, $this->findRecord('test', $zone)[0]->getRdata()->getText());
-        $this->assertCount(1, $this->findRecord('xn----7sbfndkfpirgcajeli2a4pnc.xn----7sbbfcqfo2cfcagacemif0ap5q', $zone));
-        $this->assertCount(4, $this->findRecord('testmx', $zone));
+        $this->assertEquals($txt, self::findRecord($txt->getName(), $zone)[0]);
+        $this->assertEquals($txt2, self::findRecord('test', $zone)[0]->getRdata()->getText());
+        $this->assertCount(1, self::findRecord('xn----7sbfndkfpirgcajeli2a4pnc.xn----7sbbfcqfo2cfcagacemif0ap5q', $zone));
+        $this->assertCount(4, self::findRecord('testmx', $zone));
     }
 
     /**
@@ -200,7 +200,7 @@ class ParserTest extends TestCase
         $zone = Parser::parse('example.com.', $file);
 
         /** @var APL $apl */
-        $apl = $this->findRecord('multicast', $zone)[0]->getRdata();
+        $apl = self::findRecord('multicast', $zone)[0]->getRdata();
         $this->assertCount(2, $apl->getIncludedAddressRanges());
         $this->assertCount(2, $apl->getExcludedAddressRanges());
 
@@ -276,8 +276,8 @@ TXT;
     {
         $file = NormaliserTest::readFile(__DIR__.'/Resources/ambiguous.acme.org.txt');
         $zone = Parser::parse('ambiguous.acme.org.', $file);
-        $mxRecords = $this->findRecord('mx', $zone);
-        $a4Records = $this->findRecord('aaaa', $zone);
+        $mxRecords = self::findRecord('mx', $zone);
+        $a4Records = self::findRecord('aaaa', $zone);
 
         $this->assertCount(3, $mxRecords);
         $this->assertCount(2, $a4Records);
@@ -334,7 +334,7 @@ TXT;
      *
      * @return ResourceRecord[]
      */
-    private function findRecord(?string $name, Zone $zone): array
+    public static function findRecord(?string $name, Zone $zone): array
     {
         $records = [];
 

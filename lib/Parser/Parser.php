@@ -62,7 +62,11 @@ class Parser
      */
     public function __construct(array $rdataHandlers = [])
     {
-        $this->rdataHandlers = array_merge(RdataHandlers::getHandlers(), $rdataHandlers);
+        $this->rdataHandlers = array_merge(
+            RdataHandlers::getHandlers(),
+            ['PTR' => __CLASS__.'::ptrHandler'],
+            $rdataHandlers
+        );
     }
 
     /**
@@ -127,7 +131,6 @@ class Parser
     {
         if ($this->isTTL($iterator)) {
             $this->currentResourceRecord->setTtl((int) $iterator->current());
-            $this->lastStatedTtl = (int) $iterator->current();
             $iterator->next();
             $this->processEntry($iterator);
 
@@ -136,7 +139,6 @@ class Parser
 
         if ($this->isClass($iterator)) {
             $this->currentResourceRecord->setClass(strtoupper($iterator->current()));
-            $this->lastStatedClass = strtoupper($iterator->current());
             $iterator->next();
             $this->processEntry($iterator);
 
@@ -145,7 +147,6 @@ class Parser
 
         if ($this->isResourceName($iterator) && null === $this->currentResourceRecord->getName()) {
             $this->currentResourceRecord->setName($iterator->current());
-            $this->lastStatedDomain = $iterator->current();
             $iterator->next();
             $this->processEntry($iterator);
 
@@ -171,14 +172,20 @@ class Parser
     {
         if (null === $this->currentResourceRecord->getName()) {
             $this->currentResourceRecord->setName($this->lastStatedDomain);
+        } else {
+            $this->lastStatedDomain = $this->currentResourceRecord->getName();
         }
 
         if (null === $this->currentResourceRecord->getTtl()) {
             $this->currentResourceRecord->setTtl($this->lastStatedTtl);
+        } else {
+            $this->lastStatedTtl = $this->currentResourceRecord->getTtl();
         }
 
         if (null === $this->currentResourceRecord->getClass()) {
             $this->currentResourceRecord->setClass($this->lastStatedClass);
+        } else {
+            $this->lastStatedClass = $this->currentResourceRecord->getClass();
         }
     }
 
@@ -211,21 +218,25 @@ class Parser
         }
 
         $isName = $this->isTTL($iterator) ||
-            $this->isClass($iterator) ||
+            $this->isClass($iterator, 'DOMAIN') ||
             $this->isType($iterator);
         $iterator->prev();
 
         return $isName;
     }
 
-    private function isClass(ResourceRecordIterator $iterator): bool
+    private function isClass(ResourceRecordIterator $iterator, $origin = null): bool
     {
         if (!Classes::isValid($iterator->current())) {
             return false;
         }
 
         $iterator->next();
-        $isClass = $this->isTTL($iterator) || $this->isType($iterator);
+        if ('TTL' === $origin) {
+            $isClass = $this->isType($iterator);
+        } else {
+            $isClass = $this->isTTL($iterator, 'CLASS') || $this->isType($iterator);
+        }
         $iterator->prev();
 
         return $isClass;
@@ -252,17 +263,22 @@ class Parser
      * Determine if the iterant is a TTL (i.e. it is an integer).
      *
      * @param ResourceRecordIterator $iterator
+     * @param string                 $origin
      *
      * @return bool
      */
-    private function isTTL(ResourceRecordIterator $iterator): bool
+    private function isTTL(ResourceRecordIterator $iterator, $origin = null): bool
     {
         if (1 !== preg_match('/^\d+$/', $iterator->current())) {
             return false;
         }
 
         $iterator->next();
-        $isTtl = $this->isClass($iterator) || $this->isType($iterator);
+        if ('CLASS' === $origin) {
+            $isTtl = $this->isType($iterator);
+        } else {
+            $isTtl = $this->isClass($iterator, 'TTL') || $this->isType($iterator);
+        }
         $iterator->prev();
 
         return $isTtl;
@@ -289,5 +305,32 @@ class Parser
         }
 
         return RdataHandlers::catchAll($type, $iterator);
+    }
+
+    /**
+     * This handler addresses the special case where an integer resource name could be confused for a TTL, for instance:
+     * 50 IN PTR mx1.acme.com.
+     *
+     * In the above, if the integer is below 256 then it is assumed to represent an octet of an IPv4 address.
+     *
+     * @param ResourceRecordIterator $iterator
+     *
+     * @return Rdata\PTR
+     */
+    private function ptrHandler(ResourceRecordIterator $iterator): Rdata\PTR
+    {
+        if (null === $this->currentResourceRecord->getName() && null !== $this->currentResourceRecord->getTtl()) {
+            if ($this->currentResourceRecord->getTtl() < 256) {
+                $this->currentResourceRecord->setName((string) $this->currentResourceRecord->getTtl());
+                $this->currentResourceRecord->setTtl(null);
+            }
+        }
+
+        $ptr = RdataHandlers::catchAll(Rdata\PTR::TYPE, $iterator);
+        if (!$ptr instanceof Rdata\PTR) {
+            throw new \UnexpectedValueException();
+        }
+
+        return $ptr;
     }
 }
