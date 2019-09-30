@@ -95,6 +95,24 @@ TXT;
         Normaliser::normalise($string);
     }
 
+    public function testCommentsAreRetained()
+    {
+        $zone = self::readFile(__DIR__.'/Resources/testClearComments_sample.txt');
+        $expectation = self::readFile(__DIR__.'/Resources/testKeepComments_expectation.txt');
+        $normalisedZone = Normaliser::normalise($zone, true);
+
+        $this->assertEquals($expectation, $normalisedZone);
+    }
+
+    public function testMultilineCommentsAreRetained()
+    {
+        $zone = self::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
+        $expectation = self::readFile(__DIR__.'/Resources/testCollapseMultilinesWithComments_expectation.txt');
+        $normalisedZone = Normaliser::normalise($zone, true);
+
+        $this->assertEquals($expectation, $normalisedZone);
+    }
+
     /**
      * @param string $filename
      *

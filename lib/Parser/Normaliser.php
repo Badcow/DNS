@@ -24,28 +24,41 @@ class Normaliser
     private $normalisedString = '';
 
     /**
+     * @var bool
+     */
+    private $includeComments;
+
+    /**
+     * @var string
+     */
+    private $comment = '';
+
+    /**
      * Normaliser constructor.
      *
      * @param string $zone
+     * @param bool   $includeComments
      */
-    public function __construct(string $zone)
+    public function __construct(string $zone, bool $includeComments = false)
     {
         //Remove Windows line feeds and tabs
         $zone = str_replace([Tokens::CARRIAGE_RETURN, Tokens::TAB], ['', Tokens::SPACE], $zone);
 
         $this->string = new StringIterator($zone);
+        $this->includeComments = $includeComments;
     }
 
     /**
      * @param string $zone
+     * @param bool   $includeComments
      *
      * @return string
      *
      * @throws ParseException
      */
-    public static function normalise(string $zone): string
+    public static function normalise(string $zone, bool $includeComments = false): string
     {
-        return (new self($zone))->process();
+        return (new self($zone, $includeComments))->process();
     }
 
     /**
@@ -68,7 +81,7 @@ class Normaliser
     }
 
     /**
-     * Ignores the comment section.
+     * Parses the comments.
      */
     private function handleComment(): void
     {
@@ -76,7 +89,12 @@ class Normaliser
             return;
         }
 
+        $this->string->next();
+
         while ($this->string->isNot(Tokens::LINE_FEED) && $this->string->valid()) {
+            if ($this->includeComments) {
+                $this->comment .= $this->string->current();
+            }
             $this->string->next();
         }
     }
@@ -174,6 +192,11 @@ class Normaliser
      */
     private function append()
     {
+        if ($this->string->is(Tokens::LINE_FEED) && $this->includeComments && '' !== $this->comment) {
+            $this->normalisedString = rtrim($this->normalisedString, ' ').Tokens::SEMICOLON.$this->comment;
+            $this->comment = '';
+        }
+
         $this->normalisedString .= $this->string->current();
         $this->string->next();
     }
