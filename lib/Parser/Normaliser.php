@@ -155,6 +155,8 @@ class Normaliser
             if ($this->string->is(Tokens::CLOSE_BRACKET)) {
                 $this->string->next();
 
+                $this->process();
+
                 return;
             }
 

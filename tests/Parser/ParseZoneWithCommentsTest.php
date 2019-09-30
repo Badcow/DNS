@@ -64,4 +64,21 @@ class ParseZoneWithCommentsTest extends TestCase
         $this->assertEquals('AAAA RECORDS', $nullEntries[2]->getComment());
         $this->assertEquals('MX RECORDS', $nullEntries[3]->getComment());
     }
+
+    public function testMultilineTxtRecords()
+    {
+        $zoneFile = NormaliserTest::readFile(__DIR__.'/Resources/testMultilineTxtRecords_sample.txt');
+        $zone = Parser::parse('acme.com.', $zoneFile, true);
+
+        $txtRecords = ParserTest::findRecord('test', $zone, TXT::TYPE);
+
+        $this->assertCount(1, $txtRecords);
+
+        $test = $txtRecords[0];
+        $this->assertEquals('test', $test->getName());
+        $this->assertEquals(7230, $test->getTtl());
+        $this->assertEquals('TXT', $test->getType());
+        $this->assertEquals('This is a comment.', $test->getComment());
+        $this->assertEquals('This is an example of a multiline TXT record.', $test->getRdata()->getText());
+    }
 }

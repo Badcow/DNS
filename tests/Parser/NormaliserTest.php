@@ -113,6 +113,15 @@ TXT;
         $this->assertEquals($expectation, $normalisedZone);
     }
 
+    public function testMultilineTxtRecords()
+    {
+        $zone = self::readFile(__DIR__.'/Resources/testMultilineTxtRecords_sample.txt');
+        $expectation = self::readFile(__DIR__.'/Resources/testMultilineTxtRecords_expectation.txt');
+        $normalisedZone = Normaliser::normalise($zone, true);
+
+        $this->assertEquals($expectation, $normalisedZone);
+    }
+
     /**
      * @param string $filename
      *
