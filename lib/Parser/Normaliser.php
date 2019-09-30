@@ -70,8 +70,8 @@ class Normaliser
     {
         while ($this->string->valid()) {
             $this->handleTxt();
-            $this->handleComment();
             $this->handleMultiline();
+            $this->handleComment();
             $this->append();
         }
 
@@ -193,7 +193,7 @@ class Normaliser
     private function append()
     {
         if ($this->string->is(Tokens::LINE_FEED) && $this->includeComments && '' !== $this->comment) {
-            $this->normalisedString = rtrim($this->normalisedString, ' ').Tokens::SEMICOLON.$this->comment;
+            $this->normalisedString = rtrim($this->normalisedString, ' ').Tokens::SEMICOLON.trim($this->comment);
             $this->comment = '';
         }
 
