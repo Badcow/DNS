@@ -34,12 +34,12 @@ class LOC implements RdataInterface
     const FORMAT_DMS = 'DMS';
 
     /**
-     * @var float
+     * @var float|null
      */
     private $latitude;
 
     /**
-     * @var float
+     * @var float|null
      */
     private $longitude;
 

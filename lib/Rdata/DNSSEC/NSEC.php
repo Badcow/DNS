@@ -26,7 +26,7 @@ class NSEC implements RdataInterface
      * delegation point NS RRset.
      * {@link https://tools.ietf.org/html/rfc4034#section-4.1.1}.
      *
-     * @var string
+     * @var string|null
      */
     private $nextDomainName;
 
@@ -36,9 +36,9 @@ class NSEC implements RdataInterface
     private $typeBitMaps = [];
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getNextDomainName(): string
+    public function getNextDomainName(): ?string
     {
         return $this->nextDomainName;
     }

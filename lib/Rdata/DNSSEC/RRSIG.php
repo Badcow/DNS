@@ -24,7 +24,7 @@ class RRSIG implements RdataInterface
      *  The Type Covered field identifies the type of the RRset that is
      * covered by this RRSIG record. E.G. A, MX, AAAA, etc.
      *
-     * @var string
+     * @var string|null
      */
     private $typeCovered;
 
@@ -33,7 +33,7 @@ class RRSIG implements RdataInterface
      * algorithm and determines the format of the Public Key field.
      * {@link https://tools.ietf.org/html/rfc4034#section-3.1.2}.
      *
-     * @var int
+     * @var int|null
      */
     private $algorithm;
 
@@ -42,7 +42,7 @@ class RRSIG implements RdataInterface
      * RR owner name.
      * {@link https://tools.ietf.org/html/rfc4034#section-3.1.3}.
      *
-     * @var int
+     * @var int|null
      */
     private $labels;
 
@@ -51,7 +51,7 @@ class RRSIG implements RdataInterface
      * appears in the authoritative zone.
      * {@link https://tools.ietf.org/html/rfc4034#section-3.1.4}.
      *
-     * @var int
+     * @var int|null
      */
     private $originalTtl;
 
@@ -59,7 +59,7 @@ class RRSIG implements RdataInterface
      * 32-bit unsigned integer specifying the expiration date of a signature.
      * {@link https://tools.ietf.org/html/rfc4034#section-3.1.5}.
      *
-     * @var int
+     * @var int|null
      */
     private $signatureExpiration;
 
@@ -67,7 +67,7 @@ class RRSIG implements RdataInterface
      * 32-bit unsigned integer specifying the inception date of a signature.
      * {@link https://tools.ietf.org/html/rfc4034#section-3.1.5}.
      *
-     * @var int
+     * @var int|null
      */
     private $signatureInception;
 
@@ -76,7 +76,7 @@ class RRSIG implements RdataInterface
      * validates this signature, in network byte order.
      * {@link https://tools.ietf.org/html/rfc4034#section-3.1.6}.
      *
-     * @var int
+     * @var int|null
      */
     private $keyTag;
 
@@ -87,7 +87,7 @@ class RRSIG implements RdataInterface
      * covered RRset.
      * {@link https://tools.ietf.org/html/rfc4034#section-3.1.7}.
      *
-     * @var string
+     * @var string|null
      */
     private $signersName;
 
@@ -98,14 +98,14 @@ class RRSIG implements RdataInterface
      * Covered field.
      * {@link https://tools.ietf.org/html/rfc4034#section-3.1.8}.
      *
-     * @var string
+     * @var string|null
      */
     private $signature;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getTypeCovered(): string
+    public function getTypeCovered(): ?string
     {
         return $this->typeCovered;
     }
@@ -119,9 +119,9 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getAlgorithm(): int
+    public function getAlgorithm(): ?int
     {
         return $this->algorithm;
     }
@@ -135,9 +135,9 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getLabels(): int
+    public function getLabels(): ?int
     {
         return $this->labels;
     }
@@ -151,9 +151,9 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getOriginalTtl(): int
+    public function getOriginalTtl(): ?int
     {
         return $this->originalTtl;
     }
@@ -167,9 +167,9 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getSignatureExpiration(): int
+    public function getSignatureExpiration(): ?int
     {
         return $this->signatureExpiration;
     }
@@ -183,9 +183,9 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getSignatureInception(): int
+    public function getSignatureInception(): ?int
     {
         return $this->signatureInception;
     }
@@ -199,9 +199,9 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getKeyTag(): int
+    public function getKeyTag(): ?int
     {
         return $this->keyTag;
     }
@@ -215,9 +215,9 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSignersName(): string
+    public function getSignersName(): ?string
     {
         return $this->signersName;
     }
@@ -231,9 +231,9 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSignature(): string
+    public function getSignature(): ?string
     {
         return $this->signature;
     }

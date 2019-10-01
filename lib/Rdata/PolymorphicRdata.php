@@ -19,12 +19,12 @@ class PolymorphicRdata implements RdataInterface
     /**
      * The RData type.
      *
-     * @var string
+     * @var string|null
      */
     private $type;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $data;
 
@@ -54,11 +54,11 @@ class PolymorphicRdata implements RdataInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getType(): string
     {
-        return $this->type;
+        return $this->type ?? '';
     }
 
     /**
@@ -70,9 +70,9 @@ class PolymorphicRdata implements RdataInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getData(): string
+    public function getData(): ?string
     {
         return $this->data;
     }
@@ -82,6 +82,6 @@ class PolymorphicRdata implements RdataInterface
      */
     public function output(): string
     {
-        return $this->getData();
+        return $this->getData() ?? '';
     }
 }

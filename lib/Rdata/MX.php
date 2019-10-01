@@ -21,12 +21,12 @@ class MX implements RdataInterface
     const TYPE = 'MX';
 
     /**
-     * @var int
+     * @var int|null
      */
     private $preference;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $exchange;
 
@@ -39,7 +39,7 @@ class MX implements RdataInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getExchange(): ?string
     {
@@ -55,7 +55,7 @@ class MX implements RdataInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPreference(): ?int
     {

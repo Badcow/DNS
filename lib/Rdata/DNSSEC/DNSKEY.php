@@ -28,7 +28,7 @@ class DNSKEY implements RdataInterface
     /**
      * {@link https://tools.ietf.org/html/rfc4034#section-2.1.1}.
      *
-     * @var int
+     * @var int|null
      */
     private $flags;
 
@@ -47,7 +47,7 @@ class DNSKEY implements RdataInterface
      * algorithm and determines the format of the Public Key field.
      * {@link https://tools.ietf.org/html/rfc4034#section-2.1.3}.
      *
-     * @var int
+     * @var int|null
      */
     private $algorithm;
 
@@ -56,14 +56,14 @@ class DNSKEY implements RdataInterface
      * Whitespace is allowed within the Base64 text.
      * {@link https://tools.ietf.org/html/rfc4034#section-2.1.4}.
      *
-     * @var string
+     * @var string|null
      */
     private $publicKey;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getFlags(): int
+    public function getFlags(): ?int
     {
         return $this->flags;
     }
@@ -85,9 +85,9 @@ class DNSKEY implements RdataInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getAlgorithm(): int
+    public function getAlgorithm(): ?int
     {
         return $this->algorithm;
     }
@@ -101,9 +101,9 @@ class DNSKEY implements RdataInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPublicKey(): string
+    public function getPublicKey(): ?string
     {
         return $this->publicKey;
     }

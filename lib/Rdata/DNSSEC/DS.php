@@ -23,7 +23,7 @@ class DS implements RdataInterface
     const DIGEST_SHA1 = 1;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $keyTag;
 
@@ -32,7 +32,7 @@ class DS implements RdataInterface
      * referred to by the DS record.
      * {@link https://tools.ietf.org/html/rfc4034#section-5.1.2}.
      *
-     * @var int
+     * @var int|null
      */
     private $algorithm;
 
@@ -42,14 +42,14 @@ class DS implements RdataInterface
     private $digestType = self::DIGEST_SHA1;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $digest;
 
     /**
      * @return int
      */
-    public function getKeyTag(): int
+    public function getKeyTag(): ?int
     {
         return $this->keyTag;
     }
@@ -63,9 +63,9 @@ class DS implements RdataInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getAlgorithm(): int
+    public function getAlgorithm(): ?int
     {
         return $this->algorithm;
     }
@@ -95,9 +95,9 @@ class DS implements RdataInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDigest(): string
+    public function getDigest(): ?string
     {
         return $this->digest;
     }

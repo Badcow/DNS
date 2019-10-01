@@ -37,7 +37,7 @@ class SRV extends CNAME
      * order defined by the weight field. The range is 0-65535. This
      * is a 16 bit unsigned integer.
      *
-     * @var int
+     * @var int|null
      */
     private $priority;
 
@@ -46,7 +46,7 @@ class SRV extends CNAME
      * relative weight for entries with the same priority. The range
      * is 0-65535. This is a 16 bit unsigned integer.
      *
-     * @var int
+     * @var int|null
      */
     private $weight;
 
@@ -54,7 +54,7 @@ class SRV extends CNAME
      * The port on this target host of this service. The range is
      * 0-65535. This is a 16 bit unsigned integer.
      *
-     * @var int
+     * @var int|null
      */
     private $port;
 
