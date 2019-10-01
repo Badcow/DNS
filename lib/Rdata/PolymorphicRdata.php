@@ -54,7 +54,7 @@ class PolymorphicRdata implements RdataInterface
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getType(): string
     {
