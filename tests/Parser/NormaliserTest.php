@@ -108,7 +108,7 @@ TXT;
     {
         $zone = self::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testCollapseMultilinesWithComments_expectation.txt');
-        $normalisedZone = Normaliser::normalise($zone, true);
+        $normalisedZone = Normaliser::normalise($zone, Normaliser::COMMENTS_END_OF_RECORD_ENTRY | Normaliser::COMMENTS_WITHIN_MULTILINE | Normaliser::COMMENTS_WITHOUT_RECORD_ENTRY);
 
         $this->assertEquals($expectation, $normalisedZone);
     }
@@ -117,6 +117,15 @@ TXT;
     {
         $zone = self::readFile(__DIR__.'/Resources/testMultilineTxtRecords_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testMultilineTxtRecords_expectation.txt');
+        $normalisedZone = Normaliser::normalise($zone, true);
+
+        $this->assertEquals($expectation, $normalisedZone);
+    }
+
+    public function testKeepCommentsWithoutLinefeedAtEnd()
+    {
+        $zone = self::readFile(__DIR__.'/Resources/testKeepCommentsWithoutLinefeedAtEnd_sample.txt');
+        $expectation = self::readFile(__DIR__.'/Resources/testKeepCommentsWithoutLinefeedAtEnd_expectation.txt');
         $normalisedZone = Normaliser::normalise($zone, true);
 
         $this->assertEquals($expectation, $normalisedZone);

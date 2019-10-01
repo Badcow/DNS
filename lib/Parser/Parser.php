@@ -72,30 +72,30 @@ class Parser
     /**
      * @param string $name
      * @param string $zone
-     * @param bool   $retainComments
+     * @param int    $commentOptions
      *
      * @return Zone
      *
      * @throws ParseException
      */
-    public static function parse(string $name, string $zone, bool $retainComments = false): Zone
+    public static function parse(string $name, string $zone, int $commentOptions = Normaliser::COMMENTS_NONE): Zone
     {
-        return (new self())->makeZone($name, $zone, $retainComments);
+        return (new self())->makeZone($name, $zone, $commentOptions);
     }
 
     /**
      * @param string $name
      * @param string $string
-     * @param bool   $retainComments
+     * @param int    $commentOptions
      *
      * @return Zone
      *
      * @throws ParseException
      */
-    public function makeZone(string $name, string $string, bool $retainComments = false): Zone
+    public function makeZone(string $name, string $string, int $commentOptions = Normaliser::COMMENTS_NONE): Zone
     {
         $this->zone = new Zone($name);
-        $this->string = Normaliser::normalise($string, $retainComments);
+        $this->string = Normaliser::normalise($string, $commentOptions);
 
         foreach (explode(Tokens::LINE_FEED, $this->string) as $line) {
             $this->processLine($line);
