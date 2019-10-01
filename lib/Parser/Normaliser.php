@@ -40,6 +40,13 @@ class Normaliser
     private $comment = '';
 
     /**
+     * Comments that are within a multiline context, i.e. between brackets.
+     *
+     * @var string
+     */
+    private $multilineComments = '';
+
+    /**
      * Normaliser constructor.
      *
      * @param string $zone
@@ -101,7 +108,11 @@ class Normaliser
 
         while ($this->string->isNot(Tokens::LINE_FEED) && $this->string->valid()) {
             if ($this->commentOptions & $condition) {
-                $this->comment .= $this->string->current();
+                if ($condition & self::COMMENTS_WITHIN_MULTILINE) {
+                    $this->multilineComments .= $this->string->current();
+                } else {
+                    $this->comment .= $this->string->current();
+                }
             }
             $this->string->next();
         }
@@ -204,7 +215,7 @@ class Normaliser
     {
         if (($this->string->is(Tokens::LINE_FEED) || !$this->string->valid()) &&
             $this->commentOptions &&
-            '' !== $this->comment) {
+            ('' !== $this->comment || '' !== $this->multilineComments)) {
             $this->appendComment();
         }
 
@@ -217,14 +228,31 @@ class Normaliser
         $zone = rtrim($this->normalisedString, ' ');
 
         //If there is no Resource Record on the line
-        if (Tokens::LINE_FEED === substr($zone, -1, 0) &&
-            !($this->commentOptions & self::COMMENTS_WITHOUT_RECORD_ENTRY)) {
+        if ((Tokens::LINE_FEED === substr($zone, -1, 0) || 0 === strlen($zone))) {
+            if ($this->commentOptions & self::COMMENTS_WITHOUT_RECORD_ENTRY) {
+                $this->normalisedString = sprintf('%s;%s', $zone, trim($this->comment));
+            }
             $this->comment = '';
+            $this->multilineComments = '';
 
             return;
         }
 
-        $this->normalisedString = sprintf('%s;%s', $zone, trim($this->comment));
+        $comments = '';
+
+        if ($this->commentOptions & self::COMMENTS_WITHIN_MULTILINE && '' !== $this->multilineComments) {
+            $comments .= $this->multilineComments;
+        }
+
+        if ($this->commentOptions & self::COMMENTS_END_OF_RECORD_ENTRY && '' !== $this->comment) {
+            $comments .= $this->comment;
+        }
+
+        if ('' !== $comments = trim($comments)) {
+            $this->normalisedString = sprintf('%s;%s', $zone, $comments);
+        }
+
         $this->comment = '';
+        $this->multilineComments = '';
     }
 }

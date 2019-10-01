@@ -31,6 +31,22 @@ example.com. IN SOA (
 TXT;
 
     /**
+     * @var string
+     */
+    private $commentsOptionsSample = <<< TXT
+ ; SOA Record
+example.com. IN SOA (
+                     example.com.       ; MNAME
+                     post.example.com.  ; RNAME
+                     2014110501         ; SERIAL
+                     3600               ; REFRESH
+                     14400              ; RETRY
+                     604800             ; EXPIRE
+                     3600               ; MINIMUM
+                     );This is a Start of Authority
+TXT;
+
+    /**
      * @throws \Badcow\DNS\Parser\ParseException|\Exception
      */
     public function testRemovesComments()
@@ -129,6 +145,45 @@ TXT;
         $normalisedZone = Normaliser::normalise($zone, true);
 
         $this->assertEquals($expectation, $normalisedZone);
+    }
+
+    public function testCommentOptions()
+    {
+        $option_1 = Normaliser::COMMENTS_END_OF_RECORD_ENTRY;
+        $expectation_1 = 'example.com. IN SOA example.com. post.example.com. 2014110501 3600 14400'.
+            ' 604800 3600;This is a Start of Authority';
+
+        $option_2 = Normaliser::COMMENTS_WITHIN_MULTILINE;
+        $expectation_2 = 'example.com. IN SOA example.com. post.example.com. 2014110501 3600 14400'.
+            ' 604800 3600;MNAME RNAME SERIAL REFRESH RETRY EXPIRE MINIMUM';
+
+        $option_3 = Normaliser::COMMENTS_END_OF_RECORD_ENTRY | Normaliser::COMMENTS_WITHIN_MULTILINE;
+        $expectation_3 = 'example.com. IN SOA example.com. post.example.com. 2014110501 3600 14400'.
+            ' 604800 3600;MNAME RNAME SERIAL REFRESH RETRY EXPIRE MINIMUMThis is a Start of Authority';
+
+        $option_4 = Normaliser::COMMENTS_WITHOUT_RECORD_ENTRY;
+        $expectation_4 = ";SOA Record\nexample.com. IN SOA example.com. post.example.com. 2014110501 3600 14400".
+            ' 604800 3600';
+
+        $option_5 = Normaliser::COMMENTS_WITHOUT_RECORD_ENTRY | Normaliser::COMMENTS_END_OF_RECORD_ENTRY;
+        $expectation_5 = ";SOA Record\nexample.com. IN SOA example.com. post.example.com. 2014110501 3600 14400".
+            ' 604800 3600;This is a Start of Authority';
+
+        $option_6 = Normaliser::COMMENTS_WITHOUT_RECORD_ENTRY | Normaliser::COMMENTS_WITHIN_MULTILINE;
+        $expectation_6 = ";SOA Record\nexample.com. IN SOA example.com. post.example.com. 2014110501 3600 14400".
+            ' 604800 3600;MNAME RNAME SERIAL REFRESH RETRY EXPIRE MINIMUM';
+
+        $option_7 = Normaliser::COMMENTS_ALL;
+        $expectation_7 = ";SOA Record\nexample.com. IN SOA example.com. post.example.com. 2014110501 3600 14400".
+            ' 604800 3600;MNAME RNAME SERIAL REFRESH RETRY EXPIRE MINIMUMThis is a Start of Authority';
+
+        $this->assertEquals($expectation_1, Normaliser::normalise($this->commentsOptionsSample, $option_1));
+        $this->assertEquals($expectation_2, Normaliser::normalise($this->commentsOptionsSample, $option_2));
+        $this->assertEquals($expectation_3, Normaliser::normalise($this->commentsOptionsSample, $option_3));
+        $this->assertEquals($expectation_4, Normaliser::normalise($this->commentsOptionsSample, $option_4));
+        $this->assertEquals($expectation_5, Normaliser::normalise($this->commentsOptionsSample, $option_5));
+        $this->assertEquals($expectation_6, Normaliser::normalise($this->commentsOptionsSample, $option_6));
+        $this->assertEquals($expectation_7, Normaliser::normalise($this->commentsOptionsSample, $option_7));
     }
 
     /**
