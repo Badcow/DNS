@@ -12,6 +12,7 @@
 namespace Badcow\DNS\Parser;
 
 use Badcow\DNS\Rdata;
+use PhpIP\IPBlock;
 
 class RdataHandlers
 {
@@ -89,7 +90,7 @@ class RdataHandlers
                 throw new ParseException(sprintf('"%s" is not a valid IP range.', $iterator->current()));
             }
 
-            $ipBlock = \IPBlock::create($matches['block']);
+            $ipBlock = IPBlock::create($matches['block']);
             $rdata->addAddressRange($ipBlock, '!' !== $matches['negate']);
             $iterator->next();
         }

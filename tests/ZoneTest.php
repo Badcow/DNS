@@ -17,6 +17,7 @@ use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
 use Badcow\DNS\ZoneBuilder;
+use PhpIP\IPBlock;
 
 class ZoneTest extends TestCase
 {
@@ -105,10 +106,10 @@ class ZoneTest extends TestCase
         $zone->addResourceRecord($mx1);
 
         $apl = new \Badcow\DNS\Rdata\APL();
-        $apl->addAddressRange(\IPBlock::create('192.168.0.0/23'));
-        $apl->addAddressRange(\IPBlock::create('192.168.1.64/28'), false);
-        $apl->addAddressRange(\IPBlock::create('2001:acad:1::/112'), true);
-        $apl->addAddressRange(\IPBlock::create('2001:acad:1::8/128'), false);
+        $apl->addAddressRange(IPBlock::create('192.168.0.0/23'));
+        $apl->addAddressRange(IPBlock::create('192.168.1.64/28'), false);
+        $apl->addAddressRange(IPBlock::create('2001:acad:1::/112'), true);
+        $apl->addAddressRange(IPBlock::create('2001:acad:1::8/128'), false);
 
         $multicast = new ResourceRecord('multicast', $apl);
 
