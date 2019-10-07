@@ -35,7 +35,7 @@ parameter means. E.g.
                      3600               ; MINIMUM
                      )
 ```
-###Combinations
+### Combinations
 These comment types may appear as a combination, for example:
 ```TXT
 ; LOC Records indicating the geographical location of a resource
