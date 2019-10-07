@@ -15,6 +15,7 @@ use Badcow\DNS\Rdata\DNSSEC\DNSKEY;
 use Badcow\DNS\Rdata\DNSSEC\DS;
 use Badcow\DNS\Rdata\DNSSEC\NSEC;
 use Badcow\DNS\Rdata\DNSSEC\RRSIG;
+use PhpIP\IPBlock;
 
 class Factory
 {
@@ -333,8 +334,8 @@ class Factory
     }
 
     /**
-     * @param \IPBlock[] $includedRanges
-     * @param \IPBlock[] $excludedRanges
+     * @param IPBlock[] $includedRanges
+     * @param IPBlock[] $excludedRanges
      *
      * @return APL
      */
