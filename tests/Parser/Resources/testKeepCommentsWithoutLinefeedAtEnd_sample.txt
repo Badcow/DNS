@@ -1,0 +1,5 @@
+$ORIGIN example.com.
+$TTL 3600
+
+ ; A RECORDS
+sub.domain      A    192.168.1.42 ; This is a local ip.

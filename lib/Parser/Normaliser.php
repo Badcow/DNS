@@ -13,6 +13,12 @@ namespace Badcow\DNS\Parser;
 
 class Normaliser
 {
+    const COMMENTS_NONE = 0;
+    const COMMENTS_END_OF_RECORD_ENTRY = 1;
+    const COMMENTS_WITHIN_MULTILINE = 2;
+    const COMMENTS_WITHOUT_RECORD_ENTRY = 4;
+    const COMMENTS_ALL = 7;
+
     /**
      * @var StringIterator
      */
@@ -24,28 +30,48 @@ class Normaliser
     private $normalisedString = '';
 
     /**
+     * @var int
+     */
+    private $commentOptions;
+
+    /**
+     * @var string
+     */
+    private $comment = '';
+
+    /**
+     * Comments that are within a multiline context, i.e. between brackets.
+     *
+     * @var string
+     */
+    private $multilineComments = '';
+
+    /**
      * Normaliser constructor.
      *
      * @param string $zone
+     * @param int    $commentOptions
      */
-    public function __construct(string $zone)
+    public function __construct(string $zone, int $commentOptions = self::COMMENTS_NONE)
     {
         //Remove Windows line feeds and tabs
         $zone = str_replace([Tokens::CARRIAGE_RETURN, Tokens::TAB], ['', Tokens::SPACE], $zone);
 
         $this->string = new StringIterator($zone);
+        $this->commentOptions = $commentOptions;
     }
 
     /**
      * @param string $zone
+     * @param int    $includeComments
      *
      * @return string
      *
      * @throws ParseException
      */
-    public static function normalise(string $zone): string
+    public static function normalise(string $zone, int $includeComments = self::COMMENTS_NONE): string
     {
-        return (new self($zone))->process();
+        return (new self($zone, $includeComments))->process();
     }
 
     /**
@@ -57,8 +83,8 @@ class Normaliser
     {
         while ($this->string->valid()) {
             $this->handleTxt();
-            $this->handleComment();
             $this->handleMultiline();
+            $this->handleComment(self::COMMENTS_END_OF_RECORD_ENTRY | self::COMMENTS_WITHOUT_RECORD_ENTRY);
             $this->append();
         }
 
@@ -68,15 +94,26 @@ class Normaliser
     }
 
     /**
-     * Ignores the comment section.
+     * Parses the comments.
+     *
+     * @param int $condition
      */
-    private function handleComment(): void
+    private function handleComment($condition = self::COMMENTS_ALL): void
     {
         if ($this->string->isNot(Tokens::SEMICOLON)) {
             return;
         }
 
+        $this->string->next();
+
         while ($this->string->isNot(Tokens::LINE_FEED) && $this->string->valid()) {
+            if ($this->commentOptions & $condition) {
+                if ($condition & self::COMMENTS_WITHIN_MULTILINE) {
+                    $this->multilineComments .= $this->string->current();
+                } else {
+                    $this->comment .= $this->string->current();
+                }
+            }
             $this->string->next();
         }
     }
@@ -127,7 +164,7 @@ class Normaliser
         $this->string->next();
         while ($this->string->valid()) {
             $this->handleTxt();
-            $this->handleComment();
+            $this->handleComment(self::COMMENTS_WITHIN_MULTILINE);
 
             if ($this->string->is(Tokens::LINE_FEED)) {
                 $this->string->next();
@@ -136,6 +173,8 @@ class Normaliser
 
             if ($this->string->is(Tokens::CLOSE_BRACKET)) {
                 $this->string->next();
+
+                $this->process();
 
                 return;
             }
@@ -172,9 +211,48 @@ class Normaliser
     /**
      * Add current entry to normalisedString and moves iterator to next entry.
      */
-    private function append()
+    private function append(): void
     {
+        if (($this->string->is(Tokens::LINE_FEED) || !$this->string->valid()) &&
+            $this->commentOptions &&
+            ('' !== $this->comment || '' !== $this->multilineComments)) {
+            $this->appendComment();
+        }
+
         $this->normalisedString .= $this->string->current();
         $this->string->next();
+    }
+
+    private function appendComment(): void
+    {
+        $zone = rtrim($this->normalisedString, ' ');
+
+        //If there is no Resource Record on the line
+        if ((Tokens::LINE_FEED === substr($zone, -1, 0) || 0 === strlen($zone))) {
+            if ($this->commentOptions & self::COMMENTS_WITHOUT_RECORD_ENTRY) {
+                $this->normalisedString = sprintf('%s;%s', $zone, trim($this->comment));
+            }
+            $this->comment = '';
+            $this->multilineComments = '';
+
+            return;
+        }
+
+        $comments = '';
+
+        if ($this->commentOptions & self::COMMENTS_WITHIN_MULTILINE && '' !== $this->multilineComments) {
+            $comments .= $this->multilineComments;
+        }
+
+        if ($this->commentOptions & self::COMMENTS_END_OF_RECORD_ENTRY && '' !== $this->comment) {
+            $comments .= $this->comment;
+        }
+
+        if ('' !== $comments = trim($comments)) {
+            $this->normalisedString = sprintf('%s;%s', $zone, $comments);
+        }
+
+        $this->comment = '';
+        $this->multilineComments = '';
     }
 }
