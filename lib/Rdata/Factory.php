@@ -11,6 +11,8 @@
 
 namespace Badcow\DNS\Rdata;
 
+use PhpIP\IPBlock;
+
 class Factory
 {
     /**
@@ -31,10 +33,6 @@ class Factory
         $namespace = '\\Badcow\\DNS\\Rdata\\';
         $className = $namespace.strtoupper($name);
 
-        if (!class_exists($className)) {
-            $className = $namespace.'DNSSEC\\'.strtoupper($name);
-        }
-
         return new $className();
     }
 
@@ -48,7 +46,7 @@ class Factory
         $namespace = '\\Badcow\\DNS\\Rdata\\';
         $name = strtoupper($name);
 
-        return class_exists($namespace.$name) || class_exists($namespace.'DNSSEC\\'.$name);
+        return class_exists($namespace.$name);
     }
 
     /**
@@ -169,7 +167,7 @@ class Factory
      *
      * @return TXT
      */
-    public static function txt($text)
+    public static function Txt($text)
     {
         $rdata = new TXT();
         $rdata->setText($text);
@@ -328,8 +326,8 @@ class Factory
     }
 
     /**
-     * @param \IPBlock[] $includedRanges
-     * @param \IPBlock[] $excludedRanges
+     * @param IPBlock[] $includedRanges
+     * @param IPBlock[] $excludedRanges
      *
      * @return APL
      */

@@ -11,6 +11,8 @@
 
 namespace Badcow\DNS\Rdata;
 
+use PhpIP\IPBlock;
+
 /**
  * @see https://tools.ietf.org/html/rfc3123
  */
@@ -21,21 +23,21 @@ class APL implements RdataInterface
     const TYPE = 'APL';
 
     /**
-     * @var \IPBlock[]
+     * @var IPBlock[]
      */
     private $includedAddressRanges = [];
 
     /**
-     * @var \IPBlock[]
+     * @var IPBlock[]
      */
     private $excludedAddressRanges = [];
 
     /**
-     * @param \IPBlock $ipBlock
-     * @param bool     $included True if the resource exists within the range, False if the resource
-     *                           is not within the range. I.E. the negation.
+     * @param IPBlock $ipBlock
+     * @param bool    $included True if the resource exists within the range, False if the resource
+     *                          is not within the range. I.E. the negation.
      */
-    public function addAddressRange(\IPBlock $ipBlock, $included = true): void
+    public function addAddressRange(IPBlock $ipBlock, $included = true): void
     {
         if ($included) {
             $this->includedAddressRanges[] = $ipBlock;
@@ -45,7 +47,7 @@ class APL implements RdataInterface
     }
 
     /**
-     * @return \IPBlock[]
+     * @return IPBlock[]
      */
     public function getIncludedAddressRanges(): array
     {
@@ -53,7 +55,7 @@ class APL implements RdataInterface
     }
 
     /**
-     * @return \IPBlock[]
+     * @return IPBlock[]
      */
     public function getExcludedAddressRanges(): array
     {
