@@ -25,7 +25,7 @@ class FactoryTest extends TestCase
         $namespace = '\\Badcow\\DNS\\Rdata\\';
         $this->assertInstanceOf($namespace.'CNAME', Factory::newRdataFromName('cname'));
         $this->assertInstanceOf($namespace.'AAAA', Factory::newRdataFromName('Aaaa'));
-        $this->assertInstanceOf($namespace.'DNSSEC\\RRSIG', Factory::newRdataFromName('rrsig'));
+        $this->assertInstanceOf($namespace.'RRSIG', Factory::newRdataFromName('rrsig'));
 
         $this->expectException(UnsupportedTypeException::class);
         Factory::newRdataFromName('rsig');
