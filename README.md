@@ -169,11 +169,10 @@ ipv6.domain  IN AAAA ::1; This is an IPv6 domain.
 * `SOA`
 * `SRV`
 * `TXT`
-* DNSSEC specific types:
-  * `DNSKEY`
-  * `DS`
-  * `NSEC`
-  * `RRSIG`
+* `DNSKEY`
+* `DS`
+* `NSEC`
+* `RRSIG`
 
 ## Parsing BIND Records
 
