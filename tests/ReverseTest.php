@@ -54,7 +54,7 @@ c IN PTR fooc.example.com.
 
 TXT;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->normaliseLineFeeds($this->expectedIpv4Record);
         $this->normaliseLineFeeds($this->expectedIpv6Record);

@@ -12,15 +12,16 @@
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\A;
+use PHPUnit\Framework\TestCase;
 
-class ARdataTest extends \PHPUnit\Framework\TestCase
+class ARdataTest extends TestCase
 {
     /**
      * @var A
      */
     private $aRdata;
 
-    public function setUp()
+    public function setUp():void
     {
         $this->aRdata = new A();
     }

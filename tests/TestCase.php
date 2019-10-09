@@ -40,7 +40,7 @@ example.net. IN TXT "v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all"
 
 DNS;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->normaliseLineFeeds($this->expected);
     }
