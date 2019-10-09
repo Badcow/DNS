@@ -21,7 +21,7 @@ class A implements RdataInterface
     const TYPE = 'A';
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $address;
 
@@ -36,7 +36,7 @@ class A implements RdataInterface
     /**
      * @return string
      */
-    public function getAddress(): string
+    public function getAddress(): ?string
     {
         return $this->address;
     }
@@ -46,6 +46,6 @@ class A implements RdataInterface
      */
     public function output(): string
     {
-        return $this->address;
+        return $this->address ?? '';
     }
 }

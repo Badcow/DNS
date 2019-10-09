@@ -24,7 +24,7 @@ class SOA implements RdataInterface
      * The <domain-name> of the name server that was the
      * original or primary source of data for this zone.
      *
-     * @var string
+     * @var string|null
      */
     private $mname;
 
@@ -32,7 +32,7 @@ class SOA implements RdataInterface
      * A <domain-name> which specifies the mailbox of the
      * person responsible for this zone.
      *
-     * @var string
+     * @var string|null
      */
     private $rname;
 
@@ -40,7 +40,7 @@ class SOA implements RdataInterface
      * The unsigned 32 bit version number of the original copy
      * of the zone.
      *
-     * @var int
+     * @var int|null
      */
     private $serial;
 
@@ -48,7 +48,7 @@ class SOA implements RdataInterface
      * A 32 bit time interval before the zone should be
      * refreshed.
      *
-     * @var int
+     * @var int|null
      */
     private $refresh;
 
@@ -56,7 +56,7 @@ class SOA implements RdataInterface
      * A 32 bit time interval that should elapse before a
      * failed refresh should be retried.
      *
-     * @var int
+     * @var int|null
      */
     private $retry;
 
@@ -65,7 +65,7 @@ class SOA implements RdataInterface
      * the time interval that can elapse before the zone is no
      * longer authoritative.
      *
-     * @var int
+     * @var int|null
      */
     private $expire;
 
@@ -73,7 +73,7 @@ class SOA implements RdataInterface
      * The unsigned 32 bit minimum TTL field that should be
      * exported with any RR from this zone.
      *
-     * @var int
+     * @var int|null
      */
     private $minimum;
 

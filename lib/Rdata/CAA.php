@@ -39,7 +39,7 @@ class CAA implements RdataInterface
     /**
      * It is currently used to represent the critical flag.
      *
-     * @var int
+     * @var int|null
      */
     private $flag;
 
@@ -50,12 +50,12 @@ class CAA implements RdataInterface
      *  - issuewild: explicity authorizes a single certificate authority to issue a wildcard certificate (and only wildcard) for the hostname.
      *  - iodef: specifies a URL to which a certificate authority may report policy violations.
      *
-     * @var string
+     * @var string|null
      */
     private $tag;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $value;
 
@@ -104,9 +104,9 @@ class CAA implements RdataInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getValue(): string
+    public function getValue(): ?string
     {
         return $this->value;
     }
@@ -126,8 +126,8 @@ class CAA implements RdataInterface
     {
         return sprintf('%d %s "%s"',
             $this->flag,
-            $this->tag,
-            $this->value
+            $this->tag ?? '',
+            $this->value ?? ''
         );
     }
 }

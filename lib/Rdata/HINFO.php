@@ -21,12 +21,12 @@ class HINFO implements RdataInterface
     const TYPE = 'HINFO';
 
     /**
-     * @var string
+     * @var string|null
      */
     private $cpu;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $os;
 
@@ -67,6 +67,6 @@ class HINFO implements RdataInterface
      */
     public function output(): string
     {
-        return sprintf('"%s" "%s"', $this->cpu, $this->os);
+        return sprintf('"%s" "%s"', $this->cpu ?? '', $this->os ?? '');
     }
 }

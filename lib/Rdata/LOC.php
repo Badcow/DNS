@@ -34,12 +34,12 @@ class LOC implements RdataInterface
     const FORMAT_DMS = 'DMS';
 
     /**
-     * @var float
+     * @var float|null
      */
     private $latitude;
 
     /**
-     * @var float
+     * @var float|null
      */
     private $longitude;
 
@@ -79,7 +79,7 @@ class LOC implements RdataInterface
     public function getLatitude(string $format = self::FORMAT_DECIMAL)
     {
         if (self::FORMAT_DMS === $format) {
-            return $this->toDms($this->latitude, self::LATITUDE);
+            return $this->toDms($this->latitude ?? 0, self::LATITUDE);
         }
 
         return $this->latitude;
@@ -101,7 +101,7 @@ class LOC implements RdataInterface
     public function getLongitude(string $format = self::FORMAT_DECIMAL)
     {
         if (self::FORMAT_DMS === $format) {
-            return $this->toDms($this->longitude, self::LONGITUDE);
+            return $this->toDms($this->longitude ?? 0, self::LONGITUDE);
         }
 
         return $this->longitude;

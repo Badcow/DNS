@@ -21,7 +21,7 @@ class CNAME implements RdataInterface
     const TYPE = 'CNAME';
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $target;
 
@@ -46,6 +46,6 @@ class CNAME implements RdataInterface
      */
     public function output(): string
     {
-        return $this->target;
+        return $this->target ?? '';
     }
 }
