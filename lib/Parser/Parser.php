@@ -72,28 +72,30 @@ class Parser
     /**
      * @param string $name
      * @param string $zone
+     * @param int    $commentOptions
      *
      * @return Zone
      *
      * @throws ParseException
      */
-    public static function parse(string $name, string $zone): Zone
+    public static function parse(string $name, string $zone, int $commentOptions = Normaliser::COMMENTS_NONE): Zone
     {
-        return (new self())->makeZone($name, $zone);
+        return (new self())->makeZone($name, $zone, $commentOptions);
     }
 
     /**
      * @param string $name
      * @param string $string
+     * @param int    $commentOptions
      *
      * @return Zone
      *
      * @throws ParseException
      */
-    public function makeZone(string $name, string $string): Zone
+    public function makeZone(string $name, string $string, int $commentOptions = Normaliser::COMMENTS_NONE): Zone
     {
         $this->zone = new Zone($name);
-        $this->string = Normaliser::normalise($string);
+        $this->string = Normaliser::normalise($string, $commentOptions);
 
         foreach (explode(Tokens::LINE_FEED, $this->string) as $line) {
             $this->processLine($line);
@@ -109,7 +111,18 @@ class Parser
      */
     private function processLine(string $line): void
     {
-        $iterator = new ResourceRecordIterator($line);
+        list($entry, $comment) = $this->extractComment($line);
+
+        $this->currentResourceRecord = new ResourceRecord();
+        $this->currentResourceRecord->setComment($comment);
+
+        if ('' === $entry) {
+            $this->zone->addResourceRecord($this->currentResourceRecord);
+
+            return;
+        }
+
+        $iterator = new ResourceRecordIterator($entry);
 
         if ($this->isControlEntry($iterator)) {
             $this->processControlEntry($iterator);
@@ -117,7 +130,6 @@ class Parser
             return;
         }
 
-        $this->currentResourceRecord = new ResourceRecord();
         $this->processEntry($iterator);
         $this->zone->addResourceRecord($this->currentResourceRecord);
     }
@@ -282,6 +294,57 @@ class Parser
         $iterator->prev();
 
         return $isTtl;
+    }
+
+    /**
+     * Split a DNS zone line into a resource record and a comment.
+     *
+     * @param string $rr
+     *
+     * @return array [$entry, $comment]
+     */
+    private function extractComment(string $rr): array
+    {
+        $string = new StringIterator($rr);
+        $entry = '';
+        $comment = '';
+
+        while ($string->valid()) {
+            //If a semicolon is within double quotes, it will not be treated as the beginning of a comment.
+            if ($string->is(Tokens::DOUBLE_QUOTES)) {
+                $entry .= $string->current();
+                $string->next();
+
+                while ($string->isNot(Tokens::DOUBLE_QUOTES)) {
+                    //If the current char is a backslash, treat the next char as being escaped.
+                    if ($string->is(Tokens::BACKSLASH)) {
+                        $entry .= $string->current();
+                        $string->next();
+                    }
+                    $entry .= $string->current();
+                    $string->next();
+                }
+            }
+
+            if ($string->is(Tokens::SEMICOLON)) {
+                $string->next();
+                while ($string->valid()) {
+                    $comment .= $string->current();
+                    $string->next();
+                }
+
+                break;
+            }
+
+            $entry .= $string->current();
+            $string->next();
+        }
+
+        if ('' === $comment) {
+            $comment = null;
+        }
+
+        return [$entry, $comment];
     }
 
     /**

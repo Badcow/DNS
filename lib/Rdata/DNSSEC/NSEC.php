@@ -11,79 +11,10 @@
 
 namespace Badcow\DNS\Rdata\DNSSEC;
 
-use Badcow\DNS\Rdata\RdataInterface;
-use Badcow\DNS\Rdata\RdataTrait;
-
-class NSEC implements RdataInterface
+class NSEC extends \Badcow\DNS\Rdata\NSEC
 {
-    use RdataTrait;
-
-    const TYPE = 'NSEC';
-
-    /**
-     * The Next Domain field contains the next owner name (in the canonical
-     * ordering of the zone) that has authoritative data or contains a
-     * delegation point NS RRset.
-     * {@link https://tools.ietf.org/html/rfc4034#section-4.1.1}.
-     *
-     * @var string|null
-     */
-    private $nextDomainName;
-
-    /**
-     * @var array
-     */
-    private $typeBitMaps = [];
-
-    /**
-     * @return string|null
-     */
-    public function getNextDomainName(): ?string
+    public function __construct()
     {
-        return $this->nextDomainName;
-    }
-
-    /**
-     * @param string $nextDomainName
-     */
-    public function setNextDomainName(string $nextDomainName): void
-    {
-        $this->nextDomainName = $nextDomainName;
-    }
-
-    /**
-     * @param string $type
-     */
-    public function addTypeBitMap(string $type)
-    {
-        $this->typeBitMaps[] = $type;
-    }
-
-    /**
-     * Clears the types from the RDATA.
-     */
-    public function clearTypeMap(): void
-    {
-        $this->typeBitMaps = [];
-    }
-
-    /**
-     * @return array
-     */
-    public function getTypeBitMaps(): array
-    {
-        return $this->typeBitMaps;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function output(): string
-    {
-        return sprintf(
-            '%s %s',
-            $this->nextDomainName,
-            implode(' ', $this->typeBitMaps)
-        );
+        @trigger_error('Classes in Badcow\\DNS\\Rdata\\DNSSEC namespace are deprecated. Use Classes in Badcow\\DNS\\Rdata namespace instead.', E_USER_DEPRECATED);
     }
 }

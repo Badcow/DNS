@@ -334,12 +334,12 @@ TXT;
      *
      * @return ResourceRecord[]
      */
-    public static function findRecord(?string $name, Zone $zone): array
+    public static function findRecord(?string $name, Zone $zone, ?string $type = 'ANY'): array
     {
         $records = [];
 
         foreach ($zone->getResourceRecords() as $resourceRecord) {
-            if ($name === $resourceRecord->getName()) {
+            if ($name === $resourceRecord->getName() && ('ANY' === $type || $type === $resourceRecord->getType())) {
                 $records[] = $resourceRecord;
             }
         }

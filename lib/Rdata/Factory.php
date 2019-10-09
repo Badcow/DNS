@@ -11,11 +11,6 @@
 
 namespace Badcow\DNS\Rdata;
 
-use Badcow\DNS\Rdata\DNSSEC\DNSKEY;
-use Badcow\DNS\Rdata\DNSSEC\DS;
-use Badcow\DNS\Rdata\DNSSEC\NSEC;
-use Badcow\DNS\Rdata\DNSSEC\RRSIG;
-
 class Factory
 {
     /**
