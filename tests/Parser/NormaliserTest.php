@@ -11,6 +11,7 @@
 
 namespace Badcow\DNS\Tests\Parser;
 
+use Badcow\DNS\Parser\Comments;
 use Badcow\DNS\Parser\Normaliser;
 use PHPUnit\Framework\TestCase;
 
@@ -111,6 +112,9 @@ TXT;
         Normaliser::normalise($string);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testCommentsAreRetained()
     {
         $zone = self::readFile(__DIR__.'/Resources/testClearComments_sample.txt');
@@ -120,15 +124,21 @@ TXT;
         $this->assertEquals($expectation, $normalisedZone);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testMultilineCommentsAreRetained()
     {
         $zone = self::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testCollapseMultilinesWithComments_expectation.txt');
-        $normalisedZone = Normaliser::normalise($zone, Normaliser::COMMENTS_END_OF_RECORD_ENTRY | Normaliser::COMMENTS_WITHIN_MULTILINE | Normaliser::COMMENTS_WITHOUT_RECORD_ENTRY);
+        $normalisedZone = Normaliser::normalise($zone, Comments::END_OF_ENTRY | Comments::MULTILINE | Comments::ORPHAN);
 
         $this->assertEquals($expectation, $normalisedZone);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testMultilineTxtRecords()
     {
         $zone = self::readFile(__DIR__.'/Resources/testMultilineTxtRecords_sample.txt');
@@ -138,6 +148,9 @@ TXT;
         $this->assertEquals($expectation, $normalisedZone);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testKeepCommentsWithoutLinefeedAtEnd()
     {
         $zone = self::readFile(__DIR__.'/Resources/testKeepCommentsWithoutLinefeedAtEnd_sample.txt');
@@ -147,33 +160,36 @@ TXT;
         $this->assertEquals($expectation, $normalisedZone);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testCommentOptions()
     {
-        $option_1 = Normaliser::COMMENTS_END_OF_RECORD_ENTRY;
+        $option_1 = Comments::END_OF_ENTRY;
         $expectation_1 = 'example.com. IN SOA example.com. post.example.com. 2014110501 3600 14400'.
             ' 604800 3600;This is a Start of Authority';
 
-        $option_2 = Normaliser::COMMENTS_WITHIN_MULTILINE;
+        $option_2 = Comments::MULTILINE;
         $expectation_2 = 'example.com. IN SOA example.com. post.example.com. 2014110501 3600 14400'.
             ' 604800 3600;MNAME RNAME SERIAL REFRESH RETRY EXPIRE MINIMUM';
 
-        $option_3 = Normaliser::COMMENTS_END_OF_RECORD_ENTRY | Normaliser::COMMENTS_WITHIN_MULTILINE;
+        $option_3 = Comments::END_OF_ENTRY | Comments::MULTILINE;
         $expectation_3 = 'example.com. IN SOA example.com. post.example.com. 2014110501 3600 14400'.
             ' 604800 3600;MNAME RNAME SERIAL REFRESH RETRY EXPIRE MINIMUMThis is a Start of Authority';
 
-        $option_4 = Normaliser::COMMENTS_WITHOUT_RECORD_ENTRY;
+        $option_4 = Comments::ORPHAN;
         $expectation_4 = ";SOA Record\nexample.com. IN SOA example.com. post.example.com. 2014110501 3600 14400".
             ' 604800 3600';
 
-        $option_5 = Normaliser::COMMENTS_WITHOUT_RECORD_ENTRY | Normaliser::COMMENTS_END_OF_RECORD_ENTRY;
+        $option_5 = Comments::ORPHAN | Comments::END_OF_ENTRY;
         $expectation_5 = ";SOA Record\nexample.com. IN SOA example.com. post.example.com. 2014110501 3600 14400".
             ' 604800 3600;This is a Start of Authority';
 
-        $option_6 = Normaliser::COMMENTS_WITHOUT_RECORD_ENTRY | Normaliser::COMMENTS_WITHIN_MULTILINE;
+        $option_6 = Comments::ORPHAN | Comments::MULTILINE;
         $expectation_6 = ";SOA Record\nexample.com. IN SOA example.com. post.example.com. 2014110501 3600 14400".
             ' 604800 3600;MNAME RNAME SERIAL REFRESH RETRY EXPIRE MINIMUM';
 
-        $option_7 = Normaliser::COMMENTS_ALL;
+        $option_7 = Comments::ALL;
         $expectation_7 = ";SOA Record\nexample.com. IN SOA example.com. post.example.com. 2014110501 3600 14400".
             ' 604800 3600;MNAME RNAME SERIAL REFRESH RETRY EXPIRE MINIMUMThis is a Start of Authority';
 

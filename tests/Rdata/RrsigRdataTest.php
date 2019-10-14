@@ -13,8 +13,8 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\Algorithms;
-use Badcow\DNS\Rdata\RRSIG;
 use Badcow\DNS\Rdata\Factory;
+use Badcow\DNS\Rdata\RRSIG;
 use PHPUnit\Framework\TestCase;
 
 class RrsigRdataTest extends TestCase
