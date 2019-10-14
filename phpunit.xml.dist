@@ -2,7 +2,7 @@
 <phpunit colors="true"
          bootstrap="vendor/autoload.php"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.5/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/8.4/phpunit.xsd"
         >
     <php>
         <ini name="error_reporting" value="-1" />
