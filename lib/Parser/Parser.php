@@ -78,7 +78,7 @@ class Parser
      *
      * @throws ParseException
      */
-    public static function parse(string $name, string $zone, int $commentOptions = Normaliser::COMMENTS_NONE): Zone
+    public static function parse(string $name, string $zone, int $commentOptions = Comments::NONE): Zone
     {
         return (new self())->makeZone($name, $zone, $commentOptions);
     }
@@ -92,7 +92,7 @@ class Parser
      *
      * @throws ParseException
      */
-    public function makeZone(string $name, string $string, int $commentOptions = Normaliser::COMMENTS_NONE): Zone
+    public function makeZone(string $name, string $string, int $commentOptions = Comments::NONE): Zone
     {
         $this->zone = new Zone($name);
         $this->string = Normaliser::normalise($string, $commentOptions);
