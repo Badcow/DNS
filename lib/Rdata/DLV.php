@@ -11,23 +11,20 @@
 
 namespace Badcow\DNS\Rdata;
 
-trait RdataTrait
+// TODO: Implement DLV RData
+class DLV implements RdataInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getType(): string
-    {
-        /* @const TYPE */
-        return static::TYPE;
-    }
+    use RdataTrait;
+
+    const TYPE = 'DLV';
+    const TYPE_CODE = 0;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getTypeCode(): int
+    public function output(): string
     {
-        /* @const TYPE_CODE */
-        return static::TYPE_CODE;
+        // TODO: Implement output() method.
     }
 }
+
