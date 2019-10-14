@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -49,7 +51,7 @@ example.com. IN SOA (
 TXT;
 
     /**
-     * @throws \Badcow\DNS\Parser\ParseException|\Exception
+     * @throws ParseException|\Exception
      */
     public function testRemovesComments(): void
     {
@@ -62,7 +64,7 @@ TXT;
     /**
      * Multi-line records collapse onto single line.
      *
-     * @throws \Badcow\DNS\Parser\ParseException|\Exception
+     * @throws ParseException|\Exception
      */
     public function testMultilineRecordsCollapseOntoSingleLine(): void
     {
@@ -75,7 +77,7 @@ TXT;
     /**
      * Unbalanced brackets cause ParseException.
      *
-     * @throws \Badcow\DNS\Parser\ParseException
+     * @throws ParseException
      */
     public function testUnbalancedBracketsCauseParseException(): void
     {
@@ -87,7 +89,7 @@ TXT;
     /**
      * Unbalanced quotation marks cause ParseException.
      *
-     * @throws \Badcow\DNS\Parser\ParseException
+     * @throws ParseException
      */
     public function testUnbalancedQuotationMarksCauseParseException(): void
     {
@@ -101,7 +103,7 @@ TXT;
     /**
      * Line feed inside quotation marks cause exception.
      *
-     * @throws \Badcow\DNS\Parser\ParseException
+     * @throws ParseException
      */
     public function testLineFeedInsideQuotationMarksCauseException(): void
     {
@@ -119,7 +121,7 @@ TXT;
     {
         $zone = self::readFile(__DIR__.'/Resources/testClearComments_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testKeepComments_expectation.txt');
-        $normalisedZone = Normaliser::normalise($zone, true);
+        $normalisedZone = Normaliser::normalise($zone, Comments::END_OF_ENTRY);
 
         $this->assertEquals($expectation, $normalisedZone);
     }
@@ -143,7 +145,7 @@ TXT;
     {
         $zone = self::readFile(__DIR__.'/Resources/testMultilineTxtRecords_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testMultilineTxtRecords_expectation.txt');
-        $normalisedZone = Normaliser::normalise($zone, true);
+        $normalisedZone = Normaliser::normalise($zone, Comments::END_OF_ENTRY);
 
         $this->assertEquals($expectation, $normalisedZone);
     }
@@ -155,7 +157,7 @@ TXT;
     {
         $zone = self::readFile(__DIR__.'/Resources/testKeepCommentsWithoutLinefeedAtEnd_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testKeepCommentsWithoutLinefeedAtEnd_expectation.txt');
-        $normalisedZone = Normaliser::normalise($zone, true);
+        $normalisedZone = Normaliser::normalise($zone, Comments::END_OF_ENTRY);
 
         $this->assertEquals($expectation, $normalisedZone);
     }
