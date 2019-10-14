@@ -15,7 +15,7 @@ use Badcow\DNS\ZoneBuilder;
 
 class ZoneBuilderTest extends TestCase
 {
-    public function testBuild()
+    public function testBuild(): void
     {
         $zone = $this->buildTestZone();
         $zoneBuilder = new ZoneBuilder();

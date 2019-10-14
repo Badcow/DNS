@@ -20,7 +20,7 @@ class DsRdataTest extends TestCase
 {
     private static $digest = '2BB183AF5F22588179A53B0A98631FAD1A292118';
 
-    public function testOutput()
+    public function testOutput(): void
     {
         $expectation = '60485 5 1 '.self::$digest;
 
@@ -33,7 +33,7 @@ class DsRdataTest extends TestCase
         $this->assertEquals($expectation, $ds->output());
     }
 
-    public function testFactory()
+    public function testFactory(): void
     {
         $keyTag = 60485;
         $ds = Factory::Ds($keyTag, Algorithms::RSASHA1, self::$digest, DS::DIGEST_SHA1);

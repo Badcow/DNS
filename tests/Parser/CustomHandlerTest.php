@@ -36,7 +36,7 @@ class CustomHandlerTest extends TestCase
     /**
      * @throws \Badcow\DNS\Parser\ParseException
      */
-    public function testCustomHandler()
+    public function testCustomHandler(): void
     {
         $customHandlers = ['SPF' => [$this, 'spfHandler']];
 

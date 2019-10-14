@@ -113,7 +113,7 @@ class ParserTest extends TestCase
      *
      * @throws \Badcow\DNS\Parser\ParseException
      */
-    public function testParserCreatesValidDnsObject()
+    public function testParserCreatesValidDnsObject(): void
     {
         $zoneBuilder = new AlignedBuilder();
         $zone = $zoneBuilder->build($this->getTestZone());
@@ -131,7 +131,7 @@ class ParserTest extends TestCase
      *
      * @throws ParseException|\Exception
      */
-    public function testParserIgnoresControlEntriesOtherThanTtl()
+    public function testParserIgnoresControlEntriesOtherThanTtl(): void
     {
         $file = NormaliserTest::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $zone = Parser::parse('example.com.', $file);
@@ -146,7 +146,7 @@ class ParserTest extends TestCase
      *
      * @throws \Badcow\DNS\Parser\ParseException|\Exception
      */
-    public function testParserCanHandleConvolutedZoneRecord()
+    public function testParserCanHandleConvolutedZoneRecord(): void
     {
         $file = NormaliserTest::readFile(__DIR__.'/Resources/testConvolutedZone_sample.txt');
         $zone = Parser::parse('example.com.', $file);
@@ -173,7 +173,7 @@ class ParserTest extends TestCase
     /**
      * @throws ParseException
      */
-    public function testCanHandlePolymorphicRdata()
+    public function testCanHandlePolymorphicRdata(): void
     {
         $string = 'example.com. 7200 IN SSHFP 2001:acad::1337; This is invalid.';
         $zone = Parser::parse('example.com.', $string);
@@ -194,7 +194,7 @@ class ParserTest extends TestCase
     /**
      * @throws ParseException|\Exception
      */
-    public function testParserCanHandleAplRecords()
+    public function testParserCanHandleAplRecords(): void
     {
         $file = NormaliserTest::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $zone = Parser::parse('example.com.', $file);
@@ -211,7 +211,7 @@ class ParserTest extends TestCase
     /**
      * @throws ParseException
      */
-    public function testParserCanHandleCaaRecords()
+    public function testParserCanHandleCaaRecords(): void
     {
         $text = <<<'TXT'
 $ORIGIN EXAMPLE.COM.
@@ -233,7 +233,7 @@ TXT;
     /**
      * @throws ParseException
      */
-    public function testMalformedAplRecordThrowsException1()
+    public function testMalformedAplRecordThrowsException1(): void
     {
         $zone = 'multicast 3600 IN APL 3:192.168.0.64/30';
 
@@ -246,7 +246,7 @@ TXT;
     /**
      * @throws ParseException
      */
-    public function testUnknownRdataTypeThrowsException()
+    public function testUnknownRdataTypeThrowsException(): void
     {
         $zone = 'resource 3600 IN A6 f080:3024:a::1';
 
@@ -259,7 +259,7 @@ TXT;
     /**
      * @throws ParseException
      */
-    public function testMalformedAplRecordThrowsException2()
+    public function testMalformedAplRecordThrowsException2(): void
     {
         $zone = 'multicast 3600 IN APL !1-192.168.0.64/30';
 
@@ -272,7 +272,7 @@ TXT;
     /**
      * @throws \Exception|ParseException
      */
-    public function testAmbiguousRecordsParse()
+    public function testAmbiguousRecordsParse(): void
     {
         $file = NormaliserTest::readFile(__DIR__.'/Resources/ambiguous.acme.org.txt');
         $zone = Parser::parse('ambiguous.acme.org.', $file);
@@ -315,7 +315,7 @@ TXT;
     /**
      * @throws ParseException
      */
-    public function testAmbiguousRecord()
+    public function testAmbiguousRecord(): void
     {
         $record = 'mx cname aaaa';
         $zone = Parser::parse('acme.com.', $record);

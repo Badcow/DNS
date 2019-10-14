@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 class AplTest extends TestCase
 {
-    public function testOutput()
+    public function testOutput(): void
     {
         $includedRanges = [
             IPBlock::create('192.168.0.0/23'),
@@ -35,7 +35,7 @@ class AplTest extends TestCase
         $this->assertEquals($expectation, $apl->output());
     }
 
-    public function testGetters()
+    public function testGetters(): void
     {
         $includedRanges = [
             IPBlock::create('192.168.0.0/23'),

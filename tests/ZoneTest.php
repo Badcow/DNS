@@ -21,7 +21,7 @@ use PhpIP\IPBlock;
 
 class ZoneTest extends TestCase
 {
-    public function testSetName()
+    public function testSetName(): void
     {
         $zone = new Zone();
         $zone->setName('example.com.');
@@ -32,7 +32,7 @@ class ZoneTest extends TestCase
         $zone->setName('example.com');
     }
 
-    public function testFillOut()
+    public function testFillOut(): void
     {
         $zone = new Zone('example.com.');
         $zone->setDefaultTtl(3600);
@@ -118,7 +118,7 @@ class ZoneTest extends TestCase
         $this->assertEquals($expectation, AlignedBuilder::build($zone));
     }
 
-    public function testOtherFunctions()
+    public function testOtherFunctions(): void
     {
         $zone = $this->buildTestZone();
         $this->assertCount(13, $zone);
@@ -131,7 +131,7 @@ class ZoneTest extends TestCase
         $this->assertFalse($zone->contains($rr));
     }
 
-    public function testGetClassReturnsDefaultClass()
+    public function testGetClassReturnsDefaultClass(): void
     {
         $h1 = new ResourceRecord('host1');
         $h2 = new ResourceRecord('host2');

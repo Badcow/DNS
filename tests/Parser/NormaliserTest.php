@@ -51,7 +51,7 @@ TXT;
     /**
      * @throws \Badcow\DNS\Parser\ParseException|\Exception
      */
-    public function testRemovesComments()
+    public function testRemovesComments(): void
     {
         $zone = self::readFile(__DIR__.'/Resources/testClearComments_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testClearComments_expectation.txt');
@@ -64,7 +64,7 @@ TXT;
      *
      * @throws \Badcow\DNS\Parser\ParseException|\Exception
      */
-    public function testMultilineRecordsCollapseOntoSingleLine()
+    public function testMultilineRecordsCollapseOntoSingleLine(): void
     {
         $zone = self::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testCollapseMultilines_expectation.txt');
@@ -77,7 +77,7 @@ TXT;
      *
      * @throws \Badcow\DNS\Parser\ParseException
      */
-    public function testUnbalancedBracketsCauseParseException()
+    public function testUnbalancedBracketsCauseParseException(): void
     {
         $this->expectException(ParseException::class);
         $this->expectExceptionMessage('End of file reached. Unclosed bracket.');
@@ -89,7 +89,7 @@ TXT;
      *
      * @throws \Badcow\DNS\Parser\ParseException
      */
-    public function testUnbalancedQuotationMarksCauseParseException()
+    public function testUnbalancedQuotationMarksCauseParseException(): void
     {
         $string = 'mail IN TXT "Some string';
 
@@ -103,7 +103,7 @@ TXT;
      *
      * @throws \Badcow\DNS\Parser\ParseException
      */
-    public function testLineFeedInsideQuotationMarksCauseException()
+    public function testLineFeedInsideQuotationMarksCauseException(): void
     {
         $string = "www IN CNAME @\n     mail IN TXT \"Some \nstring\"";
 
@@ -115,7 +115,7 @@ TXT;
     /**
      * @throws \Exception
      */
-    public function testCommentsAreRetained()
+    public function testCommentsAreRetained(): void
     {
         $zone = self::readFile(__DIR__.'/Resources/testClearComments_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testKeepComments_expectation.txt');
@@ -127,7 +127,7 @@ TXT;
     /**
      * @throws \Exception
      */
-    public function testMultilineCommentsAreRetained()
+    public function testMultilineCommentsAreRetained(): void
     {
         $zone = self::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testCollapseMultilinesWithComments_expectation.txt');
@@ -139,7 +139,7 @@ TXT;
     /**
      * @throws \Exception
      */
-    public function testMultilineTxtRecords()
+    public function testMultilineTxtRecords(): void
     {
         $zone = self::readFile(__DIR__.'/Resources/testMultilineTxtRecords_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testMultilineTxtRecords_expectation.txt');
@@ -151,7 +151,7 @@ TXT;
     /**
      * @throws \Exception
      */
-    public function testKeepCommentsWithoutLinefeedAtEnd()
+    public function testKeepCommentsWithoutLinefeedAtEnd(): void
     {
         $zone = self::readFile(__DIR__.'/Resources/testKeepCommentsWithoutLinefeedAtEnd_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testKeepCommentsWithoutLinefeedAtEnd_expectation.txt');
@@ -163,7 +163,7 @@ TXT;
     /**
      * @throws \Exception
      */
-    public function testCommentOptions()
+    public function testCommentOptions(): void
     {
         $option_1 = Comments::END_OF_ENTRY;
         $expectation_1 = 'example.com. IN SOA example.com. post.example.com. 2014110501 3600 14400'.

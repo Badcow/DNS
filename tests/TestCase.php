@@ -45,7 +45,7 @@ DNS;
         $this->normaliseLineFeeds($this->expected);
     }
 
-    protected function normaliseLineFeeds(string &$string)
+    protected function normaliseLineFeeds(string &$string): void
     {
         $string = str_replace("\r\n", "\n", $string);
         $string = str_replace("\n", PHP_EOL, $string);

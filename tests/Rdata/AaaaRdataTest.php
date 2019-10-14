@@ -15,7 +15,7 @@ use Badcow\DNS\Rdata\AAAA;
 
 class AaaaRdataTest extends \PHPUnit\Framework\TestCase
 {
-    public function testSetAddress()
+    public function testSetAddress(): void
     {
         $address = '2003:dead:beef:4dad:23:46:bb:101';
         $aaaa = new AAAA();

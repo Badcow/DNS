@@ -43,7 +43,7 @@ class ToolboxTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider provider_expandIPv6
      */
-    public function testExpandIpv6(string $expectation, string $ip)
+    public function testExpandIpv6(string $expectation, string $ip): void
     {
         $this->assertEquals($expectation, Toolbox::expandIpv6($ip));
     }
@@ -54,12 +54,12 @@ class ToolboxTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider provider_contractIPv6
      */
-    public function testContractIpv6(string $ip, string $expectation)
+    public function testContractIpv6(string $ip, string $expectation): void
     {
         $this->assertEquals($expectation, Toolbox::contractIpv6($ip));
     }
 
-    public function testContractIpv6ThrowsException()
+    public function testContractIpv6ThrowsException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('"127.0.0.1" is not a valid IPv6 address.');
@@ -67,7 +67,7 @@ class ToolboxTest extends \PHPUnit\Framework\TestCase
         Toolbox::contractIpv6('127.0.0.1');
     }
 
-    public function testReverseIpv4()
+    public function testReverseIpv4(): void
     {
         $case_1 = '192.168.1.213';
         $exp_1 = '213.1.168.192.in-addr.arpa.';
@@ -75,7 +75,7 @@ class ToolboxTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($exp_1, Toolbox::reverseIpv4($case_1));
     }
 
-    public function testReverseIpv6()
+    public function testReverseIpv6(): void
     {
         $case_1 = '2001:db8::567:89ab';
         $case_2 = '8007:ea:19';

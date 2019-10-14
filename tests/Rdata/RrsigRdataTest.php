@@ -22,7 +22,7 @@ class RrsigRdataTest extends TestCase
     private static $signature = 'oJB1W6WNGv+ldvQ3WDG0MQkg5IEhjRip8WTrPYGv07h108dUKGMeDPKijVCHX3DDKdfb+v6oB9wfuh3DTJXUA'.
         'fI/M0zmO/zz8bW0Rznl8O3tGNazPwQKkRN20XPXV6nwwfoXmJQbsLNrLfkGJ5D6fwFm8nN+6pBzeDQfsS3Ap3o=';
 
-    public function testOutput()
+    public function testOutput(): void
     {
         if (2147483647 === PHP_INT_MAX) {
             $this->markTestSkipped('RRSIG test does not work on 32-bit systems.');
@@ -45,7 +45,7 @@ class RrsigRdataTest extends TestCase
         $this->assertEquals($expectation, $rrsig->output());
     }
 
-    public function testFactory()
+    public function testFactory(): void
     {
         $rrsig = Factory::Rrsig(
             A::TYPE,

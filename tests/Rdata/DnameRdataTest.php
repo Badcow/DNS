@@ -15,7 +15,7 @@ use Badcow\DNS\Rdata\DNAME;
 
 class DnameRdataTest extends \PHPUnit\Framework\TestCase
 {
-    public function testSetTarget()
+    public function testSetTarget(): void
     {
         $target = 'foo.example.com.';
         $dname = new DNAME();
@@ -24,7 +24,7 @@ class DnameRdataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($target, $dname->getTarget());
     }
 
-    public function testOutput()
+    public function testOutput(): void
     {
         $target = 'foo.example.com.';
         $dname = new DNAME();

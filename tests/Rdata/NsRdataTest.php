@@ -15,7 +15,7 @@ use Badcow\DNS\Rdata\NS;
 
 class NsRdataTest extends \PHPUnit\Framework\TestCase
 {
-    public function testSetNsdname()
+    public function testSetNsdname(): void
     {
         $nsdname = 'foo.example.com.';
         $dname = new NS();
@@ -24,7 +24,7 @@ class NsRdataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($nsdname, $dname->getTarget());
     }
 
-    public function testOutput()
+    public function testOutput(): void
     {
         $Nsdname = 'foo.example.com.';
         $dname = new NS();

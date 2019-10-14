@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 class NsecRdataTest extends TestCase
 {
-    public function testOutput()
+    public function testOutput(): void
     {
         $expectation = 'host.example.com. A MX RRSIG NSEC';
 
@@ -36,7 +36,7 @@ class NsecRdataTest extends TestCase
         $this->assertEquals($expectation, $nsec->output());
     }
 
-    public function testFactory()
+    public function testFactory(): void
     {
         $nextDomain = 'host.example.com.';
         $bitMaps = [A::TYPE, MX::TYPE, RRSIG::TYPE, NSEC::TYPE];
@@ -46,7 +46,7 @@ class NsecRdataTest extends TestCase
         $this->assertEquals($bitMaps, $nsec->getTypeBitMaps());
     }
 
-    public function testClearTypeMap()
+    public function testClearTypeMap(): void
     {
         $nsec = new NSEC();
         $nsec->addTypeBitMap(NS::TYPE);

@@ -16,7 +16,7 @@ use Badcow\DNS\Rdata\SOA;
 
 class SoaRdataTest extends \PHPUnit\Framework\TestCase
 {
-    public function testSettersAndGetters()
+    public function testSettersAndGetters(): void
     {
         $soa = new SOA();
         $mname = 'example.com.';
@@ -44,7 +44,7 @@ class SoaRdataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($minimum, $soa->getMinimum());
     }
 
-    public function testOutput()
+    public function testOutput(): void
     {
         $soa = Factory::Soa(
             'example.com.',

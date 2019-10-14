@@ -71,7 +71,7 @@ example.net.           IN TXT   "v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -a
 
 DNS;
 
-    public function testCompareResourceRecords()
+    public function testCompareResourceRecords(): void
     {
         $soa = new ResourceRecord();
         $soa->setClass('IN');
@@ -137,7 +137,7 @@ DNS;
         $this->assertTrue(AlignedBuilder::compareResourceRecords($dummy, $txt) > 0);
     }
 
-    public function testBuild()
+    public function testBuild(): void
     {
         $zone = $this->buildTestZone();
         $zone->addResourceRecord(new ResourceRecord('null'));

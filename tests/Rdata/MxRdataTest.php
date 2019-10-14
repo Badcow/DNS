@@ -15,7 +15,7 @@ use Badcow\DNS\Rdata\MX;
 
 class MxRdataTest extends \PHPUnit\Framework\TestCase
 {
-    public function testSetters()
+    public function testSetters(): void
     {
         $target = 'foo.example.com.';
         $preference = 10;
@@ -27,7 +27,7 @@ class MxRdataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($preference, $mx->getPreference());
     }
 
-    public function testOutput()
+    public function testOutput(): void
     {
         $target = 'foo.example.com.';
         $mx = new MX();
@@ -37,7 +37,7 @@ class MxRdataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('42 foo.example.com.', $mx->output());
     }
 
-    public function testOutputThrowsExceptionWhenMissingPreference()
+    public function testOutputThrowsExceptionWhenMissingPreference(): void
     {
         $mx = new MX();
         $mx->setExchange('mail.google.com.');
@@ -47,7 +47,7 @@ class MxRdataTest extends \PHPUnit\Framework\TestCase
         $mx->output();
     }
 
-    public function testOutputThrowsExceptionWhenMissingExchange()
+    public function testOutputThrowsExceptionWhenMissingExchange(): void
     {
         $mx = new MX();
         $mx->setPreference(15);

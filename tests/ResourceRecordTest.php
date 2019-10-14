@@ -17,7 +17,7 @@ use Badcow\DNS\ResourceRecord;
 
 class ResourceRecordTest extends TestCase
 {
-    public function testSetClass()
+    public function testSetClass(): void
     {
         $rr = new ResourceRecord();
         $rr->setClass(Classes::INTERNET);
@@ -30,7 +30,7 @@ class ResourceRecordTest extends TestCase
     /**
      * Tests the getter and setter methods.
      */
-    public function testSettersAndGetters()
+    public function testSettersAndGetters(): void
     {
         $rr = new ResourceRecord();
         $name = 'test';
@@ -51,7 +51,7 @@ class ResourceRecordTest extends TestCase
         $this->assertEquals($a->getType(), $rr->getType());
     }
 
-    public function testUnsetTtl()
+    public function testUnsetTtl(): void
     {
         $rr = new ResourceRecord('example.com.');
         $ttl = 10800;

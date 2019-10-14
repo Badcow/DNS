@@ -19,7 +19,7 @@ class RdataTraitTest extends \PHPUnit\Framework\TestCase
 
     const TYPE = 'RDATA_TEST';
 
-    public function testGetType()
+    public function testGetType(): void
     {
         $this->assertEquals(self::TYPE, $this->getType());
     }

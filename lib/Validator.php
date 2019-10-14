@@ -145,7 +145,7 @@ class Validator
 
         $totalError = 0;
 
-        $incrementError = function (bool $errorCondition, int $errorOrdinal) use (&$totalError) {
+        $incrementError = function (bool $errorCondition, int $errorOrdinal) use (&$totalError): void {
             $totalError += $errorCondition ? $errorOrdinal : 0;
         };
 

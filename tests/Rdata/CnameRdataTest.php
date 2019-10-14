@@ -15,7 +15,7 @@ use Badcow\DNS\Rdata\CNAME;
 
 class CnameRdataTest extends \PHPUnit\Framework\TestCase
 {
-    public function testOutput()
+    public function testOutput(): void
     {
         $target = 'foo.example.com.';
         $cname = new CNAME();

@@ -60,7 +60,7 @@ TXT;
         $this->normaliseLineFeeds($this->expectedIpv6Record);
     }
 
-    public function testReverseIpv4Record()
+    public function testReverseIpv4Record(): void
     {
         $origin = Toolbox::reverseIpv4('192.168.8');
 
@@ -99,7 +99,7 @@ TXT;
         $this->assertEquals($this->expectedIpv4Record, $builder->build($zone));
     }
 
-    public function testReverseIpv6Record()
+    public function testReverseIpv6Record(): void
     {
         $origin = Toolbox::reverseIpv6('2001:f83:21');
 

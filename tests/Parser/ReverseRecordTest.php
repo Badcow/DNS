@@ -21,7 +21,7 @@ class ReverseRecordTest extends TestCase
     /**
      * @throws \Badcow\DNS\Parser\ParseException
      */
-    public function testReverseRecord()
+    public function testReverseRecord(): void
     {
         $ptr = '1    1080 IN    PTR  gw01.core.acme.com.';
         $zone = Parser::parse('50.100.200.in-addr.arpa.', $ptr);
@@ -36,7 +36,7 @@ class ReverseRecordTest extends TestCase
     /**
      * @throws \Badcow\DNS\Parser\ParseException|\Exception
      */
-    public function testParseReverseRecordFile()
+    public function testParseReverseRecordFile(): void
     {
         $file = NormaliserTest::readFile(__DIR__.'/Resources/50.100.200.in-addr.arpa.db');
         $zone = Parser::parse('50.100.200.in-addr.arpa.', $file);

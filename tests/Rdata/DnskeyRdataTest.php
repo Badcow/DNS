@@ -23,7 +23,7 @@ class DnskeyRdataTest extends TestCase
      */
     private static $publicKey = 'AQPSKmynfzW4kyBv015MUG2DeIQ3Cbl+BBZH4b/0PY1kxkmvHjcZc8nokfzj31GajIQKY+5CptLr3buXA10hWqTkF7H6RfoRqXQeogmMHfpftf6zMv1LyBUgia7za6ZEzOJBOztyvhjL742iU/TpPSEDhm2SNKLijfUppn1UaNvv4w==';
 
-    public function testOutput()
+    public function testOutput(): void
     {
         $expectation = '256 3 5 '.self::$publicKey;
 
@@ -35,7 +35,7 @@ class DnskeyRdataTest extends TestCase
         $this->assertEquals($expectation, $dnskey->output());
     }
 
-    public function testFactory()
+    public function testFactory(): void
     {
         $dnskey = Factory::Dnskey(256, Algorithms::RSASHA1, self::$publicKey);
         $output = '256 3 5 '.self::$publicKey;

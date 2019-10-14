@@ -15,7 +15,7 @@ use Badcow\DNS\Rdata\HINFO;
 
 class HinfoRdataTest extends \PHPUnit\Framework\TestCase
 {
-    public function testOutput()
+    public function testOutput(): void
     {
         $cpu = '2.7GHz';
         $os = 'Ubuntu 12.04';
@@ -27,7 +27,7 @@ class HinfoRdataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectation, $hinfo->output());
     }
 
-    public function testGetters()
+    public function testGetters(): void
     {
         $cpu = '2.7GHz';
         $os = 'Ubuntu 12.04';

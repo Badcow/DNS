@@ -26,12 +26,12 @@ class ARdataTest extends TestCase
         $this->aRdata = new A();
     }
 
-    public function testGetType()
+    public function testGetType(): void
     {
         $this->assertEquals('A', $this->aRdata->getType());
     }
 
-    public function testSetAddress()
+    public function testSetAddress(): void
     {
         $address = '192.168.1.1';
         $this->aRdata->setAddress($address);
@@ -39,7 +39,7 @@ class ARdataTest extends TestCase
         $this->assertEquals($address, $this->aRdata->getAddress());
     }
 
-    public function testOutput()
+    public function testOutput(): void
     {
         $address = '192.168.1.1';
         $this->aRdata->setAddress($address);

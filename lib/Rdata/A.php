@@ -28,7 +28,7 @@ class A implements RdataInterface
     /**
      * @param string $address
      */
-    public function setAddress(string $address)
+    public function setAddress(string $address): void
     {
         $this->address = $address;
     }

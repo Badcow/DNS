@@ -62,7 +62,7 @@ class ZoneBuilder
      *
      * @param Zone $zone
      */
-    public static function fillOutZone(Zone $zone)
+    public static function fillOutZone(Zone $zone): void
     {
         $class = $zone->getClass();
 

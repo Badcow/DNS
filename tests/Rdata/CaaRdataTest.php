@@ -16,7 +16,7 @@ use Badcow\DNS\Rdata\Factory;
 
 class CaaRdataTest extends \PHPUnit\Framework\TestCase
 {
-    public function testOutput()
+    public function testOutput(): void
     {
         $caa = Factory::Caa(0, 'issue', 'letsencrypt.org');
 
@@ -30,7 +30,7 @@ class CaaRdataTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \InvalidArgumentException
      */
-    public function testFlagException()
+    public function testFlagException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Flag must be an unsigned integer on the range [0-255]');
@@ -42,7 +42,7 @@ class CaaRdataTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \InvalidArgumentException
      */
-    public function testTagException()
+    public function testTagException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag can be one of this type "issue", "issuewild", or "iodef".');
@@ -51,7 +51,7 @@ class CaaRdataTest extends \PHPUnit\Framework\TestCase
         $srv->setTag('not_exist');
     }
 
-    public function testGetType()
+    public function testGetType(): void
     {
         $this->assertEquals('CAA', (new CAA())->getType());
     }

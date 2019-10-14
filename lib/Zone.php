@@ -97,7 +97,7 @@ class Zone implements \Countable, \IteratorAggregate
     /**
      * @param ResourceRecord[] $resourceRecords
      */
-    public function fromArray(array $resourceRecords)
+    public function fromArray(array $resourceRecords): void
     {
         foreach ($resourceRecords as $resourceRecord) {
             $this->addResourceRecord($resourceRecord);

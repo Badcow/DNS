@@ -15,7 +15,7 @@ use Badcow\DNS\Classes;
 
 class ClassesTest extends \PHPUnit\Framework\TestCase
 {
-    public function testIsValidClass()
+    public function testIsValidClass(): void
     {
         $this->assertTrue(Classes::isValid('IN'));
         $this->assertTrue(Classes::isValid('HS'));

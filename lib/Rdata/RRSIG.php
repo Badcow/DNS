@@ -142,7 +142,7 @@ class RRSIG implements RdataInterface
     /**
      * @param int $labels
      */
-    public function setLabels(int $labels)
+    public function setLabels(int $labels): void
     {
         $this->labels = $labels;
     }

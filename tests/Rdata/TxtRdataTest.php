@@ -15,7 +15,7 @@ use Badcow\DNS\Rdata\TXT;
 
 class TxtRdataTest extends \PHPUnit\Framework\TestCase
 {
-    public function testSetText()
+    public function testSetText(): void
     {
         $text = 'This is some text. It\'s a nice piece of text.';
         $txt = new TXT();
@@ -24,7 +24,7 @@ class TxtRdataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($text, $txt->getText());
     }
 
-    public function testOutput()
+    public function testOutput(): void
     {
         $text = 'This is some text. It\'s a nice piece of text.';
         $expected = '"This is some text. It\\\'s a nice piece of text."';

@@ -16,7 +16,7 @@ use Badcow\DNS\Rdata\SRV;
 
 class SrvRdataTest extends \PHPUnit\Framework\TestCase
 {
-    public function testOutput()
+    public function testOutput(): void
     {
         $srv = Factory::Srv(10, 20, 666, 'doom.example.com.');
 
@@ -31,7 +31,7 @@ class SrvRdataTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \InvalidArgumentException
      */
-    public function testPortException()
+    public function testPortException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Port must be an unsigned integer on the range [0-65535]');
@@ -43,7 +43,7 @@ class SrvRdataTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \InvalidArgumentException
      */
-    public function testPriorityException()
+    public function testPriorityException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Priority must be an unsigned integer on the range [0-65535]');
@@ -55,7 +55,7 @@ class SrvRdataTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \InvalidArgumentException
      */
-    public function testWeightException()
+    public function testWeightException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Weight must be an unsigned integer on the range [0-65535]');

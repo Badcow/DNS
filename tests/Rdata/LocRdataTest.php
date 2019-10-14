@@ -15,7 +15,7 @@ use Badcow\DNS\Rdata\LOC;
 
 class LocRdataTest extends \PHPUnit\Framework\TestCase
 {
-    public function testOutput()
+    public function testOutput(): void
     {
         $rdata = new LOC();
         $rdata->setLatitude(-35.3075);
@@ -29,7 +29,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $rdata->output());
     }
 
-    public function testSetLatitude()
+    public function testSetLatitude(): void
     {
         $latitude = -35.3075;
         $lat_dms = '35 18 27.000 S';
@@ -42,7 +42,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($lat_dms, $rdata->getLatitude(LOC::FORMAT_DMS));
     }
 
-    public function testSetLongitude()
+    public function testSetLongitude(): void
     {
         $longitude = 149.1244;
         $lon_dms = '149 7 27.840 E';
@@ -58,7 +58,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \OutOfRangeException
      */
-    public function testSetAltitude1()
+    public function testSetAltitude1(): void
     {
         $this->expectException(\OutOfRangeException::class);
         $this->expectExceptionMessage('The altitude must be on [-100000.00, 42849672.95].');
@@ -70,7 +70,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \OutOfRangeException
      */
-    public function testSetAltitude2()
+    public function testSetAltitude2(): void
     {
         $this->expectException(\OutOfRangeException::class);
         $this->expectExceptionMessage('The altitude must be on [-100000.00, 42849672.95].');
@@ -79,7 +79,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
         $rdata->setAltitude(42849673);
     }
 
-    public function testGetAltitude()
+    public function testGetAltitude(): void
     {
         $rdata = new LOC();
         $altitude = 12345;
@@ -90,7 +90,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
     /**
      * @thows \OutOfRangeException
      */
-    public function testSetSize1()
+    public function testSetSize1(): void
     {
         $this->expectException(\OutOfRangeException::class);
         $this->expectExceptionMessage('The size must be on [0, 90000000.0].');
@@ -102,7 +102,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \OutOfRangeException
      */
-    public function testSetSize2()
+    public function testSetSize2(): void
     {
         $this->expectException(\OutOfRangeException::class);
         $this->expectExceptionMessage('The size must be on [0, 90000000.0].');
@@ -111,7 +111,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
         $rdata->setSize(90000002);
     }
 
-    public function testGetSize()
+    public function testGetSize(): void
     {
         $size = 1231;
         $rdata = new LOC();
@@ -122,7 +122,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \OutOfRangeException
      */
-    public function testSetVerticalPrecision1()
+    public function testSetVerticalPrecision1(): void
     {
         $this->expectException(\OutOfRangeException::class);
         $this->expectExceptionMessage('The vertical precision must be on [0, 90000000.0].');
@@ -134,7 +134,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \OutOfRangeException
      */
-    public function testSetVerticalPrecision2()
+    public function testSetVerticalPrecision2(): void
     {
         $this->expectException(\OutOfRangeException::class);
         $this->expectExceptionMessage('The vertical precision must be on [0, 90000000.0].');
@@ -146,7 +146,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \OutOfRangeException
      */
-    public function testSetHorizontalPrecision1()
+    public function testSetHorizontalPrecision1(): void
     {
         $this->expectException(\OutOfRangeException::class);
         $this->expectExceptionMessage('The horizontal precision must be on [0, 90000000.0].');
@@ -158,7 +158,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \OutOfRangeException
      */
-    public function testSetHorizontalPrecision2()
+    public function testSetHorizontalPrecision2(): void
     {
         $this->expectException(\OutOfRangeException::class);
         $this->expectExceptionMessage('The horizontal precision must be on [0, 90000000.0].');
@@ -167,7 +167,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
         $rdata->setHorizontalPrecision(90000002);
     }
 
-    public function testGetHorizontalPrecision()
+    public function testGetHorizontalPrecision(): void
     {
         $hp = 127835;
         $rdata = new LOC();
@@ -175,7 +175,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($hp, $rdata->getHorizontalPrecision());
     }
 
-    public function testGetVerticalPrecision()
+    public function testGetVerticalPrecision(): void
     {
         $vp = 127835;
         $rdata = new LOC();

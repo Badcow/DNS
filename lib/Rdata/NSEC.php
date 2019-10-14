@@ -51,7 +51,7 @@ class NSEC implements RdataInterface
     /**
      * @param string $type
      */
-    public function addTypeBitMap(string $type)
+    public function addTypeBitMap(string $type): void
     {
         $this->typeBitMaps[] = $type;
     }

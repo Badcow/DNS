@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 
 class AlgorithmsTest extends TestCase
 {
-    public function testGetMnemonic()
+    public function testGetMnemonic(): void
     {
         $this->assertEquals('RSASHA1', Algorithms::getMnemonic(5));
     }
@@ -24,7 +24,7 @@ class AlgorithmsTest extends TestCase
     /**
      * @throws \InvalidArgumentException
      */
-    public function testGetMnemonicThrowsExceptionOnInvalidAlgorithm()
+    public function testGetMnemonicThrowsExceptionOnInvalidAlgorithm(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('"1337" is not a valid algorithm.');
