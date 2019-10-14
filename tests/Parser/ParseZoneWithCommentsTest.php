@@ -11,7 +11,7 @@
 
 namespace Badcow\DNS\Tests\Parser;
 
-use Badcow\DNS\Parser\Normaliser;
+use Badcow\DNS\Parser\Comments;
 use Badcow\DNS\Parser\Parser;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\AAAA;
@@ -28,7 +28,7 @@ class ParseZoneWithCommentsTest extends TestCase
     public function testParseZoneWithComments()
     {
         $zoneFile = NormaliserTest::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
-        $zone = Parser::parse('example.com.', $zoneFile, Normaliser::COMMENTS_ALL);
+        $zone = Parser::parse('example.com.', $zoneFile, Comments::ALL);
 
         $nsRecords = ParserTest::findRecord('@', $zone, NS::TYPE);
         $this->assertCount(2, $nsRecords);
@@ -56,7 +56,7 @@ class ParseZoneWithCommentsTest extends TestCase
     public function testCommentOnlyLinesParse()
     {
         $zoneFile = NormaliserTest::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
-        $zone = Parser::parse('example.com.', $zoneFile, Normaliser::COMMENTS_ALL);
+        $zone = Parser::parse('example.com.', $zoneFile, Comments::ALL);
 
         $nullEntries = ParserTest::findRecord(null, $zone, null);
         $this->assertCount(4, $nullEntries);
@@ -66,10 +66,13 @@ class ParseZoneWithCommentsTest extends TestCase
         $this->assertEquals('MX RECORDS', $nullEntries[3]->getComment());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testMultilineTxtRecords()
     {
         $zoneFile = NormaliserTest::readFile(__DIR__.'/Resources/testMultilineTxtRecords_sample.txt');
-        $zone = Parser::parse('acme.com.', $zoneFile, Normaliser::COMMENTS_ALL);
+        $zone = Parser::parse('acme.com.', $zoneFile, Comments::ALL);
 
         $txtRecords = ParserTest::findRecord('test', $zone, TXT::TYPE);
 
