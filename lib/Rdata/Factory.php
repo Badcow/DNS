@@ -506,8 +506,20 @@ class Factory
         // TODO: Implement TSIG() method.
     }
 
-    public static function URI(): URI
+    /**
+     * @param int    $priority
+     * @param int    $weight
+     * @param string $target
+     *
+     * @return URI
+     */
+    public static function URI(int $priority, int $weight, string $target): URI
     {
-        // TODO: Implement URI() method.
+        $uri = new URI();
+        $uri->setPriority($priority);
+        $uri->setWeight($weight);
+        $uri->setTarget($target);
+
+        return $uri;
     }
 }

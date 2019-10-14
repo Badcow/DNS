@@ -21,11 +21,12 @@ class RdataHandlers
      * @var array
      */
     private static $handlers = [
-        Rdata\LOC::TYPE => __CLASS__.'::handleLocRdata',
-        Rdata\TXT::TYPE => __CLASS__.'::handleTxtRdata',
         Rdata\APL::TYPE => __CLASS__.'::handleAplRdata',
         Rdata\CAA::TYPE => __CLASS__.'::handleCaaRdata',
+        Rdata\LOC::TYPE => __CLASS__.'::handleLocRdata',
         Rdata\SSHFP::TYPE => __CLASS__.'::handleSshfpRdata',
+        Rdata\TXT::TYPE => __CLASS__.'::handleTxtRdata',
+        Rdata\URI::TYPE => __CLASS__.'::handleUriRdata',
     ];
 
     /**
@@ -141,6 +142,21 @@ class RdataHandlers
     public static function handleSshfpRdata(\ArrayIterator $iterator): Rdata\SSHFP
     {
         return Rdata\Factory::SSHFP((int) self::pop($iterator), (int) self::pop($iterator), self::pop($iterator));
+    }
+
+    /**
+     * @param \ArrayIterator $iterator
+     *
+     * @return Rdata\URI
+     */
+    public static function handleUriRdata(\ArrayIterator $iterator): Rdata\URI
+    {
+        $priority = (int) self::pop($iterator);
+        $weight = (int) self::pop($iterator);
+        $target = trim(implode(' ', self::getAllRemaining($iterator)), '"');
+        $target = str_replace(' ', '%20', $target);
+
+        return Rdata\Factory::URI($priority, $weight, $target);
     }
 
     /**

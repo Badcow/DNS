@@ -11,19 +11,117 @@
 
 namespace Badcow\DNS\Rdata;
 
-// TODO: Implement URI RData
+/**
+ * {@link https://tools.ietf.org/html/rfc7553}.
+ */
 class URI implements RdataInterface
 {
     use RdataTrait;
 
     const TYPE = 'URI';
-    const TYPE_CODE = 0;
+    const TYPE_CODE = 256;
+    const MAX_PRIORITY = 65535;
+    const MAX_WEIGHT = 65535;
+
+    /**
+     * This field holds the priority of the target URI in this RR.  Its
+     * range is 0-65535.  A client MUST attempt to contact the URI with the
+     * lowest-numbered priority it can reach; URIs with the same priority
+     * SHOULD be selected according to probabilities defined by the weight
+     * field.
+     *
+     * @var int
+     */
+    private $priority;
+
+    /**
+     * This field holds the server selection mechanism.  The weight field
+     * specifies a relative weight for entries with the same priority.
+     * Larger weights SHOULD be given a proportionately higher probability
+     * of being selected.  The range of this number is 0-65535.
+     *
+     * @var int
+     */
+    private $weight;
+
+    /**
+     * @var string
+     */
+    private $target;
+
+    /**
+     * @return int
+     */
+    public function getPriority(): ?int
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param int $priority
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function setPriority(int $priority): void
+    {
+        if ($priority < 0 || $priority > static::MAX_PRIORITY) {
+            throw new \InvalidArgumentException('Priority must be an unsigned integer on the range [0-65535]');
+        }
+
+        $this->priority = $priority;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWeight(): ?int
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param int $weight
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function setWeight(int $weight): void
+    {
+        if ($weight < 0 || $weight > static::MAX_WEIGHT) {
+            throw new \InvalidArgumentException('Weight must be an unsigned integer on the range [0-65535]');
+        }
+
+        $this->weight = $weight;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTarget(): ?string
+    {
+        return $this->target;
+    }
+
+    /**
+     * @param string $target
+     */
+    public function setTarget(string $target): void
+    {
+        if (false === filter_var($target, FILTER_VALIDATE_URL)) {
+            throw new \InvalidArgumentException(sprintf('The target "%s" is not a valid URI.', $target));
+        }
+
+        $this->target = $target;
+    }
 
     /**
      * {@inheritdoc}
      */
     public function output(): string
     {
-        // TODO: Implement output() method.
+        return sprintf('%d %d "%s"',
+            $this->priority,
+            $this->weight,
+            $this->target
+        );
     }
 }

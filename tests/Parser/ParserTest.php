@@ -233,6 +233,9 @@ TXT;
         $this->assertEquals('letsencrypt.org', $caa->getValue());
     }
 
+    /**
+     * @throws ParseException
+     */
     public function testParserCanHandleSshfpRecords()
     {
         $txt = 'host.example. IN SSHFP 2 1 123456789abcdef67890123456789abcdef67890';
@@ -244,6 +247,22 @@ TXT;
         $this->assertEquals(2, $sshfp->getAlgorithm());
         $this->assertEquals(1, $sshfp->getFingerprintType());
         $this->assertEquals('123456789abcdef67890123456789abcdef67890', $sshfp->getFingerprint());
+    }
+
+    /**
+     * @throws ParseException
+     */
+    public function testParserCanHandleUriRecords()
+    {
+        $txt = '   _ftp._tcp    IN URI 10 1 "ftp://ftp1.example.com/public data"';
+        $zone = Parser::parse('example.com.', $txt);
+
+        $rrs = self::findRecord('_ftp._tcp', $zone, 'URI');
+        $uri = $rrs[0]->getRdata();
+
+        $this->assertEquals(10, $uri->getPriority());
+        $this->assertEquals(1, $uri->getWeight());
+        $this->assertEquals('ftp://ftp1.example.com/public%20data', $uri->getTarget());
     }
 
     /**
