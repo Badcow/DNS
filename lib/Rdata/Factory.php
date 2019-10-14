@@ -469,9 +469,21 @@ class Factory
         // TODO: Implement SMIMEA() method.
     }
 
-    public static function SSHFP(): SSHFP
+    /**
+     * @param int    $algorithm
+     * @param int    $fpType
+     * @param string $fingerprint
+     *
+     * @return SSHFP
+     */
+    public static function SSHFP(int $algorithm, int $fpType, string $fingerprint): SSHFP
     {
-        // TODO: Implement SSHFP() method.
+        $sshfp = new SSHFP();
+        $sshfp->setAlgorithm($algorithm);
+        $sshfp->setFingerprintType($fpType);
+        $sshfp->setFingerprint($fingerprint);
+
+        return $sshfp;
     }
 
     public static function TA(): TA

@@ -25,6 +25,7 @@ class RdataHandlers
         Rdata\TXT::TYPE => __CLASS__.'::handleTxtRdata',
         Rdata\APL::TYPE => __CLASS__.'::handleAplRdata',
         Rdata\CAA::TYPE => __CLASS__.'::handleCaaRdata',
+        Rdata\SSHFP::TYPE => __CLASS__.'::handleSshfpRdata',
     ];
 
     /**
@@ -130,6 +131,16 @@ class RdataHandlers
         self::handleTxt($string, $value);
 
         return Rdata\Factory::caa($flag, $tag, $value);
+    }
+
+    /**
+     * @param \ArrayIterator $iterator
+     *
+     * @return Rdata\SSHFP
+     */
+    public static function handleSshfpRdata(\ArrayIterator $iterator): Rdata\SSHFP
+    {
+        return Rdata\Factory::SSHFP((int) self::pop($iterator), (int) self::pop($iterator), self::pop($iterator));
     }
 
     /**

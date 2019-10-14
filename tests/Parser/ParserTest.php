@@ -15,6 +15,7 @@ use Badcow\DNS\AlignedBuilder;
 use Badcow\DNS\Classes;
 use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
+use Badcow\DNS\Parser\RDataTypes;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\AAAA;
 use Badcow\DNS\Rdata\APL;
@@ -175,7 +176,9 @@ class ParserTest extends TestCase
      */
     public function testCanHandlePolymorphicRdata()
     {
-        $string = 'example.com. 7200 IN SSHFP 2001:acad::1337; This is invalid.';
+        RDataTypes::$names[] = 'XX'; //Trick parser into using polymorphic type.
+
+        $string = 'example.com. 7200 IN XX 2001:acad::1337; This is invalid.';
         $zone = Parser::parse('example.com.', $string);
         $rr = $zone->getResourceRecords()[0];
 
@@ -187,7 +190,7 @@ class ParserTest extends TestCase
             return;
         }
 
-        $this->assertEquals('SSHFP', $rdata->getType());
+        $this->assertEquals('XX', $rdata->getType());
         $this->assertEquals('2001:acad::1337', $rdata->output());
     }
 
@@ -228,6 +231,19 @@ TXT;
         $this->assertEquals(0, $caa->getFlag());
         $this->assertEquals('issue', $caa->getTag());
         $this->assertEquals('letsencrypt.org', $caa->getValue());
+    }
+
+    public function testParserCanHandleSshfpRecords()
+    {
+        $txt = 'host.example. IN SSHFP 2 1 123456789abcdef67890123456789abcdef67890';
+        $zone = Parser::parse('example.', $txt);
+
+        $rrs = self::findRecord('host.example.', $zone, 'SSHFP');
+        $sshfp = $rrs[0]->getRdata();
+
+        $this->assertEquals(2, $sshfp->getAlgorithm());
+        $this->assertEquals(1, $sshfp->getFingerprintType());
+        $this->assertEquals('123456789abcdef67890123456789abcdef67890', $sshfp->getFingerprint());
     }
 
     /**
