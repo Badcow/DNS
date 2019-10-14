@@ -11,20 +11,14 @@
 
 namespace Badcow\DNS\Rdata;
 
-// TODO: Implement DLV RData
-class DLV implements RdataInterface
+/**
+ * {@link https://tools.ietf.org/html/rfc4431}
+ */
+class DLV extends DS
 {
     use RdataTrait;
 
     const TYPE = 'DLV';
-    const TYPE_CODE = 0;
-
-    /**
-     * {@inheritDoc}
-     */
-    public function output(): string
-    {
-        // TODO: Implement output() method.
-    }
+    const TYPE_CODE = 32769;
 }
 
