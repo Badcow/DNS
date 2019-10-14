@@ -12,9 +12,10 @@ Inline comments appear at the end of record entry and is oftern the most useful,
 ```TXT
 acme.org IN 3200 MX 100 mail-gw10  ;This is an inline comment
 ```
-### Record entry block headers
-Block headers appear before a block of similarly grouped records. Depending on style, these may
-separate resource record types or group records associated with a single machine. E.g.:
+### Record entry block headers (Orphan Comments)
+Block headers appear before a block of similarly grouped records. Depending on style, these may separate resource record
+types or group records associated with a single machine. As these aren't associated with a resource record in
+particular, they are referred to as "Orphan Comments". E.g.:
 ```TXT
 ;THESE RECORDS ARE FOR THE WEB SERVER
 www IN A 250.150.50.33
@@ -62,20 +63,21 @@ $zone = Parser::parse('example.com.', $exampleZone, Normaliser::COMMENTS_END_OF_
 The above will only include comments that are at the end of the resource record (i.e. no block headers or multi-line
 comments).
 
-The `$commentOptions` parameter accepts a bit-mask representing possible combinations of the above comment types.
+The `$commentOptions` parameter accepts a bit-mask representing possible combinations of the below comment types. These
+constants are contained within the `\Badcow\DNS\Parser\Comments` class.
 
-| Name                                      | Integer Value | Comment Type               |
-| ----------------------------------------- | :----------:  | :------------------------- |
-| Normaliser::COMMENTS_NONE                 | 0             | No comments are parsed     |
-| Normaliser::COMMENTS_END_OF_RECORD_ENTRY  | 1             | Inline comments            |
-| Normaliser::COMMENTS_WITHIN_MULTILINE     | 2             | Multi-line record comments |
-| Normaliser::COMMENTS_WITHOUT_RECORD_ENTRY | 4             | Block header comments      |
-| Normaliser::COMMENTS_ALL                  | 7             | Include all comments       |
+| Name                   | Integer Value | Comment Type                                                                         |
+| ---------------------- | :----------:  | :----------------------------------------------------------------------------------- |
+| Comments::NONE         | 0             | No comments are parsed                                                               |
+| Comments::END_OF_ENTRY | 1             | Inline comments that appear t the end of a resource record.                          |
+| Comments::MULTILINE    | 2             | Multi-line record comments: those comments that appear within multi-line brackets.   |
+| Comments::ORPHAN       | 4             | Orphan comments appear without a resource record. Usually these are section headers. |
+| Comments::ALL          | 7             | Include all comments.                                                                |
 
 To make a combination, simply provide each comment type as a bitwise `OR`. E.g.
 ```php
 //This excludes multi-line comments
-$commentOptions = Normaliser::COMMENTS_WITHOUT_RECORD_ENTRY | Normaliser::COMMENTS_END_OF_RECORD_ENTRY; //Equals 5
+$commentOptions = Comments::ORPHAN | Comments::END_OF_ENTRY; //Equals 5
 $zone = Parser::parse('example.com.', $exampleZone, $commentOptions);
 ```
 
@@ -97,7 +99,7 @@ acme.com. 3600 IN SOA  (
                        ); This is an SOA
 BIND;
 
-$commentOptions = Normaliser::COMMENTS_WITHOUT_RECORD_ENTRY | Normaliser::COMMENTS_END_OF_RECORD_ENTRY | Normaliser::COMMENTS_WITHIN_MULTILINE;
+$commentOptions = Comments::ORPHAN | Comments::END_OF_ENTRY | Comments::MULTILINE; //This is the same as Comments::ALL
 
 $acmeZone = Parser::parse('acme.com.', $bind, $commentOptions);
 
