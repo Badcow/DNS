@@ -21,7 +21,7 @@ class ARdataTest extends TestCase
      */
     private $aRdata;
 
-    public function setUp():void
+    public function setUp(): void
     {
         $this->aRdata = new A();
     }

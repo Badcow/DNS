@@ -17,14 +17,13 @@ use Badcow\DNS\ResourceRecord;
 
 class ResourceRecordTest extends TestCase
 {
-    /**
-     * @expectedException \UnexpectedValueException
-     */
     public function testSetClass()
     {
         $rr = new ResourceRecord();
         $rr->setClass(Classes::INTERNET);
         $this->assertEquals(Classes::INTERNET, $rr->getClass());
+
+        $this->expectException(\UnexpectedValueException::class);
         $rr->setClass('XX');
     }
 

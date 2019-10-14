@@ -147,9 +147,6 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::ipAddress($invalid4));
     }
 
-    /**
-     * @expectedExceptionMessage There must be exactly one SOA record, 2 given.
-     */
     public function testValidateNumberOfSoa()
     {
         $zone = $this->buildTestZone();
@@ -170,9 +167,6 @@ class ValidatorTest extends TestCase
         $this->assertEquals(Validator::ZONE_TOO_MANY_SOA, Validator::zone($zone));
     }
 
-    /**
-     * @expectedExceptionMessage There must be exactly one type of class, 2 given.
-     */
     public function testValidateNumberOfClasses()
     {
         $zone = $this->buildTestZone();

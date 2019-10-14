@@ -59,12 +59,11 @@ class ToolboxTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectation, Toolbox::contractIpv6($ip));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage "127.0.0.1" is not a valid IPv6 address.
-     */
     public function testContractIpv6ThrowsException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('"127.0.0.1" is not a valid IPv6 address.');
+
         Toolbox::contractIpv6('127.0.0.1');
     }
 

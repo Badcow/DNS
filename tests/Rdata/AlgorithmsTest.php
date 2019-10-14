@@ -22,10 +22,12 @@ class AlgorithmsTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function testGetMnemonicThrowsExceptionOnInvalidAlgorithm()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('"1337" is not a valid algorithm.');
         Algorithms::getMnemonic(1337);
     }
 }

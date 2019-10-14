@@ -2,4 +2,4 @@ vendor
 phpunit.xml
 composer.lock
 coverage.clover
-.php_cs.cache
+*.cache

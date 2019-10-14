@@ -9,3 +9,4 @@ CHANGELOG for 3.x
   * `\Badcow\DNS\Parser\Normaliser::COMMENTS_WITHIN_MULTILINE`
   * `\Badcow\DNS\Parser\Normaliser::COMMENTS_WITHOUT_RECORD_ENTRY`
   * `\Badcow\DNS\Parser\Normaliser::COMMENTS_ALL`
+* Upgraded to PHPUnit 8.

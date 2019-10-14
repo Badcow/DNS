@@ -82,7 +82,7 @@ class Algorithms
     public static function getMnemonic(int $algorithmId)
     {
         if (!array_key_exists($algorithmId, self::$mnemonic)) {
-            throw new \InvalidArgumentException(sprintf('"%d" id not a valid algorithm.', $algorithmId));
+            throw new \InvalidArgumentException(sprintf('"%d" is not a valid algorithm.', $algorithmId));
         }
 
         return self::$mnemonic[$algorithmId];

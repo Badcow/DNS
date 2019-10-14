@@ -13,6 +13,7 @@ namespace Badcow\DNS\Tests\Parser;
 
 use Badcow\DNS\Parser\Comments;
 use Badcow\DNS\Parser\Normaliser;
+use Badcow\DNS\Parser\ParseException;
 use PHPUnit\Framework\TestCase;
 
 class NormaliserTest extends TestCase
@@ -74,41 +75,40 @@ TXT;
     /**
      * Unbalanced brackets cause ParseException.
      *
-     * @expectedException \Badcow\DNS\Parser\ParseException
-     * @expectedExceptionMessage End of file reached. Unclosed bracket.
-     *
      * @throws \Badcow\DNS\Parser\ParseException
      */
     public function testUnbalancedBracketsCauseParseException()
     {
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('End of file reached. Unclosed bracket.');
         Normaliser::normalise($this->unbalancedBrackets);
     }
 
     /**
      * Unbalanced quotation marks cause ParseException.
      *
-     * @expectedException \Badcow\DNS\Parser\ParseException
-     * @expectedExceptionMessage Unbalanced double quotation marks. End of file reached.
-     *
      * @throws \Badcow\DNS\Parser\ParseException
      */
     public function testUnbalancedQuotationMarksCauseParseException()
     {
         $string = 'mail IN TXT "Some string';
+
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Unbalanced double quotation marks. End of file reached.');
         Normaliser::normalise($string);
     }
 
     /**
      * Line feed inside quotation marks cause exception.
      *
-     * @expectedException \Badcow\DNS\Parser\ParseException
-     * @expectedExceptionMessage Line Feed found within double quotation marks context. [Line no: 2]
-     *
      * @throws \Badcow\DNS\Parser\ParseException
      */
     public function testLineFeedInsideQuotationMarksCauseException()
     {
         $string = "www IN CNAME @\n     mail IN TXT \"Some \nstring\"";
+
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Line Feed found within double quotation marks context. [Line no: 2]');
         Normaliser::normalise($string);
     }
 

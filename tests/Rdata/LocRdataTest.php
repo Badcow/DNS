@@ -56,19 +56,25 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \OutOfRangeException
+     * @throws \OutOfRangeException
      */
     public function testSetAltitude1()
     {
+        $this->expectException(\OutOfRangeException::class);
+        $this->expectExceptionMessage('The altitude must be on [-100000.00, 42849672.95].');
+
         $rdata = new LOC();
         $rdata->setAltitude(-100001);
     }
 
     /**
-     * @expectedException \OutOfRangeException
+     * @throws \OutOfRangeException
      */
     public function testSetAltitude2()
     {
+        $this->expectException(\OutOfRangeException::class);
+        $this->expectExceptionMessage('The altitude must be on [-100000.00, 42849672.95].');
+
         $rdata = new LOC();
         $rdata->setAltitude(42849673);
     }
@@ -82,19 +88,25 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \OutOfRangeException
+     * @thows \OutOfRangeException
      */
     public function testSetSize1()
     {
+        $this->expectException(\OutOfRangeException::class);
+        $this->expectExceptionMessage('The size must be on [0, 90000000.0].');
+
         $rdata = new LOC();
         $rdata->setSize(-1);
     }
 
     /**
-     * @expectedException \OutOfRangeException
+     * @throws \OutOfRangeException
      */
     public function testSetSize2()
     {
+        $this->expectException(\OutOfRangeException::class);
+        $this->expectExceptionMessage('The size must be on [0, 90000000.0].');
+
         $rdata = new LOC();
         $rdata->setSize(90000002);
     }
@@ -108,37 +120,49 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \OutOfRangeException
+     * @throws \OutOfRangeException
      */
     public function testSetVerticalPrecision1()
     {
+        $this->expectException(\OutOfRangeException::class);
+        $this->expectExceptionMessage('The vertical precision must be on [0, 90000000.0].');
+
         $rdata = new LOC();
         $rdata->setVerticalPrecision(-1);
     }
 
     /**
-     * @expectedException \OutOfRangeException
+     * @throws \OutOfRangeException
      */
     public function testSetVerticalPrecision2()
     {
+        $this->expectException(\OutOfRangeException::class);
+        $this->expectExceptionMessage('The vertical precision must be on [0, 90000000.0].');
+
         $rdata = new LOC();
         $rdata->setVerticalPrecision(90000002);
     }
 
     /**
-     * @expectedException \OutOfRangeException
+     * @throws \OutOfRangeException
      */
     public function testSetHorizontalPrecision1()
     {
+        $this->expectException(\OutOfRangeException::class);
+        $this->expectExceptionMessage('The horizontal precision must be on [0, 90000000.0].');
+
         $rdata = new LOC();
         $rdata->setHorizontalPrecision(-1);
     }
 
     /**
-     * @expectedException \OutOfRangeException
+     * @throws \OutOfRangeException
      */
     public function testSetHorizontalPrecision2()
     {
+        $this->expectException(\OutOfRangeException::class);
+        $this->expectExceptionMessage('The horizontal precision must be on [0, 90000000.0].');
+
         $rdata = new LOC();
         $rdata->setHorizontalPrecision(90000002);
     }

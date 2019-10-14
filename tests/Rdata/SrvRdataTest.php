@@ -29,28 +29,37 @@ class SrvRdataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function testPortException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Port must be an unsigned integer on the range [0-65535]');
+
         $srv = new SRV();
         $srv->setPort(SRV::HIGHEST_PORT + 1);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function testPriorityException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Priority must be an unsigned integer on the range [0-65535]');
+
         $srv = new SRV();
         $srv->setPriority(SRV::MAX_PRIORITY + 1);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function testWeightException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Weight must be an unsigned integer on the range [0-65535]');
+
         $srv = new SRV();
         $srv->setWeight(SRV::MAX_WEIGHT + 1);
     }

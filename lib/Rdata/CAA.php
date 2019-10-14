@@ -97,7 +97,7 @@ class CAA implements RdataInterface
     public function setTag(string $tag): void
     {
         if (!in_array($tag, static::ALLOWED_TAGS)) {
-            throw new \InvalidArgumentException('Tag can be one of this type '.implode(' ', static::ALLOWED_TAGS));
+            throw new \InvalidArgumentException('Tag can be one of this type "issue", "issuewild", or "iodef".');
         }
 
         $this->tag = $tag;

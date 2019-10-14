@@ -21,17 +21,14 @@ use PhpIP\IPBlock;
 
 class ZoneTest extends TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Zone "example.com" is not a fully qualified domain name.
-     */
     public function testSetName()
     {
         $zone = new Zone();
         $zone->setName('example.com.');
         $this->assertEquals('example.com.', $zone->getName());
 
-        //Should throw exception
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Zone "example.com" is not a fully qualified domain name.');
         $zone->setName('example.com');
     }
 

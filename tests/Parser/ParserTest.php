@@ -231,40 +231,40 @@ TXT;
     }
 
     /**
-     * @expectedException \Badcow\DNS\Parser\ParseException
-     * @expectedExceptionMessage "3:192.168.0.64/30" is not a valid IP range.
-     *
      * @throws ParseException
      */
     public function testMalformedAplRecordThrowsException1()
     {
         $zone = 'multicast 3600 IN APL 3:192.168.0.64/30';
 
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('"3:192.168.0.64/30" is not a valid IP range.');
+
         Parser::parse('example.com.', $zone);
     }
 
     /**
-     * @expectedException \Badcow\DNS\Parser\ParseException
-     * @expectedExceptionMessage Could not parse entry "resource 3600 IN A6 f080:3024:a::1".
-     *
      * @throws ParseException
      */
     public function testUnknownRdataTypeThrowsException()
     {
         $zone = 'resource 3600 IN A6 f080:3024:a::1';
 
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Could not parse entry "resource 3600 IN A6 f080:3024:a::1".');
+
         Parser::parse('acme.com.', $zone);
     }
 
     /**
-     * @expectedException \Badcow\DNS\Parser\ParseException
-     * @expectedExceptionMessage "!1-192.168.0.64/30" is not a valid IP range.
-     *
      * @throws ParseException
      */
     public function testMalformedAplRecordThrowsException2()
     {
         $zone = 'multicast 3600 IN APL !1-192.168.0.64/30';
+
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('"!1-192.168.0.64/30" is not a valid IP range.');
 
         Parser::parse('example.com.', $zone);
     }
