@@ -19,6 +19,7 @@ class HINFO implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'HINFO';
+    const TYPE_CODE = 13;
 
     /**
      * @var string|null

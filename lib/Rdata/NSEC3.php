@@ -20,11 +20,10 @@ class NSEC3 implements RdataInterface
     const TYPE_CODE = 0;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function output(): string
     {
         // TODO: Implement output() method.
     }
 }
-

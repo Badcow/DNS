@@ -17,4 +17,5 @@ namespace Badcow\DNS\Rdata;
 class AAAA extends A
 {
     const TYPE = 'AAAA';
+    const TYPE_CODE = 28;
 }

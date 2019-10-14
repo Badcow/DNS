@@ -17,4 +17,5 @@ namespace Badcow\DNS\Rdata;
 class PTR extends CNAME
 {
     const TYPE = 'PTR';
+    const TYPE_CODE = 12;
 }

@@ -23,11 +23,9 @@ namespace Badcow\DNS\Rdata;
 class SRV extends CNAME
 {
     const TYPE = 'SRV';
-
+    const TYPE_CODE = 33;
     const HIGHEST_PORT = 65535;
-
     const MAX_PRIORITY = 65535;
-
     const MAX_WEIGHT = 65535;
 
     /**

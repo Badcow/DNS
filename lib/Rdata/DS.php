@@ -16,7 +16,7 @@ class DS implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'DS';
-
+    const TYPE_CODE = 43;
     const DIGEST_SHA1 = 1;
 
     /**

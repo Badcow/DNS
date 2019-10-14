@@ -24,13 +24,10 @@ class LOC implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'LOC';
-
+    const TYPE_CODE = 29;
     const LATITUDE = 'LATITUDE';
-
     const LONGITUDE = 'LONGITUDE';
-
     const FORMAT_DECIMAL = 'DECIMAL';
-
     const FORMAT_DMS = 'DMS';
 
     /**

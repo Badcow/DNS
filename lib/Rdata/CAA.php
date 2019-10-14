@@ -25,15 +25,11 @@ class CAA implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'CAA';
-
+    const TYPE_CODE = 257;
     const MAX_FLAG = 255;
-
     const TAG_ISSUE = 'issue';
-
     const TAG_ISSUEWILD = 'issuewild';
-
     const TAG_IODEF = 'iodef';
-
     const ALLOWED_TAGS = [self::TAG_ISSUE, self::TAG_ISSUEWILD, self::TAG_IODEF];
 
     /**

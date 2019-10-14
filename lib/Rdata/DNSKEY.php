@@ -21,6 +21,7 @@ class DNSKEY implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'DNSKEY';
+    const TYPE_CODE = 48;
 
     /**
      * {@link https://tools.ietf.org/html/rfc4034#section-2.1.1}.

@@ -19,6 +19,7 @@ class CNAME implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'CNAME';
+    const TYPE_CODE = 5;
 
     /**
      * @var string|null

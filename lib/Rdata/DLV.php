@@ -12,7 +12,7 @@
 namespace Badcow\DNS\Rdata;
 
 /**
- * {@link https://tools.ietf.org/html/rfc4431}
+ * {@link https://tools.ietf.org/html/rfc4431}.
  */
 class DLV extends DS
 {
@@ -21,4 +21,3 @@ class DLV extends DS
     const TYPE = 'DLV';
     const TYPE_CODE = 32769;
 }
-

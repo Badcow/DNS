@@ -19,6 +19,7 @@ class TXT implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'TXT';
+    const TYPE_CODE = 16;
 
     /**
      * @var string|null

@@ -19,6 +19,7 @@ class APL implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'APL';
+    const TYPE_CODE = 42;
 
     /**
      * @var \IPBlock[]

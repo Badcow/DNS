@@ -24,4 +24,5 @@ namespace Badcow\DNS\Rdata;
 class DNAME extends CNAME
 {
     const TYPE = 'DNAME';
+    const TYPE_CODE = 39;
 }
