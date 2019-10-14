@@ -28,12 +28,7 @@ class Factory
             throw new UnsupportedTypeException($name);
         }
 
-        $namespace = '\\Badcow\\DNS\\Rdata\\';
-        $className = $namespace.strtoupper($name);
-
-        if (!class_exists($className)) {
-            $className = $namespace.'DNSSEC\\'.strtoupper($name);
-        }
+        $className = __NAMESPACE__.'\\'.strtoupper($name);
 
         return new $className();
     }
@@ -45,10 +40,7 @@ class Factory
      */
     public static function isTypeImplemented(string $name): bool
     {
-        $namespace = '\\Badcow\\DNS\\Rdata\\';
-        $name = strtoupper($name);
-
-        return class_exists($namespace.$name) || class_exists($namespace.'DNSSEC\\'.$name);
+        return class_exists(__NAMESPACE__.'\\'.strtoupper($name));
     }
 
     /**
