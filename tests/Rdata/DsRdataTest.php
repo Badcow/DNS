@@ -32,13 +32,13 @@ class DsRdataTest extends TestCase
         $ds->setDigestType(DS::DIGEST_SHA1);
         $ds->setDigest(self::$digest);
 
-        $this->assertEquals($expectation, $ds->output());
+        $this->assertEquals($expectation, $ds->toText());
     }
 
     public function testFactory(): void
     {
         $keyTag = 60485;
-        $ds = Factory::Ds($keyTag, Algorithms::RSASHA1, self::$digest, DS::DIGEST_SHA1);
+        $ds = Factory::DS($keyTag, Algorithms::RSASHA1, self::$digest, DS::DIGEST_SHA1);
 
         $this->assertEquals($keyTag, $ds->getKeyTag());
         $this->assertEquals(Algorithms::RSASHA1, $ds->getAlgorithm());

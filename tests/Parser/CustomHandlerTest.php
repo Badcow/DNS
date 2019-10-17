@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests\Parser;
 
 use Badcow\DNS\Classes;
+use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
 use Badcow\DNS\Rdata\TXT;
 use PHPUnit\Framework\TestCase;
@@ -36,7 +37,7 @@ class CustomHandlerTest extends TestCase
     }
 
     /**
-     * @throws \Badcow\DNS\Parser\ParseException
+     * @throws ParseException
      */
     public function testCustomHandler(): void
     {

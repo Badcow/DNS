@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\Tokens;
+
 /**
  * @see https://tools.ietf.org/html/rfc1035#section-3.3.13
  */
@@ -195,8 +197,18 @@ class SOA implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
+        if (!isset($this->mname) ||
+            !isset($this->rname) ||
+            !isset($this->serial) ||
+            !isset($this->refresh) ||
+            !isset($this->retry) ||
+            !isset($this->expire) ||
+            !isset($this->minimum)) {
+            throw new \InvalidArgumentException('All parameters of SOA must be set.');
+        }
+
         return sprintf(
             '%s %s %s %s %s %s %s',
             $this->mname,
@@ -207,5 +219,77 @@ class SOA implements RdataInterface
             $this->expire,
             $this->minimum
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toWire(): string
+    {
+        if (!isset($this->mname) ||
+            !isset($this->rname) ||
+            !isset($this->serial) ||
+            !isset($this->refresh) ||
+            !isset($this->retry) ||
+            !isset($this->expire) ||
+            !isset($this->minimum)) {
+            throw new \InvalidArgumentException('All parameters of SOA must be set.');
+        }
+
+        return
+            self::encodeName($this->mname).
+            self::encodeName($this->rname).
+            pack(
+                'NNNNN',
+                $this->serial,
+                $this->refresh,
+                $this->retry,
+                $this->expire,
+                $this->minimum
+            );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $rdata = explode(Tokens::SPACE, $text);
+        $soa = new self();
+        $soa->setMname($rdata[0]);
+        $soa->setRname($rdata[1]);
+        $soa->setSerial((int) $rdata[2]);
+        $soa->setRefresh((int) $rdata[3]);
+        $soa->setRetry((int) $rdata[4]);
+        $soa->setExpire((int) $rdata[5]);
+        $soa->setMinimum((int) $rdata[6]);
+
+        return $soa;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromWire(string $string): RdataInterface
+    {
+        $offset = 0;
+        $rdata = array_merge(
+            [
+                'mname' => self::decodeName($string, $offset),
+                'rname' => self::decodeName($string, $offset),
+            ],
+            unpack('Nserial/Nrefresh/Nretry/Nexpire/Nminimum', substr($string, $offset))
+        );
+
+        $soa = new self();
+        $soa->setMname($rdata['mname']);
+        $soa->setRname($rdata['rname']);
+        $soa->setSerial((int) $rdata['serial']);
+        $soa->setRefresh((int) $rdata['refresh']);
+        $soa->setRetry((int) $rdata['retry']);
+        $soa->setExpire((int) $rdata['expire']);
+        $soa->setMinimum((int) $rdata['minimum']);
+
+        return $soa;
     }
 }

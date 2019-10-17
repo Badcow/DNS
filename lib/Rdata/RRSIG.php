@@ -249,7 +249,7 @@ class RRSIG implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return sprintf(
             '%s %s %s %s %s %s %s %s %s',
@@ -263,5 +263,20 @@ class RRSIG implements RdataInterface
             $this->signersName,
             $this->signature
         );
+    }
+
+    public function toWire(): string
+    {
+        // TODO: Implement toWire() method.
+    }
+
+    public static function fromText(string $text): RdataInterface
+    {
+        // TODO: Implement fromText() method.
+    }
+
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        // TODO: Implement fromWire() method.
     }
 }

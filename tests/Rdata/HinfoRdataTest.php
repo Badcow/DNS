@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\HINFO;
+use PHPUnit\Framework\TestCase;
 
-class HinfoRdataTest extends \PHPUnit\Framework\TestCase
+class HinfoRdataTest extends TestCase
 {
     public function testOutput(): void
     {
@@ -26,7 +27,7 @@ class HinfoRdataTest extends \PHPUnit\Framework\TestCase
         $hinfo->setCpu($cpu);
         $hinfo->setOs($os);
 
-        $this->assertEquals($expectation, $hinfo->output());
+        $this->assertEquals($expectation, $hinfo->toText());
     }
 
     public function testGetters(): void

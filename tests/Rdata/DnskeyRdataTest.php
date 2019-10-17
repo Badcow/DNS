@@ -34,18 +34,18 @@ class DnskeyRdataTest extends TestCase
         $dnskey->setAlgorithm(Algorithms::RSASHA1);
         $dnskey->setPublicKey(self::$publicKey);
 
-        $this->assertEquals($expectation, $dnskey->output());
+        $this->assertEquals($expectation, $dnskey->toText());
     }
 
     public function testFactory(): void
     {
-        $dnskey = Factory::Dnskey(256, Algorithms::RSASHA1, self::$publicKey);
+        $dnskey = Factory::DNSKEY(256, Algorithms::RSASHA1, self::$publicKey);
         $output = '256 3 5 '.self::$publicKey;
 
         $this->assertEquals(256, $dnskey->getFlags());
         $this->assertEquals(5, $dnskey->getAlgorithm());
         $this->assertEquals(self::$publicKey, $dnskey->getPublicKey());
         $this->assertEquals(3, $dnskey->getProtocol());
-        $this->assertEquals($output, $dnskey->output());
+        $this->assertEquals($output, $dnskey->toText());
     }
 }

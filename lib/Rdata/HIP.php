@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -17,13 +19,37 @@ class HIP implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'HIP';
-    const TYPE_CODE = 0;
+    const TYPE_CODE = 55;
 
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         // TODO: Implement output() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toWire(): string
+    {
+        // TODO: Implement toWire() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        // TODO: Implement fromText() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        // TODO: Implement fromWire() method.
     }
 }

@@ -54,7 +54,7 @@ class Factory
      *
      * @return AAAA
      */
-    public static function Aaaa(string $address)
+    public static function AAAA(string $address): AAAA
     {
         $rdata = new AAAA();
         $rdata->setAddress($address);
@@ -69,7 +69,7 @@ class Factory
      *
      * @return A
      */
-    public static function A(string $address)
+    public static function A(string $address): A
     {
         $rdata = new A();
         $rdata->setAddress($address);
@@ -84,7 +84,7 @@ class Factory
      *
      * @return CNAME
      */
-    public static function Cname(string $cname)
+    public static function CNAME(string $cname): CNAME
     {
         $rdata = new CNAME();
         $rdata->setTarget($cname);
@@ -98,7 +98,7 @@ class Factory
      *
      * @return HINFO
      */
-    public static function Hinfo(string $cpu, string $os)
+    public static function HINFO(string $cpu, string $os): HINFO
     {
         $rdata = new HINFO();
         $rdata->setCpu($cpu);
@@ -113,7 +113,7 @@ class Factory
      *
      * @return MX
      */
-    public static function Mx(int $preference, string $exchange)
+    public static function MX(int $preference, string $exchange): MX
     {
         $rdata = new MX();
         $rdata->setPreference($preference);
@@ -133,7 +133,7 @@ class Factory
      *
      * @return SOA
      */
-    public static function Soa(string $mname, string $rname, int $serial, int $refresh, int $retry, int $expire, int $minimum)
+    public static function SOA(string $mname, string $rname, int $serial, int $refresh, int $retry, int $expire, int $minimum): SOA
     {
         $rdata = new SOA();
         $rdata->setMname($mname);
@@ -152,7 +152,7 @@ class Factory
      *
      * @return NS
      */
-    public static function Ns(string $nsdname)
+    public static function NS(string $nsdname): NS
     {
         $rdata = new NS();
         $rdata->setTarget($nsdname);
@@ -165,7 +165,7 @@ class Factory
      *
      * @return TXT
      */
-    public static function Txt(string $text)
+    public static function TXT(string $text): TXT
     {
         $rdata = new TXT();
         $rdata->setText($text);
@@ -178,7 +178,7 @@ class Factory
      *
      * @return DNAME
      */
-    public static function Dname(string $target)
+    public static function DNAME(string $target): DNAME
     {
         $rdata = new DNAME();
         $rdata->setTarget($target);
@@ -196,17 +196,17 @@ class Factory
      *
      * @return LOC
      */
-    public static function Loc(float $lat, float $lon, float $alt = 0.0, float $size = 1.0, float $hp = 10000.0, float $vp = 10.0)
+    public static function LOC(float $lat, float $lon, $alt = 0.0, $size = 1.0, $hp = 10000.0, $vp = 10.0): LOC
     {
-        $rdata = new LOC();
-        $rdata->setLatitude($lat);
-        $rdata->setLongitude($lon);
-        $rdata->setAltitude($alt);
-        $rdata->setSize($size);
-        $rdata->setHorizontalPrecision($hp);
-        $rdata->setVerticalPrecision($vp);
+        $loc = new LOC();
+        $loc->setLatitude($lat);
+        $loc->setLongitude($lon);
+        $loc->setAltitude($alt);
+        $loc->setSize($size);
+        $loc->setHorizontalPrecision($hp);
+        $loc->setVerticalPrecision($vp);
 
-        return $rdata;
+        return $loc;
     }
 
     /**
@@ -214,12 +214,12 @@ class Factory
      *
      * @return PTR
      */
-    public static function Ptr(string $target)
+    public static function PTR(string $target): PTR
     {
-        $rdata = new PTR();
-        $rdata->setTarget($target);
+        $ptr = new PTR();
+        $ptr->setTarget($target);
 
-        return $rdata;
+        return $ptr;
     }
 
     /**
@@ -229,7 +229,7 @@ class Factory
      *
      * @return DNSKEY
      */
-    public static function Dnskey(int $flags, int $algorithm, string $publicKey)
+    public static function DNSKEY(int $flags, int $algorithm, string $publicKey): DNSKEY
     {
         $rdata = new DNSKEY();
         $rdata->setFlags($flags);
@@ -247,7 +247,7 @@ class Factory
      *
      * @return DS
      */
-    public static function Ds(int $keyTag, int $algorithm, string $digest, int $digestType = DS::DIGEST_SHA1)
+    public static function DS(int $keyTag, int $algorithm, string $digest, int $digestType = DS::DIGEST_SHA1): DS
     {
         $rdata = new DS();
         $rdata->setKeyTag($keyTag);
@@ -260,15 +260,15 @@ class Factory
 
     /**
      * @param string $nextDomainName
-     * @param array  $typeBitMaps
+     * @param array  $types
      *
      * @return NSEC
      */
-    public static function Nsec(string $nextDomainName, array $typeBitMaps)
+    public static function NSEC(string $nextDomainName, array $types): NSEC
     {
         $rdata = new NSEC();
         $rdata->setNextDomainName($nextDomainName);
-        array_map([$rdata, 'addTypeBitMap'], $typeBitMaps);
+        array_map([$rdata, 'addType'], $types);
 
         return $rdata;
     }
@@ -286,9 +286,9 @@ class Factory
      *
      * @return RRSIG
      */
-    public static function Rrsig(string $typeCovered, int $algorithm, int $labels, int $originalTtl,
-                            int $signatureExpiration, int $signatureInception, int $keyTag,
-                            string $signersName, string $signature)
+    public static function RRSIG(string $typeCovered, int $algorithm, int $labels, int $originalTtl,
+                                 int $signatureExpiration, int $signatureInception, int $keyTag,
+                                 string $signersName, string $signature): RRSIG
     {
         $rdata = new RRSIG();
         $rdata->setTypeCovered($typeCovered);
@@ -312,7 +312,7 @@ class Factory
      *
      * @return SRV
      */
-    public static function Srv(int $priority, int $weight, int $port, string $target)
+    public static function SRV(int $priority, int $weight, int $port, string $target): SRV
     {
         $rdata = new SRV();
         $rdata->setPriority($priority);
@@ -329,7 +329,7 @@ class Factory
      *
      * @return APL
      */
-    public static function Apl(array $includedRanges = [], array $excludedRanges = []): APL
+    public static function APL(array $includedRanges = [], array $excludedRanges = []): APL
     {
         $rdata = new APL();
 
@@ -351,7 +351,7 @@ class Factory
      *
      * @return CAA
      */
-    public static function Caa(int $flag, string $tag, string $value): CAA
+    public static function CAA(int $flag, string $tag, string $value): CAA
     {
         $rdata = new CAA();
         $rdata->setFlag($flag);
@@ -361,9 +361,19 @@ class Factory
         return $rdata;
     }
 
-    public static function AFSDB(): AFSDB
+    /**
+     * @param int    $subType
+     * @param string $hostname
+     *
+     * @return AFSDB
+     */
+    public static function AFSDB(int $subType, string $hostname): AFSDB
     {
-        // TODO: Implement AFSDB() method.
+        $afsdb = new AFSDB();
+        $afsdb->setSubType($subType);
+        $afsdb->setHostname($hostname);
+
+        return $afsdb;
     }
 
     public static function CDNSKEY(): CDNSKEY
@@ -450,9 +460,13 @@ class Factory
         // TODO: Implement OPENPGPKEY() method.
     }
 
-    public static function RP(): RP
+    public static function RP(string $mboxDomain, string $txtDomain): RP
     {
-        // TODO: Implement RP() method.
+        $rp = new RP();
+        $rp->setMailboxDomainName($mboxDomain);
+        $rp->setTxtDomainName($txtDomain);
+
+        return $rp;
     }
 
     public static function SIG(): SIG

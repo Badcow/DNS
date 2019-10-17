@@ -15,16 +15,17 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\CAA;
 use Badcow\DNS\Rdata\Factory;
+use PHPUnit\Framework\TestCase;
 
-class CaaRdataTest extends \PHPUnit\Framework\TestCase
+class CaaTest extends TestCase
 {
     public function testOutput(): void
     {
-        $caa = Factory::Caa(0, 'issue', 'letsencrypt.org');
+        $caa = Factory::CAA(0, 'issue', 'letsencrypt.org');
 
         $expectation = '0 issue "letsencrypt.org"';
 
-        $this->assertEquals($expectation, $caa->output());
+        $this->assertEquals($expectation, $caa->toText());
         $this->assertEquals(0, $caa->getFlag());
         $this->assertEquals('issue', $caa->getTag());
     }
@@ -56,5 +57,28 @@ class CaaRdataTest extends \PHPUnit\Framework\TestCase
     public function testGetType(): void
     {
         $this->assertEquals('CAA', (new CAA())->getType());
+    }
+
+    public function testFromText(): void
+    {
+        $text = '0 iodef "mailto:security@example.com"';
+        /** @var CAA $caa */
+        $caa = CAA::fromText($text);
+
+        $this->assertEquals(0, $caa->getFlag());
+        $this->assertEquals(CAA::TAG_IODEF, $caa->getTag());
+        $this->assertEquals('mailto:security@example.com', $caa->getValue());
+    }
+
+    public function testWire(): void
+    {
+        $expectation = chr(0).chr(5).'iodef'.'mailto:security@example.com';
+        $caa = new CAA();
+        $caa->setFlag(0);
+        $caa->setTag(CAA::TAG_IODEF);
+        $caa->setValue('mailto:security@example.com');
+
+        $this->assertEquals($expectation, $caa->toWire());
+        $this->assertEquals($caa, CAA::fromWire($expectation));
     }
 }

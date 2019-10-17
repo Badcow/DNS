@@ -25,8 +25,23 @@ class DummyRdata implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return 'co.badcow.dns.test.dummy';
+    }
+
+    public function toWire(): string
+    {
+        return '';
+    }
+
+    public static function fromText(string $text): RdataInterface
+    {
+        return new self();
+    }
+
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        return new self();
     }
 }

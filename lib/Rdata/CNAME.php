@@ -47,8 +47,42 @@ class CNAME implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return $this->target ?? '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toWire(): string
+    {
+        if (!isset($this->target)) {
+            throw new \InvalidArgumentException('Target must be set.');
+        }
+
+        return self::encodeName($this->target);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $cname = new static();
+        $cname->setTarget($text);
+
+        return $cname;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        $cname = new static();
+        $cname->setTarget(self::decodeName($rdata));
+
+        return $cname;
     }
 }

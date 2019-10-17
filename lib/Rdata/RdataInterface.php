@@ -16,6 +16,8 @@ namespace Badcow\DNS\Rdata;
 interface RdataInterface
 {
     /**
+     * @deprecated
+     *
      * @return string
      */
     public function output(): string;
@@ -26,4 +28,14 @@ interface RdataInterface
      * @return string
      */
     public function getType(): string;
+
+    public function getTypeCode(): int;
+
+    public function toText(): string;
+
+    public function toWire(): string;
+
+    public static function fromText(string $text): RdataInterface;
+
+    public static function fromWire(string $rdata): RdataInterface;
 }

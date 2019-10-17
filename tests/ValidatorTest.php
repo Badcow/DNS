@@ -155,7 +155,7 @@ class ValidatorTest extends TestCase
         $soa = new ResourceRecord();
         $soa->setClass(Classes::INTERNET);
         $soa->setName('@');
-        $soa->setRdata(Factory::Soa(
+        $soa->setRdata(Factory::SOA(
             'example.com.',
             'postmaster.example.com.',
             (int) date('Ymd01'),
@@ -196,7 +196,7 @@ class ValidatorTest extends TestCase
         $soa = new ResourceRecord();
         $soa->setClass(Classes::INTERNET);
         $soa->setName('@');
-        $soa->setRdata(Factory::Soa(
+        $soa->setRdata(Factory::SOA(
             'example.com.',
             'postmaster.example.com.',
             (int) date('Ymd01'),
@@ -354,13 +354,13 @@ class ValidatorTest extends TestCase
         //Pass case
         $txt1 = new ResourceRecord();
         $txt1->setName('www');
-        $txt1->setRdata(Factory::txt('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
+        $txt1->setRdata(Factory::TXT('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
         $txt1->setClass(Classes::INTERNET);
 
         //Fail case
         $txt2 = new ResourceRecord();
         $txt2->setName('alias');
-        $txt2->setRdata(Factory::txt('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
+        $txt2->setRdata(Factory::TXT('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
         $txt2->setClass(Classes::INTERNET);
 
         $zone = $this->buildTestZone();

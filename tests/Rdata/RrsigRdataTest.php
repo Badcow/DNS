@@ -44,12 +44,12 @@ class RrsigRdataTest extends TestCase
         $rrsig->setSignersName('example.com.');
         $rrsig->setSignature(self::$signature);
 
-        $this->assertEquals($expectation, $rrsig->output());
+        $this->assertEquals($expectation, $rrsig->toText());
     }
 
     public function testFactory(): void
     {
-        $rrsig = Factory::Rrsig(
+        $rrsig = Factory::RRSIG(
             A::TYPE,
             Algorithms::RSASHA1,
             3,

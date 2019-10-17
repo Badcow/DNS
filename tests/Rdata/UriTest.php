@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -34,7 +36,7 @@ class UriTest extends TestCase
         $srv = Factory::URI(10, 1, 'http://www.example.com/path');
         $expectation = '10 1 "http://www.example.com/path"';
 
-        $this->assertEquals($expectation, $srv->output());
+        $this->assertEquals($expectation, $srv->toText());
         $this->assertEquals(10, $srv->getPriority());
         $this->assertEquals(1, $srv->getWeight());
         $this->assertEquals('http://www.example.com/path', $srv->getTarget());
@@ -55,5 +57,29 @@ class UriTest extends TestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         Factory::URI($priority, $weight, $target);
+    }
+
+    public function testFromText(): void
+    {
+        $text = '10 1 "ftp://ftp1.example.com/public%20data"';
+
+        $uri = new URI();
+        $uri->setPriority(10);
+        $uri->setWeight(1);
+        $uri->setTarget('ftp://ftp1.example.com/public%20data');
+
+        $this->assertEquals($uri, URI::fromText($text));
+    }
+
+    public function testWire(): void
+    {
+        $expectation = pack('nn', 10, 1).'ftp://ftp1.example.com/public%20data';
+        $uri = new URI();
+        $uri->setPriority(10);
+        $uri->setWeight(1);
+        $uri->setTarget('ftp://ftp1.example.com/public%20data');
+
+        $this->assertEquals($expectation, $uri->toWire());
+        $this->assertEquals($uri, URI::fromWire($expectation));
     }
 }

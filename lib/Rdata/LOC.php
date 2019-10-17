@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\Tokens;
+
 /**
  * Class LocRdata.
  *
@@ -197,7 +199,7 @@ class LOC implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return sprintf(
                 '%s %s %.2fm %.2fm %.2fm %.2fm',
@@ -230,5 +232,51 @@ class LOC implements RdataInterface
         }
 
         return sprintf('%d %d %.3f %s', $d, $m, $s, $h);
+    }
+
+    public function toWire(): string
+    {
+        // TODO: Implement toWire() method.
+    }
+
+    /**
+     * Transform a DMS string to a decimal representation. Used for LOC records.
+     *
+     * @param int    $deg        Degrees
+     * @param int    $min        Minutes
+     * @param float  $sec        Seconds
+     * @param string $hemisphere Either 'N', 'S', 'E', or 'W'
+     *
+     * @return float
+     */
+    public static function dmsToDecimal(int $deg, int $min, float $sec, string $hemisphere): float
+    {
+        $multiplier = ('S' === $hemisphere || 'W' === $hemisphere) ? -1 : 1;
+
+        return $multiplier * ($deg + ($min / 60) + ($sec / 3600));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $rdata = explode(Tokens::SPACE, $text);
+        $lat = self::dmsToDecimal((int) array_shift($rdata), (int) array_shift($rdata), (float) array_shift($rdata), (string) array_shift($rdata));
+        $lon = self::dmsToDecimal((int) array_shift($rdata), (int) array_shift($rdata), (float) array_shift($rdata), (string) array_shift($rdata));
+
+        return Factory::LOC(
+            $lat,
+            $lon,
+            (float) array_shift($rdata),
+            (float) array_shift($rdata),
+            (float) array_shift($rdata),
+            (float) array_shift($rdata)
+        );
+    }
+
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        // TODO: Implement fromWire() method.
     }
 }

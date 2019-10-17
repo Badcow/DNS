@@ -153,9 +153,8 @@ class ZoneBuilder
 
     /**
      * @param AAAA $rdata
-     * @param Zone $zone
      */
-    protected static function fillOutAaaa(AAAA $rdata, Zone $zone): void
+    protected static function fillOutAaaa(AAAA $rdata): void
     {
         $rdata->setAddress(Toolbox::expandIpv6($rdata->getAddress() ?? ''));
     }

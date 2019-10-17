@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\DNAME;
+use PHPUnit\Framework\TestCase;
 
-class DnameRdataTest extends \PHPUnit\Framework\TestCase
+class DnameRdataTest extends TestCase
 {
     public function testSetTarget(): void
     {
@@ -32,6 +33,28 @@ class DnameRdataTest extends \PHPUnit\Framework\TestCase
         $dname = new DNAME();
         $dname->setTarget($target);
 
-        $this->assertEquals($target, $dname->output());
+        $this->assertEquals($target, $dname->toText());
+        $this->assertEquals($target, $dname->toText());
+    }
+
+    public function testFromText(): void
+    {
+        $text = 'host.example.com.';
+        /** @var DNAME $cname */
+        $cname = DNAME::fromText($text);
+
+        $this->assertEquals($text, $cname->getTarget());
+    }
+
+    public function testWire(): void
+    {
+        $host = 'host.example.com.';
+        $expectation = chr(4).'host'.chr(7).'example'.chr(3).'com'.chr(0);
+
+        /** @var DNAME $dname */
+        $dname = DNAME::fromWire($expectation);
+
+        $this->assertEquals($expectation, $dname->toWire());
+        $this->assertEquals($host, $dname->getTarget());
     }
 }

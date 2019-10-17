@@ -14,12 +14,10 @@ declare(strict_types=1);
 namespace Badcow\DNS\Rdata;
 
 /**
- * {@link https://tools.ietf.org/html/rfc4431}.
+ * {@link https://tools.ietf.org/html/rfc7208}.
  */
-class DLV extends DS
+class SPF extends TXT
 {
-    use RdataTrait;
-
-    const TYPE = 'DLV';
-    const TYPE_CODE = 32769;
+    const TYPE = 'SPF';
+    const TYPE_CODE = 99;
 }

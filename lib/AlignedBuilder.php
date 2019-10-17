@@ -125,8 +125,8 @@ class AlignedBuilder
      */
     public static function compareResourceRecords(ResourceRecord $a, ResourceRecord $b): int
     {
-        $a_rdata = (null === $a->getRdata()) ? '' : $a->getRdata()->output();
-        $b_rdata = (null === $b->getRdata()) ? '' : $b->getRdata()->output();
+        $a_rdata = (null === $a->getRdata()) ? '' : $a->getRdata()->toText();
+        $b_rdata = (null === $b->getRdata()) ? '' : $b->getRdata()->toText();
 
         if ($a->getType() === $b->getType()) {
             return strcmp($a->getName().$a_rdata, $b->getName().$b_rdata);
@@ -166,7 +166,7 @@ class AlignedBuilder
             return self::outputLoc($rdata, $padding);
         }
 
-        return $rdata->output();
+        return $rdata->toText();
     }
 
     /**
@@ -208,7 +208,7 @@ class AlignedBuilder
      */
     private static function outputApl(APL $rdata, int $padding): string
     {
-        $blocks = explode(' ', $rdata->output());
+        $blocks = explode(' ', $rdata->toText());
         $longestVarLength = max(array_map('strlen', $blocks));
         $string = self::MULTILINE_BEGIN.PHP_EOL;
 

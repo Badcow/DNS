@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\RdataTrait;
+use PHPUnit\Framework\TestCase;
 
-class RdataTraitTest extends \PHPUnit\Framework\TestCase
+class RdataTraitTest extends TestCase
 {
     use RdataTrait;
 

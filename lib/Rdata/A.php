@@ -24,7 +24,7 @@ class A implements RdataInterface
     const TYPE_CODE = 1;
 
     /**
-     * @var string|null
+     * @var string
      */
     protected $address;
 
@@ -47,8 +47,48 @@ class A implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return $this->address ?? '';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function toWire(): string
+    {
+        if (false === $encoded = inet_pton($this->address)) {
+            throw new \InvalidArgumentException(sprintf('The IP address "%s" cannot be encoded. Check that it is a valid IP address.', $this->address));
+        }
+
+        return $encoded;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $a = new static();
+        $a->setAddress($text);
+
+        return $a;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        if (false === $address = inet_ntop($rdata)) {
+            throw new \InvalidArgumentException('The IP address cannot be decoded.');
+        }
+
+        $a = new static();
+        $a->setAddress($address);
+
+        return $a;
     }
 }

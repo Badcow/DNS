@@ -42,4 +42,20 @@ class ResourceRecordIterator extends \ArrayIterator
         $lastPos = $this->count() - 1;
         $this->seek($lastPos);
     }
+
+    /**
+     * Get all the remaining values of an iterator as an array. This will move the pointer to the end of the array.
+     *
+     * @return string
+     */
+    public function getRemainingAsString(): string
+    {
+        $values = [];
+        while ($this->valid()) {
+            $values[] = $this->current();
+            $this->next();
+        }
+
+        return implode(Tokens::SPACE, $values);
+    }
 }

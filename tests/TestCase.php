@@ -77,7 +77,7 @@ DNS;
         $soa = new ResourceRecord();
         $soa->setClass('IN');
         $soa->setName('@');
-        $soa->setRdata(Factory::Soa(
+        $soa->setRdata(Factory::SOA(
             'example.com.',
             'postmaster.example.com.',
             2015050801,
@@ -91,13 +91,13 @@ DNS;
         $ns1->setClass('IN');
         $ns1->setName('@');
         $ns1->setTtl(14400);
-        $ns1->setRdata(Factory::Ns('ns1.example.net.au.'));
+        $ns1->setRdata(Factory::NS('ns1.example.net.au.'));
 
         $ns2 = new ResourceRecord();
         $ns2->setClass('IN');
         $ns2->setName('@');
         $ns2->setTtl(14400);
-        $ns2->setRdata(Factory::Ns('ns2.example.net.au.'));
+        $ns2->setRdata(Factory::NS('ns2.example.net.au.'));
 
         $a_record = new ResourceRecord();
         $a_record->setName('subdomain.au');
@@ -106,11 +106,11 @@ DNS;
 
         $cname = new ResourceRecord();
         $cname->setName('alias');
-        $cname->setRdata(Factory::Cname('subdomain.au.example.com.'));
+        $cname->setRdata(Factory::CNAME('subdomain.au.example.com.'));
 
         $aaaa = new ResourceRecord(
             'ipv6domain',
-            Factory::Aaaa('::1'),
+            Factory::AAAA('::1'),
             3600,
             Classes::INTERNET,
             'This is an IPv6 domain.'
@@ -118,24 +118,24 @@ DNS;
 
         $mx1 = new ResourceRecord();
         $mx1->setName('@');
-        $mx1->setRdata(Factory::Mx(10, 'mail-gw1.example.net.'));
+        $mx1->setRdata(Factory::MX(10, 'mail-gw1.example.net.'));
 
         $mx2 = new ResourceRecord();
         $mx2->setName('@');
-        $mx2->setRdata(Factory::Mx(20, 'mail-gw2.example.net.'));
+        $mx2->setRdata(Factory::MX(20, 'mail-gw2.example.net.'));
 
         $mx3 = new ResourceRecord();
         $mx3->setName('@');
-        $mx3->setRdata(Factory::Mx(30, 'mail-gw3.example.net.'));
+        $mx3->setRdata(Factory::MX(30, 'mail-gw3.example.net.'));
 
         $txt = new ResourceRecord();
         $txt->setName('example.net.');
-        $txt->setRdata(Factory::txt('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
+        $txt->setRdata(Factory::TXT('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
         $txt->setClass(Classes::INTERNET);
 
         $loc = new ResourceRecord();
         $loc->setName('canberra');
-        $loc->setRdata(Factory::Loc(
+        $loc->setRdata(Factory::LOC(
             -35.3075,   //Lat
             149.1244,   //Lon
             500,        //Alt
@@ -154,7 +154,7 @@ DNS;
         $hinfo = new ResourceRecord();
         $hinfo->setName('@');
         $hinfo->setClass(Classes::INTERNET);
-        $hinfo->setRdata(Factory::Hinfo('2.7GHz', 'Ubuntu 12.04'));
+        $hinfo->setRdata(Factory::HINFO('2.7GHz', 'Ubuntu 12.04'));
 
         return new Zone('example.com.', 3600, [
             $soa,
