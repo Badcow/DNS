@@ -49,7 +49,7 @@ class SoaTest extends TestCase
 
     public function testOutput(): void
     {
-        $soa = Factory::Soa(
+        $soa = Factory::SOA(
             'example.com.',
             'postmaster.example.com.',
             2015042101,

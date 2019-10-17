@@ -42,7 +42,7 @@ class NsecRdataTest extends TestCase
     {
         $nextDomain = 'host.example.com.';
         $bitMaps = [A::TYPE, MX::TYPE, RRSIG::TYPE, NSEC::TYPE];
-        $nsec = Factory::Nsec($nextDomain, $bitMaps);
+        $nsec = Factory::NSEC($nextDomain, $bitMaps);
 
         $this->assertEquals($nextDomain, $nsec->getNextDomainName());
         $this->assertEquals($bitMaps, $nsec->getTypes());

@@ -39,7 +39,7 @@ class DnskeyRdataTest extends TestCase
 
     public function testFactory(): void
     {
-        $dnskey = Factory::Dnskey(256, Algorithms::RSASHA1, self::$publicKey);
+        $dnskey = Factory::DNSKEY(256, Algorithms::RSASHA1, self::$publicKey);
         $output = '256 3 5 '.self::$publicKey;
 
         $this->assertEquals(256, $dnskey->getFlags());

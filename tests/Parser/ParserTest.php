@@ -43,7 +43,7 @@ class ParserTest extends TestCase
 
         $soa = new ResourceRecord();
         $soa->setName('@');
-        $soa->setRdata(Factory::Soa(
+        $soa->setRdata(Factory::SOA(
             'example.com.',
             'post.example.com.',
             2014110501,
@@ -55,11 +55,11 @@ class ParserTest extends TestCase
 
         $ns1 = new ResourceRecord();
         $ns1->setName('@');
-        $ns1->setRdata(Factory::Ns('ns1.nameserver.com.'));
+        $ns1->setRdata(Factory::NS('ns1.nameserver.com.'));
 
         $ns2 = new ResourceRecord();
         $ns2->setName('@');
-        $ns2->setRdata(Factory::Ns('ns2.nameserver.com.'));
+        $ns2->setRdata(Factory::NS('ns2.nameserver.com.'));
 
         $a = new ResourceRecord();
         $a->setName('sub.domain');
@@ -68,26 +68,26 @@ class ParserTest extends TestCase
 
         $a6 = new ResourceRecord();
         $a6->setName('ipv6.domain');
-        $a6->setRdata(Factory::Aaaa('::1'));
+        $a6->setRdata(Factory::AAAA('::1'));
         $a6->setComment('This is an IPv6 domain.');
 
         $mx1 = new ResourceRecord();
         $mx1->setName('@');
-        $mx1->setRdata(Factory::Mx(10, 'mail-gw1.example.net.'));
+        $mx1->setRdata(Factory::MX(10, 'mail-gw1.example.net.'));
 
         $mx2 = new ResourceRecord();
         $mx2->setName('@');
-        $mx2->setRdata(Factory::Mx(20, 'mail-gw2.example.net.'));
+        $mx2->setRdata(Factory::MX(20, 'mail-gw2.example.net.'));
 
         $mx3 = new ResourceRecord();
         $mx3->setName('@');
-        $mx3->setRdata(Factory::Mx(30, 'mail-gw3.example.net.'));
+        $mx3->setRdata(Factory::MX(30, 'mail-gw3.example.net.'));
 
         $dname = new ResourceRecord('hq', Factory::Dname('syd.example.com.'));
 
         $loc = new ResourceRecord();
         $loc->setName('canberra');
-        $loc->setRdata(Factory::Loc(
+        $loc->setRdata(Factory::LOC(
             -35.3075,   //Lat
             149.1244,   //Lon
             500,        //Alt
@@ -158,7 +158,7 @@ class ParserTest extends TestCase
 
         $txt = new ResourceRecord(
             'testtxt',
-            Factory::txt('v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBg'.
+            Factory::TXT('v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBg'.
                 'QDZKI3U+9acu3NfEy0NJHIPydxnPLPpnAJ7k2JdrsLqAK1uouMudHI20pgE8RMldB/TeW'.
                 'KXYoRidcGCZWXleUzldDTwZAMDQNpdH1uuxym0VhoZpPbI1RXwpgHRTbCk49VqlC'),
             600,

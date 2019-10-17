@@ -32,16 +32,16 @@ class DummyRdata implements RdataInterface
 
     public function toWire(): string
     {
-        // TODO: Implement toWire() method.
+        return '';
     }
 
     public static function fromText(string $text): RdataInterface
     {
-        // TODO: Implement fromText() method.
+        return new self();
     }
 
     public static function fromWire(string $rdata): RdataInterface
     {
-        // TODO: Implement fromWire() method.
+        return new self();
     }
 }

@@ -21,7 +21,7 @@ class CaaTest extends TestCase
 {
     public function testOutput(): void
     {
-        $caa = Factory::Caa(0, 'issue', 'letsencrypt.org');
+        $caa = Factory::CAA(0, 'issue', 'letsencrypt.org');
 
         $expectation = '0 issue "letsencrypt.org"';
 

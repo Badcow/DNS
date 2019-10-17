@@ -21,7 +21,7 @@ class SrvTest extends TestCase
 {
     public function testOutput(): void
     {
-        $srv = Factory::Srv(10, 20, 666, 'doom.example.com.');
+        $srv = Factory::SRV(10, 20, 666, 'doom.example.com.');
 
         $expectation = '10 20 666 doom.example.com.';
 

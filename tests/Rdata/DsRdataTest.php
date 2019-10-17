@@ -38,7 +38,7 @@ class DsRdataTest extends TestCase
     public function testFactory(): void
     {
         $keyTag = 60485;
-        $ds = Factory::Ds($keyTag, Algorithms::RSASHA1, self::$digest, DS::DIGEST_SHA1);
+        $ds = Factory::DS($keyTag, Algorithms::RSASHA1, self::$digest, DS::DIGEST_SHA1);
 
         $this->assertEquals($keyTag, $ds->getKeyTag());
         $this->assertEquals(Algorithms::RSASHA1, $ds->getAlgorithm());

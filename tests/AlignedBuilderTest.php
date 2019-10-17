@@ -78,7 +78,7 @@ DNS;
         $soa = new ResourceRecord();
         $soa->setClass('IN');
         $soa->setName('@');
-        $soa->setRdata(Factory::Soa(
+        $soa->setRdata(Factory::SOA(
             'example.com.',
             'postmaster.example.com.',
             2015050801,
@@ -92,13 +92,13 @@ DNS;
         $ns1->setClass(Classes::INTERNET);
         $ns1->setName('@');
         $ns1->setTtl(14400);
-        $ns1->setRdata(Factory::Ns('ns1.example.net.au.'));
+        $ns1->setRdata(Factory::NS('ns1.example.net.au.'));
 
         $ns2 = new ResourceRecord();
         $ns2->setClass('IN');
         $ns2->setName('@');
         $ns2->setTtl(14400);
-        $ns2->setRdata(Factory::Ns('ns2.example.net.au.'));
+        $ns2->setRdata(Factory::NS('ns2.example.net.au.'));
 
         $a = new ResourceRecord();
         $a->setName('subdomain.au');
@@ -107,22 +107,22 @@ DNS;
 
         $cname = new ResourceRecord();
         $cname->setName('alias');
-        $cname->setRdata(Factory::Cname('subdomain.au.example.com.'));
+        $cname->setRdata(Factory::CNAME('subdomain.au.example.com.'));
         $cname->setClass(Classes::INTERNET);
 
-        $aaaa = new ResourceRecord('ipv6domain', Factory::Aaaa('::1'), 3600);
+        $aaaa = new ResourceRecord('ipv6domain', Factory::AAAA('::1'), 3600);
 
         $mx1 = new ResourceRecord();
         $mx1->setName('@');
-        $mx1->setRdata(Factory::Mx(10, 'mailgw01.example.net.'));
+        $mx1->setRdata(Factory::MX(10, 'mailgw01.example.net.'));
 
         $mx2 = new ResourceRecord();
         $mx2->setName('@');
-        $mx2->setRdata(Factory::Mx(20, 'mailgw02.example.net.'));
+        $mx2->setRdata(Factory::MX(20, 'mailgw02.example.net.'));
 
         $txt = new ResourceRecord();
         $txt->setName('example.net.');
-        $txt->setRdata(Factory::txt('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
+        $txt->setRdata(Factory::TXT('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
 
         $dummy = new ResourceRecord();
         $dummy->setName('example.com.');

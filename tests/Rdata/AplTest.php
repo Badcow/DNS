@@ -34,7 +34,7 @@ class AplTest extends TestCase
             IPBlock::create('2001:acad:1::8/128'),
         ];
 
-        $apl = Factory::Apl($includedRanges, $excludedRanges);
+        $apl = Factory::APL($includedRanges, $excludedRanges);
 
         $expectation = '1:192.168.0.0/23 2:2001:acad:1::/112 !1:192.168.1.64/28 !2:2001:acad:1::8/128';
         $this->assertEquals($expectation, $apl->toText());
@@ -52,7 +52,7 @@ class AplTest extends TestCase
             IPBlock::create('2001:acad:1::8/128'),
         ];
 
-        $apl = Factory::Apl($includedRanges, $excludedRanges);
+        $apl = Factory::APL($includedRanges, $excludedRanges);
 
         $this->assertEquals($includedRanges, $apl->getIncludedAddressRanges());
         $this->assertEquals($excludedRanges, $apl->getExcludedAddressRanges());

@@ -265,7 +265,7 @@ class LOC implements RdataInterface
         $lat = self::dmsToDecimal((int) array_shift($rdata), (int) array_shift($rdata), (float) array_shift($rdata), (string) array_shift($rdata));
         $lon = self::dmsToDecimal((int) array_shift($rdata), (int) array_shift($rdata), (float) array_shift($rdata), (string) array_shift($rdata));
 
-        return Factory::Loc(
+        return Factory::LOC(
             $lat,
             $lon,
             (float) array_shift($rdata),

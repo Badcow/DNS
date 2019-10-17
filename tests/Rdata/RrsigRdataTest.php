@@ -49,7 +49,7 @@ class RrsigRdataTest extends TestCase
 
     public function testFactory(): void
     {
-        $rrsig = Factory::Rrsig(
+        $rrsig = Factory::RRSIG(
             A::TYPE,
             Algorithms::RSASHA1,
             3,
