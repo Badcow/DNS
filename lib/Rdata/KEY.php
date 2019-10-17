@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\Tokens;
+
 /**
  * {@link https://tools.ietf.org/html/rfc2535#section-3.1}.
  */
