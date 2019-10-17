@@ -24,32 +24,39 @@ class KEY implements RdataInterface
     const TYPE_CODE = 25;
     
     /**
-     * 16-bit unsigned integer.
+     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.1}.
      *
      * @var int
      */
-    private $flags;
+    protected $flags;
     
     /**
-     * 8-bit unsigned integer.
-     * 
+     * The Protocol Field MUST have value 3, and the DNSKEY RR MUST be
+     * treated as invalid during signature verification if it is found to be
+     * some value other than 3.
+     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.2}.
+     *
      * @var int
      */
-    private $protocol;
+    protected $protocol = 3;
     
     /**
-     * 8-bit unsigned integer.
-     * 
+     * The Algorithm field identifies the public key's cryptographic
+     * algorithm and determines the format of the Public Key field.
+     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.3}.
+     *
      * @var int
      */
-    private $algorithm;
+    protected $algorithm;
     
     /**
-     * Base64 encoded public key.
-     * 
+     * The Public Key field is a Base64 encoding of the Public Key.
+     * Whitespace is allowed within the Base64 text.
+     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.4}.
+     *
      * @var string
      */
-    private $publicKey;
+    protected $publicKey;
     
     /**
      * @param int $flags
@@ -140,7 +147,7 @@ class KEY implements RdataInterface
     public static function fromText(string $text): RdataInterface
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $key = new self();
+        $key = new static();
         $key->setFlags((int) array_shift($rdata));
         $key->setProtocol((int) array_shift($rdata));
         $key->setAlgorithm((int) array_shift($rdata));
@@ -155,7 +162,7 @@ class KEY implements RdataInterface
     public static function fromWire(string $rdata): RdataInterface
     {
         $integers = unpack('nflags/Cprotocol/Calgorithm', $rdata);
-        $key = new self();
+        $key = new static();
         $key->setFlags((int) $integers['flags']);
         $key->setProtocol((int) $integers['protocol']);
         $key->setAlgorithm((int) $integers['algorithm']);
