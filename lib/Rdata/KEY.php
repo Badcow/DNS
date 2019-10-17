@@ -13,20 +13,114 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
-// TODO: Implement KEY RData
+/**
+ * {@link https://tools.ietf.org/html/rfc2535#section-3.1}.
+ */
 class KEY implements RdataInterface
 {
     use RdataTrait;
 
     const TYPE = 'KEY';
     const TYPE_CODE = 25;
+    
+    /**
+     * 16-bit unsigned integer.
+     *
+     * @var int
+     */
+    private $flags;
+    
+    /**
+     * 8-bit unsigned integer.
+     * 
+     * @var int
+     */
+    private $protocol;
+    
+    /**
+     * 8-bit unsigned integer.
+     * 
+     * @var int
+     */
+    private $algorithm;
+    
+    /**
+     * Base64 encoded public key.
+     * 
+     * @var string
+     */
+    private $publicKey;
+    
+    /**
+     * @param int $flags
+     */
+    public function setFlags(int $flags): void
+    {
+        $this->flags = $flags;
+    }
+
+    /**
+     * @param int $protocol
+     */
+    public function setProtocol(int $protocol): void
+    {
+        $this->protocol = $protocol;
+    }
+
+    /**
+     * @param int $algorithm
+     */
+    public function setAlgorithm(int $algorithm): void
+    {
+        $this->algorithm = $algorithm;
+    }
+    
+    /**
+     * @param string $publicKey
+     */
+    public function setAlgorithm(string $publicKey): void
+    {
+        $this->publicKey = $publicKey;
+    }
+    
+    /**
+     * @return int
+     */
+    public function getFlags(): int
+    {
+        return $this->flags;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProtocol(): int
+    {
+        return $this->protocol;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAlgorithm(): int
+    {
+        return $this->algorithm;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getPublicKey(): string
+    {
+        return $this->publicKey;
+    }
 
     /**
      * {@inheritdoc}
      */
     public function toText(): string
     {
-        // TODO: Implement output() method.
+        return sprintf('%d %d %d %s', $this->flags, $this->protocol, $this->algorithm, $this->publicKey);
     }
 
     /**
@@ -34,7 +128,10 @@ class KEY implements RdataInterface
      */
     public function toWire(): string
     {
-        // TODO: Implement toWire() method.
+        $encoded = pack('nCC', $this->flags, $this->protocol, $this->algorithm);
+        $encoded .= $this->publicKey;
+        
+        return $encoded;
     }
 
     /**
@@ -42,7 +139,14 @@ class KEY implements RdataInterface
      */
     public static function fromText(string $text): RdataInterface
     {
-        // TODO: Implement fromText() method.
+        $rdata = explode(Tokens::SPACE, $text);
+        $key = new self();
+        $key->setFlags((int) array_shift($rdata));
+        $key->setProtocol((int) array_shift($rdata));
+        $key->setAlgorithm((int) array_shift($rdata));
+        $key->setPublicKey(implode('', $rdata));
+        
+        return $key;
     }
 
     /**
@@ -50,6 +154,13 @@ class KEY implements RdataInterface
      */
     public static function fromWire(string $rdata): RdataInterface
     {
-        // TODO: Implement fromWire() method.
+        $integers = unpack('nflags/Cprotocol/Calgorithm', $rdata);
+        $key = new self();
+        $key->setFlags((int) $integers['flags']);
+        $key->setProtocol((int) $integers['protocol']);
+        $key->setAlgorithm((int) $integers['algorithm']);
+        $key->setPublicKey(substr($rdata, 4));
+        
+        return $key;
     }
 }
