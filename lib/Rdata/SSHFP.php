@@ -109,7 +109,7 @@ class SSHFP implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return sprintf('%d %d %s', $this->algorithm, $this->fingerprintType, $this->fingerprint);
     }

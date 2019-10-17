@@ -258,15 +258,15 @@ class Factory
 
     /**
      * @param string $nextDomainName
-     * @param array  $typeBitMaps
+     * @param array  $types
      *
      * @return NSEC
      */
-    public static function Nsec(string $nextDomainName, array $typeBitMaps)
+    public static function Nsec(string $nextDomainName, array $types)
     {
         $rdata = new NSEC();
         $rdata->setNextDomainName($nextDomainName);
-        array_map([$rdata, 'addTypeBitMap'], $typeBitMaps);
+        array_map([$rdata, 'addType'], $types);
 
         return $rdata;
     }

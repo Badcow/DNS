@@ -16,6 +16,8 @@ namespace Badcow\DNS\Rdata;
  */
 class PolymorphicRdata implements RdataInterface
 {
+    use RdataTrait;
+
     /**
      * The RData type.
      *
@@ -27,6 +29,11 @@ class PolymorphicRdata implements RdataInterface
      * @var string|null
      */
     private $data;
+
+    /**
+     * @var int|null
+     */
+    private $typeCode;
 
     /**
      * PolymorphicRdata constructor.
@@ -50,6 +57,11 @@ class PolymorphicRdata implements RdataInterface
      */
     public function setType(string $type): void
     {
+        try {
+            $this->typeCode = TypeCodes::getTypeCode($type);
+        } catch (\Exception $e) {
+            $this->typeCode = 65535;
+        }
         $this->type = $type;
     }
 
@@ -59,6 +71,11 @@ class PolymorphicRdata implements RdataInterface
     public function getType(): string
     {
         return $this->type ?? '';
+    }
+
+    public function getTypeCode(): int
+    {
+        return $this->getTypeCode();
     }
 
     /**
@@ -80,7 +97,7 @@ class PolymorphicRdata implements RdataInterface
     /**
      * @return string
      */
-    public function output(): string
+    public function toText(): string
     {
         return $this->getData() ?? '';
     }

@@ -68,7 +68,7 @@ class MX implements RdataInterface
      *
      * @throws \InvalidArgumentException throws exception if preference or exchange have not been set
      */
-    public function output(): string
+    public function toText(): string
     {
         if (null === $this->preference) {
             throw new \InvalidArgumentException('No preference has been set on MX object.');

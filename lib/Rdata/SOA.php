@@ -193,7 +193,7 @@ class SOA implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return sprintf(
             '%s %s %s %s %s %s %s',

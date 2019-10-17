@@ -17,12 +17,12 @@ class AFSDB implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'AFSDB';
-    const TYPE_CODE = 0;
+    const TYPE_CODE = 18;
 
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         // TODO: Implement output() method.
     }

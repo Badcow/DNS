@@ -28,12 +28,12 @@ class NsecRdataTest extends TestCase
 
         $nsec = new NSEC();
         $nsec->setNextDomainName('host.example.com.');
-        $nsec->addTypeBitMap(A::TYPE);
-        $nsec->addTypeBitMap(MX::TYPE);
-        $nsec->addTypeBitMap(RRSIG::TYPE);
-        $nsec->addTypeBitMap(NSEC::TYPE);
+        $nsec->addType(A::TYPE);
+        $nsec->addType(MX::TYPE);
+        $nsec->addType(RRSIG::TYPE);
+        $nsec->addType(NSEC::TYPE);
 
-        $this->assertEquals($expectation, $nsec->output());
+        $this->assertEquals($expectation, $nsec->toText());
     }
 
     public function testFactory(): void
@@ -43,17 +43,49 @@ class NsecRdataTest extends TestCase
         $nsec = Factory::Nsec($nextDomain, $bitMaps);
 
         $this->assertEquals($nextDomain, $nsec->getNextDomainName());
-        $this->assertEquals($bitMaps, $nsec->getTypeBitMaps());
+        $this->assertEquals($bitMaps, $nsec->getTypes());
     }
 
     public function testClearTypeMap(): void
     {
         $nsec = new NSEC();
-        $nsec->addTypeBitMap(NS::TYPE);
-        $nsec->addTypeBitMap(PTR::TYPE);
+        $nsec->addType(NS::TYPE);
+        $nsec->addType(PTR::TYPE);
 
-        $this->assertEquals([NS::TYPE, PTR::TYPE], $nsec->getTypeBitMaps());
-        $nsec->clearTypeMap();
-        $this->assertEquals([], $nsec->getTypeBitMaps());
+        $this->assertEquals([NS::TYPE, PTR::TYPE], $nsec->getTypes());
+        $nsec->clearTypes();
+        $this->assertEquals([], $nsec->getTypes());
+    }
+
+    public function testFromText()
+    {
+        $text = 'host.example.com. A MX RRSIG NSEC TYPE1234';
+        /** @var NSEC $nsec */
+        $nsec = NSEC::fromText($text);
+
+        $this->assertEquals('host.example.com.', $nsec->getNextDomainName());
+        $this->assertEquals(['A', 'MX', 'RRSIG', 'NSEC', 'TYPE1234'], $nsec->getTypes());
+        $this->assertEquals($text, $nsec->toText());
+    }
+
+    public function testWire()
+    {
+        $hexMatrix = [
+            0x04, ord('h'), ord('o'), ord('s'), ord('t'),
+            0x07, ord('e'), ord('x'), ord('a'), ord('m'), ord('p'), ord('l'), ord('e'),
+            0x03, ord('c'), ord('o'), ord('m'), 0x00,
+            0x00, 0x06, 0x40, 0x01, 0x00, 0x00, 0x00, 0x03,
+            0x01, 0x01, 0x40,
+            0x80, 0x01, 0x40,
+        ];
+
+        $expectation = pack('C*', ...$hexMatrix);
+
+        $text = 'host.example.com. A MX RRSIG NSEC CAA DLV';
+        /** @var NSEC $nsec */
+        $nsec = NSEC::fromText($text);
+
+        $this->assertEquals($expectation, $nsec->toWire());
+        $this->assertEquals($nsec, NSEC::fromWire($expectation));
     }
 }

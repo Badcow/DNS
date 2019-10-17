@@ -31,5 +31,28 @@ class DnameRdataTest extends \PHPUnit\Framework\TestCase
         $dname->setTarget($target);
 
         $this->assertEquals($target, $dname->output());
+        $this->assertEquals($target, $dname->toText());
+    }
+
+
+    public function testFromText()
+    {
+        $text = 'host.example.com.';
+        /** @var DNAME $cname */
+        $cname = DNAME::fromText($text);
+
+        $this->assertEquals($text, $cname->getTarget());
+    }
+
+    public function testWire()
+    {
+        $host = 'host.example.com.';
+        $expectation = chr(4).'host'.chr(7).'example'.chr(3).'com'.chr(0);
+
+        /** @var DNAME $dname */
+        $dname = DNAME::fromWire($expectation);
+
+        $this->assertEquals($expectation, $dname->toWire());
+        $this->assertEquals($host, $dname->getTarget());
     }
 }

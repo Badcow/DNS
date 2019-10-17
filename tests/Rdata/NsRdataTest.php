@@ -17,19 +17,41 @@ class NsRdataTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetNsdname(): void
     {
-        $nsdname = 'foo.example.com.';
-        $dname = new NS();
-        $dname->setTarget($nsdname);
+        $target = 'foo.example.com.';
+        $ns = new NS();
+        $ns->setTarget($target);
 
-        $this->assertEquals($nsdname, $dname->getTarget());
+        $this->assertEquals($target, $ns->getTarget());
     }
 
     public function testOutput(): void
     {
-        $Nsdname = 'foo.example.com.';
-        $dname = new NS();
-        $dname->setTarget($Nsdname);
+        $target = 'foo.example.com.';
+        $ns = new NS();
+        $ns->setTarget($target);
 
-        $this->assertEquals($Nsdname, $dname->output());
+        $this->assertEquals($target, $ns->output());
+        $this->assertEquals($target, $ns->toText());
+    }
+
+    public function testFromText()
+    {
+        $text = 'host.example.com.';
+        /** @var NS $cname */
+        $cname = NS::fromText($text);
+
+        $this->assertEquals($text, $cname->getTarget());
+    }
+
+    public function testWire()
+    {
+        $host = 'host.example.com.';
+        $expectation = chr(4).'host'.chr(7).'example'.chr(3).'com'.chr(0);
+
+        /** @var NS $ns */
+        $ns = NS::fromWire($expectation);
+
+        $this->assertEquals($expectation, $ns->toWire());
+        $this->assertEquals($host, $ns->getTarget());
     }
 }

@@ -118,7 +118,7 @@ class CAA implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return sprintf('%d %s "%s"',
             $this->flag,

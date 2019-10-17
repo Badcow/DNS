@@ -22,7 +22,7 @@ class NSEC3 implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         // TODO: Implement output() method.
     }

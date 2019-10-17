@@ -23,4 +23,24 @@ class AaaaRdataTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($address, $aaaa->getAddress());
     }
+
+    public function testFromText()
+    {
+        $text = '2003:dead:beef:4dad:23:46:bb:101';
+        /** @var AAAA $aaaa */
+        $aaaa = AAAA::fromText($text);
+
+        $this->assertEquals($text, $aaaa->getAddress());
+    }
+
+    public function testWire()
+    {
+        $address = '2003:dead:beef:4dad:23:46:bb:101';
+        $expectation = inet_pton($address);
+        /** @var AAAA $aaaa */
+        $aaaa = AAAA::fromWire($expectation);
+
+        $this->assertEquals($expectation, $aaaa->toWire());
+        $this->assertEquals($address, $aaaa->getAddress());
+    }
 }

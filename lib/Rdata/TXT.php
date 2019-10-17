@@ -51,7 +51,7 @@ class TXT implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return sprintf('"%s"', $this->text);
     }

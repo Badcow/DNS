@@ -45,5 +45,26 @@ class ARdataTest extends TestCase
         $this->aRdata->setAddress($address);
 
         $this->assertEquals($address, $this->aRdata->output());
+        $this->assertEquals($address, $this->aRdata->toText());
+    }
+
+    public function testFromText()
+    {
+        $text = '200.100.50.1';
+        /** @var A $a */
+        $a = A::fromText($text);
+
+        $this->assertEquals($text, $a->getAddress());
+    }
+
+    public function testWire()
+    {
+        $address = '200.100.50.1';
+        $expectation = inet_pton($address);
+        /** @var A $a */
+        $a = A::fromWire($expectation);
+
+        $this->assertEquals($expectation, $a->toWire());
+        $this->assertEquals($address, $a->getAddress());
     }
 }

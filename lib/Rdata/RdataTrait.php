@@ -30,4 +30,92 @@ trait RdataTrait
         /* @const TYPE_CODE */
         return static::TYPE_CODE;
     }
+
+    /**
+     * @deprecated
+     * @return string
+     */
+    public function output(): string
+    {
+        @trigger_error('Method RdataInterface::output() has been deprecated. Use RdataInterface::toText().', E_USER_DEPRECATED);
+
+        return $this->toText();
+    }
+
+    /**
+     * Encode a domain name as a sequence of labels.
+     *
+     * @param $name
+     *
+     * @return string
+     */
+    public static function encodeName($name): string
+    {
+        if ('.' === $name) {
+            return chr(0);
+        }
+
+        $name = rtrim($name, '.').'.';
+        $res = '';
+
+        foreach (explode('.', $name) as $label) {
+            $res .= chr(strlen($label)).$label;
+        }
+
+        return $res;
+    }
+
+    /**
+     * @param string $string
+     * @param int    $offset
+     *
+     * @return string
+     */
+    public static function decodeName(string $string, int &$offset = 0): string
+    {
+        $len = ord($string[$offset]);
+        ++$offset;
+
+        if (0 === $len) {
+            return '.';
+        }
+
+        $name = '';
+        while (0 !== $len) {
+            $name .= substr($string, $offset, $len).'.';
+            $offset += $len;
+            $len = ord($string[$offset]);
+            ++$offset;
+        }
+
+        return $name;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * @throws \Exception
+     */
+    public function toWire(): string
+    {
+        throw new \Exception('Not yet implemented.');
+    }
+
+    /**
+     * {@inheritDoc}
+     * @throws \Exception
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        throw new \Exception('Not yet implemented.');
+    }
+
+    /**
+     * {@inheritDoc}
+     * @throws \Exception
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        throw new \Exception('Not yet implemented.');
+    }
 }

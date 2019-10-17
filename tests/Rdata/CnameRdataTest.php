@@ -12,8 +12,9 @@
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\CNAME;
+use PHPUnit\Framework\TestCase;
 
-class CnameRdataTest extends \PHPUnit\Framework\TestCase
+class CnameRdataTest extends TestCase
 {
     public function testOutput(): void
     {
@@ -22,5 +23,26 @@ class CnameRdataTest extends \PHPUnit\Framework\TestCase
         $cname->setTarget($target);
 
         $this->assertEquals($target, $cname->output());
+    }
+
+    public function testFromText()
+    {
+        $text = 'host.example.com.';
+        /** @var CNAME $cname */
+        $cname = CNAME::fromText($text);
+
+        $this->assertEquals($text, $cname->getTarget());
+    }
+
+    public function testWire()
+    {
+        $host = 'host.example.com.';
+        $expectation = chr(4).'host'.chr(7).'example'.chr(3).'com'.chr(0);
+
+        /** @var CNAME $cname */
+        $cname = CNAME::fromWire($expectation);
+
+        $this->assertEquals($expectation, $cname->toWire());
+        $this->assertEquals($host, $cname->getTarget());
     }
 }

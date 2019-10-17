@@ -45,8 +45,38 @@ class A implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return $this->address ?? '';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toWire(): string
+    {
+        return inet_pton($this->address);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $a = new self;
+        $a->setAddress($text);
+
+        return $a;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        $a = new self;
+        $a->setAddress(inet_ntop($rdata));
+
+        return $a;
     }
 }

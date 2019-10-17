@@ -195,7 +195,7 @@ class LOC implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return sprintf(
                 '%s %s %.2fm %.2fm %.2fm %.2fm',

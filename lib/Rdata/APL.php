@@ -11,7 +11,10 @@
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\ParseException;
 use PhpIP\IPBlock;
+use PhpIP\IPv4Block;
+use PhpIP\IPv6Block;
 
 /**
  * @see https://tools.ietf.org/html/rfc3123
@@ -66,7 +69,7 @@ class APL implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         $string = '';
         foreach ($this->includedAddressRanges as $ipBlock) {
@@ -80,5 +83,80 @@ class APL implements RdataInterface
         }
 
         return rtrim($string, ' ');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toWire(): string
+    {
+        $encoded = '';
+
+        foreach ($this->includedAddressRanges as $ipBlock) {
+            $encoded .= pack('nCC',
+                (4 === $ipBlock->getVersion()) ? 1 : 2,
+                $ipBlock->getPrefix(),
+                $ipBlock->getGivenIp()::NB_BYTES
+            ).inet_pton($ipBlock->getGivenIp());
+        }
+
+        foreach ($this->excludedAddressRanges as $ipBlock) {
+            $encoded .= pack('nCCC*',
+                (4 === $ipBlock->getVersion()) ? 1 : 2,
+                $ipBlock->getPrefix(),
+                $ipBlock->getGivenIp()::NB_BYTES | 0b10000000
+            ).inet_pton($ipBlock->getGivenIp());
+        }
+
+        return $encoded;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @throws \Exception
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $iterator = new \ArrayIterator(explode(' ', $text));
+        $apl = new self();
+
+        while ($iterator->valid()) {
+            $matches = [];
+            if (1 !== preg_match('/^(?<negate>!)?[1-2]:(?<block>.+)$/i', $iterator->current(), $matches)) {
+                throw new \Exception(sprintf('"%s" is not a valid IP range.', $iterator->current()));
+            }
+
+            $ipBlock = IPBlock::create($matches['block']);
+            $apl->addAddressRange($ipBlock, '!' !== $matches['negate']);
+            $iterator->next();
+        }
+
+        return $apl;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        $apl = new self();
+        $rdLength = strlen($rdata);
+        $offset = 0;
+
+        while ($offset < $rdLength) {
+            $apItem = unpack('nfamily/Cprefix/Clength', $rdata, $offset);
+            $isExcluded = (bool) ($apItem['length'] & 0b10000000);
+            $len = $apItem['length'] & 0b01111111;
+            $version = ($apItem['family'] === 1) ? 4 : 6;
+            $offset += 4;
+            $address = substr($rdata, $offset, $len);
+            $address = inet_ntop($address);
+            $offset += $len;
+
+            $ipBlock = (4 === $version) ? new IPv4Block($address, $apItem['prefix']) : new IPv6Block($address, $apItem['prefix']);
+            $apl->addAddressRange($ipBlock, !$isExcluded);
+        }
+
+        return $apl;
     }
 }

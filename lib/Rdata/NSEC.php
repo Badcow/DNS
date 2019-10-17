@@ -11,6 +11,8 @@
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\Tokens;
+
 class NSEC implements RdataInterface
 {
     use RdataTrait;
@@ -31,7 +33,7 @@ class NSEC implements RdataInterface
     /**
      * @var array
      */
-    private $typeBitMaps = [];
+    private $types = [];
 
     /**
      * @return string
@@ -52,36 +54,127 @@ class NSEC implements RdataInterface
     /**
      * @param string $type
      */
-    public function addTypeBitMap(string $type): void
+    public function addType(string $type): void
     {
-        $this->typeBitMaps[] = $type;
+        $this->types[] = $type;
+    }
+
+    /**
+     * @deprecated
+     */
+    public function addTypeBitMap(string $type)
+    {
+        @trigger_error('Method NSEC::addTypeBitMap has been deprecated. Use NSEC::addType instead.', E_USER_DEPRECATED);
+        $this->addType($type);
+    }
+
+    /**
+     * @deprecated
+     */
+    public function clearTypeMap()
+    {
+        @trigger_error('Method NSEC::clearTypeMap has been deprecated and is unusable. Use NSEC::clearTypes instead.', E_USER_DEPRECATED);
+        $this->clearTypes();
+    }
+    /**
+     * @deprecated
+     */
+    public function getTypeBitMaps()
+    {
+        @trigger_error('Method NSEC::getTypeBitMaps has been deprecated and is unusable. Use NSEC::getTypes instead.', E_USER_DEPRECATED);
+
+        return$this->getTypes();
     }
 
     /**
      * Clears the types from the RDATA.
      */
-    public function clearTypeMap(): void
+    public function clearTypes(): void
     {
-        $this->typeBitMaps = [];
+        $this->types = [];
     }
 
     /**
      * @return array
      */
-    public function getTypeBitMaps(): array
+    public function getTypes(): array
     {
-        return $this->typeBitMaps;
+        return $this->types;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return sprintf(
             '%s %s',
             $this->nextDomainName,
-            implode(' ', $this->typeBitMaps)
+            implode(' ', $this->types)
         );
+    }
+
+    public function toWire(): string
+    {
+        $blocks = [];
+
+        foreach($this->types as $type) {
+            $int = TypeCodes::getTypeCode($type);
+            $window = $int >> 8;
+            $int = $int & 0b11111111;
+            $mod = $int % 8;
+            $mask = $blocks[$window] ?? str_repeat("\0", 32);
+            $byteNum = ($int - $mod) / 8;
+            $byte = ord($mask[$byteNum]) | (128 >> $mod);
+            $mask[$byteNum] = chr($byte);
+            $blocks[$window] = $mask;
+        }
+
+        $encoded = self::encodeName($this->nextDomainName);
+        foreach($blocks as $n => $mask) {
+            $mask = rtrim($mask, "\0");
+            $encoded .= chr($n) . chr(strlen($mask)) . $mask;
+        }
+
+        return $encoded;
+    }
+
+    public static function fromText(string $text): RdataInterface
+    {
+        $iterator = new \ArrayIterator(explode(Tokens::SPACE, $text));
+        $nsec = new self();
+        $nsec->setNextDomainName($iterator->current());
+        $iterator->next();
+        while ($iterator->valid()) {
+            $nsec->addType($iterator->current());
+            $iterator->next();
+        }
+
+        return $nsec;
+    }
+
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        $nsec = new self();
+        $offset = 0;
+        $nsec->setNextDomainName(self::decodeName($rdata, $offset));
+
+        $bytes = unpack('C*', $rdata, $offset);
+
+        while (count($bytes) > 0) {
+            $mask = '';
+            $window = array_shift($bytes);
+            $len = array_shift($bytes);
+            for ($i = 0; $i < $len; $i++) {
+                $mask .= str_pad(decbin(array_shift($bytes)), 8, '0', STR_PAD_LEFT);
+            }
+            $offset = 0;
+            while (false !== $pos = strpos($mask, '1', $offset)) {
+                $nsec->addType(TypeCodes::getName($window * 256 + $pos));
+                $offset = $pos + 1;
+            }
+        }
+
+        return $nsec;
     }
 }
