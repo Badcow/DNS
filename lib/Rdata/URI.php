@@ -12,49 +12,42 @@
 namespace Badcow\DNS\Rdata;
 
 /**
- * Class SrvRdata.
- *
- * SRV is defined in RFC 2782
- *
- * @see https://tools.ietf.org/html/rfc2782
- *
- * @author Samuel Williams <sam@badcow.co>
+ * {@link https://tools.ietf.org/html/rfc7553}.
  */
-class SRV extends CNAME
+class URI implements RdataInterface
 {
-    const TYPE = 'SRV';
-    const TYPE_CODE = 33;
-    const HIGHEST_PORT = 65535;
+    use RdataTrait;
+
+    const TYPE = 'URI';
+    const TYPE_CODE = 256;
     const MAX_PRIORITY = 65535;
     const MAX_WEIGHT = 65535;
 
     /**
-     * The priority of this target host. A client MUST attempt to
-     * contact the target host with the lowest-numbered priority it can
-     * reach; target hosts with the same priority SHOULD be tried in an
-     * order defined by the weight field. The range is 0-65535. This
-     * is a 16 bit unsigned integer.
+     * This field holds the priority of the target URI in this RR.  Its
+     * range is 0-65535.  A client MUST attempt to contact the URI with the
+     * lowest-numbered priority it can reach; URIs with the same priority
+     * SHOULD be selected according to probabilities defined by the weight
+     * field.
      *
-     * @var int|null
+     * @var int
      */
     private $priority;
 
     /**
-     * A server selection mechanism.  The weight field specifies a
-     * relative weight for entries with the same priority. The range
-     * is 0-65535. This is a 16 bit unsigned integer.
+     * This field holds the server selection mechanism.  The weight field
+     * specifies a relative weight for entries with the same priority.
+     * Larger weights SHOULD be given a proportionately higher probability
+     * of being selected.  The range of this number is 0-65535.
      *
-     * @var int|null
+     * @var int
      */
     private $weight;
 
     /**
-     * The port on this target host of this service. The range is
-     * 0-65535. This is a 16 bit unsigned integer.
-     *
-     * @var int|null
+     * @var string
      */
-    private $port;
+    private $target;
 
     /**
      * @return int
@@ -101,25 +94,23 @@ class SRV extends CNAME
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getPort(): ?int
+    public function getTarget(): ?string
     {
-        return $this->port;
+        return $this->target;
     }
 
     /**
-     * @param int $port
-     *
-     * @throws \InvalidArgumentException
+     * @param string $target
      */
-    public function setPort(int $port): void
+    public function setTarget(string $target): void
     {
-        if ($port < 0 || $port > static::HIGHEST_PORT) {
-            throw new \InvalidArgumentException('Port must be an unsigned integer on the range [0-65535]');
+        if (false === filter_var($target, FILTER_VALIDATE_URL)) {
+            throw new \InvalidArgumentException(sprintf('The target "%s" is not a valid URI.', $target));
         }
 
-        $this->port = $port;
+        $this->target = $target;
     }
 
     /**
@@ -127,10 +118,9 @@ class SRV extends CNAME
      */
     public function output(): string
     {
-        return sprintf('%s %s %s %s',
+        return sprintf('%d %d "%s"',
             $this->priority,
             $this->weight,
-            $this->port,
             $this->target
         );
     }

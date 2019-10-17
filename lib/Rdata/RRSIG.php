@@ -16,6 +16,7 @@ class RRSIG implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'RRSIG';
+    const TYPE_CODE = 46;
 
     /**
      *  The Type Covered field identifies the type of the RRset that is

@@ -11,23 +11,19 @@
 
 namespace Badcow\DNS\Rdata;
 
-trait RdataTrait
+// TODO: Implement NSEC3 RData
+class NSEC3 implements RdataInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getType(): string
-    {
-        /* @const TYPE */
-        return static::TYPE;
-    }
+    use RdataTrait;
+
+    const TYPE = 'NSEC3';
+    const TYPE_CODE = 0;
 
     /**
      * {@inheritdoc}
      */
-    public function getTypeCode(): int
+    public function output(): string
     {
-        /* @const TYPE_CODE */
-        return static::TYPE_CODE;
+        // TODO: Implement output() method.
     }
 }

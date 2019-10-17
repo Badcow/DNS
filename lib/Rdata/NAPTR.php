@@ -11,23 +11,19 @@
 
 namespace Badcow\DNS\Rdata;
 
-trait RdataTrait
+// TODO: Implement NAPTR RData
+class NAPTR implements RdataInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getType(): string
-    {
-        /* @const TYPE */
-        return static::TYPE;
-    }
+    use RdataTrait;
+
+    const TYPE = 'NAPTR';
+    const TYPE_CODE = 0;
 
     /**
      * {@inheritdoc}
      */
-    public function getTypeCode(): int
+    public function output(): string
     {
-        /* @const TYPE_CODE */
-        return static::TYPE_CODE;
+        // TODO: Implement output() method.
     }
 }

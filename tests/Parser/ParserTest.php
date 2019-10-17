@@ -15,6 +15,7 @@ use Badcow\DNS\AlignedBuilder;
 use Badcow\DNS\Classes;
 use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
+use Badcow\DNS\Parser\RDataTypes;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\AAAA;
 use Badcow\DNS\Rdata\APL;
@@ -111,7 +112,7 @@ class ParserTest extends TestCase
     /**
      * Parser creates valid dns object.
      *
-     * @throws \Badcow\DNS\Parser\ParseException
+     * @throws ParseException
      */
     public function testParserCreatesValidDnsObject(): void
     {
@@ -144,7 +145,7 @@ class ParserTest extends TestCase
     /**
      * Parser can handle convoluted zone record.
      *
-     * @throws \Badcow\DNS\Parser\ParseException|\Exception
+     * @throws ParseException|\Exception
      */
     public function testParserCanHandleConvolutedZoneRecord(): void
     {
@@ -175,7 +176,9 @@ class ParserTest extends TestCase
      */
     public function testCanHandlePolymorphicRdata(): void
     {
-        $string = 'example.com. 7200 IN SSHFP 2001:acad::1337; This is invalid.';
+        RDataTypes::$names[] = 'XX'; //Trick parser into using polymorphic type.
+
+        $string = 'example.com. 7200 IN XX 2001:acad::1337; This is invalid.';
         $zone = Parser::parse('example.com.', $string);
         $rr = $zone->getResourceRecords()[0];
 
@@ -187,7 +190,7 @@ class ParserTest extends TestCase
             return;
         }
 
-        $this->assertEquals('SSHFP', $rdata->getType());
+        $this->assertEquals('XX', $rdata->getType());
         $this->assertEquals('2001:acad::1337', $rdata->output());
     }
 
@@ -228,6 +231,38 @@ TXT;
         $this->assertEquals(0, $caa->getFlag());
         $this->assertEquals('issue', $caa->getTag());
         $this->assertEquals('letsencrypt.org', $caa->getValue());
+    }
+
+    /**
+     * @throws ParseException
+     */
+    public function testParserCanHandleSshfpRecords(): void
+    {
+        $txt = 'host.example. IN SSHFP 2 1 123456789abcdef67890123456789abcdef67890';
+        $zone = Parser::parse('example.', $txt);
+
+        $rrs = self::findRecord('host.example.', $zone, 'SSHFP');
+        $sshfp = $rrs[0]->getRdata();
+
+        $this->assertEquals(2, $sshfp->getAlgorithm());
+        $this->assertEquals(1, $sshfp->getFingerprintType());
+        $this->assertEquals('123456789abcdef67890123456789abcdef67890', $sshfp->getFingerprint());
+    }
+
+    /**
+     * @throws ParseException
+     */
+    public function testParserCanHandleUriRecords(): void
+    {
+        $txt = '   _ftp._tcp    IN URI 10 1 "ftp://ftp1.example.com/public data"';
+        $zone = Parser::parse('example.com.', $txt);
+
+        $rrs = self::findRecord('_ftp._tcp', $zone, 'URI');
+        $uri = $rrs[0]->getRdata();
+
+        $this->assertEquals(10, $uri->getPriority());
+        $this->assertEquals(1, $uri->getWeight());
+        $this->assertEquals('ftp://ftp1.example.com/public%20data', $uri->getTarget());
     }
 
     /**
@@ -331,6 +366,7 @@ TXT;
      *
      * @param string|null $name
      * @param Zone        $zone
+     * @param string|null $type
      *
      * @return ResourceRecord[]
      */

@@ -30,8 +30,7 @@ class Factory
             throw new UnsupportedTypeException($name);
         }
 
-        $namespace = '\\Badcow\\DNS\\Rdata\\';
-        $className = $namespace.strtoupper($name);
+        $className = __NAMESPACE__.'\\'.strtoupper($name);
 
         return new $className();
     }
@@ -43,10 +42,7 @@ class Factory
      */
     public static function isTypeImplemented(string $name): bool
     {
-        $namespace = '\\Badcow\\DNS\\Rdata\\';
-        $name = strtoupper($name);
-
-        return class_exists($namespace.$name);
+        return class_exists(__NAMESPACE__.'\\'.strtoupper($name));
     }
 
     /**
@@ -361,5 +357,163 @@ class Factory
         $rdata->setValue($value);
 
         return $rdata;
+    }
+
+    public static function AFSDB(): AFSDB
+    {
+        // TODO: Implement AFSDB() method.
+    }
+
+    public static function CDNSKEY(): CDNSKEY
+    {
+        // TODO: Implement CDNSKEY() method.
+    }
+
+    public static function CDS(): CDS
+    {
+        // TODO: Implement CDS() method.
+    }
+
+    public static function CERT(): CERT
+    {
+        // TODO: Implement CERT() method.
+    }
+
+    public static function CSYNC(): CSYNC
+    {
+        // TODO: Implement CSYNC() method.
+    }
+
+    public static function DHCID(): DHCID
+    {
+        // TODO: Implement DHCID() method.
+    }
+
+    /**
+     * @param int    $keyTag
+     * @param int    $algorithm
+     * @param string $digest
+     * @param int    $digestType
+     *
+     * @return DLV
+     */
+    public static function DLV(int $keyTag, int $algorithm, string $digest, int $digestType = DS::DIGEST_SHA1): DLV
+    {
+        $rdata = new DLV();
+        $rdata->setKeyTag($keyTag);
+        $rdata->setAlgorithm($algorithm);
+        $rdata->setDigest($digest);
+        $rdata->setDigestType($digestType);
+
+        return $rdata;
+    }
+
+    public static function HIP(): HIP
+    {
+        // TODO: Implement HIP() method.
+    }
+
+    public static function IPSECKEY(): IPSECKEY
+    {
+        // TODO: Implement IPSECKEY() method.
+    }
+
+    public static function KEY(): KEY
+    {
+        // TODO: Implement KEY() method.
+    }
+
+    public static function KX(): KX
+    {
+        // TODO: Implement KX() method.
+    }
+
+    public static function NAPTR(): NAPTR
+    {
+        // TODO: Implement NAPTR() method.
+    }
+
+    public static function NSEC3(): NSEC3
+    {
+        // TODO: Implement NSEC3() method.
+    }
+
+    public static function NSEC3PARAM(): NSEC3PARAM
+    {
+        // TODO: Implement NSEC3PARAM() method.
+    }
+
+    public static function OPENPGPKEY(): OPENPGPKEY
+    {
+        // TODO: Implement OPENPGPKEY() method.
+    }
+
+    public static function RP(): RP
+    {
+        // TODO: Implement RP() method.
+    }
+
+    public static function SIG(): SIG
+    {
+        // TODO: Implement SIG() method.
+    }
+
+    public static function SMIMEA(): SMIMEA
+    {
+        // TODO: Implement SMIMEA() method.
+    }
+
+    /**
+     * @param int    $algorithm
+     * @param int    $fpType
+     * @param string $fingerprint
+     *
+     * @return SSHFP
+     */
+    public static function SSHFP(int $algorithm, int $fpType, string $fingerprint): SSHFP
+    {
+        $sshfp = new SSHFP();
+        $sshfp->setAlgorithm($algorithm);
+        $sshfp->setFingerprintType($fpType);
+        $sshfp->setFingerprint($fingerprint);
+
+        return $sshfp;
+    }
+
+    public static function TA(): TA
+    {
+        // TODO: Implement TA() method.
+    }
+
+    public static function TKEY(): TKEY
+    {
+        // TODO: Implement TKEY() method.
+    }
+
+    public static function TLSA(): TLSA
+    {
+        // TODO: Implement TLSA() method.
+    }
+
+    public static function TSIG(): TSIG
+    {
+        // TODO: Implement TSIG() method.
+    }
+
+    /**
+     * @param int    $priority
+     * @param int    $weight
+     * @param string $target
+     *
+     * @return URI
+     */
+    public static function URI(int $priority, int $weight, string $target): URI
+    {
+        $uri = new URI();
+        $uri->setPriority($priority);
+        $uri->setWeight($weight);
+        $uri->setTarget($target);
+
+        return $uri;
     }
 }

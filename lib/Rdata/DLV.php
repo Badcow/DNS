@@ -12,10 +12,12 @@
 namespace Badcow\DNS\Rdata;
 
 /**
- * @see https://tools.ietf.org/html/rfc1035#section-3.3.12
+ * {@link https://tools.ietf.org/html/rfc4431}.
  */
-class PTR extends CNAME
+class DLV extends DS
 {
-    const TYPE = 'PTR';
-    const TYPE_CODE = 12;
+    use RdataTrait;
+
+    const TYPE = 'DLV';
+    const TYPE_CODE = 32769;
 }

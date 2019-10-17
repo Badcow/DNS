@@ -11,11 +11,19 @@
 
 namespace Badcow\DNS\Rdata;
 
-/**
- * @see https://tools.ietf.org/html/rfc1035#section-3.3.12
- */
-class PTR extends CNAME
+// TODO: Implement KX RData
+class KX implements RdataInterface
 {
-    const TYPE = 'PTR';
-    const TYPE_CODE = 12;
+    use RdataTrait;
+
+    const TYPE = 'KX';
+    const TYPE_CODE = 0;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function output(): string
+    {
+        // TODO: Implement output() method.
+    }
 }
