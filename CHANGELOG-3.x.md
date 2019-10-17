@@ -10,3 +10,4 @@ CHANGELOG for 3.x
   * `\Badcow\DNS\Parser\Normaliser::COMMENTS_WITHOUT_RECORD_ENTRY`
   * `\Badcow\DNS\Parser\Normaliser::COMMENTS_ALL`
 * Upgraded to PHPUnit 8.
+* Enforce strict_types [Issue #37](https://github.com/Badcow/DNS/issues/37).
