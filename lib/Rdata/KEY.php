@@ -78,7 +78,7 @@ class KEY implements RdataInterface
     /**
      * @param string $publicKey
      */
-    public function setAlgorithm(string $publicKey): void
+    public function setPublicKey(string $publicKey): void
     {
         $this->publicKey = $publicKey;
     }
