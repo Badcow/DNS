@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -37,7 +39,7 @@ class SshfpTest extends TestCase
         $sshfp->setFingerprint('123456789abcdef67890123456789abcdef67890');
 
         $expectation = '2 1 123456789abcdef67890123456789abcdef67890';
-        $this->assertEquals($expectation, $sshfp->output());
+        $this->assertEquals($expectation, $sshfp->toText());
     }
 
     /**

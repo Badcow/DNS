@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -57,7 +59,7 @@ class NsecRdataTest extends TestCase
         $this->assertEquals([], $nsec->getTypes());
     }
 
-    public function testFromText()
+    public function testFromText(): void
     {
         $text = 'host.example.com. A MX RRSIG NSEC TYPE1234';
         /** @var NSEC $nsec */
@@ -68,7 +70,7 @@ class NsecRdataTest extends TestCase
         $this->assertEquals($text, $nsec->toText());
     }
 
-    public function testWire()
+    public function testWire(): void
     {
         $hexMatrix = [
             0x04, ord('h'), ord('o'), ord('s'), ord('t'),

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -10,6 +12,8 @@
  */
 
 namespace Badcow\DNS\Rdata;
+
+use Badcow\DNS\Parser\Tokens;
 
 /**
  * Class CaaRdata.
@@ -35,23 +39,23 @@ class CAA implements RdataInterface
     /**
      * It is currently used to represent the critical flag.
      *
-     * @var int|null
+     * @var int
      */
     private $flag;
 
     /**
      * An ASCII string that represents the identifier of the property represented by the record.
      * The RFC currently defines 3 available tags:
-     *  - issue: explicity authorizes a single certificate authority to issue a certificate (any type) for the hostname.
-     *  - issuewild: explicity authorizes a single certificate authority to issue a wildcard certificate (and only wildcard) for the hostname.
+     *  - issue: explicitly authorizes a single certificate authority to issue a certificate (any type) for the hostname.
+     *  - issuewild: explicitly authorizes a single certificate authority to issue a wildcard certificate (and only wildcard) for the hostname.
      *  - iodef: specifies a URL to which a certificate authority may report policy violations.
      *
-     * @var string|null
+     * @var string
      */
     private $tag;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $value;
 
@@ -92,6 +96,7 @@ class CAA implements RdataInterface
      */
     public function setTag(string $tag): void
     {
+        $tag = strtolower($tag);
         if (!in_array($tag, static::ALLOWED_TAGS)) {
             throw new \InvalidArgumentException('Tag can be one of this type "issue", "issuewild", or "iodef".');
         }
@@ -120,10 +125,49 @@ class CAA implements RdataInterface
      */
     public function toText(): string
     {
+        if (!isset($this->tag) || !isset($this->flag) || !isset($this->value)) {
+            throw new \InvalidArgumentException('All CAA parameters must be set.');
+        }
+
         return sprintf('%d %s "%s"',
             $this->flag,
             $this->tag ?? '',
             $this->value ?? ''
         );
+    }
+
+    public function toWire(): string
+    {
+        if (!isset($this->tag) || !isset($this->flag) || !isset($this->value)) {
+            throw new \InvalidArgumentException('All CAA parameters must be set.');
+        }
+
+        return chr($this->flag).
+            chr(strlen($this->tag)).
+            $this->tag.
+            $this->value;
+    }
+
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        $caa = new self();
+        $caa->setFlag(ord($rdata[0]));
+        $tagLen = ord($rdata[1]);
+        $caa->setTag(substr($rdata, 2, $tagLen));
+        $caa->setValue(substr($rdata, 2 + $tagLen));
+
+        return $caa;
+    }
+
+    public static function fromText(string $string): RdataInterface
+    {
+        $caa = new self();
+        $rdata = explode(Tokens::SPACE, $string);
+        $caa->setFlag((int) array_shift($rdata));
+        $caa->setTag((string) array_shift($rdata));
+        $rdata = implode('', $rdata);
+        $caa->setValue(trim($rdata, '"'));
+
+        return $caa;
     }
 }

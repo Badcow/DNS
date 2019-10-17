@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -10,6 +12,8 @@
  */
 
 namespace Badcow\DNS\Rdata;
+
+use Badcow\DNS\Parser\Tokens;
 
 /**
  * {@link https://tools.ietf.org/html/rfc7553}.
@@ -123,5 +127,34 @@ class URI implements RdataInterface
             $this->weight,
             $this->target
         );
+    }
+
+    public function toWire(): string
+    {
+        return pack('nn', $this->priority, $this->weight).$this->target;
+    }
+
+    public static function fromText(string $text): RdataInterface
+    {
+        $rdata = explode(Tokens::SPACE, $text);
+        $uri = new self();
+        $uri->setPriority((int) array_shift($rdata));
+        $uri->setWeight((int) array_shift($rdata));
+        $target = implode(' ', $rdata);
+        $uri->setTarget(trim($target, '"'));
+
+        return $uri;
+    }
+
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        $integers = unpack('npriority/nweight', $rdata);
+
+        $uri = new self();
+        $uri->setTarget(substr($rdata, 4));
+        $uri->setPriority($integers['priority']);
+        $uri->setWeight($integers['weight']);
+
+        return $uri;
     }
 }

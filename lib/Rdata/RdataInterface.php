@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -15,6 +17,7 @@ interface RdataInterface
 {
     /**
      * @deprecated
+     *
      * @return string
      */
     public function output(): string;

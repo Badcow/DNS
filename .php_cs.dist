@@ -24,6 +24,7 @@ $config = PhpCsFixer\Config::create()
         'array_syntax' => ['syntax' => 'short'],
         'ordered_imports' => ['sort_algorithm' => 'alpha'],
         'void_return' => true,
+        'declare_strict_types' => true,
     ])
     ->setFinder($finder)
 ;

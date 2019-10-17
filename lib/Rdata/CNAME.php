@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -55,6 +57,10 @@ class CNAME implements RdataInterface
      */
     public function toWire(): string
     {
+        if (!isset($this->target)) {
+            throw new \InvalidArgumentException('Target must be set.');
+        }
+
         return self::encodeName($this->target);
     }
 
@@ -63,7 +69,7 @@ class CNAME implements RdataInterface
      */
     public static function fromText(string $text): RdataInterface
     {
-        $cname = new self();
+        $cname = new static();
         $cname->setTarget($text);
 
         return $cname;
@@ -74,7 +80,7 @@ class CNAME implements RdataInterface
      */
     public static function fromWire(string $rdata): RdataInterface
     {
-        $cname = new self();
+        $cname = new static();
         $cname->setTarget(self::decodeName($rdata));
 
         return $cname;

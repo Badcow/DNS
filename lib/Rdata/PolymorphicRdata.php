@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -16,8 +18,6 @@ namespace Badcow\DNS\Rdata;
  */
 class PolymorphicRdata implements RdataInterface
 {
-    use RdataTrait;
-
     /**
      * The RData type.
      *
@@ -66,16 +66,31 @@ class PolymorphicRdata implements RdataInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getType(): string
     {
         return $this->type ?? '';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getTypeCode(): int
     {
         return $this->getTypeCode();
+    }
+
+    /**
+     * @deprecated
+     *
+     * @return string
+     */
+    public function output(): string
+    {
+        @trigger_error('Method RdataInterface::output() has been deprecated. Use RdataInterface::toText().', E_USER_DEPRECATED);
+
+        return $this->toText();
     }
 
     /**
@@ -95,10 +110,34 @@ class PolymorphicRdata implements RdataInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function toText(): string
     {
         return $this->getData() ?? '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toWire(): string
+    {
+        // TODO: Implement toWire() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        // TODO: Implement fromText() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        // TODO: Implement fromWire() method.
     }
 }

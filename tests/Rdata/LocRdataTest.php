@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -12,8 +14,9 @@
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\LOC;
+use PHPUnit\Framework\TestCase;
 
-class LocRdataTest extends \PHPUnit\Framework\TestCase
+class LocRdataTest extends TestCase
 {
     public function testOutput(): void
     {
@@ -26,7 +29,7 @@ class LocRdataTest extends \PHPUnit\Framework\TestCase
         $rdata->setVerticalPrecision(300.1);
 
         $expected = '35 18 27.000 S 149 7 27.840 E 500.00m 20.12m 200.30m 300.10m';
-        $this->assertEquals($expected, $rdata->output());
+        $this->assertEquals($expected, $rdata->toText());
     }
 
     public function testSetLatitude(): void

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -11,12 +13,12 @@
 
 namespace Badcow\DNS\Tests\Rdata;
 
+use Badcow\DNS\Rdata\APL;
 use Badcow\DNS\Rdata\Factory;
 use PhpIP\IPBlock;
 use PhpIP\IPv4Block;
 use PhpIP\IPv6Block;
 use PHPUnit\Framework\TestCase;
-use Badcow\DNS\Rdata\APL;
 
 class AplTest extends TestCase
 {
@@ -35,7 +37,7 @@ class AplTest extends TestCase
         $apl = Factory::Apl($includedRanges, $excludedRanges);
 
         $expectation = '1:192.168.0.0/23 2:2001:acad:1::/112 !1:192.168.1.64/28 !2:2001:acad:1::8/128';
-        $this->assertEquals($expectation, $apl->output());
+        $this->assertEquals($expectation, $apl->toText());
     }
 
     public function testGetters(): void
@@ -56,7 +58,10 @@ class AplTest extends TestCase
         $this->assertEquals($excludedRanges, $apl->getExcludedAddressRanges());
     }
 
-    public function testFromText()
+    /**
+     * @throws \Exception
+     */
+    public function testFromText(): void
     {
         $text = '1:192.168.0.0/23 2:2001:acad:1::/112 !1:192.168.1.64/28 !2:2001:acad:1::8/128';
         $expectation_incl = [
@@ -79,20 +84,20 @@ class AplTest extends TestCase
         $this->assertEquals($expectation_excl, $apl->getExcludedAddressRanges());
     }
 
-    public function testWire()
+    public function testWire(): void
     {
         $expectation = pack('nCCC4nCC',
             1,                  //Address Family
             24,                 //Prefix
             0 +                 //N: "!" is present
             4,                  //AFD Length
-            255,255,255,255,    //AFDPart
+            255, 255, 255, 255,    //AFDPart
 
             2,                  //Address Family
             64,                 //Prefix
             128 +               //N: "!" is present
             16                  //AFD Length
-        ) . inet_pton('2001:acad:dead:beef::'); //AFDPart
+        ).inet_pton('2001:acad:dead:beef::'); //AFDPart
 
         $apl = new APL();
         $apl->addAddressRange(IPBlock::create('255.255.255.255/24'), true);

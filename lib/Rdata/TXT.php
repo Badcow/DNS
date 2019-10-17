@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -10,6 +12,9 @@
  */
 
 namespace Badcow\DNS\Rdata;
+
+use Badcow\DNS\Parser\StringIterator;
+use Badcow\DNS\Parser\Tokens;
 
 /**
  * @see https://tools.ietf.org/html/rfc1035#section-3.3.14
@@ -37,7 +42,7 @@ class TXT implements RdataInterface
             return;
         }
 
-        $this->text = addslashes($text);
+        $this->text = stripslashes($text);
     }
 
     /**
@@ -45,7 +50,7 @@ class TXT implements RdataInterface
      */
     public function getText(): ?string
     {
-        return stripslashes((string) $this->text);
+        return (string) $this->text ?? '';
     }
 
     /**
@@ -53,6 +58,66 @@ class TXT implements RdataInterface
      */
     public function toText(): string
     {
-        return sprintf('"%s"', $this->text);
+        return sprintf('"%s"', addslashes($this->text ?? ''));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toWire(): string
+    {
+        return $this->text ?? '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        $txt = new self();
+        $txt->setText($rdata);
+
+        return $txt;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $string = new StringIterator($text);
+        $txt = new StringIterator();
+
+        while ($string->valid()) {
+            self::handleTxt($string, $txt);
+            $string->next();
+        }
+
+        $rdata = new self();
+        $rdata->setText((string) $txt);
+
+        return $rdata;
+    }
+
+    /**
+     * @param StringIterator $string
+     * @param StringIterator $txt
+     */
+    public static function handleTxt(StringIterator $string, StringIterator $txt): void
+    {
+        if ($string->isNot(Tokens::DOUBLE_QUOTES)) {
+            return;
+        }
+
+        $string->next();
+
+        while ($string->isNot(Tokens::DOUBLE_QUOTES) && $string->valid()) {
+            if ($string->is(Tokens::BACKSLASH)) {
+                $string->next();
+            }
+
+            $txt->append($string->current());
+            $string->next();
+        }
     }
 }

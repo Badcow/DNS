@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -42,7 +44,7 @@ class RrsigRdataTest extends TestCase
         $rrsig->setSignersName('example.com.');
         $rrsig->setSignature(self::$signature);
 
-        $this->assertEquals($expectation, $rrsig->output());
+        $this->assertEquals($expectation, $rrsig->toText());
     }
 
     public function testFactory(): void

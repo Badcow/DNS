@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -33,6 +35,7 @@ trait RdataTrait
 
     /**
      * @deprecated
+     *
      * @return string
      */
     public function output(): string
@@ -45,11 +48,11 @@ trait RdataTrait
     /**
      * Encode a domain name as a sequence of labels.
      *
-     * @param $name
+     * @param string $name
      *
      * @return string
      */
-    public static function encodeName($name): string
+    public static function encodeName(string $name): string
     {
         if ('.' === $name) {
             return chr(0);
@@ -89,33 +92,5 @@ trait RdataTrait
         }
 
         return $name;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * @throws \Exception
-     */
-    public function toWire(): string
-    {
-        throw new \Exception('Not yet implemented.');
-    }
-
-    /**
-     * {@inheritDoc}
-     * @throws \Exception
-     */
-    public static function fromText(string $text): RdataInterface
-    {
-        throw new \Exception('Not yet implemented.');
-    }
-
-    /**
-     * {@inheritDoc}
-     * @throws \Exception
-     */
-    public static function fromWire(string $rdata): RdataInterface
-    {
-        throw new \Exception('Not yet implemented.');
     }
 }

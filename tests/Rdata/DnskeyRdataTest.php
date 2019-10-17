@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -32,7 +34,7 @@ class DnskeyRdataTest extends TestCase
         $dnskey->setAlgorithm(Algorithms::RSASHA1);
         $dnskey->setPublicKey(self::$publicKey);
 
-        $this->assertEquals($expectation, $dnskey->output());
+        $this->assertEquals($expectation, $dnskey->toText());
     }
 
     public function testFactory(): void
@@ -44,6 +46,6 @@ class DnskeyRdataTest extends TestCase
         $this->assertEquals(5, $dnskey->getAlgorithm());
         $this->assertEquals(self::$publicKey, $dnskey->getPublicKey());
         $this->assertEquals(3, $dnskey->getProtocol());
-        $this->assertEquals($output, $dnskey->output());
+        $this->assertEquals($output, $dnskey->toText());
     }
 }

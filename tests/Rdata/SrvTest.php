@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -13,8 +15,9 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\SRV;
+use PHPUnit\Framework\TestCase;
 
-class SrvRdataTest extends \PHPUnit\Framework\TestCase
+class SrvTest extends TestCase
 {
     public function testOutput(): void
     {
@@ -22,7 +25,7 @@ class SrvRdataTest extends \PHPUnit\Framework\TestCase
 
         $expectation = '10 20 666 doom.example.com.';
 
-        $this->assertEquals($expectation, $srv->output());
+        $this->assertEquals($expectation, $srv->toText());
         $this->assertEquals(10, $srv->getPriority());
         $this->assertEquals(20, $srv->getWeight());
         $this->assertEquals(666, $srv->getPort());
@@ -62,5 +65,30 @@ class SrvRdataTest extends \PHPUnit\Framework\TestCase
 
         $srv = new SRV();
         $srv->setWeight(SRV::MAX_WEIGHT + 1);
+    }
+
+    public function testFromText(): void
+    {
+        $text = '0 1 80 www.example.com.';
+        $srv = new SRV();
+        $srv->setPriority(0);
+        $srv->setWeight(1);
+        $srv->setPort(80);
+        $srv->setTarget('www.example.com.');
+
+        $this->assertEquals($srv, SRV::fromText($text));
+    }
+
+    public function testWire(): void
+    {
+        $expectation = pack('nnn', 0, 1, 80).chr(3).'www'.chr(7).'example'.chr(3).'com'.chr(0);
+        $srv = new SRV();
+        $srv->setPriority(0);
+        $srv->setWeight(1);
+        $srv->setPort(80);
+        $srv->setTarget('www.example.com.');
+
+        $this->assertEquals($expectation, $srv->toWire());
+        $this->assertEquals($srv, SRV::fromWire($expectation));
     }
 }

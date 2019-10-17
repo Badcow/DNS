@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Badcow\DNS\Rdata;
 
 /**
- * @see https://tools.ietf.org/html/rfc1035#section-3.3.11
+ * {@link https://tools.ietf.org/html/rfc7208}.
  */
-class NS extends CNAME
+class SPF extends TXT
 {
-    const TYPE = 'NS';
-    const TYPE_CODE = 2;
+    const TYPE = 'SPF';
+    const TYPE_CODE = 99;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -12,8 +14,9 @@
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\AAAA;
+use PHPUnit\Framework\TestCase;
 
-class AaaaRdataTest extends \PHPUnit\Framework\TestCase
+class AaaaTest extends TestCase
 {
     public function testSetAddress(): void
     {
@@ -24,7 +27,7 @@ class AaaaRdataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($address, $aaaa->getAddress());
     }
 
-    public function testFromText()
+    public function testFromText(): void
     {
         $text = '2003:dead:beef:4dad:23:46:bb:101';
         /** @var AAAA $aaaa */
@@ -33,7 +36,7 @@ class AaaaRdataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($text, $aaaa->getAddress());
     }
 
-    public function testWire()
+    public function testWire(): void
     {
         $address = '2003:dead:beef:4dad:23:46:bb:101';
         $expectation = inet_pton($address);

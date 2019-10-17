@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -10,6 +12,8 @@
  */
 
 namespace Badcow\DNS\Rdata;
+
+use Badcow\DNS\Parser\Tokens;
 
 /**
  * {@link https://tools.ietf.org/html/rfc4255}.
@@ -112,5 +116,22 @@ class SSHFP implements RdataInterface
     public function toText(): string
     {
         return sprintf('%d %d %s', $this->algorithm, $this->fingerprintType, $this->fingerprint);
+    }
+
+    public function toWire(): string
+    {
+        // TODO: Implement toWire() method.
+    }
+
+    public static function fromText(string $text): RdataInterface
+    {
+        $rdata = explode(Tokens::SPACE, $text);
+
+        return Factory::SSHFP((int) array_shift($rdata), (int) array_shift($rdata), (string) array_shift($rdata));
+    }
+
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        // TODO: Implement fromWire() method.
     }
 }

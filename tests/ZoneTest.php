@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -13,6 +15,7 @@ namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\AlignedBuilder;
 use Badcow\DNS\Classes;
+use Badcow\DNS\Rdata\APL;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
@@ -49,7 +52,7 @@ class ZoneTest extends TestCase
             3600
         ));
 
-        $soa->setClass(\Badcow\DNS\Classes::INTERNET);
+        $soa->setClass(Classes::INTERNET);
 
         $ns1 = new ResourceRecord();
         $ns1->setName('@');
@@ -102,7 +105,7 @@ class ZoneTest extends TestCase
         $zone->addResourceRecord($ns2);
         $zone->addResourceRecord($mx1);
 
-        $apl = new \Badcow\DNS\Rdata\APL();
+        $apl = new APL();
         $apl->addAddressRange(IPBlock::create('192.168.0.0/23'));
         $apl->addAddressRange(IPBlock::create('192.168.1.64/28'), false);
         $apl->addAddressRange(IPBlock::create('2001:acad:1::/112'), true);

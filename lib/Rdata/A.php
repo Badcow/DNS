@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -22,7 +24,7 @@ class A implements RdataInterface
     const TYPE_CODE = 1;
 
     /**
-     * @var string|null
+     * @var string
      */
     protected $address;
 
@@ -51,31 +53,41 @@ class A implements RdataInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException
      */
     public function toWire(): string
     {
-        return inet_pton($this->address);
+        if (false === $encoded = inet_pton($this->address)) {
+            throw new \InvalidArgumentException(sprintf('The IP address "%s" cannot be encoded. Check that it is a valid IP address.', $this->address));
+        }
+
+        return $encoded;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function fromText(string $text): RdataInterface
     {
-        $a = new self;
+        $a = new static();
         $a->setAddress($text);
 
         return $a;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function fromWire(string $rdata): RdataInterface
     {
-        $a = new self;
-        $a->setAddress(inet_ntop($rdata));
+        if (false === $address = inet_ntop($rdata)) {
+            throw new \InvalidArgumentException('The IP address cannot be decoded.');
+        }
+
+        $a = new static();
+        $a->setAddress($address);
 
         return $a;
     }

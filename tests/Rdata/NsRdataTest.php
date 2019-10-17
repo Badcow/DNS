@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -12,8 +14,9 @@
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\NS;
+use PHPUnit\Framework\TestCase;
 
-class NsRdataTest extends \PHPUnit\Framework\TestCase
+class NsRdataTest extends TestCase
 {
     public function testSetNsdname(): void
     {
@@ -30,11 +33,11 @@ class NsRdataTest extends \PHPUnit\Framework\TestCase
         $ns = new NS();
         $ns->setTarget($target);
 
-        $this->assertEquals($target, $ns->output());
+        $this->assertEquals($target, $ns->toText());
         $this->assertEquals($target, $ns->toText());
     }
 
-    public function testFromText()
+    public function testFromText(): void
     {
         $text = 'host.example.com.';
         /** @var NS $cname */
@@ -43,7 +46,7 @@ class NsRdataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($text, $cname->getTarget());
     }
 
-    public function testWire()
+    public function testWire(): void
     {
         $host = 'host.example.com.';
         $expectation = chr(4).'host'.chr(7).'example'.chr(3).'com'.chr(0);

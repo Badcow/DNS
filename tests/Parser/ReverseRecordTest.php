@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -12,6 +14,7 @@
 namespace Badcow\DNS\Tests\Parser;
 
 use Badcow\DNS\Classes;
+use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
 use Badcow\DNS\Rdata\PTR;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 class ReverseRecordTest extends TestCase
 {
     /**
-     * @throws \Badcow\DNS\Parser\ParseException
+     * @throws ParseException
      */
     public function testReverseRecord(): void
     {
@@ -34,7 +37,7 @@ class ReverseRecordTest extends TestCase
     }
 
     /**
-     * @throws \Badcow\DNS\Parser\ParseException|\Exception
+     * @throws ParseException|\Exception
      */
     public function testParseReverseRecordFile(): void
     {

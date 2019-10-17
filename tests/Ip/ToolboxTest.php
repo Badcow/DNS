@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -12,8 +14,9 @@
 namespace Badcow\DNS\Tests\Ip;
 
 use Badcow\DNS\Ip\Toolbox;
+use PHPUnit\Framework\TestCase;
 
-class ToolboxTest extends \PHPUnit\Framework\TestCase
+class ToolboxTest extends TestCase
 {
     public function provider_expandIPv6(): array
     {

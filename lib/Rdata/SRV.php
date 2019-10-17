@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -11,6 +13,8 @@
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\Tokens;
+
 /**
  * Class SrvRdata.
  *
@@ -20,8 +24,10 @@ namespace Badcow\DNS\Rdata;
  *
  * @author Samuel Williams <sam@badcow.co>
  */
-class SRV extends CNAME
+class SRV implements RdataInterface
 {
+    use RdataTrait;
+
     const TYPE = 'SRV';
     const TYPE_CODE = 33;
     const HIGHEST_PORT = 65535;
@@ -55,6 +61,21 @@ class SRV extends CNAME
      * @var int|null
      */
     private $port;
+
+    /**
+     * The domain name of the target host.  There MUST be one or more
+     * address records for this name, the name MUST NOT be an alias (in
+     * the sense of RFC 1034 or RFC 2181).  Implementors are urged, but
+     * not required, to return the address record(s) in the Additional
+     * Data section.  Unless and until permitted by future standards
+     * action, name compression is not to be used for this field.
+     *
+     * A Target of "." means that the service is decidedly not
+     * available at this domain.
+     *
+     * @var string
+     */
+    private $target;
 
     /**
      * @return int
@@ -123,6 +144,22 @@ class SRV extends CNAME
     }
 
     /**
+     * @return string
+     */
+    public function getTarget(): string
+    {
+        return $this->target;
+    }
+
+    /**
+     * @param string $target
+     */
+    public function setTarget(string $target): void
+    {
+        $this->target = $target;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function toText(): string
@@ -133,5 +170,36 @@ class SRV extends CNAME
             $this->port,
             $this->target
         );
+    }
+
+    public function toWire(): string
+    {
+        return pack('nnn', $this->priority, $this->weight, $this->port).self::encodeName($this->target);
+    }
+
+    public static function fromText(string $text): RdataInterface
+    {
+        $rdata = explode(Tokens::SPACE, $text);
+        $srv = new SRV();
+        $srv->setPriority((int) $rdata[0]);
+        $srv->setWeight((int) $rdata[1]);
+        $srv->setPort((int) $rdata[2]);
+        $srv->setTarget($rdata[3]);
+
+        return $srv;
+    }
+
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        $offset = 0;
+        $integers = unpack('npriority/nweight/nport', $rdata, $offset);
+        $offset += 6;
+        $srv = new self();
+        $srv->setTarget(self::decodeName($rdata, $offset));
+        $srv->setPriority($integers['priority']);
+        $srv->setWeight($integers['weight']);
+        $srv->setPort($integers['port']);
+
+        return $srv;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -22,10 +24,10 @@ class CnameRdataTest extends TestCase
         $cname = new CNAME();
         $cname->setTarget($target);
 
-        $this->assertEquals($target, $cname->output());
+        $this->assertEquals($target, $cname->toText());
     }
 
-    public function testFromText()
+    public function testFromText(): void
     {
         $text = 'host.example.com.';
         /** @var CNAME $cname */
@@ -34,7 +36,7 @@ class CnameRdataTest extends TestCase
         $this->assertEquals($text, $cname->getTarget());
     }
 
-    public function testWire()
+    public function testWire(): void
     {
         $host = 'host.example.com.';
         $expectation = chr(4).'host'.chr(7).'example'.chr(3).'com'.chr(0);

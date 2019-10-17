@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -11,7 +13,6 @@
 
 namespace Badcow\DNS\Rdata;
 
-use Badcow\DNS\Parser\ParseException;
 use PhpIP\IPBlock;
 use PhpIP\IPv4Block;
 use PhpIP\IPv6Block;
@@ -97,7 +98,7 @@ class APL implements RdataInterface
                 (4 === $ipBlock->getVersion()) ? 1 : 2,
                 $ipBlock->getPrefix(),
                 $ipBlock->getGivenIp()::NB_BYTES
-            ).inet_pton($ipBlock->getGivenIp());
+            ).inet_pton((string) $ipBlock->getGivenIp());
         }
 
         foreach ($this->excludedAddressRanges as $ipBlock) {
@@ -105,7 +106,7 @@ class APL implements RdataInterface
                 (4 === $ipBlock->getVersion()) ? 1 : 2,
                 $ipBlock->getPrefix(),
                 $ipBlock->getGivenIp()::NB_BYTES | 0b10000000
-            ).inet_pton($ipBlock->getGivenIp());
+            ).inet_pton((string) $ipBlock->getGivenIp());
         }
 
         return $encoded;
@@ -113,6 +114,7 @@ class APL implements RdataInterface
 
     /**
      * {@inheritdoc}
+     *
      * @throws \Exception
      */
     public static function fromText(string $text): RdataInterface
@@ -147,7 +149,7 @@ class APL implements RdataInterface
             $apItem = unpack('nfamily/Cprefix/Clength', $rdata, $offset);
             $isExcluded = (bool) ($apItem['length'] & 0b10000000);
             $len = $apItem['length'] & 0b01111111;
-            $version = ($apItem['family'] === 1) ? 4 : 6;
+            $version = (1 === $apItem['family']) ? 4 : 6;
             $offset += 4;
             $address = substr($rdata, $offset, $len);
             $address = inet_ntop($address);

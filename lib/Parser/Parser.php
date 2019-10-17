@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -63,7 +65,6 @@ class Parser
     public function __construct(array $rdataHandlers = [])
     {
         $this->rdataHandlers = array_merge(
-            RdataHandlers::getHandlers(),
             ['PTR' => __CLASS__.'::ptrHandler'],
             $rdataHandlers
         );
@@ -360,14 +361,23 @@ class Parser
         $iterator->next();
 
         if (array_key_exists($type, $this->rdataHandlers)) {
-            try {
-                return call_user_func($this->rdataHandlers[$type], $iterator);
-            } catch (\Exception $exception) {
-                throw new ParseException($exception->getMessage(), null, $exception);
-            }
+            return call_user_func($this->rdataHandlers[$type], $iterator);
         }
 
-        return RdataHandlers::catchAll($type, $iterator);
+        $className = '\\Badcow\\DNS\\Rdata\\'.strtoupper($type);
+        /** @var callable $callable */
+        $callable = $className.'::fromText';
+        $rdataString = $iterator->getRemainingAsString();
+
+        if (!class_exists($className)) {
+            return new Rdata\PolymorphicRdata($type, $rdataString);
+        }
+
+        try {
+            return call_user_func($callable, $rdataString);
+        } catch (\Exception $exception) {
+            throw new ParseException($exception->getMessage(), null, $exception);
+        }
     }
 
     /**
@@ -389,10 +399,8 @@ class Parser
             }
         }
 
-        $ptr = RdataHandlers::catchAll(Rdata\PTR::TYPE, $iterator);
-        if (!$ptr instanceof Rdata\PTR) {
-            throw new \UnexpectedValueException();
-        }
+        /** @var Rdata\PTR $ptr */
+        $ptr = Rdata\PTR::fromText($iterator->getRemainingAsString());
 
         return $ptr;
     }

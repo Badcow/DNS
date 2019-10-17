@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -61,8 +63,10 @@ class NSEC implements RdataInterface
 
     /**
      * @deprecated
+     *
+     * @param string $type
      */
-    public function addTypeBitMap(string $type)
+    public function addTypeBitMap(string $type): void
     {
         @trigger_error('Method NSEC::addTypeBitMap has been deprecated. Use NSEC::addType instead.', E_USER_DEPRECATED);
         $this->addType($type);
@@ -71,11 +75,12 @@ class NSEC implements RdataInterface
     /**
      * @deprecated
      */
-    public function clearTypeMap()
+    public function clearTypeMap(): void
     {
         @trigger_error('Method NSEC::clearTypeMap has been deprecated and is unusable. Use NSEC::clearTypes instead.', E_USER_DEPRECATED);
         $this->clearTypes();
     }
+
     /**
      * @deprecated
      */
@@ -118,7 +123,7 @@ class NSEC implements RdataInterface
     {
         $blocks = [];
 
-        foreach($this->types as $type) {
+        foreach ($this->types as $type) {
             $int = TypeCodes::getTypeCode($type);
             $window = $int >> 8;
             $int = $int & 0b11111111;
@@ -131,9 +136,9 @@ class NSEC implements RdataInterface
         }
 
         $encoded = self::encodeName($this->nextDomainName);
-        foreach($blocks as $n => $mask) {
+        foreach ($blocks as $n => $mask) {
             $mask = rtrim($mask, "\0");
-            $encoded .= chr($n) . chr(strlen($mask)) . $mask;
+            $encoded .= chr($n).chr(strlen($mask)).$mask;
         }
 
         return $encoded;
@@ -165,12 +170,12 @@ class NSEC implements RdataInterface
             $mask = '';
             $window = array_shift($bytes);
             $len = array_shift($bytes);
-            for ($i = 0; $i < $len; $i++) {
+            for ($i = 0; $i < $len; ++$i) {
                 $mask .= str_pad(decbin(array_shift($bytes)), 8, '0', STR_PAD_LEFT);
             }
             $offset = 0;
             while (false !== $pos = strpos($mask, '1', $offset)) {
-                $nsec->addType(TypeCodes::getName($window * 256 + $pos));
+                $nsec->addType(TypeCodes::getName((int) $window * 256 + $pos));
                 $offset = $pos + 1;
             }
         }

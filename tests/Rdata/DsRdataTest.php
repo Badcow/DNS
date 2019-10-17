@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -30,7 +32,7 @@ class DsRdataTest extends TestCase
         $ds->setDigestType(DS::DIGEST_SHA1);
         $ds->setDigest(self::$digest);
 
-        $this->assertEquals($expectation, $ds->output());
+        $this->assertEquals($expectation, $ds->toText());
     }
 
     public function testFactory(): void

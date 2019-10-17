@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -26,5 +28,20 @@ class DummyRdata implements RdataInterface
     public function toText(): string
     {
         return 'co.badcow.dns.test.dummy';
+    }
+
+    public function toWire(): string
+    {
+        // TODO: Implement toWire() method.
+    }
+
+    public static function fromText(string $text): RdataInterface
+    {
+        // TODO: Implement fromText() method.
+    }
+
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        // TODO: Implement fromWire() method.
     }
 }
