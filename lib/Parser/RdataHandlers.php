@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -26,8 +28,9 @@ class RdataHandlers
         Rdata\CAA::TYPE => __CLASS__.'::handleCaaRdata',
         Rdata\LOC::TYPE => __CLASS__.'::handleLocRdata',
         Rdata\SSHFP::TYPE => __CLASS__.'::handleSshfpRdata',
-        Rdata\TXT::TYPE => __CLASS__.'::handleTxtRdata',
         Rdata\URI::TYPE => __CLASS__.'::handleUriRdata',
+        Rdata\SOA::TYPE => __CLASS__.'::handleSoaRdata',
+        Rdata\TXT::TYPE => __CLASS__.'::handleTxtRdata',
     ];
 
     /**
@@ -72,6 +75,23 @@ class RdataHandlers
             (float) self::pop($iterator),
             (float) self::pop($iterator),
             (float) self::pop($iterator)
+        );
+    }
+
+    /**
+     * @param \ArrayIterator $iterator
+     * @return Rdata\SOA
+     */
+    public static function handleSoaRdata(\ArrayIterator $iterator): Rdata\SOA
+    {
+        return Rdata\Factory::Soa(
+            self::pop($iterator),
+            self::pop($iterator),
+            (int) self::pop($iterator),
+            (int) self::pop($iterator),
+            (int) self::pop($iterator),
+            (int) self::pop($iterator),
+            (int) self::pop($iterator)
         );
     }
 
@@ -132,7 +152,7 @@ class RdataHandlers
         $string = new StringIterator(implode(Tokens::SPACE, self::getAllRemaining($iterator)));
         self::handleTxt($string, $value);
 
-        return Rdata\Factory::caa($flag, $tag, $value);
+        return Rdata\Factory::caa($flag, $tag, (string) $value);
     }
 
     /**

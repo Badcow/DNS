@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -279,9 +281,9 @@ class AlignedBuilder
         $name = $ttl = $type = 0;
 
         foreach ($zone as $resourceRecord) {
-            $name = max($name, strlen($resourceRecord->getName()));
-            $ttl = max($ttl, strlen($resourceRecord->getTtl()));
-            $type = max($type, strlen($resourceRecord->getType()));
+            $name = max($name, strlen($resourceRecord->getName() ?? ''));
+            $ttl = max($ttl, strlen((string) $resourceRecord->getTtl()));
+            $type = max($type, strlen($resourceRecord->getType() ?? ''));
         }
 
         return [

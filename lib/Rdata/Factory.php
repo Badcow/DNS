@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -52,7 +54,7 @@ class Factory
      *
      * @return AAAA
      */
-    public static function Aaaa($address)
+    public static function Aaaa(string $address)
     {
         $rdata = new AAAA();
         $rdata->setAddress($address);
@@ -67,7 +69,7 @@ class Factory
      *
      * @return A
      */
-    public static function A($address)
+    public static function A(string $address)
     {
         $rdata = new A();
         $rdata->setAddress($address);
@@ -82,7 +84,7 @@ class Factory
      *
      * @return CNAME
      */
-    public static function Cname($cname)
+    public static function Cname(string $cname)
     {
         $rdata = new CNAME();
         $rdata->setTarget($cname);
@@ -96,7 +98,7 @@ class Factory
      *
      * @return HINFO
      */
-    public static function Hinfo($cpu, $os)
+    public static function Hinfo(string $cpu, string $os)
     {
         $rdata = new HINFO();
         $rdata->setCpu($cpu);
@@ -111,7 +113,7 @@ class Factory
      *
      * @return MX
      */
-    public static function Mx($preference, $exchange)
+    public static function Mx(int $preference, string $exchange)
     {
         $rdata = new MX();
         $rdata->setPreference($preference);
@@ -131,7 +133,7 @@ class Factory
      *
      * @return SOA
      */
-    public static function Soa($mname, $rname, $serial, $refresh, $retry, $expire, $minimum)
+    public static function Soa(string $mname, string $rname, int $serial, int $refresh, int $retry, int $expire, int $minimum)
     {
         $rdata = new SOA();
         $rdata->setMname($mname);
@@ -150,7 +152,7 @@ class Factory
      *
      * @return NS
      */
-    public static function Ns($nsdname)
+    public static function Ns(string $nsdname)
     {
         $rdata = new NS();
         $rdata->setTarget($nsdname);
@@ -163,7 +165,7 @@ class Factory
      *
      * @return TXT
      */
-    public static function Txt($text)
+    public static function Txt(string $text)
     {
         $rdata = new TXT();
         $rdata->setText($text);
@@ -176,7 +178,7 @@ class Factory
      *
      * @return DNAME
      */
-    public static function Dname($target)
+    public static function Dname(string $target)
     {
         $rdata = new DNAME();
         $rdata->setTarget($target);
@@ -194,7 +196,7 @@ class Factory
      *
      * @return LOC
      */
-    public static function Loc(float $lat, float $lon, $alt = 0.0, $size = 1.0, $hp = 10000.0, $vp = 10.0)
+    public static function Loc(float $lat, float $lon, float $alt = 0.0, float $size = 1.0, float $hp = 10000.0, float $vp = 10.0)
     {
         $rdata = new LOC();
         $rdata->setLatitude($lat);
@@ -212,7 +214,7 @@ class Factory
      *
      * @return PTR
      */
-    public static function Ptr($target)
+    public static function Ptr(string $target)
     {
         $rdata = new PTR();
         $rdata->setTarget($target);
@@ -227,7 +229,7 @@ class Factory
      *
      * @return DNSKEY
      */
-    public static function Dnskey($flags, $algorithm, $publicKey)
+    public static function Dnskey(int $flags, int $algorithm, string $publicKey)
     {
         $rdata = new DNSKEY();
         $rdata->setFlags($flags);
