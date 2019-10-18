@@ -122,19 +122,42 @@ class DS implements RdataInterface
             $this->digest
         );
     }
-
+    
+    /**
+     * {@inheritdoc}
+     */
     public function toWire(): string
     {
-        // TODO: Implement toWire() method.
+        return pack('nCC', $this->keyTag, $this->algorithm, $this->digestType).$this->digest;
     }
-
+    
+    /**
+     * {@inheritdoc}
+     */
     public static function fromText(string $text): RdataInterface
     {
-        // TODO: Implement fromText() method.
+        $rdata = explode(Tokens::SPACE, $text);
+        $ds = new static();
+        $ds->setKeyTag((int) array_shift($rdata));
+        $ds->setAlgorithm((int) array_shift($rdata));
+        $ds->setDigestType((int) array_shift($rdata));
+        $ds->setDigest((string) array_shift($rdata));
+        
+        return $ds;
     }
-
+    
+    /**
+     * {@inheritdoc}
+     */
     public static function fromWire(string $rdata): RdataInterface
     {
-        // TODO: Implement fromWire() method.
+        $integers = unpack('ntag/Calgorithm/Cdtype', $rdata);
+        $ds = new static();
+        $ds->setKeyTag($integers['tag']);
+        $ds->setAlgorithm($integers['algorithm']);
+        $ds->setDigestType($integers['dtype']);
+        $ds->setDigest(substr($rdata, 4));
+        
+        return $ds;
     }
 }
