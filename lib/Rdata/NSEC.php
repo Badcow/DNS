@@ -119,31 +119,17 @@ class NSEC implements RdataInterface
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function toWire(): string
     {
-        $blocks = [];
-
-        foreach ($this->types as $type) {
-            $int = TypeCodes::getTypeCode($type);
-            $window = $int >> 8;
-            $int = $int & 0b11111111;
-            $mod = $int % 8;
-            $mask = $blocks[$window] ?? str_repeat("\0", 32);
-            $byteNum = ($int - $mod) / 8;
-            $byte = ord($mask[$byteNum]) | (128 >> $mod);
-            $mask[$byteNum] = chr($byte);
-            $blocks[$window] = $mask;
-        }
-
-        $encoded = self::encodeName($this->nextDomainName);
-        foreach ($blocks as $n => $mask) {
-            $mask = rtrim($mask, "\0");
-            $encoded .= chr($n).chr(strlen($mask)).$mask;
-        }
-
-        return $encoded;
+        return self::encodeName($this->nextDomainName).self::renderBitmap($this->types);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function fromText(string $text): RdataInterface
     {
         $iterator = new \ArrayIterator(explode(Tokens::SPACE, $text));
@@ -158,13 +144,30 @@ class NSEC implements RdataInterface
         return $nsec;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function fromWire(string $rdata): RdataInterface
     {
         $nsec = new self();
         $offset = 0;
         $nsec->setNextDomainName(self::decodeName($rdata, $offset));
+        $types = self::parseBitmap($rdata, $offset);
+        array_map([$nsec, 'addType'], $types);
 
+        return $nsec;
+    }
+
+    /**
+     * @param string $rdata
+     * @param int    $offset
+     *
+     * @return string[]
+     */
+    public static function parseBitmap(string $rdata, int &$offset): array
+    {
         $bytes = unpack('C*', $rdata, $offset);
+        $types = [];
 
         while (count($bytes) > 0) {
             $mask = '';
@@ -175,11 +178,41 @@ class NSEC implements RdataInterface
             }
             $offset = 0;
             while (false !== $pos = strpos($mask, '1', $offset)) {
-                $nsec->addType(TypeCodes::getName((int) $window * 256 + $pos));
+                $types[] = TypeCodes::getName((int) $window * 256 + $pos);
                 $offset = $pos + 1;
             }
         }
 
-        return $nsec;
+        return $types;
+    }
+
+    /**
+     * @param string[] $types
+     *
+     * @return string
+     */
+    public static function renderBitmap(array $types): string
+    {
+        $blocks = [];
+
+        foreach ($types as $type) {
+            $int = TypeCodes::getTypeCode($type);
+            $window = $int >> 8;
+            $int = $int & 0b11111111;
+            $mod = $int % 8;
+            $mask = $blocks[$window] ?? str_repeat("\0", 32);
+            $byteNum = ($int - $mod) / 8;
+            $byte = ord($mask[$byteNum]) | (128 >> $mod);
+            $mask[$byteNum] = chr($byte);
+            $blocks[$window] = $mask;
+        }
+
+        $encoded = '';
+        foreach ($blocks as $n => $mask) {
+            $mask = rtrim($mask, "\0");
+            $encoded .= chr($n).chr(strlen($mask)).$mask;
+        }
+
+        return $encoded;
     }
 }
