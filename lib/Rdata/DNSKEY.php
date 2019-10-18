@@ -24,7 +24,24 @@ class DNSKEY extends KEY
     const TYPE_CODE = 48;
 
     /**
-     * {@inheritdoc}
+     * The Protocol Field MUST have value 3, and the DNSKEY RR MUST be
+     * treated as invalid during signature verification if it is found to be
+     * some value other than 3.
+     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.2}.
+     *
+     * @var int
      */
     protected $protocol = 3;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProtocol(int $protocol): void
+    {
+        if (3 !== $protocol) {
+            throw new \InvalidArgumentException('DNSKEY RData: parameter <protocol> can only be set to "3".');
+        }
+
+        parent::setProtocol($protocol);
+    }
 }

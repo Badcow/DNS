@@ -24,24 +24,19 @@ class KEY implements RdataInterface
 
     const TYPE = 'KEY';
     const TYPE_CODE = 25;
-    
+
     /**
      * {@link https://tools.ietf.org/html/rfc4034#section-2.1.1}.
      *
      * @var int
      */
     protected $flags;
-    
+
     /**
-     * The Protocol Field MUST have value 3, and the DNSKEY RR MUST be
-     * treated as invalid during signature verification if it is found to be
-     * some value other than 3.
-     * {@link https://tools.ietf.org/html/rfc4034#section-2.1.2}.
-     *
      * @var int
      */
-    protected $protocol = 3;
-    
+    protected $protocol;
+
     /**
      * The Algorithm field identifies the public key's cryptographic
      * algorithm and determines the format of the Public Key field.
@@ -50,7 +45,7 @@ class KEY implements RdataInterface
      * @var int
      */
     protected $algorithm;
-    
+
     /**
      * The Public Key field is a Base64 encoding of the Public Key.
      * Whitespace is allowed within the Base64 text.
@@ -59,7 +54,7 @@ class KEY implements RdataInterface
      * @var string
      */
     protected $publicKey;
-    
+
     /**
      * @param int $flags
      */
@@ -83,15 +78,21 @@ class KEY implements RdataInterface
     {
         $this->algorithm = $algorithm;
     }
-    
+
     /**
      * @param string $publicKey
+     *
+     * @throws \InvalidArgumentException
      */
     public function setPublicKey(string $publicKey): void
     {
-        $this->publicKey = $publicKey;
+        if (!self::isBase64($publicKey)) {
+            throw new \InvalidArgumentException('The public key must be a valid base64 encoded string.');
+        }
+
+        $this->publicKey = (string) preg_replace('/[^a-zA-Z0-9\/+=]/', '', $publicKey);
     }
-    
+
     /**
      * @return int
      */
@@ -115,7 +116,7 @@ class KEY implements RdataInterface
     {
         return $this->algorithm;
     }
-    
+
     /**
      * @return string
      */
@@ -139,7 +140,7 @@ class KEY implements RdataInterface
     {
         $encoded = pack('nCC', $this->flags, $this->protocol, $this->algorithm);
         $encoded .= $this->publicKey;
-        
+
         return $encoded;
     }
 
@@ -154,7 +155,7 @@ class KEY implements RdataInterface
         $key->setProtocol((int) array_shift($rdata));
         $key->setAlgorithm((int) array_shift($rdata));
         $key->setPublicKey(implode('', $rdata));
-        
+
         return $key;
     }
 
@@ -169,7 +170,17 @@ class KEY implements RdataInterface
         $key->setProtocol((int) $integers['protocol']);
         $key->setAlgorithm((int) $integers['algorithm']);
         $key->setPublicKey(substr($rdata, 4));
-        
+
         return $key;
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return bool
+     */
+    public static function isBase64(string $string): bool
+    {
+        return false !== preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $string);
     }
 }
