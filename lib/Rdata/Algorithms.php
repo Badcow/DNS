@@ -147,7 +147,7 @@ class Algorithms
     /**
      * @var array
      */
-    private static $mnemonic = [
+    const MNEMONICS = [
         self::DELETE => 'DELETE',
         self::RSAMD5 => 'RSAMD5',
         self::DH => 'DH',
@@ -179,10 +179,26 @@ class Algorithms
      */
     public static function getMnemonic(int $algorithmId)
     {
-        if (!array_key_exists($algorithmId, self::$mnemonic)) {
+        if (!array_key_exists($algorithmId, self::MNEMONICS)) {
             throw new \InvalidArgumentException(sprintf('"%d" is not a valid algorithm.', $algorithmId));
         }
 
-        return self::$mnemonic[$algorithmId];
+        return self::MNEMONICS[$algorithmId];
+    }
+
+    /**
+     * @param string $algorithmMnemonic
+     *
+     * @return int
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function getAlgorithmValue(string $algorithmMnemonic): int
+    {
+        if (false === $keyTypeValue = array_search($algorithmMnemonic, self::MNEMONICS, true)) {
+            throw new \InvalidArgumentException(sprintf('"%s" is not a valid algorithm mnemonic.', $algorithmMnemonic));
+        }
+
+        return (int) $keyTypeValue;
     }
 }

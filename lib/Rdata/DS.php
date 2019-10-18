@@ -124,7 +124,7 @@ class DS implements RdataInterface
             $this->digest
         );
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -132,7 +132,7 @@ class DS implements RdataInterface
     {
         return pack('nCC', $this->keyTag, $this->algorithm, $this->digestType).$this->digest;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -144,10 +144,10 @@ class DS implements RdataInterface
         $ds->setAlgorithm((int) array_shift($rdata));
         $ds->setDigestType((int) array_shift($rdata));
         $ds->setDigest((string) array_shift($rdata));
-        
+
         return $ds;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -159,7 +159,7 @@ class DS implements RdataInterface
         $ds->setAlgorithm($integers['algorithm']);
         $ds->setDigestType($integers['dtype']);
         $ds->setDigest(substr($rdata, 4));
-        
+
         return $ds;
     }
 }
