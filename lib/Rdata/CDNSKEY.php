@@ -13,43 +13,11 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
-// TODO: Implement CDNSKEY RData
-class CDNSKEY implements RdataInterface
+/**
+ * {@link https://tools.ietf.org/html/rfc7344#page-7}.
+ */
+class CDNSKEY extends DNSKEY
 {
-    use RdataTrait;
-
     const TYPE = 'CDNSKEY';
     const TYPE_CODE = 60;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function toText(): string
-    {
-        // TODO: Implement output() method.
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function toWire(): string
-    {
-        // TODO: Implement toWire() method.
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromText(string $text): RdataInterface
-    {
-        // TODO: Implement fromText() method.
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromWire(string $rdata): RdataInterface
-    {
-        // TODO: Implement fromWire() method.
-    }
 }
