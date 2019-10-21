@@ -115,6 +115,18 @@ class ResourceRecord
     }
 
     /**
+     * @return int|null
+     */
+    public function getClassId(): ?int
+    {
+        if (!isset($this->class)) {
+            return null;
+        }
+
+        return Classes::getClassId($this->class);
+    }
+
+    /**
      * Set the time to live.
      *
      * @param int $ttl

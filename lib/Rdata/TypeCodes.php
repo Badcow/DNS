@@ -119,12 +119,12 @@ class TypeCodes
      *
      * @return string
      *
-     * @throws \InvalidArgumentException
+     * @throws UnsupportedTypeException
      */
     public static function getName(int $type): string
     {
         if (!self::isValid($type)) {
-            throw new \InvalidArgumentException(sprintf('The integer "%d" does not correspond to a valid type', $type));
+            throw new UnsupportedTypeException(sprintf('The integer "%d" does not correspond to a supported type.', $type));
         }
 
         return self::TYPE_NAMES[$type];
@@ -137,13 +137,13 @@ class TypeCodes
      *
      * @return int
      *
-     * @throws \InvalidArgumentException
+     * @throws UnsupportedTypeException
      */
     public static function getTypeCode(string $name): int
     {
         $type = array_search(strtoupper(trim($name)), self::TYPE_NAMES);
         if (false === $type || !is_int($type)) {
-            throw new \InvalidArgumentException(sprintf('RData type "%s" is not defined.', $name));
+            throw new UnsupportedTypeException(sprintf('RData type "%s" is not supported.', $name));
         }
 
         return $type;

@@ -38,6 +38,17 @@ class Factory
     }
 
     /**
+     * @param int $id
+     * @return RdataInterface
+     *
+     * @throws UnsupportedTypeException
+     */
+    public static function newRdataFromId(int $id): RdataInterface
+    {
+        return self::newRdataFromName(TypeCodes::getName($id));
+    }
+
+    /**
      * @param string $name
      *
      * @return bool
