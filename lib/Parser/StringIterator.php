@@ -50,6 +50,6 @@ class StringIterator extends \ArrayIterator
      */
     public function __toString()
     {
-        return implode($this->getArrayCopy());
+        return implode('', $this->getArrayCopy());
     }
 }
