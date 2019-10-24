@@ -32,7 +32,7 @@ class Factory
             throw new UnsupportedTypeException($name);
         }
 
-        $className = __NAMESPACE__.'\\'.strtoupper($name);
+        $className = self::getRdataClassName($name);
 
         return new $className();
     }
@@ -55,7 +55,32 @@ class Factory
      */
     public static function isTypeImplemented(string $name): bool
     {
-        return class_exists(__NAMESPACE__.'\\'.strtoupper($name));
+        return class_exists(self::getRdataClassName($name));
+    }
+
+    /**
+     * @param string $type
+     * @param string $text
+     * @return RdataInterface
+     */
+    public static function textToRdataType(string $type, string $text): RdataInterface
+    {
+        if (!self::isTypeImplemented($type)) {
+            return new PolymorphicRdata($type, $text);
+        }
+
+        return call_user_func(self::getRdataClassName($type) .'::fromText', $text);
+    }
+
+    /**
+     * Get the fully qualified class name of the RData class for $type.
+     *
+     * @param string $type
+     * @return string
+     */
+    public static function getRdataClassName(string $type): string
+    {
+        return __NAMESPACE__.'\\'.strtoupper($type);
     }
 
     /**

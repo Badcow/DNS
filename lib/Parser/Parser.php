@@ -33,7 +33,7 @@ class Parser
     /**
      * Array of methods that take an ArrayIterator and return an Rdata object. The array key is the Rdata type.
      *
-     * @var array
+     * @var callable[]
      */
     private $rdataHandlers = [];
 
@@ -65,7 +65,7 @@ class Parser
     public function __construct(array $rdataHandlers = [])
     {
         $this->rdataHandlers = array_merge(
-            ['PTR' => __CLASS__.'::ptrHandler'],
+            [Rdata\PTR::TYPE => [$this, 'ptrHandler']],
             $rdataHandlers
         );
     }
@@ -364,17 +364,8 @@ class Parser
             return call_user_func($this->rdataHandlers[$type], $iterator);
         }
 
-        $className = '\\Badcow\\DNS\\Rdata\\'.strtoupper($type);
-        /** @var callable $callable */
-        $callable = $className.'::fromText';
-        $rdataString = $iterator->getRemainingAsString();
-
-        if (!class_exists($className)) {
-            return new Rdata\PolymorphicRdata($type, $rdataString);
-        }
-
         try {
-            return call_user_func($callable, $rdataString);
+            return Rdata\Factory::textToRdataType($type, $iterator->getRemainingAsString());
         } catch (\Exception $exception) {
             throw new ParseException($exception->getMessage(), null, $exception);
         }
