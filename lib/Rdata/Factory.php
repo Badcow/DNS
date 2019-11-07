@@ -39,6 +39,7 @@ class Factory
 
     /**
      * @param int $id
+     *
      * @return RdataInterface
      *
      * @throws UnsupportedTypeException
@@ -61,6 +62,7 @@ class Factory
     /**
      * @param string $type
      * @param string $text
+     *
      * @return RdataInterface
      */
     public static function textToRdataType(string $type, string $text): RdataInterface
@@ -69,13 +71,17 @@ class Factory
             return new PolymorphicRdata($type, $text);
         }
 
-        return call_user_func(self::getRdataClassName($type) .'::fromText', $text);
+        /** @var callable $callable */
+        $callable = self::getRdataClassName($type).'::fromText';
+
+        return call_user_func($callable, $text);
     }
 
     /**
      * Get the fully qualified class name of the RData class for $type.
      *
      * @param string $type
+     *
      * @return string
      */
     public static function getRdataClassName(string $type): string

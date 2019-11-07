@@ -51,7 +51,9 @@ class Classes
 
     /**
      * @param string $className
+     *
      * @return int
+     *
      * @throws \InvalidArgumentException
      */
     public static function getClassId(string $className): int
