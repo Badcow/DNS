@@ -238,6 +238,14 @@ class Parser
         return $isName;
     }
 
+    /**
+     * Determine if iterant is a class.
+     *
+     * @param ResourceRecordIterator $iterator
+     * @param string|null            $origin   the previously assumed resource record parameter, either 'TTL' or NULL
+     *
+     * @return bool
+     */
     private function isClass(ResourceRecordIterator $iterator, $origin = null): bool
     {
         if (!Classes::isValid($iterator->current())) {
@@ -255,6 +263,13 @@ class Parser
         return $isClass;
     }
 
+    /**
+     * Determine if current iterant is an Rdata type string.
+     *
+     * @param ResourceRecordIterator $iterator
+     *
+     * @return bool
+     */
     private function isType(ResourceRecordIterator $iterator): bool
     {
         return RDataTypes::isValid(strtoupper($iterator->current())) || array_key_exists($iterator->current(), $this->rdataHandlers);
@@ -276,7 +291,7 @@ class Parser
      * Determine if the iterant is a TTL (i.e. it is an integer).
      *
      * @param ResourceRecordIterator $iterator
-     * @param string                 $origin
+     * @param string                 $origin   the previously assumed resource record parameter, either 'CLASS' or NULL
      *
      * @return bool
      */
