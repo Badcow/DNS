@@ -482,9 +482,17 @@ class Factory
         // TODO: Implement KX() method.
     }
 
-    public static function NAPTR(): NAPTR
+    public static function NAPTR(int $order, int $preference, string $flags, string $services, string $regexp, string $replacement): NAPTR
     {
-        // TODO: Implement NAPTR() method.
+        $naptr = new NAPTR();
+        $naptr->setOrder($order);
+        $naptr->setPreference($preference);
+        $naptr->setFlags($flags);
+        $naptr->setServices($services);
+        $naptr->setRegexp($regexp);
+        $naptr->setReplacement($replacement);
+
+        return $naptr;
     }
 
     public static function NSEC3(): NSEC3

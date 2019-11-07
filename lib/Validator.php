@@ -53,6 +53,10 @@ class Validator
      */
     public static function fullyQualifiedDomainName(string $name): bool
     {
+        if ('.' === $name) {
+            return true;
+        }
+
         return strlen($name) < 254 &&
             (1 === preg_match('/^(?:(?!-)[a-z0-9\-]{1,63}(?<!-)\.){1,127}$/i', $name));
     }
