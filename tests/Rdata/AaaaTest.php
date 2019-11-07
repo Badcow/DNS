@@ -14,17 +14,18 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\AAAA;
+use Badcow\DNS\Rdata\Factory;
 use PHPUnit\Framework\TestCase;
 
-class AaaaTest extends TestCase
+class AaaaTest extends TestCase implements RdataTestInterface
 {
-    public function testSetAddress(): void
+    public function testToText(): void
     {
         $address = '2003:dead:beef:4dad:23:46:bb:101';
         $aaaa = new AAAA();
         $aaaa->setAddress($address);
 
-        $this->assertEquals($address, $aaaa->getAddress());
+        $this->assertEquals($address, $aaaa->toText());
     }
 
     public function testFromText(): void
@@ -36,7 +37,7 @@ class AaaaTest extends TestCase
         $this->assertEquals($text, $aaaa->getAddress());
     }
 
-    public function testWire(): void
+    public function testToWire(): void
     {
         $address = '2003:dead:beef:4dad:23:46:bb:101';
         $expectation = inet_pton($address);
@@ -45,5 +46,33 @@ class AaaaTest extends TestCase
 
         $this->assertEquals($expectation, $aaaa->toWire());
         $this->assertEquals($address, $aaaa->getAddress());
+    }
+
+    public function testGetType(): void
+    {
+        $aaaa = new AAAA();
+        $this->assertEquals('AAAA', $aaaa->getType());
+    }
+
+    public function testGetTypeCode(): void
+    {
+        $aaaa = new AAAA();
+        $this->assertEquals(28, $aaaa->getTypeCode());
+    }
+
+    public function testFromWire(): void
+    {
+        $wire = inet_pton('beef::1');
+        $aaaa = AAAA::fromWire($wire);
+
+        $this->assertEquals('beef::1', $aaaa->getAddress());
+    }
+
+    public function testFactory(): void
+    {
+        $aaaa = new AAAA();
+        $aaaa->setAddress('2001:acad:1::');
+
+        $this->assertEquals(Factory::AAAA('2001:acad:1::'), $aaaa);
     }
 }
