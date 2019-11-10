@@ -467,9 +467,22 @@ class Factory
         // TODO: Implement HIP() method.
     }
 
-    public static function IPSECKEY(): IPSECKEY
+    /**
+     * @param int         $precedence an 8-bit unsigned integer
+     * @param string|null $gateway    either &null for no gateway, a fully qualified domain name, or an IPv4 or IPv6 address
+     * @param int         $algorithm  either IPSECKEY::ALGORITHM_NONE, IPSECKEY::ALGORITHM_DSA, IPSECKEY::ALGORITHM_RSA, or IPSECKEY::ALGORITHM_ECDSA
+     * @param string|null $publicKey  base64 encoded public key
+     *
+     * @return IPSECKEY
+     */
+    public static function IPSECKEY(int $precedence, ?string $gateway, int $algorithm = 0, ?string $publicKey = null): IPSECKEY
     {
-        // TODO: Implement IPSECKEY() method.
+        $ipseckey = new IPSECKEY();
+        $ipseckey->setPrecedence($precedence);
+        $ipseckey->setGateway($gateway);
+        $ipseckey->setPublicKey($algorithm, $publicKey);
+
+        return $ipseckey;
     }
 
     public static function KEY(): KEY
