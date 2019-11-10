@@ -438,9 +438,32 @@ class Factory
         // TODO: Implement CSYNC() method.
     }
 
-    public static function DHCID(): DHCID
+    /**
+     * @param string|null $digest         Set to &null if the $identifier and $fqdn are known
+     * @param int         $identifierType 16-bit integer
+     * @param string|null $identifier     This is ignored if $digest is not &null
+     * @param string|null $fqdn           This is ignored if $digest is not &null
+     *
+     * @return DHCID
+     */
+    public static function DHCID(?string $digest, int $identifierType, ?string $identifier = null, ?string $fqdn = null): DHCID
     {
-        // TODO: Implement DHCID() method.
+        $dhcid = new DHCID();
+        if (null !== $digest) {
+            $dhcid->setIdentifierType($identifierType);
+            $dhcid->setDigest($digest);
+
+            return $dhcid;
+        }
+
+        if (null === $identifier || null === $fqdn) {
+            throw new \InvalidArgumentException('Identifier and FQDN cannot be null if digest is null.');
+        }
+
+        $dhcid->setIdentifier($identifierType, $identifier);
+        $dhcid->setFqdn($fqdn);
+
+        return $dhcid;
     }
 
     /**
