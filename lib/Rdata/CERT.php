@@ -17,6 +17,7 @@ namespace Badcow\DNS\Rdata;
  * {@link https://tools.ietf.org/html/rfc4398#section-2.1}.
  */
 use Badcow\DNS\Parser\Tokens;
+use Badcow\DNS\Validator;
 
 class CERT implements RdataInterface
 {
@@ -136,8 +137,8 @@ class CERT implements RdataInterface
      */
     public function setCertificate(string $certificate): void
     {
-        if (!KEY::isBase64($certificate)) {
-            throw new \InvalidArgumentException('The certificate must be a valid base64 encoded string.');
+        if (!Validator::isBase64Encoded($certificate)) {
+            throw new \InvalidArgumentException('The certificate must be a valid Base64 encoded string.');
         }
 
         $this->certificate = (string) preg_replace('/[^a-zA-Z0-9\/+=]/', '', $certificate);

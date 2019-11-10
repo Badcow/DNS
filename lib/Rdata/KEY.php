@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\Parser\Tokens;
+use Badcow\DNS\Validator;
 
 /**
  * {@link https://tools.ietf.org/html/rfc2535#section-3.1}.
@@ -86,7 +87,7 @@ class KEY implements RdataInterface
      */
     public function setPublicKey(string $publicKey): void
     {
-        if (!self::isBase64($publicKey)) {
+        if (!Validator::isBase64Encoded($publicKey)) {
             throw new \InvalidArgumentException('The public key must be a valid base64 encoded string.');
         }
 
@@ -172,15 +173,5 @@ class KEY implements RdataInterface
         $key->setPublicKey(substr($rdata, 4));
 
         return $key;
-    }
-
-    /**
-     * @param string $string
-     *
-     * @return bool
-     */
-    public static function isBase64(string $string): bool
-    {
-        return false !== preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $string);
     }
 }

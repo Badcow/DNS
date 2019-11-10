@@ -269,4 +269,47 @@ class Validator
 
         return true;
     }
+
+    /**
+     * Determine if string is a base64 encoded string.
+     *
+     * @param string $string A base64 encoded string
+     *
+     * @return bool
+     */
+    public static function isBase64Encoded(string $string): bool
+    {
+        if (1 !== preg_match('/^[a-zA-Z0-9\/\r\n+ ]*={0,2}$/', $string)) {
+            return false;
+        }
+
+        if (null === $string = preg_replace('/[^a-zA-Z0-9\/+=]/', '', $string)) {
+            return false;
+        }
+
+        if (false === $decoded = base64_decode($string, true)) {
+            return false;
+        }
+
+        return $string === base64_encode($decoded);
+    }
+
+    /**
+     * Determine if $integer is an unsigned integer less than 2^$numberOfBits.
+     *
+     * @param int $integer      The integer to test
+     * @param int $numberOfBits The upper limit that the integer can be expressed as an exponent of 2
+     *
+     * @return bool
+     */
+    public static function isUnsignedInteger(int $integer, int $numberOfBits): bool
+    {
+        $maxBits = PHP_INT_SIZE * 8 - 1;
+
+        if ($numberOfBits > $maxBits) {
+            throw new \RuntimeException(sprintf('Number of bits "%d" exceeds maximum binary exponent of "%d".', $numberOfBits, $maxBits));
+        }
+
+        return (0 <= $integer) && ($integer < (2 ** $numberOfBits));
+    }
 }
