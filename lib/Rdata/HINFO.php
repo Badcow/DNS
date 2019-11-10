@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\StringIterator;
+use Badcow\DNS\Parser\Tokens;
+
 /**
  * @see https://tools.ietf.org/html/rfc1035#section-3.3.2
  */
@@ -73,18 +76,62 @@ class HINFO implements RdataInterface
         return sprintf('"%s" "%s"', $this->cpu ?? '', $this->os ?? '');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function toWire(): string
     {
-        // TODO: Implement toWire() method.
+        return $this->toText();
     }
 
-    public static function fromText(string $text): RdataInterface
-    {
-        // TODO: Implement fromText() method.
-    }
-
+    /**
+     * {@inheritdoc}
+     *
+     * @return HINFO
+     */
     public static function fromWire(string $rdata): RdataInterface
     {
-        // TODO: Implement fromWire() method.
+        return self::fromText($rdata);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return HINFO
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $string = new StringIterator($text);
+        $hinfo = new self();
+        $hinfo->setCpu(self::extractText($string));
+        $hinfo->setOs(self::extractText($string));
+
+        return $hinfo;
+    }
+
+    /**
+     * @param StringIterator $string
+     *
+     * @return string
+     */
+    private static function extractText(StringIterator $string): string
+    {
+        $txt = new StringIterator();
+
+        if ($string->is(Tokens::DOUBLE_QUOTES)) {
+            TXT::handleTxt($string, $txt);
+            $string->next();
+        } else {
+            while ($string->isNot(Tokens::SPACE) && $string->valid()) {
+                $txt->append($string->current());
+                $string->next();
+            }
+        }
+
+        if ($string->is(Tokens::SPACE)) {
+            $string->next();
+        }
+
+        return (string) $txt;
     }
 }

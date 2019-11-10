@@ -122,7 +122,7 @@ class PolymorphicRdata implements RdataInterface
      */
     public function toWire(): string
     {
-        // TODO: Implement toWire() method.
+        throw new \BadMethodCallException('Cannot use method PolymorphicRdata::toWire().');
     }
 
     /**
@@ -130,7 +130,7 @@ class PolymorphicRdata implements RdataInterface
      */
     public static function fromText(string $text): RdataInterface
     {
-        // TODO: Implement fromText() method.
+        return new self(null, $text);
     }
 
     /**
@@ -138,6 +138,6 @@ class PolymorphicRdata implements RdataInterface
      */
     public static function fromWire(string $rdata): RdataInterface
     {
-        // TODO: Implement fromWire() method.
+        throw new \BadMethodCallException('Cannot use method PolymorphicRdata::fromWire().');
     }
 }

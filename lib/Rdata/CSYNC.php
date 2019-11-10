@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
-// TODO: Implement CSYNC RData
 use Badcow\DNS\Parser\Tokens;
 
+/**
+ * {@link https://tools.ietf.org/html/rfc7477}.
+ */
 class CSYNC implements RdataInterface
 {
     use RdataTrait;
