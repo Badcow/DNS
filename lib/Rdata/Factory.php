@@ -418,24 +418,69 @@ class Factory
         return $afsdb;
     }
 
-    public static function CDNSKEY(): CDNSKEY
+    /**
+     * @param int    $flags
+     * @param int    $algorithm
+     * @param string $publicKey
+     *
+     * @return CDNSKEY
+     */
+    public static function CDNSKEY(int $flags, int $algorithm, string $publicKey): CDNSKEY
     {
-        // TODO: Implement CDNSKEY() method.
+        $cdnskey = new CDNSKEY();
+        $cdnskey->setFlags($flags);
+        $cdnskey->setAlgorithm($algorithm);
+        $cdnskey->setPublicKey($publicKey);
+
+        return $cdnskey;
     }
 
-    public static function CDS(): CDS
+    /**
+     * @param int    $keyTag
+     * @param int    $algorithm
+     * @param string $digest
+     * @param int    $digestType
+     *
+     * @return CDS
+     */
+    public static function CDS(int $keyTag, int $algorithm, string $digest, int $digestType = DS::DIGEST_SHA1): CDS
     {
-        // TODO: Implement CDS() method.
+        $cds = new CDS();
+        $cds->setKeyTag($keyTag);
+        $cds->setAlgorithm($algorithm);
+        $cds->setDigest($digest);
+        $cds->setDigestType($digestType);
+
+        return $cds;
     }
 
-    public static function CERT(): CERT
+    /**
+     * @param int    $certificateType
+     * @param int    $keyTag
+     * @param int    $algorithm
+     * @param string $certificate
+     *
+     * @return CERT
+     */
+    public static function CERT(int $certificateType, int $keyTag, int $algorithm, string $certificate): CERT
     {
-        // TODO: Implement CERT() method.
+        $cert = new CERT();
+        $cert->setCertificateType($certificateType);
+        $cert->setKeyTag($keyTag);
+        $cert->setAlgorithm($algorithm);
+        $cert->setCertificate($certificate);
+
+        return $cert;
     }
 
-    public static function CSYNC(): CSYNC
+    public static function CSYNC(int $soaSerial, int $flags, array $types): CSYNC
     {
-        // TODO: Implement CSYNC() method.
+        $csync = new CSYNC();
+        $csync->setSoaSerial($soaSerial);
+        $csync->setFlags($flags);
+        array_map([$csync, 'addType'], $types);
+
+        return $csync;
     }
 
     /**
@@ -508,9 +553,23 @@ class Factory
         return $ipseckey;
     }
 
-    public static function KEY(): KEY
+    /**
+     * @param int    $flags
+     * @param int    $protocol
+     * @param int    $algorithm
+     * @param string $publicKey
+     *
+     * @return KEY
+     */
+    public static function KEY(int $flags, int $protocol, int $algorithm, string $publicKey): KEY
     {
-        // TODO: Implement KEY() method.
+        $key = new KEY();
+        $key->setFlags($flags);
+        $key->setProtocol($protocol);
+        $key->setAlgorithm($algorithm);
+        $key->setPublicKey($publicKey);
+
+        return $key;
     }
 
     public static function KX(): KX
@@ -555,9 +614,35 @@ class Factory
         return $rp;
     }
 
-    public static function SIG(): SIG
+    /**
+     * @param string $typeCovered
+     * @param int    $algorithm
+     * @param int    $labels
+     * @param int    $originalTtl
+     * @param int    $signatureExpiration
+     * @param int    $signatureInception
+     * @param int    $keyTag
+     * @param string $signersName
+     * @param string $signature
+     *
+     * @return SIG
+     */
+    public static function SIG(string $typeCovered, int $algorithm, int $labels, int $originalTtl,
+                                 int $signatureExpiration, int $signatureInception, int $keyTag,
+                                 string $signersName, string $signature): SIG
     {
-        // TODO: Implement SIG() method.
+        $sig = new SIG();
+        $sig->setTypeCovered($typeCovered);
+        $sig->setAlgorithm($algorithm);
+        $sig->setLabels($labels);
+        $sig->setOriginalTtl($originalTtl);
+        $sig->setSignatureExpiration($signatureExpiration);
+        $sig->setSignatureInception($signatureInception);
+        $sig->setKeyTag($keyTag);
+        $sig->setSignersName($signersName);
+        $sig->setSignature($signature);
+
+        return $sig;
     }
 
     public static function SMIMEA(): SMIMEA
