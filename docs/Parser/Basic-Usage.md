@@ -60,6 +60,6 @@ foreach ($zone->getResourceRecords() as $record) {
     $record->getName();
     $record->getClass();
     $record->getTtl();
-    $record->getRdata()->output();
+    $record->getRdata()->toText();
 }
 ```

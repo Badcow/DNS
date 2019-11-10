@@ -78,6 +78,7 @@ class DhcidTest extends TestCase
         $this->assertEquals($expectation->getDigestType(), $dhcid->getDigestType());
         $this->assertEquals($expectation->getDigest(), $dhcid->getDigest());
         $this->assertEquals($expectation->toText(), $dhcid->toText());
+        $this->assertEquals($text, $dhcid->toText());
     }
 
     /**
@@ -87,6 +88,8 @@ class DhcidTest extends TestCase
      * @param int    $identifierType
      * @param string $identifier
      * @param string $fqdn
+     *
+     * @throws \Exception
      */
     public function testFromText(string $text, int $identifierType, string $identifier, string $fqdn): void
     {

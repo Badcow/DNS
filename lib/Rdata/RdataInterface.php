@@ -16,13 +16,6 @@ namespace Badcow\DNS\Rdata;
 interface RdataInterface
 {
     /**
-     * @deprecated
-     *
-     * @return string
-     */
-    public function output(): string;
-
-    /**
      * Get the string representation of the Rdata type.
      *
      * @return string

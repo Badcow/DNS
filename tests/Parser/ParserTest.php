@@ -193,7 +193,7 @@ class ParserTest extends TestCase
         }
 
         $this->assertEquals('XX', $rdata->getType());
-        $this->assertEquals('2001:acad::1337', $rdata->output());
+        $this->assertEquals('2001:acad::1337', $rdata->toText());
     }
 
     /**
