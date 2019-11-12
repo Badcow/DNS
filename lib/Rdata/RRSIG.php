@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\Tokens;
+
+/**
+ * Class RRSIG.
+ */
 class RRSIG implements RdataInterface
 {
     use RdataTrait;
@@ -265,18 +270,77 @@ class RRSIG implements RdataInterface
         );
     }
 
+    /**
+     * @return string
+     *
+     * @throws UnsupportedTypeException
+     */
     public function toWire(): string
     {
-        // TODO: Implement toWire() method.
+        $wire = pack('nCCNNNC',
+            TypeCodes::getTypeCode($this->typeCovered),
+            $this->algorithm,
+            $this->labels,
+            $this->originalTtl,
+            $this->signatureExpiration,
+            $this->signatureInception,
+            $this->keyTag
+        );
+
+        $wire .= RdataTrait::encodeName($this->signersName);
+        $wire .= $this->signature;
+
+        return $wire;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return RRSIG
+     */
     public static function fromText(string $text): RdataInterface
     {
-        // TODO: Implement fromText() method.
+        $rdata = explode(Tokens::SPACE, $text);
+        $rrsig = new RRSIG();
+        $rrsig->setTypeCovered((string) array_shift($rdata));
+        $rrsig->setAlgorithm((int) array_shift($rdata));
+        $rrsig->setLabels((int) array_shift($rdata));
+        $rrsig->setOriginalTtl((int) array_shift($rdata));
+        $rrsig->setSignatureExpiration((int) array_shift($rdata));
+        $rrsig->setSignatureInception((int) array_shift($rdata));
+        $rrsig->setKeyTag((int) array_shift($rdata));
+        $rrsig->setSignersName((string) array_shift($rdata));
+        $rrsig->setSignature(implode('', $rdata));
+
+        return $rrsig;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return RRSIG
+     *
+     * @throws UnsupportedTypeException
+     */
     public static function fromWire(string $rdata): RdataInterface
     {
-        // TODO: Implement fromWire() method.
+        $offset = 0;
+        $values = unpack('n<type>/C<algorithm>/C<labels>/N<originalTtl>/N<sigExpiration>/N<sigInception>/C<keyTag>', $rdata, $offset);
+        $offset += 18;
+        $signersName = RdataTrait::decodeName($rdata, $offset);
+        $signature = substr($rdata, $offset);
+
+        $rrsig = new RRSIG();
+        $rrsig->setTypeCovered(TypeCodes::getName($values['<type>']));
+        $rrsig->setAlgorithm($values['<algorithm>']);
+        $rrsig->setLabels($values['<labels>']);
+        $rrsig->setOriginalTtl($values['<originalTtl>']);
+        $rrsig->setSignatureExpiration($values['<sigExpiration>']);
+        $rrsig->setSignatureInception($values['<sigInception>']);
+        $rrsig->setKeyTag($values['<keyTag>']);
+        $rrsig->setSignersName($signersName);
+        $rrsig->setSignature($signature);
+
+        return $rrsig;
     }
 }

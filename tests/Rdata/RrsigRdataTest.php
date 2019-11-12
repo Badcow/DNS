@@ -17,6 +17,7 @@ use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\Algorithms;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\RRSIG;
+use Badcow\DNS\Rdata\UnsupportedTypeException;
 use PHPUnit\Framework\TestCase;
 
 class RrsigRdataTest extends TestCase
@@ -24,7 +25,7 @@ class RrsigRdataTest extends TestCase
     private static $signature = 'oJB1W6WNGv+ldvQ3WDG0MQkg5IEhjRip8WTrPYGv07h108dUKGMeDPKijVCHX3DDKdfb+v6oB9wfuh3DTJXUA'.
         'fI/M0zmO/zz8bW0Rznl8O3tGNazPwQKkRN20XPXV6nwwfoXmJQbsLNrLfkGJ5D6fwFm8nN+6pBzeDQfsS3Ap3o=';
 
-    public function testOutput(): void
+    public function testToText(): void
     {
         if (2147483647 === PHP_INT_MAX) {
             $this->markTestSkipped('RRSIG test does not work on 32-bit systems.');
@@ -70,5 +71,44 @@ class RrsigRdataTest extends TestCase
         $this->assertEquals(2642, $rrsig->getKeyTag());
         $this->assertEquals('example.com.', $rrsig->getSignersName());
         $this->assertEquals(self::$signature, $rrsig->getSignature());
+    }
+
+    public function testFromText(): void
+    {
+        $text = 'A 5 3 86400 20050322173103 20030220173103 2642 example.com. '.self::$signature;
+
+        $rrsig = new RRSIG();
+        $rrsig->setTypeCovered('A');
+        $rrsig->setAlgorithm(Algorithms::RSASHA1);
+        $rrsig->setLabels(3);
+        $rrsig->setOriginalTtl(86400);
+        $rrsig->setSignatureExpiration(20050322173103);
+        $rrsig->setSignatureInception(20030220173103);
+        $rrsig->setKeyTag(2642);
+        $rrsig->setSignersName('example.com.');
+        $rrsig->setSignature(self::$signature);
+
+        $this->assertEquals($rrsig, RRSIG::fromText($text));
+    }
+
+    /**
+     * @throws UnsupportedTypeException
+     */
+    public function testWire(): void
+    {
+        $rrsig = new RRSIG();
+        $rrsig->setTypeCovered('A');
+        $rrsig->setAlgorithm(Algorithms::RSASHA1);
+        $rrsig->setLabels(3);
+        $rrsig->setOriginalTtl(86400);
+        $rrsig->setSignatureExpiration(20050322173103);
+        $rrsig->setSignatureInception(20030220173103);
+        $rrsig->setKeyTag(2642);
+        $rrsig->setSignersName('example.com.');
+        $rrsig->setSignature(self::$signature);
+
+        $wireFormat = $rrsig->toWire();
+
+        $this->assertEquals($rrsig, RRSIG::fromWire($wireFormat));
     }
 }
