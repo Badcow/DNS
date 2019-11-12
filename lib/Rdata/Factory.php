@@ -332,18 +332,18 @@ class Factory
                                  int $signatureExpiration, int $signatureInception, int $keyTag,
                                  string $signersName, string $signature): RRSIG
     {
-        $rdata = new RRSIG();
-        $rdata->setTypeCovered($typeCovered);
-        $rdata->setAlgorithm($algorithm);
-        $rdata->setLabels($labels);
-        $rdata->setOriginalTtl($originalTtl);
-        $rdata->setSignatureExpiration($signatureExpiration);
-        $rdata->setSignatureInception($signatureInception);
-        $rdata->setKeyTag($keyTag);
-        $rdata->setSignersName($signersName);
-        $rdata->setSignature($signature);
+        $rrsig = new RRSIG();
+        $rrsig->setTypeCovered($typeCovered);
+        $rrsig->setAlgorithm($algorithm);
+        $rrsig->setLabels($labels);
+        $rrsig->setOriginalTtl($originalTtl);
+        $rrsig->setSignatureExpiration($signatureExpiration);
+        $rrsig->setSignatureInception($signatureInception);
+        $rrsig->setKeyTag($keyTag);
+        $rrsig->setSignersName($signersName);
+        $rrsig->setSignature($signature);
 
-        return $rdata;
+        return $rrsig;
     }
 
     /**
