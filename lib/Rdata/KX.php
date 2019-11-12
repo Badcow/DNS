@@ -22,17 +22,17 @@ class KX implements RdataInterface
 
     const TYPE = 'KX';
     const TYPE_CODE = 36;
-    
+
     /**
      * @var int
      */
     private $preference;
-    
+
     /**
      * @var string
      */
     private $exchanger;
-    
+
     /**
      * @param string $exchanger
      */
@@ -40,7 +40,7 @@ class KX implements RdataInterface
     {
         $this->exchanger = $exchanger;
     }
-    
+
     /**
      * @return string
      */
@@ -48,7 +48,7 @@ class KX implements RdataInterface
     {
         return $this->exchanger;
     }
-    
+
     /**
      * @param int $preference
      */
@@ -56,7 +56,7 @@ class KX implements RdataInterface
     {
         $this->preference = $preference;
     }
-    
+
     /**
      * @return int
      */
@@ -64,7 +64,7 @@ class KX implements RdataInterface
     {
         return $this->preference;
     }
-    
+
     /**
      * {@inheritdoc}
      *
@@ -81,7 +81,7 @@ class KX implements RdataInterface
 
         return $this->preference.' '.$this->exchanger;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -96,7 +96,7 @@ class KX implements RdataInterface
 
         return pack('n', $this->preference).self::encodeName($this->exchanger);
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -109,7 +109,7 @@ class KX implements RdataInterface
 
         return $kx;
     }
-    
+
     /**
      * {@inheritdoc}
      */

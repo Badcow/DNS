@@ -594,7 +594,7 @@ class Factory
      * @param string $services
      * @param string $regexp
      * @param string $replacement
-     * 
+     *
      * @return NAPTR
      */
     public static function NAPTR(int $order, int $preference, string $flags, string $services, string $regexp, string $replacement): NAPTR
