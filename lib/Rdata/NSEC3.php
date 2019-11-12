@@ -13,7 +13,12 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
-// TODO: Implement NSEC3 RData
+use Badcow\DNS\Parser\Tokens;
+use Badcow\DNS\Validator;
+
+/**
+ * {@link https://tools.ietf.org/html/rfc5155}.
+ */
 class NSEC3 implements RdataInterface
 {
     use RdataTrait;
@@ -22,34 +27,238 @@ class NSEC3 implements RdataInterface
     const TYPE_CODE = 50;
 
     /**
+     * @var int
+     */
+    private $hashAlgorithm;
+
+    /**
+     * @var bool
+     */
+    private $unsignedDelegationsCovered = false;
+
+    /**
+     * @var int
+     */
+    private $iterations;
+
+    /**
+     * @var string Binary encoded string
+     */
+    private $salt;
+
+    /**
+     * @var string Binary encoded hash
+     */
+    private $nextHashedOwnerName;
+
+    /**
+     * @var array
+     */
+    private $types = [];
+
+    /**
+     * @var \Base2n
+     */
+    private static $base32;
+
+    private static function base32(): \Base2n
+    {
+        if (!isset(self::$base32)) {
+            self::$base32 = new \Base2n(5, '0123456789abcdefghijklmnopqrstuv', false, true, true);
+        }
+
+        return self::$base32;
+    }
+
+    public function getHashAlgorithm(): int
+    {
+        return $this->hashAlgorithm;
+    }
+
+    public function setHashAlgorithm(int $hashAlgorithm): void
+    {
+        if (!Validator::isUnsignedInteger($hashAlgorithm, 8)) {
+            throw new \InvalidArgumentException('Hash algorithm must be 8-bit integer.');
+        }
+        $this->hashAlgorithm = $hashAlgorithm;
+    }
+
+    public function isUnsignedDelegationsCovered(): bool
+    {
+        return $this->unsignedDelegationsCovered;
+    }
+
+    public function setUnsignedDelegationsCovered(bool $unsignedDelegationsCovered): void
+    {
+        $this->unsignedDelegationsCovered = $unsignedDelegationsCovered;
+    }
+
+    public function getIterations(): int
+    {
+        return $this->iterations;
+    }
+
+    public function setIterations(int $iterations): void
+    {
+        if (!Validator::isUnsignedInteger($iterations, 16)) {
+            throw new \InvalidArgumentException('Hash algorithm must be 16-bit integer.');
+        }
+        $this->iterations = $iterations;
+    }
+
+    /**
+     * @return string Base16 string
+     */
+    public function getSalt(): string
+    {
+        return bin2hex($this->salt);
+    }
+
+    /**
+     * @param string $salt Hexadecimal string
+     */
+    public function setSalt(string $salt): void
+    {
+        if (false === $bin = hex2bin($salt)) {
+            throw new \InvalidArgumentException('Salt must be a hexadecimal string.');
+        }
+        $this->salt = $bin;
+    }
+
+    /**
+     * @return string Base32 hashed string
+     */
+    public function getNextHashedOwnerName(): string
+    {
+        return self::base32encode($this->nextHashedOwnerName);
+    }
+
+    public function setNextHashedOwnerName(string $nextHashedOwnerName): void
+    {
+        if (!Validator::isBase32HexEncoded($nextHashedOwnerName)) {
+            throw new \InvalidArgumentException('Next hashed owner name must be a base32 encoded string.');
+        }
+
+        $this->nextHashedOwnerName = self::base32decode($nextHashedOwnerName);
+    }
+
+    /**
+     * @param string $type
+     */
+    public function addType(string $type): void
+    {
+        $this->types[] = $type;
+    }
+
+    /**
+     * Clears the types from the RDATA.
+     */
+    public function clearTypes(): void
+    {
+        $this->types = [];
+    }
+
+    public function getTypes(): array
+    {
+        return $this->types;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function toText(): string
     {
-        // TODO: Implement output() method.
+        return sprintf('%d %d %d %s %s %s',
+            $this->hashAlgorithm,
+            (int) $this->unsignedDelegationsCovered,
+            $this->iterations,
+            $this->getSalt(),
+            $this->getNextHashedOwnerName(),
+            implode(Tokens::SPACE, $this->types)
+        );
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws UnsupportedTypeException
      */
     public function toWire(): string
     {
-        // TODO: Implement toWire() method.
+        $wire = pack('CCnC',
+            $this->hashAlgorithm,
+            (int) $this->unsignedDelegationsCovered,
+            $this->iterations,
+            strlen($this->salt)
+        );
+        $wire .= $this->salt;
+        $wire .= chr(strlen($this->nextHashedOwnerName));
+        $wire .= $this->nextHashedOwnerName;
+        $wire .= NSEC::renderBitmap($this->types);
+
+        return $wire;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @return NSEC3
      */
     public static function fromText(string $text): RdataInterface
     {
-        // TODO: Implement fromText() method.
+        $rdata = explode(Tokens::SPACE, $text);
+        $nsec3 = new self();
+        $nsec3->setHashAlgorithm((int) array_shift($rdata));
+        $nsec3->setUnsignedDelegationsCovered((bool) array_shift($rdata));
+        $nsec3->setIterations((int) array_shift($rdata));
+        $nsec3->setSalt((string) array_shift($rdata));
+        $nsec3->setNextHashedOwnerName((string) array_shift($rdata));
+        array_map([$nsec3, 'addType'], $rdata);
+
+        return $nsec3;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @return NSEC3
+     *
+     * @throws UnsupportedTypeException
      */
     public static function fromWire(string $rdata): RdataInterface
     {
-        // TODO: Implement fromWire() method.
+        $offset = 0;
+        $values = unpack('C<hashAlgo>/C<flags>/n<iterations>/C<saltLen>', $rdata, $offset);
+        $offset += 5;
+        $nsec3 = new self();
+        $nsec3->setHashAlgorithm((int) $values['<hashAlgo>']);
+        $nsec3->setUnsignedDelegationsCovered((bool) $values['<flags>']);
+        $nsec3->setIterations((int) $values['<iterations>']);
+
+        $saltLen = (int) $values['<saltLen>'];
+        $salt = unpack('H*', substr($rdata, $offset, $saltLen))[1];
+        $nsec3->setSalt($salt);
+        $offset += $saltLen;
+
+        $hashLen = ord(substr($rdata, $offset, 1));
+        ++$offset;
+        $hash = substr($rdata, $offset, $hashLen);
+        $offset += $hashLen;
+        $nsec3->setNextHashedOwnerName(self::base32encode($hash));
+
+        $types = NSEC::parseBitmap($rdata, $offset);
+        array_map([$nsec3, 'addType'], $types);
+
+        return $nsec3;
+    }
+
+    public static function base32encode(string $data): string
+    {
+        return self::base32()->encode($data);
+    }
+
+    public static function base32decode(string $data): string
+    {
+        return self::base32()->decode($data);
     }
 }

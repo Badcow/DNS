@@ -295,12 +295,26 @@ class Validator
     }
 
     /**
+     * Determine if string is a base32 encoded string.
+     */
+    public static function isBase32Encoded(string $string): bool
+    {
+        return 1 === preg_match('/^[A-Z2-7]+=*$/', $string);
+    }
+
+    /**
+     * Determine if string is a base32hex (extended hex) encoded string.
+     */
+    public static function isBase32HexEncoded(string $string): bool
+    {
+        return 1 === preg_match('/^[a-zA-Z0-9]+=*$/', $string);
+    }
+
+    /**
      * Determine if $integer is an unsigned integer less than 2^$numberOfBits.
      *
      * @param int $integer      The integer to test
      * @param int $numberOfBits The upper limit that the integer can be expressed as an exponent of 2
-     *
-     * @return bool
      */
     public static function isUnsignedInteger(int $integer, int $numberOfBits): bool
     {

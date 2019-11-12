@@ -10,7 +10,8 @@
     ],
     "require": {
         "php": "~7.2",
-        "rlanvin/php-ip": "~2.0"
+        "rlanvin/php-ip": "~2.0",
+        "ademarre/binary-to-text-php": "@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "~8.4",
