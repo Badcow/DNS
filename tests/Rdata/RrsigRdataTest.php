@@ -39,8 +39,8 @@ class RrsigRdataTest extends TestCase
         $rrsig->setAlgorithm(Algorithms::RSASHA1);
         $rrsig->setLabels(3);
         $rrsig->setOriginalTtl(86400);
-        $rrsig->setSignatureExpiration(20050322173103);
-        $rrsig->setSignatureInception(20030220173103);
+        $rrsig->setSignatureExpiration(\DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20050322173103'));
+        $rrsig->setSignatureInception(\DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20030220173103'));
         $rrsig->setKeyTag(2642);
         $rrsig->setSignersName('example.com.');
         $rrsig->setSignature(self::$signature);
@@ -55,8 +55,8 @@ class RrsigRdataTest extends TestCase
             Algorithms::RSASHA1,
             3,
             86400,
-            2020,
-            2015,
+            \DateTime::createFromFormat('Ymd', '20220101'),
+            \DateTime::createFromFormat('Ymd', '20180101'),
             2642,
             'example.com.',
             self::$signature
@@ -66,8 +66,8 @@ class RrsigRdataTest extends TestCase
         $this->assertEquals(Algorithms::RSASHA1, $rrsig->getAlgorithm());
         $this->assertEquals(3, $rrsig->getLabels());
         $this->assertEquals(86400, $rrsig->getOriginalTtl());
-        $this->assertEquals(2020, $rrsig->getSignatureExpiration());
-        $this->assertEquals(2015, $rrsig->getSignatureInception());
+        $this->assertEquals(\DateTime::createFromFormat('Ymd', '20220101'), $rrsig->getSignatureExpiration());
+        $this->assertEquals(\DateTime::createFromFormat('Ymd', '20180101'), $rrsig->getSignatureInception());
         $this->assertEquals(2642, $rrsig->getKeyTag());
         $this->assertEquals('example.com.', $rrsig->getSignersName());
         $this->assertEquals(self::$signature, $rrsig->getSignature());
@@ -82,8 +82,8 @@ class RrsigRdataTest extends TestCase
         $rrsig->setAlgorithm(Algorithms::RSASHA1);
         $rrsig->setLabels(3);
         $rrsig->setOriginalTtl(86400);
-        $rrsig->setSignatureExpiration(20050322173103);
-        $rrsig->setSignatureInception(20030220173103);
+        $rrsig->setSignatureExpiration(\DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20050322173103'));
+        $rrsig->setSignatureInception(\DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20030220173103'));
         $rrsig->setKeyTag(2642);
         $rrsig->setSignersName('example.com.');
         $rrsig->setSignature(self::$signature);
@@ -101,8 +101,8 @@ class RrsigRdataTest extends TestCase
         $rrsig->setAlgorithm(Algorithms::RSASHA1);
         $rrsig->setLabels(3);
         $rrsig->setOriginalTtl(86400);
-        $rrsig->setSignatureExpiration(20050322173103);
-        $rrsig->setSignatureInception(20030220173103);
+        $rrsig->setSignatureExpiration(\DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20050322173103'));
+        $rrsig->setSignatureInception(\DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20030220173103'));
         $rrsig->setKeyTag(2642);
         $rrsig->setSignersName('example.com.');
         $rrsig->setSignature(self::$signature);

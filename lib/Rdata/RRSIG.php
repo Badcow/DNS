@@ -16,7 +16,7 @@ namespace Badcow\DNS\Rdata;
 use Badcow\DNS\Parser\Tokens;
 
 /**
- * Class RRSIG.
+ * {@link https://tools.ietf.org/html/rfc4034}.
  */
 class RRSIG implements RdataInterface
 {
@@ -24,6 +24,7 @@ class RRSIG implements RdataInterface
 
     const TYPE = 'RRSIG';
     const TYPE_CODE = 46;
+    const TIME_FORMAT = 'YmdHis';
 
     /**
      *  The Type Covered field identifies the type of the RRset that is
@@ -64,7 +65,7 @@ class RRSIG implements RdataInterface
      * 32-bit unsigned integer specifying the expiration date of a signature.
      * {@link https://tools.ietf.org/html/rfc4034#section-3.1.5}.
      *
-     * @var int
+     * @var \DateTime
      */
     private $signatureExpiration;
 
@@ -72,7 +73,7 @@ class RRSIG implements RdataInterface
      * 32-bit unsigned integer specifying the inception date of a signature.
      * {@link https://tools.ietf.org/html/rfc4034#section-3.1.5}.
      *
-     * @var int
+     * @var \DateTime
      */
     private $signatureInception;
 
@@ -172,17 +173,17 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * @return int
+     * @return \DateTime
      */
-    public function getSignatureExpiration(): int
+    public function getSignatureExpiration(): \DateTime
     {
         return $this->signatureExpiration;
     }
 
     /**
-     * @param int $signatureExpiration
+     * @param \DateTime $signatureExpiration
      */
-    public function setSignatureExpiration(int $signatureExpiration): void
+    public function setSignatureExpiration(\DateTime $signatureExpiration): void
     {
         $this->signatureExpiration = $signatureExpiration;
     }
@@ -190,7 +191,7 @@ class RRSIG implements RdataInterface
     /**
      * @return int
      */
-    public function getSignatureInception(): int
+    public function getSignatureInception(): \DateTime
     {
         return $this->signatureInception;
     }
@@ -198,7 +199,7 @@ class RRSIG implements RdataInterface
     /**
      * @param int $signatureInception
      */
-    public function setSignatureInception(int $signatureInception): void
+    public function setSignatureInception(\DateTime $signatureInception): void
     {
         $this->signatureInception = $signatureInception;
     }
@@ -262,8 +263,8 @@ class RRSIG implements RdataInterface
             $this->algorithm,
             $this->labels,
             $this->originalTtl,
-            $this->signatureExpiration,
-            $this->signatureInception,
+            $this->signatureExpiration->format(self::TIME_FORMAT),
+            $this->signatureInception->format(self::TIME_FORMAT),
             $this->keyTag,
             $this->signersName,
             $this->signature
@@ -277,13 +278,13 @@ class RRSIG implements RdataInterface
      */
     public function toWire(): string
     {
-        $wire = pack('nCCNNNC',
+        $wire = pack('nCCNNNn',
             TypeCodes::getTypeCode($this->typeCovered),
             $this->algorithm,
             $this->labels,
             $this->originalTtl,
-            $this->signatureExpiration,
-            $this->signatureInception,
+            (int) $this->signatureExpiration->format('U'),
+            (int) $this->signatureInception->format('U'),
             $this->keyTag
         );
 
@@ -306,11 +307,17 @@ class RRSIG implements RdataInterface
         $rrsig->setAlgorithm((int) array_shift($rdata));
         $rrsig->setLabels((int) array_shift($rdata));
         $rrsig->setOriginalTtl((int) array_shift($rdata));
-        $rrsig->setSignatureExpiration((int) array_shift($rdata));
-        $rrsig->setSignatureInception((int) array_shift($rdata));
+        $sigExpiration = (string) array_shift($rdata);
+        $sigInception = (string) array_shift($rdata);
         $rrsig->setKeyTag((int) array_shift($rdata));
         $rrsig->setSignersName((string) array_shift($rdata));
         $rrsig->setSignature(implode('', $rdata));
+
+        $timeFormat = (14 === strlen($sigExpiration)) ? self::TIME_FORMAT : 'U';
+        $rrsig->setSignatureExpiration(\DateTime::createFromFormat($timeFormat, $sigExpiration));
+
+        $timeFormat = (14 === strlen($sigInception)) ? self::TIME_FORMAT : 'U';
+        $rrsig->setSignatureInception(\DateTime::createFromFormat($timeFormat, $sigInception));
 
         return $rrsig;
     }
@@ -325,7 +332,7 @@ class RRSIG implements RdataInterface
     public static function fromWire(string $rdata): RdataInterface
     {
         $offset = 0;
-        $values = unpack('n<type>/C<algorithm>/C<labels>/N<originalTtl>/N<sigExpiration>/N<sigInception>/C<keyTag>', $rdata, $offset);
+        $values = unpack('n<type>/C<algorithm>/C<labels>/N<originalTtl>/N<sigExpiration>/N<sigInception>/n<keyTag>', $rdata, $offset);
         $offset += 18;
         $signersName = RdataTrait::decodeName($rdata, $offset);
         $signature = substr($rdata, $offset);
@@ -335,11 +342,12 @@ class RRSIG implements RdataInterface
         $rrsig->setAlgorithm($values['<algorithm>']);
         $rrsig->setLabels($values['<labels>']);
         $rrsig->setOriginalTtl($values['<originalTtl>']);
-        $rrsig->setSignatureExpiration($values['<sigExpiration>']);
-        $rrsig->setSignatureInception($values['<sigInception>']);
         $rrsig->setKeyTag($values['<keyTag>']);
         $rrsig->setSignersName($signersName);
         $rrsig->setSignature($signature);
+
+        $rrsig->setSignatureExpiration(\DateTime::createFromFormat('U', (string) $values['<sigExpiration>']));
+        $rrsig->setSignatureInception(\DateTime::createFromFormat('U', (string) $values['<sigInception>']));
 
         return $rrsig;
     }

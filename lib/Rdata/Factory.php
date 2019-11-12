@@ -316,20 +316,20 @@ class Factory
     }
 
     /**
-     * @param string $typeCovered
-     * @param int    $algorithm
-     * @param int    $labels
-     * @param int    $originalTtl
-     * @param int    $signatureExpiration
-     * @param int    $signatureInception
-     * @param int    $keyTag
-     * @param string $signersName
-     * @param string $signature
+     * @param string    $typeCovered
+     * @param int       $algorithm
+     * @param int       $labels
+     * @param int       $originalTtl
+     * @param \DateTime $signatureExpiration
+     * @param \DateTime $signatureInception
+     * @param int       $keyTag
+     * @param string    $signersName
+     * @param string    $signature
      *
      * @return RRSIG
      */
     public static function RRSIG(string $typeCovered, int $algorithm, int $labels, int $originalTtl,
-                                 int $signatureExpiration, int $signatureInception, int $keyTag,
+                                 \DateTime $signatureExpiration, \DateTime $signatureInception, int $keyTag,
                                  string $signersName, string $signature): RRSIG
     {
         $rrsig = new RRSIG();
