@@ -5,7 +5,9 @@ classes representing DNS objects (such as `Zone`, `ResourceRecord`, and various 
 style text files to the PHP objects, and builders to create aesthetically pleasing BIND records.
 
 ## Build Status
-[![Build Status](https://travis-ci.org/Badcow/DNS.png)](https://travis-ci.org/Badcow/DNS) [![Code Coverage](https://scrutinizer-ci.com/g/Badcow/DNS/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Badcow/DNS/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=master)
+[![Build Status](https://travis-ci.org/Badcow/DNS.png)](https://travis-ci.org/Badcow/DNS)
+[![Code Coverage](https://scrutinizer-ci.com/g/Badcow/DNS/badges/coverage.png?b=Version3)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=Version3)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Badcow/DNS/badges/quality-score.png?b=Version3)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=Version3)
 
 ## Contents
 1. [Example usage](#example-usage)

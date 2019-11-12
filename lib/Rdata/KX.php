@@ -13,43 +13,113 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
-// TODO: Implement KX RData
+/**
+ * {@link https://tools.ietf.org/html/rfc2230}.
+ */
 class KX implements RdataInterface
 {
     use RdataTrait;
 
     const TYPE = 'KX';
     const TYPE_CODE = 36;
-
+    
+    /**
+     * @var int
+     */
+    private $preference;
+    
+    /**
+     * @var string
+     */
+    private $exchanger;
+    
+    /**
+     * @param string $exchanger
+     */
+    public function setExchanger(string $exchanger): void
+    {
+        $this->exchanger = $exchanger;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getExchanger(): string
+    {
+        return $this->exchanger;
+    }
+    
+    /**
+     * @param int $preference
+     */
+    public function setPreference(int $preference): void
+    {
+        $this->preference = $preference;
+    }
+    
+    /**
+     * @return int
+     */
+    public function getPreference(): int
+    {
+        return $this->preference;
+    }
+    
     /**
      * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException throws exception if preference or exchanger have not been set
      */
     public function toText(): string
     {
-        // TODO: Implement output() method.
-    }
+        if (null === $this->preference) {
+            throw new \InvalidArgumentException('No preference has been set on KX object.');
+        }
+        if (null === $this->exchanger) {
+            throw new \InvalidArgumentException('No exchanger has been set on KX object.');
+        }
 
+        return $this->preference.' '.$this->exchanger;
+    }
+    
     /**
      * {@inheritdoc}
      */
     public function toWire(): string
     {
-        // TODO: Implement toWire() method.
-    }
+        if (null === $this->preference) {
+            throw new \InvalidArgumentException('No preference has been set on KX object.');
+        }
+        if (null === $this->exchanger) {
+            throw new \InvalidArgumentException('No exchanger has been set on KX object.');
+        }
 
+        return pack('n', $this->preference).self::encodeName($this->exchanger);
+    }
+    
     /**
      * {@inheritdoc}
      */
     public static function fromText(string $text): RdataInterface
     {
-        // TODO: Implement fromText() method.
-    }
+        $rdata = explode(' ', $text);
+        $kx = new self();
+        $kx->setPreference((int) $rdata[0]);
+        $kx->setExchanger($rdata[1]);
 
+        return $kx;
+    }
+    
     /**
      * {@inheritdoc}
      */
     public static function fromWire(string $rdata): RdataInterface
     {
-        // TODO: Implement fromWire() method.
+        $offset = 2;
+        $kx = new self();
+        $kx->setPreference(unpack('n', $rdata)[1]);
+        $kx->setexchanger(self::decodeName($rdata, $offset));
+
+        return $kx;
     }
 }

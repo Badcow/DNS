@@ -572,11 +572,31 @@ class Factory
         return $key;
     }
 
-    public static function KX(): KX
+    /**
+     * @param int    $preference
+     * @param string $exchanger
+     *
+     * @return KX
+     */
+    public static function KX(int $preference, string $exchanger): KX
     {
-        // TODO: Implement KX() method.
+        $kx = new KX();
+        $kx->setPreference($preference);
+        $kx->setExchanger($exchanger);
+
+        return $kx;
     }
 
+    /**
+     * @param int    $order
+     * @param int    $preference
+     * @param string $flags
+     * @param string $services
+     * @param string $regexp
+     * @param string $replacement
+     * 
+     * @return NAPTR
+     */
     public static function NAPTR(int $order, int $preference, string $flags, string $services, string $regexp, string $replacement): NAPTR
     {
         $naptr = new NAPTR();
