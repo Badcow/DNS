@@ -189,7 +189,7 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * @return int
+     * @return \DateTime
      */
     public function getSignatureInception(): \DateTime
     {
@@ -197,7 +197,7 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * @param int $signatureInception
+     * @param \DateTime $signatureInception
      */
     public function setSignatureInception(\DateTime $signatureInception): void
     {
@@ -313,11 +313,8 @@ class RRSIG implements RdataInterface
         $rrsig->setSignersName((string) array_shift($rdata));
         $rrsig->setSignature(implode('', $rdata));
 
-        $timeFormat = (14 === strlen($sigExpiration)) ? self::TIME_FORMAT : 'U';
-        $rrsig->setSignatureExpiration(\DateTime::createFromFormat($timeFormat, $sigExpiration));
-
-        $timeFormat = (14 === strlen($sigInception)) ? self::TIME_FORMAT : 'U';
-        $rrsig->setSignatureInception(\DateTime::createFromFormat($timeFormat, $sigInception));
+        $rrsig->setSignatureExpiration(self::makeDateTime($sigExpiration));
+        $rrsig->setSignatureInception(self::makeDateTime($sigInception));
 
         return $rrsig;
     }
@@ -346,9 +343,24 @@ class RRSIG implements RdataInterface
         $rrsig->setSignersName($signersName);
         $rrsig->setSignature($signature);
 
-        $rrsig->setSignatureExpiration(\DateTime::createFromFormat('U', (string) $values['<sigExpiration>']));
-        $rrsig->setSignatureInception(\DateTime::createFromFormat('U', (string) $values['<sigInception>']));
+        $rrsig->setSignatureExpiration(self::makeDateTime((string) $values['<sigExpiration>']));
+        $rrsig->setSignatureInception(self::makeDateTime((string) $values['<sigInception>']));
 
         return $rrsig;
+    }
+
+    /**
+     * @param string $timeString
+     *
+     * @return \DateTime
+     */
+    private static function makeDateTime(string $timeString): \DateTime
+    {
+        $timeFormat = (14 === strlen($timeString)) ? self::TIME_FORMAT : 'U';
+        if (false === $dateTime = \DateTime::createFromFormat($timeFormat, $timeString)) {
+            throw new \InvalidArgumentException(sprintf('Unable to create \DateTime object from date "%s".', $timeString));
+        }
+
+        return $dateTime;
     }
 }
