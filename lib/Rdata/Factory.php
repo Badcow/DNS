@@ -455,14 +455,14 @@ class Factory
     }
 
     /**
-     * @param int    $certificateType
-     * @param int    $keyTag
-     * @param int    $algorithm
-     * @param string $certificate
+     * @param int|string $certificateType
+     * @param int        $keyTag
+     * @param int        $algorithm
+     * @param string     $certificate
      *
      * @return CERT
      */
-    public static function CERT(int $certificateType, int $keyTag, int $algorithm, string $certificate): CERT
+    public static function CERT($certificateType, int $keyTag, int $algorithm, string $certificate): CERT
     {
         $cert = new CERT();
         $cert->setCertificateType($certificateType);

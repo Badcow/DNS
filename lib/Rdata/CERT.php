@@ -17,7 +17,6 @@ namespace Badcow\DNS\Rdata;
  * {@link https://tools.ietf.org/html/rfc4398#section-2.1}.
  */
 use Badcow\DNS\Parser\Tokens;
-use Badcow\DNS\Validator;
 
 class CERT implements RdataInterface
 {
@@ -85,8 +84,10 @@ class CERT implements RdataInterface
      */
     public function setCertificateType($certificateType): void
     {
-        if (is_int($certificateType) || false !== preg_match('/\d+/', $certificateType)) {
+        if (is_int($certificateType) || 1 === preg_match('/^\d+$/', $certificateType)) {
             $this->certificateType = (int) $certificateType;
+
+            return;
         }
 
         $this->certificateType = self::getKeyTypeValue((string) $certificateType);
@@ -123,33 +124,35 @@ class CERT implements RdataInterface
      */
     public function setAlgorithm($algorithm): void
     {
-        if (is_int($algorithm) || false !== preg_match('/\d+/', $algorithm)) {
+        if (is_int($algorithm) || 1 === preg_match('/^\d+$/', $algorithm)) {
             $this->algorithm = (int) $algorithm;
+
+            return;
         }
 
         $this->algorithm = Algorithms::getAlgorithmValue((string) $algorithm);
     }
 
     /**
-     * @param string $certificate
+     * @param string $certificate Base64 encoded string
      *
      * @throws \InvalidArgumentException
      */
     public function setCertificate(string $certificate): void
     {
-        if (!Validator::isBase64Encoded($certificate)) {
+        if (false === $decoded = base64_decode($certificate)) {
             throw new \InvalidArgumentException('The certificate must be a valid Base64 encoded string.');
         }
 
-        $this->certificate = (string) preg_replace('/[^a-zA-Z0-9\/+=]/', '', $certificate);
+        $this->certificate = $decoded;
     }
 
     /**
-     * @return string
+     * @return string Base64 encoded string
      */
     public function getCertificate(): string
     {
-        return $this->certificate;
+        return base64_encode($this->certificate);
     }
 
     /**
@@ -160,7 +163,7 @@ class CERT implements RdataInterface
         $type = (array_key_exists($this->certificateType, self::MNEMONICS)) ? self::MNEMONICS[$this->certificateType] : (string) $this->certificateType;
         $algorithm = (array_key_exists($this->algorithm, Algorithms::MNEMONICS)) ? Algorithms::MNEMONICS[$this->algorithm] : (string) $this->algorithm;
 
-        return sprintf('%s %s %s %s', $type, (string) $this->keyTag, $algorithm, $this->certificate);
+        return sprintf('%s %s %s %s', $type, (string) $this->keyTag, $algorithm, $this->getCertificate());
     }
 
     /**
@@ -196,7 +199,7 @@ class CERT implements RdataInterface
         $cert->setCertificateType((int) $integers['type']);
         $cert->setKeyTag((int) $integers['keyTag']);
         $cert->setAlgorithm((int) $integers['algorithm']);
-        $cert->setCertificate(substr($rdata, 5));
+        $cert->setCertificate(base64_encode(substr($rdata, 5)));
 
         return $cert;
     }
