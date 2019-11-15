@@ -25,7 +25,7 @@ class NSEC implements RdataInterface
     /**
      * The Next Domain field contains the next owner name (in the canonical
      * ordering of the zone) that has authoritative data or contains a
-     * delegation point NS RRset.
+     * delegation point NS RR set.
      * {@link https://tools.ietf.org/html/rfc4034#section-4.1.1}.
      *
      * @var string
@@ -62,36 +62,6 @@ class NSEC implements RdataInterface
     }
 
     /**
-     * @deprecated
-     *
-     * @param string $type
-     */
-    public function addTypeBitMap(string $type): void
-    {
-        @trigger_error('Method NSEC::addTypeBitMap has been deprecated. Use NSEC::addType instead.', E_USER_DEPRECATED);
-        $this->addType($type);
-    }
-
-    /**
-     * @deprecated
-     */
-    public function clearTypeMap(): void
-    {
-        @trigger_error('Method NSEC::clearTypeMap has been deprecated and is unusable. Use NSEC::clearTypes instead.', E_USER_DEPRECATED);
-        $this->clearTypes();
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getTypeBitMaps()
-    {
-        @trigger_error('Method NSEC::getTypeBitMaps has been deprecated and is unusable. Use NSEC::getTypes instead.', E_USER_DEPRECATED);
-
-        return$this->getTypes();
-    }
-
-    /**
      * Clears the types from the RDATA.
      */
     public function clearTypes(): void
@@ -121,6 +91,8 @@ class NSEC implements RdataInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws UnsupportedTypeException
      */
     public function toWire(): string
     {
@@ -146,6 +118,8 @@ class NSEC implements RdataInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws UnsupportedTypeException
      */
     public static function fromWire(string $rdata): RdataInterface
     {
@@ -163,6 +137,8 @@ class NSEC implements RdataInterface
      * @param int    $offset
      *
      * @return string[]
+     *
+     * @throws UnsupportedTypeException
      */
     public static function parseBitmap(string $rdata, int &$offset): array
     {
@@ -190,6 +166,8 @@ class NSEC implements RdataInterface
      * @param string[] $types
      *
      * @return string
+     *
+     * @throws UnsupportedTypeException
      */
     public static function renderBitmap(array $types): string
     {
