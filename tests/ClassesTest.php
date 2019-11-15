@@ -28,4 +28,18 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(Classes::isValid('In'));
         $this->assertFalse(Classes::isValid('hS'));
     }
+
+    public function testGetClassId(): void
+    {
+        $this->assertEquals(1, Classes::getClassId('IN'));
+        $this->assertEquals(4, Classes::getClassId('HS'));
+        $this->assertEquals(3, Classes::getClassId('CH'));
+    }
+
+    public function testGetClassIdThrowsExceptionForUndefinedClass(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Class "XX" is not a valid DNS class.');
+        Classes::getClassId('XX');
+    }
 }
