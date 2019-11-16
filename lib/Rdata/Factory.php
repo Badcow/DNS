@@ -623,9 +623,23 @@ class Factory
         return $nsec3;
     }
 
-    public static function NSEC3PARAM(): NSEC3PARAM
+    /**
+     * @param int    $hashAlgorithm
+     * @param int    $flags
+     * @param int    $iterations
+     * @param string $salt
+     *
+     * @return NSEC3PARAM
+     */
+    public static function NSEC3PARAM(int $hashAlgorithm, int $flags, int $iterations, string $salt): NSEC3PARAM
     {
-        // TODO: Implement NSEC3PARAM() method.
+        $nsec3param = new NSEC3PARAM();
+        $nsec3param->setHashAlgorithm($hashAlgorithm);
+        $nsec3param->setFlags($flags);
+        $nsec3param->setIterations($iterations);
+        $nsec3param->setSalt($salt);
+
+        return $nsec3param;
     }
 
     public static function OPENPGPKEY(): OPENPGPKEY
