@@ -58,4 +58,57 @@ class SshfpTest extends TestCase
 
         Factory::SSHFP($algorithm, $fpType, $fingerprint);
     }
+
+    public function testGetType(): void
+    {
+        $sshfp = new SSHFP();
+        $this->assertEquals('SSHFP', $sshfp->getType());
+    }
+
+    public function testGetTypeCode(): void
+    {
+        $sshfp = new SSHFP();
+        $this->assertEquals(44, $sshfp->getTypeCode());
+    }
+
+    public function testToText(): void
+    {
+        $expectation = '2 1 123456789abcdef67890123456789abcdef67890';
+        $sshfp = new SSHFP();
+        $sshfp->setAlgorithm(2);
+        $sshfp->setFingerprintType(1);
+        $sshfp->setFingerprint('123456789abcdef67890123456789abcdef67890');
+
+        $this->assertEquals($expectation, $sshfp->toText());
+    }
+
+    public function testWire(): void
+    {
+        $sshfp = new SSHFP();
+        $sshfp->setAlgorithm(2);
+        $sshfp->setFingerprintType(1);
+        $sshfp->setFingerprint('123456789abcdef67890123456789abcdef67890');
+
+        $wireFormat = $sshfp->toWire();
+        $this->assertEquals($sshfp, SSHFP::fromWire($wireFormat));
+    }
+
+    public function testFromText(): void
+    {
+        $expectation = new SSHFP();
+        $expectation->setAlgorithm(2);
+        $expectation->setFingerprintType(1);
+        $expectation->setFingerprint('123456789abcdef67890123456789abcdef67890');
+
+        $this->assertEquals($expectation, SSHFP::fromText('2 1 123456789abcdef67890123456789abcdef67890'));
+    }
+
+    public function testFactory(): void
+    {
+        $sshfp = Factory::SSHFP(2, 1, '123456789abcdef67890123456789abcdef67890');
+
+        $this->assertEquals(2, $sshfp->getAlgorithm());
+        $this->assertEquals(1, $sshfp->getFingerprintType());
+        $this->assertEquals('123456789abcdef67890123456789abcdef67890', $sshfp->getFingerprint());
+    }
 }

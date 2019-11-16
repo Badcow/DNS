@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\Parser\Tokens;
+use Badcow\DNS\Validator;
 
 /**
  * {@link https://tools.ietf.org/html/rfc4255}.
@@ -64,7 +65,7 @@ class SSHFP implements RdataInterface
      */
     public function setAlgorithm(int $algorithm): void
     {
-        if ($algorithm < 0 || $algorithm > 255) {
+        if (!Validator::isUnsignedInteger($algorithm, 8)) {
             throw new \InvalidArgumentException('Algorithm must be an 8-bit integer between 0 and 255.');
         }
         $this->algorithm = $algorithm;
@@ -85,7 +86,7 @@ class SSHFP implements RdataInterface
      */
     public function setFingerprintType(int $fingerprintType): void
     {
-        if ($fingerprintType < 0 || $fingerprintType > 255) {
+        if (!Validator::isUnsignedInteger($fingerprintType, 8)) {
             throw new \InvalidArgumentException('Fingerprint type must be an 8-bit integer between 0 and 255.');
         }
         $this->fingerprintType = $fingerprintType;
@@ -96,7 +97,7 @@ class SSHFP implements RdataInterface
      */
     public function getFingerprint(): string
     {
-        return $this->fingerprint;
+        return bin2hex($this->fingerprint);
     }
 
     /**
@@ -104,10 +105,10 @@ class SSHFP implements RdataInterface
      */
     public function setFingerprint(string $fingerprint): void
     {
-        if (1 !== preg_match('/^[0-9a-f]+$/i', $fingerprint)) {
+        if (!Validator::isBase16Encoded($fingerprint) || false === $fp = hex2bin($fingerprint)) {
             throw new \InvalidArgumentException('The fingerprint MUST be a hexadecimal value.');
         }
-        $this->fingerprint = $fingerprint;
+        $this->fingerprint = $fp;
     }
 
     /**
@@ -115,14 +116,22 @@ class SSHFP implements RdataInterface
      */
     public function toText(): string
     {
-        return sprintf('%d %d %s', $this->algorithm, $this->fingerprintType, $this->fingerprint);
+        return sprintf('%d %d %s', $this->algorithm, $this->fingerprintType, bin2hex($this->fingerprint));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function toWire(): string
     {
-        // TODO: Implement toWire() method.
+        return pack('CC', $this->algorithm, $this->fingerprintType).$this->fingerprint;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return SSHFP
+     */
     public static function fromText(string $text): RdataInterface
     {
         $rdata = explode(Tokens::SPACE, $text);
@@ -130,8 +139,19 @@ class SSHFP implements RdataInterface
         return Factory::SSHFP((int) array_shift($rdata), (int) array_shift($rdata), (string) array_shift($rdata));
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return SSHFP
+     */
     public static function fromWire(string $rdata): RdataInterface
     {
-        // TODO: Implement fromWire() method.
+        $integers = unpack('C<algorithm>/C<fpType>', $rdata);
+        $sshfp = new self();
+        $sshfp->setAlgorithm($integers['<algorithm>']);
+        $sshfp->setFingerprintType($integers['<fpType>']);
+        $sshfp->setFingerprint(bin2hex(substr($rdata, 2)));
+
+        return $sshfp;
     }
 }
