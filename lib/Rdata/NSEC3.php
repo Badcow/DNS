@@ -61,6 +61,11 @@ class NSEC3 implements RdataInterface
      */
     private static $base32;
 
+    /**
+     * Singleton to instantiate and return \Base2n instance for extended hex.
+     *
+     * @return \Base2n
+     */
     private static function base32(): \Base2n
     {
         if (!isset(self::$base32)) {
@@ -70,11 +75,19 @@ class NSEC3 implements RdataInterface
         return self::$base32;
     }
 
+    /**
+     * @return int
+     */
     public function getHashAlgorithm(): int
     {
         return $this->hashAlgorithm;
     }
 
+    /**
+     * @param int $hashAlgorithm
+     *
+     * @throws \InvalidArgumentException
+     */
     public function setHashAlgorithm(int $hashAlgorithm): void
     {
         if (!Validator::isUnsignedInteger($hashAlgorithm, 8)) {
@@ -83,21 +96,35 @@ class NSEC3 implements RdataInterface
         $this->hashAlgorithm = $hashAlgorithm;
     }
 
+    /**
+     * @return bool
+     */
     public function isUnsignedDelegationsCovered(): bool
     {
         return $this->unsignedDelegationsCovered;
     }
 
+    /**
+     * @param bool $unsignedDelegationsCovered
+     */
     public function setUnsignedDelegationsCovered(bool $unsignedDelegationsCovered): void
     {
         $this->unsignedDelegationsCovered = $unsignedDelegationsCovered;
     }
 
+    /**
+     * @return int
+     */
     public function getIterations(): int
     {
         return $this->iterations;
     }
 
+    /**
+     * @param int $iterations
+     *
+     * @throws \InvalidArgumentException
+     */
     public function setIterations(int $iterations): void
     {
         if (!Validator::isUnsignedInteger($iterations, 16)) {
@@ -133,6 +160,9 @@ class NSEC3 implements RdataInterface
         return self::base32encode($this->nextHashedOwnerName);
     }
 
+    /**
+     * @param string $nextHashedOwnerName
+     */
     public function setNextHashedOwnerName(string $nextHashedOwnerName): void
     {
         if (!Validator::isBase32HexEncoded($nextHashedOwnerName)) {
@@ -158,6 +188,9 @@ class NSEC3 implements RdataInterface
         $this->types = [];
     }
 
+    /**
+     * @return array
+     */
     public function getTypes(): array
     {
         return $this->types;
@@ -252,11 +285,25 @@ class NSEC3 implements RdataInterface
         return $nsec3;
     }
 
+    /**
+     * Encode data as a base32 string.
+     *
+     * @param string $data
+     *
+     * @return string base32 string
+     */
     public static function base32encode(string $data): string
     {
         return self::base32()->encode($data);
     }
 
+    /**
+     * Decode a base32 encoded string.
+     *
+     * @param string $data base32 string
+     *
+     * @return string
+     */
     public static function base32decode(string $data): string
     {
         return self::base32()->decode($data);
