@@ -642,11 +642,6 @@ class Factory
         return $nsec3param;
     }
 
-    public static function OPENPGPKEY(): OPENPGPKEY
-    {
-        // TODO: Implement OPENPGPKEY() method.
-    }
-
     public static function RP(string $mboxDomain, string $txtDomain): RP
     {
         $rp = new RP();

@@ -33,7 +33,6 @@ CHANGELOG for 3.x
   * NAPTR
   * NSEC3
   * NSEC3PARAM
-  * OPENPGPKEY
   * RP
   * SIG
   * SMIMEA
@@ -46,3 +45,10 @@ CHANGELOG for 3.x
 * New Validator methods:
   * `Validator::isBase64Encoded()`
   * `Validator::isUnsignedInteger()`
+  * `Validator::isBase16Encoded()`
+  * `Validator::isBase32Encoded()`
+  * `Validator::isBase32HexEncoded()`
+* Deprecate and delete NSEC methods:
+  * `NSEC::addTypeBitMap()` replaced with `NSEC::addType()`
+  * `NSEC::clearTypeMap()` replaced with `NSEC::clearTypes()`
+  * `NSEC::getTypeBitMaps()` replaced with `NSEC::getTypes()`
