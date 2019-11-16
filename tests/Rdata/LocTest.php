@@ -16,7 +16,7 @@ namespace Badcow\DNS\Tests\Rdata;
 use Badcow\DNS\Rdata\LOC;
 use PHPUnit\Framework\TestCase;
 
-class LocRdataTest extends TestCase
+class LocTest extends TestCase
 {
     public function testOutput(): void
     {
@@ -96,7 +96,7 @@ class LocRdataTest extends TestCase
     public function testSetSize1(): void
     {
         $this->expectException(\OutOfRangeException::class);
-        $this->expectExceptionMessage('The size must be on [0, 90000000.0].');
+        $this->expectExceptionMessage('The size must be on [0, 9e9].');
 
         $rdata = new LOC();
         $rdata->setSize(-1);
@@ -108,10 +108,10 @@ class LocRdataTest extends TestCase
     public function testSetSize2(): void
     {
         $this->expectException(\OutOfRangeException::class);
-        $this->expectExceptionMessage('The size must be on [0, 90000000.0].');
+        $this->expectExceptionMessage('The size must be on [0, 9e9].');
 
         $rdata = new LOC();
-        $rdata->setSize(90000002);
+        $rdata->setSize(9000000002);
     }
 
     public function testGetSize(): void
@@ -128,7 +128,7 @@ class LocRdataTest extends TestCase
     public function testSetVerticalPrecision1(): void
     {
         $this->expectException(\OutOfRangeException::class);
-        $this->expectExceptionMessage('The vertical precision must be on [0, 90000000.0].');
+        $this->expectExceptionMessage('The vertical precision must be on [0, 9e9].');
 
         $rdata = new LOC();
         $rdata->setVerticalPrecision(-1);
@@ -140,10 +140,10 @@ class LocRdataTest extends TestCase
     public function testSetVerticalPrecision2(): void
     {
         $this->expectException(\OutOfRangeException::class);
-        $this->expectExceptionMessage('The vertical precision must be on [0, 90000000.0].');
+        $this->expectExceptionMessage('The vertical precision must be on [0, 9e9].');
 
         $rdata = new LOC();
-        $rdata->setVerticalPrecision(90000002);
+        $rdata->setVerticalPrecision(9000000002);
     }
 
     /**
@@ -152,7 +152,7 @@ class LocRdataTest extends TestCase
     public function testSetHorizontalPrecision1(): void
     {
         $this->expectException(\OutOfRangeException::class);
-        $this->expectExceptionMessage('The horizontal precision must be on [0, 90000000.0].');
+        $this->expectExceptionMessage('The horizontal precision must be on [0, 9e9].');
 
         $rdata = new LOC();
         $rdata->setHorizontalPrecision(-1);
@@ -164,10 +164,10 @@ class LocRdataTest extends TestCase
     public function testSetHorizontalPrecision2(): void
     {
         $this->expectException(\OutOfRangeException::class);
-        $this->expectExceptionMessage('The horizontal precision must be on [0, 90000000.0].');
+        $this->expectExceptionMessage('The horizontal precision must be on [0, 9e9].');
 
         $rdata = new LOC();
-        $rdata->setHorizontalPrecision(90000002);
+        $rdata->setHorizontalPrecision(9000000002);
     }
 
     public function testGetHorizontalPrecision(): void
@@ -184,5 +184,20 @@ class LocRdataTest extends TestCase
         $rdata = new LOC();
         $rdata->setVerticalPrecision($vp);
         $this->assertEquals($vp, $rdata->getVerticalPrecision());
+    }
+
+    public function testWire(): void
+    {
+        $loc = new LOC();
+        $loc->setLatitude(-35.3075);
+        $loc->setLongitude(149.1244);
+        $loc->setAltitude(500);
+        $loc->setSize(200);
+        $loc->setHorizontalPrecision(200);
+        $loc->setVerticalPrecision(300);
+
+        $wireFormat = $loc->toWire();
+
+        $this->assertEquals($loc, LOC::fromWire($wireFormat));
     }
 }
