@@ -18,7 +18,7 @@ use Badcow\DNS\Rdata\DS;
 use Badcow\DNS\Rdata\Factory;
 use PHPUnit\Framework\TestCase;
 
-class DsRdataTest extends TestCase
+class DsTest extends TestCase
 {
     private static $digest = '2BB183AF5F22588179A53B0A98631FAD1A292118';
 
@@ -44,5 +44,28 @@ class DsRdataTest extends TestCase
         $this->assertEquals(Algorithms::RSASHA1, $ds->getAlgorithm());
         $this->assertEquals(self::$digest, $ds->getDigest());
         $this->assertEquals(DS::DIGEST_SHA1, $ds->getDigestType());
+    }
+
+    public function testFromText(): void
+    {
+        $expectation = new DS();
+        $expectation->setKeyTag(60485);
+        $expectation->setAlgorithm(Algorithms::RSASHA1);
+        $expectation->setDigestType(DS::DIGEST_SHA1);
+        $expectation->setDigest(self::$digest);
+
+        $this->assertEquals($expectation, DS::fromText('60485 5 1 '.self::$digest));
+    }
+
+    public function testWire(): void
+    {
+        $ds = new DS();
+        $ds->setKeyTag(60485);
+        $ds->setAlgorithm(Algorithms::RSASHA1);
+        $ds->setDigestType(DS::DIGEST_SHA1);
+        $ds->setDigest(self::$digest);
+        $wireFormat = $ds->toWire();
+
+        $this->assertEquals($ds, DS::fromWire($wireFormat));
     }
 }
