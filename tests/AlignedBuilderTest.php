@@ -73,6 +73,12 @@ example.net.           IN TXT   "v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -a
 
 DNS;
 
+    protected function getExpected(): string
+    {
+        //This is a fix for Windows systems that may expect a carriage return char.
+        return str_replace("\r", '', $this->expected);
+    }
+
     public function testCompareResourceRecords(): void
     {
         $soa = new ResourceRecord();
@@ -147,6 +153,6 @@ DNS;
         $builder = new AlignedBuilder();
         $output = $builder->build($zone);
 
-        $this->assertEquals($this->expected, $output);
+        $this->assertEquals($this->getExpected(), $output);
     }
 }
