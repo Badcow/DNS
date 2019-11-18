@@ -682,11 +682,6 @@ class Factory
         return $sig;
     }
 
-    public static function SMIMEA(): SMIMEA
-    {
-        // TODO: Implement SMIMEA() method.
-    }
-
     /**
      * @param int    $algorithm
      * @param int    $fpType
