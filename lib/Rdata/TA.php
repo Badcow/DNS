@@ -13,43 +13,11 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
-// TODO: Implement TA RData
-class TA implements RdataInterface
+/**
+ * {@link http://www.watson.org/~weiler/INI1999-19.pdf}.
+ */
+class TA extends DS
 {
-    use RdataTrait;
-
     const TYPE = 'TA';
     const TYPE_CODE = 32768;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function toText(): string
-    {
-        // TODO: Implement output() method.
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function toWire(): string
-    {
-        // TODO: Implement toWire() method.
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromText(string $text): RdataInterface
-    {
-        // TODO: Implement fromText() method.
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromWire(string $rdata): RdataInterface
-    {
-        // TODO: Implement fromWire() method.
-    }
 }

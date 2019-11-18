@@ -699,14 +699,48 @@ class Factory
         return $sshfp;
     }
 
-    public static function TA(): TA
+    /**
+     * @param int    $keyTag
+     * @param int    $algorithm
+     * @param string $digest
+     * @param int    $digestType
+     *
+     * @return TA
+     */
+    public static function TA(int $keyTag, int $algorithm, string $digest, int $digestType = DS::DIGEST_SHA1): TA
     {
-        // TODO: Implement TA() method.
+        $ta = new TA();
+        $ta->setKeyTag($keyTag);
+        $ta->setAlgorithm($algorithm);
+        $ta->setDigest($digest);
+        $ta->setDigestType($digestType);
+
+        return $ta;
     }
 
-    public static function TKEY(): TKEY
+    /**
+     * @param string    $algorithm
+     * @param \DateTime $inception
+     * @param \DateTime $expiration
+     * @param int       $mode
+     * @param int       $error
+     * @param string    $keyData    binary string
+     * @param string    $otherData  binary string
+     *
+     * @return TKEY
+     */
+    public static function TKEY(string $algorithm, \DateTime $inception, \DateTime $expiration, int $mode, int $error, string $keyData, string $otherData = ''): TKEY
     {
-        // TODO: Implement TKEY() method.
+        $tkey = new TKEY();
+        $tkey->setAlgorithm($algorithm);
+        $tkey->setInception($inception);
+        $tkey->setExpiration($expiration);
+        $tkey->setMode($mode);
+        $tkey->setError($error);
+        $tkey->setKeyData($keyData);
+        $tkey->setOtherData($otherData);
+
+        return $tkey;
     }
 
     public static function TLSA(): TLSA
