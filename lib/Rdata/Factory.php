@@ -530,9 +530,23 @@ class Factory
         return $rdata;
     }
 
-    public static function HIP(): HIP
+    /**
+     * @param int      $publicKeyAlgorithm
+     * @param string   $hostIdentityTag
+     * @param string   $publicKey
+     * @param string[] $rendezvousServers
+     *
+     * @return HIP
+     */
+    public static function HIP(int $publicKeyAlgorithm, string $hostIdentityTag, string $publicKey, array $rendezvousServers): HIP
     {
-        // TODO: Implement HIP() method.
+        $hip = new HIP();
+        $hip->setPublicKeyAlgorithm($publicKeyAlgorithm);
+        $hip->setHostIdentityTag($hostIdentityTag);
+        $hip->setPublicKey($publicKey);
+        array_map([$hip, 'addRendezvousServer'], $rendezvousServers);
+
+        return $hip;
     }
 
     /**
