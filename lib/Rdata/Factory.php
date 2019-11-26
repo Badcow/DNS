@@ -329,8 +329,8 @@ class Factory
      * @return RRSIG
      */
     public static function RRSIG(string $typeCovered, int $algorithm, int $labels, int $originalTtl,
-                                 \DateTime $signatureExpiration, \DateTime $signatureInception, int $keyTag,
-                                 string $signersName, string $signature): RRSIG
+                                    \DateTime $signatureExpiration, \DateTime $signatureInception, int $keyTag,
+                                    string $signersName, string $signature): RRSIG
     {
         $rrsig = new RRSIG();
         $rrsig->setTypeCovered($typeCovered);

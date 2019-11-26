@@ -35,7 +35,6 @@ CHANGELOG for 3.x
   * NSEC3PARAM
   * RP
   * SIG
-  * SMIMEA
   * SSHFP
   * TA
   * TKEY

@@ -366,7 +366,7 @@ class Parser
     /**
      * @param ResourceRecordIterator $iterator
      *
-     * @return RData\RdataInterface
+     * @return Rdata\RdataInterface
      *
      * @throws ParseException
      */
