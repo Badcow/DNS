@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\A;
+use Badcow\DNS\Rdata\DecodeException;
 use PHPUnit\Framework\TestCase;
 
 class ATest extends TestCase
@@ -59,6 +60,9 @@ class ATest extends TestCase
         $this->assertEquals($text, $a->getAddress());
     }
 
+    /**
+     * @throws DecodeException
+     */
     public function testWire(): void
     {
         $address = '200.100.50.1';
@@ -68,5 +72,16 @@ class ATest extends TestCase
 
         $this->assertEquals($expectation, $a->toWire());
         $this->assertEquals($address, $a->getAddress());
+    }
+
+    /**
+     * @throws DecodeException
+     */
+    public function testException(): void
+    {
+        $wire = pack('nCCC', 0x100, 0xff, 0x01, 0x01); //256.255.1.1
+        $this->expectException(DecodeException::class);
+        $this->expectExceptionMessage('Unable to decode A record rdata from binary data "0x01 0x00 0xff 0x01 0x01"');
+        A::fromWire($wire);
     }
 }

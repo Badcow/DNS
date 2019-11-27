@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\AAAA;
+use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Factory;
 use PHPUnit\Framework\TestCase;
 
@@ -60,6 +61,9 @@ class AaaaTest extends TestCase implements RdataTestInterface
         $this->assertEquals(28, $aaaa->getTypeCode());
     }
 
+    /**
+     * @throws DecodeException
+     */
     public function testFromWire(): void
     {
         $wire = inet_pton('beef::1');
@@ -74,5 +78,16 @@ class AaaaTest extends TestCase implements RdataTestInterface
         $aaaa->setAddress('2001:acad:1::');
 
         $this->assertEquals(Factory::AAAA('2001:acad:1::'), $aaaa);
+    }
+
+    /**
+     * @throws DecodeException
+     */
+    public function testException(): void
+    {
+        $wire = pack('C17', 0x14, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01); //2001::1:1
+        $this->expectException(DecodeException::class);
+        $this->expectExceptionMessage('Unable to decode AAAA record rdata from binary data "0x14 0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x01 0x01"');
+        AAAA::fromWire($wire);
     }
 }

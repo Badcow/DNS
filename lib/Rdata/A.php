@@ -79,11 +79,13 @@ class A implements RdataInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws DecodeException
      */
     public static function fromWire(string $rdata): RdataInterface
     {
-        if (false === $address = inet_ntop($rdata)) {
-            throw new \InvalidArgumentException('The IP address cannot be decoded.');
+        if (false === $address = @inet_ntop($rdata)) {
+            throw new DecodeException(static::TYPE, $rdata);
         }
 
         $a = new static();
