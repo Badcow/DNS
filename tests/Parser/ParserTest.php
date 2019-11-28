@@ -83,7 +83,7 @@ class ParserTest extends TestCase
         $mx3->setName('@');
         $mx3->setRdata(Factory::MX(30, 'mail-gw3.example.net.'));
 
-        $dname = new ResourceRecord('hq', Factory::Dname('syd.example.com.'));
+        $dname = ResourceRecord::create('hq', Factory::Dname('syd.example.com.'));
 
         $loc = new ResourceRecord();
         $loc->setName('canberra');
@@ -156,7 +156,7 @@ class ParserTest extends TestCase
         $this->assertEquals(3600, $zone->getDefaultTtl());
         $this->assertCount(28, $zone->getResourceRecords());
 
-        $txt = new ResourceRecord(
+        $txt = ResourceRecord::create(
             'testtxt',
             Factory::TXT('v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBg'.
                 'QDZKI3U+9acu3NfEy0NJHIPydxnPLPpnAJ7k2JdrsLqAK1uouMudHI20pgE8RMldB/TeW'.

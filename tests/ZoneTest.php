@@ -111,7 +111,7 @@ class ZoneTest extends TestCase
         $apl->addAddressRange(IPBlock::create('2001:acad:1::/112'), true);
         $apl->addAddressRange(IPBlock::create('2001:acad:1::8/128'), false);
 
-        $multicast = new ResourceRecord('multicast', $apl);
+        $multicast = ResourceRecord::create('multicast', $apl);
 
         $zone->addResourceRecord($multicast);
 
@@ -139,9 +139,16 @@ class ZoneTest extends TestCase
 
     public function testGetClassReturnsDefaultClass(): void
     {
-        $h1 = new ResourceRecord('host1');
-        $h2 = new ResourceRecord('host2');
-        $h3 = new ResourceRecord('host3');
+        $a = Factory::A('192.168.1.1');
+        $h1 = ResourceRecord::create('host1', $a, 3600);
+        $h1->setClass(null);
+
+        $h2 = ResourceRecord::create('host2', $a, 3600);
+        $h2->setClass(null);
+
+        $h3 = ResourceRecord::create('host3', $a, 3600);
+        $h3->setClass(null);
+
         $zone = new Zone('example.com.');
         $zone->fromList($h1, $h2, $h3);
 

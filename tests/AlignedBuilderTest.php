@@ -39,21 +39,21 @@ $TTL 3600
 @                14400 IN NS    ns2.example.net.au.
 
 ; A RECORDS
-subdomain.au              A     192.168.1.2; This is a local ip.
+subdomain.au           IN A     192.168.1.2; This is a local ip.
 
 ; AAAA RECORDS
 ipv6domain       3600  IN AAAA  ::1; This is an IPv6 domain.
 
 ; CNAME RECORDS
-alias                     CNAME subdomain.au.example.com.
+alias                  IN CNAME subdomain.au.example.com.
 
 ; DNAME RECORDS
 bar.example.com.       IN DNAME foo.example.com.
 
 ; MX RECORDS
-@                         MX    10 mail-gw1.example.net.
-@                         MX    20 mail-gw2.example.net.
-@                         MX    30 mail-gw3.example.net.
+@                      IN MX    10 mail-gw1.example.net.
+@                      IN MX    20 mail-gw2.example.net.
+@                      IN MX    30 mail-gw3.example.net.
 
 ; LOC RECORDS
 canberra               IN LOC   (
@@ -116,7 +116,7 @@ DNS;
         $cname->setRdata(Factory::CNAME('subdomain.au.example.com.'));
         $cname->setClass(Classes::INTERNET);
 
-        $aaaa = new ResourceRecord('ipv6domain', Factory::AAAA('::1'), 3600);
+        $aaaa = ResourceRecord::create('ipv6domain', Factory::AAAA('::1'), 3600);
 
         $mx1 = new ResourceRecord();
         $mx1->setName('@');
@@ -148,7 +148,9 @@ DNS;
     public function testBuild(): void
     {
         $zone = $this->buildTestZone();
-        $zone->addResourceRecord(new ResourceRecord('null'));
+        $resourceRecord = new ResourceRecord();
+        $resourceRecord->setName('null');
+        $zone->addResourceRecord($resourceRecord);
 
         $builder = new AlignedBuilder();
         $output = $builder->build($zone);

@@ -48,26 +48,19 @@ class ResourceRecord
      * @param int            $ttl
      * @param string         $class
      * @param string         $comment
+     *
+     * @return ResourceRecord
      */
-    public function __construct(string $name = null, RdataInterface $rdata = null, int $ttl = null, string $class = null, string $comment = null)
+    public static function create(string $name, RdataInterface $rdata, int $ttl = null, string $class = Classes::INTERNET, string $comment = null): ResourceRecord
     {
-        if (null !== $name) {
-            $this->setName($name);
-        }
+        $rr = new self();
+        $rr->setName($name);
+        $rr->setRdata($rdata);
+        $rr->setTtl($ttl);
+        $rr->setClass($class);
+        $rr->setComment($comment);
 
-        if (null !== $rdata) {
-            $this->setRdata($rdata);
-        }
-
-        if (null !== $ttl) {
-            $this->setTtl($ttl);
-        }
-
-        $this->setClass($class);
-
-        if (null !== $comment) {
-            $this->setComment($comment);
-        }
+        return $rr;
     }
 
     /**

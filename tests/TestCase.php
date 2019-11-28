@@ -29,14 +29,14 @@ $TTL 3600
 @ IN SOA example.com. postmaster.example.com. 2015050801 3600 14400 604800 3600
 @ 14400 IN NS ns1.example.net.au.
 @ 14400 IN NS ns2.example.net.au.
-subdomain.au A 192.168.1.2; This is a local ip.
+subdomain.au IN A 192.168.1.2; This is a local ip.
 ipv6domain 3600 IN AAAA ::1; This is an IPv6 domain.
 canberra IN LOC 35 18 27.000 S 149 7 27.840 E 500.00m 20.12m 200.30m 300.10m; This is Canberra
 bar.example.com. IN DNAME foo.example.com.
-@ MX 30 mail-gw3.example.net.
-@ MX 10 mail-gw1.example.net.
-@ MX 20 mail-gw2.example.net.
-alias CNAME subdomain.au.example.com.
+@ IN MX 30 mail-gw3.example.net.
+@ IN MX 10 mail-gw1.example.net.
+@ IN MX 20 mail-gw2.example.net.
+alias IN CNAME subdomain.au.example.com.
 example.net. IN TXT "v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all"
 @ IN HINFO "2.7GHz" "Ubuntu 12.04"
 
@@ -108,7 +108,7 @@ DNS;
         $cname->setName('alias');
         $cname->setRdata(Factory::CNAME('subdomain.au.example.com.'));
 
-        $aaaa = new ResourceRecord(
+        $aaaa = ResourceRecord::create(
             'ipv6domain',
             Factory::AAAA('::1'),
             3600,
