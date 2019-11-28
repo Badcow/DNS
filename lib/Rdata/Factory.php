@@ -762,9 +762,29 @@ class Factory
         // TODO: Implement TLSA() method.
     }
 
-    public static function TSIG(): TSIG
+    /**
+     * @param string    $algorithmName
+     * @param \DateTime $timeSigned
+     * @param int       $fudge
+     * @param string    $mac
+     * @param int       $originalId
+     * @param int       $error
+     * @param string    $otherData
+     *
+     * @return TSIG
+     */
+    public static function TSIG(string $algorithmName, \DateTime $timeSigned, int $fudge, string $mac, int $originalId, int $error, string $otherData): TSIG
     {
-        // TODO: Implement TSIG() method.
+        $tsig = new TSIG();
+        $tsig->setAlgorithmName($algorithmName);
+        $tsig->setTimeSigned($timeSigned);
+        $tsig->setFudge($fudge);
+        $tsig->setMac($mac);
+        $tsig->setOriginalId($originalId);
+        $tsig->setError($error);
+        $tsig->setOtherData($otherData);
+
+        return $tsig;
     }
 
     /**
