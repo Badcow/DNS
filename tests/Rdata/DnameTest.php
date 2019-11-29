@@ -16,7 +16,7 @@ namespace Badcow\DNS\Tests\Rdata;
 use Badcow\DNS\Rdata\DNAME;
 use PHPUnit\Framework\TestCase;
 
-class DnameRdataTest extends TestCase
+class DnameTest extends TestCase
 {
     public function testSetTarget(): void
     {
