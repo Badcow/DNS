@@ -34,18 +34,6 @@ trait RdataTrait
     }
 
     /**
-     * @deprecated
-     *
-     * @return string
-     */
-    public function output(): string
-    {
-        @trigger_error('Method RdataInterface::output() has been deprecated. Use RdataInterface::toText().', E_USER_DEPRECATED);
-
-        return $this->toText();
-    }
-
-    /**
      * Encode a domain name as a sequence of labels.
      *
      * @param string $name

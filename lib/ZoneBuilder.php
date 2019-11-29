@@ -44,7 +44,7 @@ class ZoneBuilder
                     $rr->getTtl(),
                     $rr->getClass(),
                     $rr->getType(),
-                    $rr->getRdata()->output()
+                    $rr->getRdata()->toText()
                 )));
             }
 

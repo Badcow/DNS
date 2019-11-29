@@ -10,7 +10,7 @@ CHANGELOG for 3.x
   * `\Badcow\DNS\Parser\Normaliser::COMMENTS_WITHOUT_RECORD_ENTRY`
   * `\Badcow\DNS\Parser\Normaliser::COMMENTS_ALL`
 * Upgraded to PHPUnit 8.
-* Deprecate method `RdataInterface::output()` in favour of `RdataInterface::toText()`.
+* Deprecated and deleted method `RdataInterface::output()` in favour of `RdataInterface::toText()`.
 * New `RdataInterface` methods:
   * `RdataInterface::toText()` same as `RdataInterface::output()`
   * `RdataInterface::fromText()` construct an Rdata object from an Rdata string.
