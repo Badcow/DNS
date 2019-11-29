@@ -18,7 +18,7 @@ use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Factory;
 use PHPUnit\Framework\TestCase;
 
-class AaaaTest extends TestCase implements RdataTestInterface
+class AaaaTest extends TestCase
 {
     public function testToText(): void
     {

@@ -20,7 +20,7 @@ use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\NS;
 use PHPUnit\Framework\TestCase;
 
-class CsyncTest extends TestCase implements RdataTestInterface
+class CsyncTest extends TestCase
 {
     public function testGetType(): void
     {
