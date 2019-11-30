@@ -33,6 +33,10 @@ class A implements RdataInterface
      */
     public function setAddress(string $address): void
     {
+        if (false === @inet_pton($address)) {
+            throw new \InvalidArgumentException(sprintf('The address "%s" is not a valid IP address.', $address));
+        }
+
         $this->address = $address;
     }
 

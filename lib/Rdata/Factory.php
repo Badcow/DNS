@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\ParseException;
+use Badcow\DNS\Parser\Tokens;
 use PhpIP\IPBlock;
 
 class Factory
@@ -60,15 +62,58 @@ class Factory
     }
 
     /**
+     * @param int $typeCode
+     *
+     * @return bool
+     */
+    public static function isTypeCodeImplemented(int $typeCode): bool
+    {
+        try {
+            return self::isTypeImplemented(TypeCodes::getName($typeCode));
+        } catch (UnsupportedTypeException $e) {
+            return false;
+        }
+    }
+
+    /**
      * @param string $type
      * @param string $text
      *
      * @return RdataInterface
+     *
+     * @throws ParseException
+     * @throws UnsupportedTypeException
      */
     public static function textToRdataType(string $type, string $text): RdataInterface
     {
+        if (1 === preg_match('/^TYPE(\d+)$/', $type, $matches)) {
+            $typeCode = (int) $matches[1];
+            if (self::isTypeCodeImplemented($typeCode)) {
+                $type = TypeCodes::getName($typeCode);
+            } else {
+                $rdata = UnknownType::fromText($text);
+                $rdata->setTypeCode($typeCode);
+
+                return $rdata;
+            }
+        }
+
         if (!self::isTypeImplemented($type)) {
             return new PolymorphicRdata($type, $text);
+        }
+
+        if (1 === preg_match('/^\\\#\s+(\d+)(\s[a-f0-9\s]+)?$/i', $text, $matches)) {
+            if ('0' === $matches[1]) {
+                $className = self::getRdataClassName($type);
+
+                return new $className();
+            }
+            $wireFormat = hex2bin(str_replace(Tokens::SPACE, '', $matches[2]));
+
+            /** @var callable $callable */
+            $callable = self::getRdataClassName($type).'::fromWire';
+
+            return call_user_func($callable, $wireFormat);
         }
 
         /** @var callable $callable */

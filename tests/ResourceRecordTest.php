@@ -25,7 +25,7 @@ class ResourceRecordTest extends TestCase
         $rr->setClass(Classes::INTERNET);
         $this->assertEquals(Classes::INTERNET, $rr->getClass());
 
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $rr->setClass('XX');
     }
 

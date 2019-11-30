@@ -18,9 +18,9 @@ use Badcow\DNS\Rdata\RdataInterface;
 class ResourceRecord
 {
     /**
-     * @var string|null
+     * @var int|null
      */
-    private $class = Classes::INTERNET;
+    private $classId = 1;
 
     /**
      * @var RdataInterface|null
@@ -69,15 +69,21 @@ class ResourceRecord
      *
      * @param string $class
      *
-     * @throws \UnexpectedValueException
+     * @throws \InvalidArgumentException
      */
     public function setClass(?string $class): void
     {
         if (null !== $class && !Classes::isValid($class)) {
-            throw new \UnexpectedValueException(sprintf('No such class as "%s"', $class));
+            throw new \InvalidArgumentException(sprintf('No such class as "%s"', $class));
         }
 
-        $this->class = $class;
+        if (null === $class) {
+            $this->classId = null;
+
+            return;
+        }
+
+        $this->classId = Classes::getClassId($class);
     }
 
     /**
@@ -104,7 +110,16 @@ class ResourceRecord
      */
     public function getClass(): ?string
     {
-        return $this->class;
+        if (null === $this->classId) {
+            return null;
+        }
+
+        return Classes::getClassName($this->classId);
+    }
+
+    public function setClassId(int $classId): void
+    {
+        $this->classId = $classId;
     }
 
     /**
@@ -112,11 +127,7 @@ class ResourceRecord
      */
     public function getClassId(): ?int
     {
-        if (!isset($this->class)) {
-            return null;
-        }
-
-        return Classes::getClassId($this->class);
+        return $this->classId;
     }
 
     /**

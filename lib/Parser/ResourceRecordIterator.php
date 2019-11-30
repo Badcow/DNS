@@ -58,4 +58,12 @@ class ResourceRecordIterator extends \ArrayIterator
 
         return implode(Tokens::SPACE, $values);
     }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return implode(Tokens::SPACE, $this->getArrayCopy());
+    }
 }

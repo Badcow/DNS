@@ -275,7 +275,6 @@ TXT;
         $zone = 'multicast 3600 IN APL 3:192.168.0.64/30';
 
         $this->expectException(ParseException::class);
-        $this->expectExceptionMessage('"3:192.168.0.64/30" is not a valid IP range.');
 
         Parser::parse('example.com.', $zone);
     }
@@ -301,7 +300,6 @@ TXT;
         $zone = 'multicast 3600 IN APL !1-192.168.0.64/30';
 
         $this->expectException(ParseException::class);
-        $this->expectExceptionMessage('"!1-192.168.0.64/30" is not a valid IP range.');
 
         Parser::parse('example.com.', $zone);
     }
@@ -361,6 +359,39 @@ TXT;
         $this->assertEquals(CNAME::TYPE, $mx->getType());
         $this->assertEquals('mx', $mx->getName());
         $this->assertEquals('aaaa', $mx->getRdata()->getTarget());
+    }
+
+    /**
+     * @throws ParseException
+     */
+    public function testUnknownRdataTypesAreParsed(): void
+    {
+        $entries = <<<DNS
+a.example.com.   CLASS32     TYPE731         \# 6 abcd   ef 01 23 45
+b.example.com.   HS          TYPE62347       \# 0
+c.example.com.   IN          A               \# 4 0A000001
+d.example.com.   CLASS1      TYPE1           \# 4 0A 00 00 02
+DNS;
+
+        $zone = Parser::parse('example.com.', $entries);
+        $this->assertCount(4, $zone);
+
+        $a = self::findRecord('a.example.com.', $zone)[0];
+        $this->assertEquals(731, $a->getRdata()->getTypeCode());
+        $this->assertEquals(hex2bin('abcdef012345'), $a->getRdata()->getData());
+        $this->assertEquals('CLASS32', $a->getClass());
+
+        $b = self::findRecord('b.example.com.', $zone)[0];
+        $this->assertEquals(62347, $b->getRdata()->getTypeCode());
+        $this->assertEquals(null, $b->getRdata()->getData());
+
+        $c = self::findRecord('c.example.com.', $zone)[0];
+        $this->assertInstanceOf(A::class, $c->getRdata());
+        $this->assertEquals('10.0.0.1', $c->getRdata()->getAddress());
+
+        $d = self::findRecord('d.example.com.', $zone)[0];
+        $this->assertInstanceOf(A::class, $d->getRdata());
+        $this->assertEquals('10.0.0.2', $d->getRdata()->getAddress());
     }
 
     /**

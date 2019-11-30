@@ -38,6 +38,16 @@ class Classes
     ];
 
     /**
+     * @const string[]
+     */
+    const IDS_CLASSES = [
+        1 => 'IN',
+        2 => 'CS',
+        3 => 'CH',
+        4 => 'HS',
+    ];
+
+    /**
      * Determine if a class is valid.
      *
      * @param string $class
@@ -46,7 +56,15 @@ class Classes
      */
     public static function isValid(string $class): bool
     {
-        return array_key_exists($class, self::$classes);
+        if (array_key_exists($class, self::$classes)) {
+            return true;
+        }
+
+        if (1 === preg_match('/^CLASS\d+$/', $class)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -62,6 +80,24 @@ class Classes
             throw new \InvalidArgumentException(sprintf('Class "%s" is not a valid DNS class.', $className));
         }
 
+        if (1 === preg_match('/^CLASS(\d+)$/', $className, $matches)) {
+            return (int) $matches[1];
+        }
+
         return self::CLASS_IDS[$className];
+    }
+
+    /**
+     * @param int $classId
+     *
+     * @return string
+     */
+    public static function getClassName(int $classId): string
+    {
+        if (array_key_exists($classId, self::IDS_CLASSES)) {
+            return self::IDS_CLASSES[$classId];
+        }
+
+        return 'CLASS'.$classId;
     }
 }

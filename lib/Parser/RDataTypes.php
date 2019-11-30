@@ -109,6 +109,14 @@ class RDataTypes
      */
     public static function isValid(string $type): bool
     {
-        return false !== array_search($type, self::$names);
+        if (false !== array_search($type, self::$names)) {
+            return true;
+        }
+
+        if (1 === preg_match('/^TYPE\d+$/', $type)) {
+            return true;
+        }
+
+        return false;
     }
 }
