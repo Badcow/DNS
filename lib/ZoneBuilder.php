@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS;
 
+use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Rdata\AAAA;
 use Badcow\DNS\Rdata\CNAME;
 use Badcow\DNS\Rdata\DNAME;
@@ -31,9 +32,9 @@ class ZoneBuilder
      */
     public static function build(Zone $zone): string
     {
-        $master = '$ORIGIN '.$zone->getName().PHP_EOL;
+        $master = '$ORIGIN '.$zone->getName().Tokens::LINE_FEED;
         if (null !== $zone->getDefaultTtl()) {
-            $master .= '$TTL '.$zone->getDefaultTtl().PHP_EOL;
+            $master .= '$TTL '.$zone->getDefaultTtl().Tokens::LINE_FEED;
         }
 
         foreach ($zone as $rr) {
@@ -51,7 +52,7 @@ class ZoneBuilder
                 $master .= '; '.$rr->getComment();
             }
 
-            $master .= PHP_EOL;
+            $master .= Tokens::LINE_FEED;
         }
 
         return $master;

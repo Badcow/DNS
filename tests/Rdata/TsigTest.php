@@ -15,9 +15,10 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Rcode;
+use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\TSIG;
-use Badcow\DNS\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class TsigTest extends TestCase
 {
@@ -89,6 +90,9 @@ TXT;
         $this->assertEquals(base64_decode($otherData), $tsig->getOtherData());
     }
 
+    /**
+     * @throws DecodeException
+     */
     public function testWire(): void
     {
         $tsig = new TSIG();

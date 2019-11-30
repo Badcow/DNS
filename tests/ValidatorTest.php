@@ -18,6 +18,7 @@ use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\NS;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Validator;
+use PHPUnit\Framework\TestCase;
 
 class ValidatorTest extends TestCase
 {
@@ -151,7 +152,7 @@ class ValidatorTest extends TestCase
 
     public function testValidateNumberOfSoa(): void
     {
-        $zone = $this->buildTestZone();
+        $zone = TestZone::buildTestZone();
         $soa = new ResourceRecord();
         $soa->setClass(Classes::INTERNET);
         $soa->setName('@');
@@ -171,7 +172,7 @@ class ValidatorTest extends TestCase
 
     public function testValidateNumberOfClasses(): void
     {
-        $zone = $this->buildTestZone();
+        $zone = TestZone::buildTestZone();
         $a = new ResourceRecord();
         $a->setName('test');
         $a->setClass(Classes::CHAOS);
@@ -184,7 +185,7 @@ class ValidatorTest extends TestCase
 
     public function testValidateZone(): void
     {
-        $zone = $this->buildTestZone();
+        $zone = TestZone::buildTestZone();
 
         //Remove the NS records.
         foreach ($zone as $resourceRecord) {
@@ -222,7 +223,7 @@ class ValidatorTest extends TestCase
 
     public function testZone(): void
     {
-        $zone = $this->buildTestZone();
+        $zone = TestZone::buildTestZone();
         $this->assertEquals(Validator::ZONE_OKAY, Validator::zone($zone));
     }
 
@@ -363,7 +364,7 @@ class ValidatorTest extends TestCase
         $txt2->setRdata(Factory::TXT('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
         $txt2->setClass(Classes::INTERNET);
 
-        $zone = $this->buildTestZone();
+        $zone = TestZone::buildTestZone();
 
         $this->assertTrue(Validator::noAliasInZone($zone, $txt1));
 

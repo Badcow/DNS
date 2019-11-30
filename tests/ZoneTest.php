@@ -21,6 +21,7 @@ use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
 use Badcow\DNS\ZoneBuilder;
 use PhpIP\IPBlock;
+use PHPUnit\Framework\TestCase;
 
 class ZoneTest extends TestCase
 {
@@ -126,7 +127,7 @@ class ZoneTest extends TestCase
 
     public function testOtherFunctions(): void
     {
-        $zone = $this->buildTestZone();
+        $zone = TestZone::buildTestZone();
         $this->assertCount(13, $zone);
         $this->assertFalse($zone->isEmpty());
 

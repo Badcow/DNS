@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\ZoneBuilder;
+use PHPUnit\Framework\TestCase;
 
 class ZoneBuilderTest extends TestCase
 {
     public function testBuild(): void
     {
-        $zone = $this->buildTestZone();
+        $zone = TestZone::buildTestZone();
         $zoneBuilder = new ZoneBuilder();
-        $this->assertEquals($this->expected, $output = $zoneBuilder->build($zone));
+        $this->assertEquals(TestZone::getExpectation(), $output = $zoneBuilder->build($zone));
     }
 }

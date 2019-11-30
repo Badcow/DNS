@@ -18,12 +18,12 @@ use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
 
-abstract class TestCase extends \PHPUnit\Framework\TestCase
+final class TestZone
 {
     /**
      * @var string
      */
-    protected $expected = <<< 'DNS'
+    public static $expected = <<< 'DNS'
 $ORIGIN example.com.
 $TTL 3600
 @ IN SOA example.com. postmaster.example.com. 2015050801 3600 14400 604800 3600
@@ -42,37 +42,19 @@ example.net. IN TXT "v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all"
 
 DNS;
 
-    protected function setUp(): void
+    private function __construct()
     {
-        $this->normaliseLineFeeds($this->expected);
     }
 
-    protected function normaliseLineFeeds(string &$string): void
+    public static function getExpectation(): string
     {
-        $string = str_replace("\r\n", "\n", $string);
-        $string = str_replace("\n", PHP_EOL, $string);
-    }
-
-    /**
-     * Get an environment variable.
-     *
-     * @param string $varname
-     *
-     * @return mixed
-     */
-    protected function getEnvVariable($varname)
-    {
-        if (false !== $var = getenv($varname)) {
-            return $var;
-        }
-
-        return null;
+        return str_replace("\r", '', self::$expected);
     }
 
     /**
      * @return Zone
      */
-    protected function buildTestZone()
+    public static function buildTestZone(): Zone
     {
         $soa = new ResourceRecord();
         $soa->setClass('IN');

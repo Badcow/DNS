@@ -19,6 +19,7 @@ use Badcow\DNS\Rdata\PTR;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
 use Badcow\DNS\ZoneBuilder;
+use PHPUnit\Framework\TestCase;
 
 class ReverseTest extends TestCase
 {
@@ -58,8 +59,8 @@ TXT;
 
     protected function setUp(): void
     {
-        $this->normaliseLineFeeds($this->expectedIpv4Record);
-        $this->normaliseLineFeeds($this->expectedIpv6Record);
+        $this->expectedIpv4Record = str_replace("\r", '', $this->expectedIpv4Record);
+        $this->expectedIpv6Record = str_replace("\r", '', $this->expectedIpv6Record);
     }
 
     public function testReverseIpv4Record(): void

@@ -16,6 +16,7 @@ namespace Badcow\DNS\Tests;
 use Badcow\DNS\Classes;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
+use PHPUnit\Framework\TestCase;
 
 class ResourceRecordTest extends TestCase
 {
@@ -55,7 +56,8 @@ class ResourceRecordTest extends TestCase
 
     public function testUnsetTtl(): void
     {
-        $rr = new ResourceRecord('example.com.');
+        $rr = new ResourceRecord();
+        $rr->setName('example.com.');
         $ttl = 10800;
 
         $this->assertNull($rr->getTtl());

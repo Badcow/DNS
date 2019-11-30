@@ -19,7 +19,7 @@ use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\NSEC3;
 use Badcow\DNS\Rdata\RRSIG;
 use Badcow\DNS\Rdata\UnsupportedTypeException;
-use Badcow\DNS\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class Nsec3Test extends TestCase
 {

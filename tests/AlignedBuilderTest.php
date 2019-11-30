@@ -18,6 +18,7 @@ use Badcow\DNS\Classes;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Tests\Rdata\DummyRdata;
+use PHPUnit\Framework\TestCase;
 
 class AlignedBuilderTest extends TestCase
 {
@@ -147,7 +148,7 @@ DNS;
 
     public function testBuild(): void
     {
-        $zone = $this->buildTestZone();
+        $zone = TestZone::buildTestZone();
         $resourceRecord = new ResourceRecord();
         $resourceRecord->setName('null');
         $zone->addResourceRecord($resourceRecord);
