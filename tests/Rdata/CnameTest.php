@@ -13,35 +13,25 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Rdata\NS;
+use Badcow\DNS\Rdata\CNAME;
 use PHPUnit\Framework\TestCase;
 
-class NsRdataTest extends TestCase
+class CnameTest extends TestCase
 {
-    public function testSetNsdname(): void
-    {
-        $target = 'foo.example.com.';
-        $ns = new NS();
-        $ns->setTarget($target);
-
-        $this->assertEquals($target, $ns->getTarget());
-    }
-
     public function testOutput(): void
     {
         $target = 'foo.example.com.';
-        $ns = new NS();
-        $ns->setTarget($target);
+        $cname = new CNAME();
+        $cname->setTarget($target);
 
-        $this->assertEquals($target, $ns->toText());
-        $this->assertEquals($target, $ns->toText());
+        $this->assertEquals($target, $cname->toText());
     }
 
     public function testFromText(): void
     {
         $text = 'host.example.com.';
-        /** @var NS $cname */
-        $cname = NS::fromText($text);
+        /** @var CNAME $cname */
+        $cname = CNAME::fromText($text);
 
         $this->assertEquals($text, $cname->getTarget());
     }
@@ -51,10 +41,10 @@ class NsRdataTest extends TestCase
         $host = 'host.example.com.';
         $expectation = chr(4).'host'.chr(7).'example'.chr(3).'com'.chr(0);
 
-        /** @var NS $ns */
-        $ns = NS::fromWire($expectation);
+        /** @var CNAME $cname */
+        $cname = CNAME::fromWire($expectation);
 
-        $this->assertEquals($expectation, $ns->toWire());
-        $this->assertEquals($host, $ns->getTarget());
+        $this->assertEquals($expectation, $cname->toWire());
+        $this->assertEquals($host, $cname->getTarget());
     }
 }

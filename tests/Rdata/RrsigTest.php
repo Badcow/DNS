@@ -20,7 +20,7 @@ use Badcow\DNS\Rdata\RRSIG;
 use Badcow\DNS\Rdata\UnsupportedTypeException;
 use PHPUnit\Framework\TestCase;
 
-class RrsigRdataTest extends TestCase
+class RrsigTest extends TestCase
 {
     private static $signature = 'oJB1W6WNGv+ldvQ3WDG0MQkg5IEhjRip8WTrPYGv07h108dUKGMeDPKijVCHX3DDKdfb+v6oB9wfuh3DTJXUA'.
         'fI/M0zmO/zz8bW0Rznl8O3tGNazPwQKkRN20XPXV6nwwfoXmJQbsLNrLfkGJ5D6fwFm8nN+6pBzeDQfsS3Ap3o=';

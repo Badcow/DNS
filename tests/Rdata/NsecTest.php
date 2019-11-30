@@ -22,7 +22,7 @@ use Badcow\DNS\Rdata\PTR;
 use Badcow\DNS\Rdata\RRSIG;
 use PHPUnit\Framework\TestCase;
 
-class NsecRdataTest extends TestCase
+class NsecTest extends TestCase
 {
     public function testOutput(): void
     {
