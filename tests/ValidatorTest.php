@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -16,10 +18,11 @@ use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\NS;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Validator;
+use PHPUnit\Framework\TestCase;
 
 class ValidatorTest extends TestCase
 {
-    public function testValidateResourceRecordName()
+    public function testValidateResourceRecordName(): void
     {
         //Pass cases
         $fqdn1 = 'example.com.';
@@ -70,7 +73,7 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::resourceRecordName($uqdn9));
     }
 
-    public function testValidateIpv4Address()
+    public function testValidateIpv4Address(): void
     {
         $valid1 = '119.15.101.102';
         $valid2 = '255.0.0.255';
@@ -95,7 +98,7 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::ipv4($invalid5));
     }
 
-    public function testValidateIpv6Address()
+    public function testValidateIpv6Address(): void
     {
         $valid1 = '2001:0db8:0000:0000:0000:ff00:0042:8329';
         $valid2 = '2001:db8:0:0:0:ff00:42:8329';
@@ -116,7 +119,7 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::ipv6($invalid3));
     }
 
-    public function testValidateIpAddress()
+    public function testValidateIpAddress(): void
     {
         $valid1 = '2001:0db8:0000:0000:0000:ff00:0042:8329';
         $valid2 = '2001:db8:0:0:0:ff00:42:8329';
@@ -147,16 +150,13 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::ipAddress($invalid4));
     }
 
-    /**
-     * @expectedExceptionMessage There must be exactly one SOA record, 2 given.
-     */
-    public function testValidateNumberOfSoa()
+    public function testValidateNumberOfSoa(): void
     {
-        $zone = $this->buildTestZone();
+        $zone = TestZone::buildTestZone();
         $soa = new ResourceRecord();
         $soa->setClass(Classes::INTERNET);
         $soa->setName('@');
-        $soa->setRdata(Factory::Soa(
+        $soa->setRdata(Factory::SOA(
             'example.com.',
             'postmaster.example.com.',
             (int) date('Ymd01'),
@@ -170,12 +170,9 @@ class ValidatorTest extends TestCase
         $this->assertEquals(Validator::ZONE_TOO_MANY_SOA, Validator::zone($zone));
     }
 
-    /**
-     * @expectedExceptionMessage There must be exactly one type of class, 2 given.
-     */
-    public function testValidateNumberOfClasses()
+    public function testValidateNumberOfClasses(): void
     {
-        $zone = $this->buildTestZone();
+        $zone = TestZone::buildTestZone();
         $a = new ResourceRecord();
         $a->setName('test');
         $a->setClass(Classes::CHAOS);
@@ -186,9 +183,9 @@ class ValidatorTest extends TestCase
         $this->assertEquals(Validator::ZONE_TOO_MANY_CLASSES, Validator::zone($zone));
     }
 
-    public function testValidateZone()
+    public function testValidateZone(): void
     {
-        $zone = $this->buildTestZone();
+        $zone = TestZone::buildTestZone();
 
         //Remove the NS records.
         foreach ($zone as $resourceRecord) {
@@ -200,7 +197,7 @@ class ValidatorTest extends TestCase
         $soa = new ResourceRecord();
         $soa->setClass(Classes::INTERNET);
         $soa->setName('@');
-        $soa->setRdata(Factory::Soa(
+        $soa->setRdata(Factory::SOA(
             'example.com.',
             'postmaster.example.com.',
             (int) date('Ymd01'),
@@ -224,13 +221,13 @@ class ValidatorTest extends TestCase
         $this->assertEquals($expectation, Validator::zone($zone));
     }
 
-    public function testZone()
+    public function testZone(): void
     {
-        $zone = $this->buildTestZone();
+        $zone = TestZone::buildTestZone();
         $this->assertEquals(Validator::ZONE_OKAY, Validator::zone($zone));
     }
 
-    public function testWildcard()
+    public function testWildcard(): void
     {
         $valid_1 = '*.example.com.';
         $valid_2 = '*';
@@ -255,7 +252,7 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::resourceRecordName($invalid_4));
     }
 
-    public function testReverseIpv4()
+    public function testReverseIpv4(): void
     {
         $valid_01 = '10.IN-ADDR.ARPA.';
         $valid_02 = '10.IN-ADDR.ARPA.';
@@ -292,7 +289,7 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::reverseIpv4($invalid_05));
     }
 
-    public function testReverseIpv6()
+    public function testReverseIpv6(): void
     {
         $valid_01 = 'b.a.9.8.7.6.5.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.';
         $valid_02 = '1.0.0.0.6.8.7.0.6.5.a.0.4.0.5.1.2.0.0.3.8.f.0.1.0.0.2.ip6.arpa.';
@@ -306,7 +303,7 @@ class ValidatorTest extends TestCase
         $this->assertTrue(Validator::fullyQualifiedDomainName($valid_02));
     }
 
-    public function testResourceRecordName()
+    public function testResourceRecordName(): void
     {
         $case_1 = '*.';
         $case_2 = '*.hello.com';
@@ -317,7 +314,7 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::resourceRecordName($case_3));
     }
 
-    public function testFqdn()
+    public function testFqdn(): void
     {
         //Pass cases
         $fqdn1 = 'example.com.';
@@ -348,26 +345,26 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::fullyQualifiedDomainName($fqdn11));
     }
 
-    public function testHostName()
+    public function testHostName(): void
     {
         $this->assertTrue(Validator::hostName('ya-hoo123'));
     }
 
-    public function testNoAliasInZone()
+    public function testNoAliasInZone(): void
     {
         //Pass case
         $txt1 = new ResourceRecord();
         $txt1->setName('www');
-        $txt1->setRdata(Factory::txt('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
+        $txt1->setRdata(Factory::TXT('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
         $txt1->setClass(Classes::INTERNET);
 
         //Fail case
         $txt2 = new ResourceRecord();
         $txt2->setName('alias');
-        $txt2->setRdata(Factory::txt('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
+        $txt2->setRdata(Factory::TXT('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
         $txt2->setClass(Classes::INTERNET);
 
-        $zone = $this->buildTestZone();
+        $zone = TestZone::buildTestZone();
 
         $this->assertTrue(Validator::noAliasInZone($zone, $txt1));
 

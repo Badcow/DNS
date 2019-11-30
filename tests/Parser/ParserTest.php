@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -40,7 +42,7 @@ class ParserTest extends TestCase
 
         $soa = new ResourceRecord();
         $soa->setName('@');
-        $soa->setRdata(Factory::Soa(
+        $soa->setRdata(Factory::SOA(
             'example.com.',
             'post.example.com.',
             2014110501,
@@ -52,11 +54,11 @@ class ParserTest extends TestCase
 
         $ns1 = new ResourceRecord();
         $ns1->setName('@');
-        $ns1->setRdata(Factory::Ns('ns1.nameserver.com.'));
+        $ns1->setRdata(Factory::NS('ns1.nameserver.com.'));
 
         $ns2 = new ResourceRecord();
         $ns2->setName('@');
-        $ns2->setRdata(Factory::Ns('ns2.nameserver.com.'));
+        $ns2->setRdata(Factory::NS('ns2.nameserver.com.'));
 
         $a = new ResourceRecord();
         $a->setName('sub.domain');
@@ -65,26 +67,26 @@ class ParserTest extends TestCase
 
         $a6 = new ResourceRecord();
         $a6->setName('ipv6.domain');
-        $a6->setRdata(Factory::Aaaa('::1'));
+        $a6->setRdata(Factory::AAAA('::1'));
         $a6->setComment('This is an IPv6 domain.');
 
         $mx1 = new ResourceRecord();
         $mx1->setName('@');
-        $mx1->setRdata(Factory::Mx(10, 'mail-gw1.example.net.'));
+        $mx1->setRdata(Factory::MX(10, 'mail-gw1.example.net.'));
 
         $mx2 = new ResourceRecord();
         $mx2->setName('@');
-        $mx2->setRdata(Factory::Mx(20, 'mail-gw2.example.net.'));
+        $mx2->setRdata(Factory::MX(20, 'mail-gw2.example.net.'));
 
         $mx3 = new ResourceRecord();
         $mx3->setName('@');
-        $mx3->setRdata(Factory::Mx(30, 'mail-gw3.example.net.'));
+        $mx3->setRdata(Factory::MX(30, 'mail-gw3.example.net.'));
 
-        $dname = new ResourceRecord('hq', Factory::Dname('syd.example.com.'));
+        $dname = ResourceRecord::create('hq', Factory::Dname('syd.example.com.'));
 
         $loc = new ResourceRecord();
         $loc->setName('canberra');
-        $loc->setRdata(Factory::Loc(
+        $loc->setRdata(Factory::LOC(
             -35.3075,   //Lat
             149.1244,   //Lon
             500,        //Alt
@@ -111,9 +113,9 @@ class ParserTest extends TestCase
     /**
      * Parser creates valid dns object.
      *
-     * @throws \Badcow\DNS\Parser\ParseException
+     * @throws ParseException
      */
-    public function testParserCreatesValidDnsObject()
+    public function testParserCreatesValidDnsObject(): void
     {
         $zoneBuilder = new AlignedBuilder();
         $zone = $zoneBuilder->build($this->getTestZone());
@@ -131,7 +133,7 @@ class ParserTest extends TestCase
      *
      * @throws ParseException|\Exception
      */
-    public function testParserIgnoresControlEntriesOtherThanTtl()
+    public function testParserIgnoresControlEntriesOtherThanTtl(): void
     {
         $file = NormaliserTest::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $zone = Parser::parse('example.com.', $file);
@@ -144,18 +146,18 @@ class ParserTest extends TestCase
     /**
      * Parser can handle convoluted zone record.
      *
-     * @throws \Badcow\DNS\Parser\ParseException|\Exception
+     * @throws ParseException|\Exception
      */
-    public function testParserCanHandleConvolutedZoneRecord()
+    public function testParserCanHandleConvolutedZoneRecord(): void
     {
         $file = NormaliserTest::readFile(__DIR__.'/Resources/testConvolutedZone_sample.txt');
         $zone = Parser::parse('example.com.', $file);
         $this->assertEquals(3600, $zone->getDefaultTtl());
         $this->assertCount(28, $zone->getResourceRecords());
 
-        $txt = new ResourceRecord(
+        $txt = ResourceRecord::create(
             'testtxt',
-            Factory::txt('v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBg'.
+            Factory::TXT('v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBg'.
                 'QDZKI3U+9acu3NfEy0NJHIPydxnPLPpnAJ7k2JdrsLqAK1uouMudHI20pgE8RMldB/TeW'.
                 'KXYoRidcGCZWXleUzldDTwZAMDQNpdH1uuxym0VhoZpPbI1RXwpgHRTbCk49VqlC'),
             600,
@@ -173,9 +175,9 @@ class ParserTest extends TestCase
     /**
      * @throws ParseException
      */
-    public function testCanHandlePolymorphicRdata()
+    public function testCanHandlePolymorphicRdata(): void
     {
-        $string = 'example.com. 7200 IN SSHFP 2001:acad::1337; This is invalid.';
+        $string = 'example.com. 7200 IN A6 2001:acad::1337; This is invalid.';
         $zone = Parser::parse('example.com.', $string);
         $rr = $zone->getResourceRecords()[0];
 
@@ -187,14 +189,14 @@ class ParserTest extends TestCase
             return;
         }
 
-        $this->assertEquals('SSHFP', $rdata->getType());
-        $this->assertEquals('2001:acad::1337', $rdata->output());
+        $this->assertEquals('A6', $rdata->getType());
+        $this->assertEquals('2001:acad::1337', $rdata->toText());
     }
 
     /**
      * @throws ParseException|\Exception
      */
-    public function testParserCanHandleAplRecords()
+    public function testParserCanHandleAplRecords(): void
     {
         $file = NormaliserTest::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $zone = Parser::parse('example.com.', $file);
@@ -211,7 +213,7 @@ class ParserTest extends TestCase
     /**
      * @throws ParseException
      */
-    public function testParserCanHandleCaaRecords()
+    public function testParserCanHandleCaaRecords(): void
     {
         $text = <<<'TXT'
 $ORIGIN EXAMPLE.COM.
@@ -231,40 +233,70 @@ TXT;
     }
 
     /**
-     * @expectedException \Badcow\DNS\Parser\ParseException
-     * @expectedExceptionMessage "3:192.168.0.64/30" is not a valid IP range.
-     *
      * @throws ParseException
      */
-    public function testMalformedAplRecordThrowsException1()
+    public function testParserCanHandleSshfpRecords(): void
+    {
+        $txt = 'host.example. IN SSHFP 2 1 123456789abcdef67890123456789abcdef67890';
+        $zone = Parser::parse('example.', $txt);
+
+        $rrs = self::findRecord('host.example.', $zone, 'SSHFP');
+        $sshfp = $rrs[0]->getRdata();
+
+        $this->assertEquals(2, $sshfp->getAlgorithm());
+        $this->assertEquals(1, $sshfp->getFingerprintType());
+        $this->assertEquals('123456789abcdef67890123456789abcdef67890', $sshfp->getFingerprint());
+    }
+
+    /**
+     * @throws ParseException
+     */
+    public function testParserCanHandleUriRecords(): void
+    {
+        $txt = '   _ftp._tcp    IN URI 10 1 "ftp://ftp1.example.com/public%20data"';
+        $zone = Parser::parse('example.com.', $txt);
+
+        $rrs = self::findRecord('_ftp._tcp', $zone, 'URI');
+        $uri = $rrs[0]->getRdata();
+
+        $this->assertEquals(10, $uri->getPriority());
+        $this->assertEquals(1, $uri->getWeight());
+        $this->assertEquals('ftp://ftp1.example.com/public%20data', $uri->getTarget());
+    }
+
+    /**
+     * @throws ParseException
+     */
+    public function testMalformedAplRecordThrowsException1(): void
     {
         $zone = 'multicast 3600 IN APL 3:192.168.0.64/30';
+
+        $this->expectException(ParseException::class);
 
         Parser::parse('example.com.', $zone);
     }
 
     /**
-     * @expectedException \Badcow\DNS\Parser\ParseException
-     * @expectedExceptionMessage Could not parse entry "resource 3600 IN A6 f080:3024:a::1".
-     *
      * @throws ParseException
      */
-    public function testUnknownRdataTypeThrowsException()
+    public function testUnknownRdataTypeThrowsException(): void
     {
-        $zone = 'resource 3600 IN A6 f080:3024:a::1';
+        $zone = 'resource 3600 IN XX f080:3024:a::1';
+
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Could not parse entry "resource 3600 IN XX f080:3024:a::1".');
 
         Parser::parse('acme.com.', $zone);
     }
 
     /**
-     * @expectedException \Badcow\DNS\Parser\ParseException
-     * @expectedExceptionMessage "!1-192.168.0.64/30" is not a valid IP range.
-     *
      * @throws ParseException
      */
-    public function testMalformedAplRecordThrowsException2()
+    public function testMalformedAplRecordThrowsException2(): void
     {
         $zone = 'multicast 3600 IN APL !1-192.168.0.64/30';
+
+        $this->expectException(ParseException::class);
 
         Parser::parse('example.com.', $zone);
     }
@@ -272,7 +304,7 @@ TXT;
     /**
      * @throws \Exception|ParseException
      */
-    public function testAmbiguousRecordsParse()
+    public function testAmbiguousRecordsParse(): void
     {
         $file = NormaliserTest::readFile(__DIR__.'/Resources/ambiguous.acme.org.txt');
         $zone = Parser::parse('ambiguous.acme.org.', $file);
@@ -315,7 +347,7 @@ TXT;
     /**
      * @throws ParseException
      */
-    public function testAmbiguousRecord()
+    public function testAmbiguousRecord(): void
     {
         $record = 'mx cname aaaa';
         $zone = Parser::parse('acme.com.', $record);
@@ -327,10 +359,44 @@ TXT;
     }
 
     /**
+     * @throws ParseException
+     */
+    public function testUnknownRdataTypesAreParsed(): void
+    {
+        $entries = <<<DNS
+a.example.com.   CLASS32     TYPE731         \# 6 abcd   ef 01 23 45
+b.example.com.   HS          TYPE62347       \# 0
+c.example.com.   IN          A               \# 4 0A000001
+d.example.com.   CLASS1      TYPE1           \# 4 0A 00 00 02
+DNS;
+
+        $zone = Parser::parse('example.com.', $entries);
+        $this->assertCount(4, $zone);
+
+        $a = self::findRecord('a.example.com.', $zone)[0];
+        $this->assertEquals(731, $a->getRdata()->getTypeCode());
+        $this->assertEquals(hex2bin('abcdef012345'), $a->getRdata()->getData());
+        $this->assertEquals('CLASS32', $a->getClass());
+
+        $b = self::findRecord('b.example.com.', $zone)[0];
+        $this->assertEquals(62347, $b->getRdata()->getTypeCode());
+        $this->assertEquals(null, $b->getRdata()->getData());
+
+        $c = self::findRecord('c.example.com.', $zone)[0];
+        $this->assertInstanceOf(A::class, $c->getRdata());
+        $this->assertEquals('10.0.0.1', $c->getRdata()->getAddress());
+
+        $d = self::findRecord('d.example.com.', $zone)[0];
+        $this->assertInstanceOf(A::class, $d->getRdata());
+        $this->assertEquals('10.0.0.2', $d->getRdata()->getAddress());
+    }
+
+    /**
      * Find all records in a Zone named $name.
      *
      * @param string|null $name
      * @param Zone        $zone
+     * @param string|null $type
      *
      * @return ResourceRecord[]
      */

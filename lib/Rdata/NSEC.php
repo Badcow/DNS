@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -11,16 +13,19 @@
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\Tokens;
+
 class NSEC implements RdataInterface
 {
     use RdataTrait;
 
     const TYPE = 'NSEC';
+    const TYPE_CODE = 47;
 
     /**
      * The Next Domain field contains the next owner name (in the canonical
      * ordering of the zone) that has authoritative data or contains a
-     * delegation point NS RRset.
+     * delegation point NS RR set.
      * {@link https://tools.ietf.org/html/rfc4034#section-4.1.1}.
      *
      * @var string
@@ -30,7 +35,7 @@ class NSEC implements RdataInterface
     /**
      * @var array
      */
-    private $typeBitMaps = [];
+    private $types = [];
 
     /**
      * @return string
@@ -51,36 +56,141 @@ class NSEC implements RdataInterface
     /**
      * @param string $type
      */
-    public function addTypeBitMap(string $type)
+    public function addType(string $type): void
     {
-        $this->typeBitMaps[] = $type;
+        $this->types[] = $type;
     }
 
     /**
      * Clears the types from the RDATA.
      */
-    public function clearTypeMap(): void
+    public function clearTypes(): void
     {
-        $this->typeBitMaps = [];
+        $this->types = [];
     }
 
     /**
      * @return array
      */
-    public function getTypeBitMaps(): array
+    public function getTypes(): array
     {
-        return $this->typeBitMaps;
+        return $this->types;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return sprintf(
             '%s %s',
             $this->nextDomainName,
-            implode(' ', $this->typeBitMaps)
+            implode(' ', $this->types)
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws UnsupportedTypeException
+     */
+    public function toWire(): string
+    {
+        return self::encodeName($this->nextDomainName).self::renderBitmap($this->types);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $iterator = new \ArrayIterator(explode(Tokens::SPACE, $text));
+        $nsec = new self();
+        $nsec->setNextDomainName($iterator->current());
+        $iterator->next();
+        while ($iterator->valid()) {
+            $nsec->addType($iterator->current());
+            $iterator->next();
+        }
+
+        return $nsec;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws UnsupportedTypeException
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        $nsec = new self();
+        $offset = 0;
+        $nsec->setNextDomainName(self::decodeName($rdata, $offset));
+        $types = self::parseBitmap($rdata, $offset);
+        array_map([$nsec, 'addType'], $types);
+
+        return $nsec;
+    }
+
+    /**
+     * @param string $rdata
+     * @param int    $offset
+     *
+     * @return string[]
+     *
+     * @throws UnsupportedTypeException
+     */
+    public static function parseBitmap(string $rdata, int &$offset): array
+    {
+        $bytes = unpack('C*', $rdata, $offset);
+        $types = [];
+
+        while (count($bytes) > 0) {
+            $mask = '';
+            $window = array_shift($bytes);
+            $len = array_shift($bytes);
+            for ($i = 0; $i < $len; ++$i) {
+                $mask .= str_pad(decbin(array_shift($bytes)), 8, '0', STR_PAD_LEFT);
+            }
+            $offset = 0;
+            while (false !== $pos = strpos($mask, '1', $offset)) {
+                $types[] = Types::getName((int) $window * 256 + $pos);
+                $offset = $pos + 1;
+            }
+        }
+
+        return $types;
+    }
+
+    /**
+     * @param string[] $types
+     *
+     * @return string
+     *
+     * @throws UnsupportedTypeException
+     */
+    public static function renderBitmap(array $types): string
+    {
+        $blocks = [];
+
+        foreach ($types as $type) {
+            $int = Types::getTypeCode($type);
+            $window = $int >> 8;
+            $int = $int & 0b11111111;
+            $mod = $int % 8;
+            $mask = $blocks[$window] ?? str_repeat("\0", 32);
+            $byteNum = ($int - $mod) / 8;
+            $byte = ord($mask[$byteNum]) | (128 >> $mod);
+            $mask[$byteNum] = chr($byte);
+            $blocks[$window] = $mask;
+        }
+
+        $encoded = '';
+        foreach ($blocks as $n => $mask) {
+            $mask = rtrim($mask, "\0");
+            $encoded .= chr($n).chr(strlen($mask)).$mask;
+        }
+
+        return $encoded;
     }
 }

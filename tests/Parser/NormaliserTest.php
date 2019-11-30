@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -13,6 +15,7 @@ namespace Badcow\DNS\Tests\Parser;
 
 use Badcow\DNS\Parser\Comments;
 use Badcow\DNS\Parser\Normaliser;
+use Badcow\DNS\Parser\ParseException;
 use PHPUnit\Framework\TestCase;
 
 class NormaliserTest extends TestCase
@@ -48,9 +51,9 @@ example.com. IN SOA (
 TXT;
 
     /**
-     * @throws \Badcow\DNS\Parser\ParseException|\Exception
+     * @throws ParseException|\Exception
      */
-    public function testRemovesComments()
+    public function testRemovesComments(): void
     {
         $zone = self::readFile(__DIR__.'/Resources/testClearComments_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testClearComments_expectation.txt');
@@ -61,9 +64,9 @@ TXT;
     /**
      * Multi-line records collapse onto single line.
      *
-     * @throws \Badcow\DNS\Parser\ParseException|\Exception
+     * @throws ParseException|\Exception
      */
-    public function testMultilineRecordsCollapseOntoSingleLine()
+    public function testMultilineRecordsCollapseOntoSingleLine(): void
     {
         $zone = self::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testCollapseMultilines_expectation.txt');
@@ -74,52 +77,51 @@ TXT;
     /**
      * Unbalanced brackets cause ParseException.
      *
-     * @expectedException \Badcow\DNS\Parser\ParseException
-     * @expectedExceptionMessage End of file reached. Unclosed bracket.
-     *
-     * @throws \Badcow\DNS\Parser\ParseException
+     * @throws ParseException
      */
-    public function testUnbalancedBracketsCauseParseException()
+    public function testUnbalancedBracketsCauseParseException(): void
     {
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('End of file reached. Unclosed bracket.');
         Normaliser::normalise($this->unbalancedBrackets);
     }
 
     /**
      * Unbalanced quotation marks cause ParseException.
      *
-     * @expectedException \Badcow\DNS\Parser\ParseException
-     * @expectedExceptionMessage Unbalanced double quotation marks. End of file reached.
-     *
-     * @throws \Badcow\DNS\Parser\ParseException
+     * @throws ParseException
      */
-    public function testUnbalancedQuotationMarksCauseParseException()
+    public function testUnbalancedQuotationMarksCauseParseException(): void
     {
         $string = 'mail IN TXT "Some string';
+
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Unbalanced double quotation marks. End of file reached.');
         Normaliser::normalise($string);
     }
 
     /**
      * Line feed inside quotation marks cause exception.
      *
-     * @expectedException \Badcow\DNS\Parser\ParseException
-     * @expectedExceptionMessage Line Feed found within double quotation marks context. [Line no: 2]
-     *
-     * @throws \Badcow\DNS\Parser\ParseException
+     * @throws ParseException
      */
-    public function testLineFeedInsideQuotationMarksCauseException()
+    public function testLineFeedInsideQuotationMarksCauseException(): void
     {
         $string = "www IN CNAME @\n     mail IN TXT \"Some \nstring\"";
+
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Line Feed found within double quotation marks context. [Line no: 2]');
         Normaliser::normalise($string);
     }
 
     /**
      * @throws \Exception
      */
-    public function testCommentsAreRetained()
+    public function testCommentsAreRetained(): void
     {
         $zone = self::readFile(__DIR__.'/Resources/testClearComments_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testKeepComments_expectation.txt');
-        $normalisedZone = Normaliser::normalise($zone, true);
+        $normalisedZone = Normaliser::normalise($zone, Comments::END_OF_ENTRY);
 
         $this->assertEquals($expectation, $normalisedZone);
     }
@@ -127,7 +129,7 @@ TXT;
     /**
      * @throws \Exception
      */
-    public function testMultilineCommentsAreRetained()
+    public function testMultilineCommentsAreRetained(): void
     {
         $zone = self::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testCollapseMultilinesWithComments_expectation.txt');
@@ -139,11 +141,11 @@ TXT;
     /**
      * @throws \Exception
      */
-    public function testMultilineTxtRecords()
+    public function testMultilineTxtRecords(): void
     {
         $zone = self::readFile(__DIR__.'/Resources/testMultilineTxtRecords_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testMultilineTxtRecords_expectation.txt');
-        $normalisedZone = Normaliser::normalise($zone, true);
+        $normalisedZone = Normaliser::normalise($zone, Comments::END_OF_ENTRY);
 
         $this->assertEquals($expectation, $normalisedZone);
     }
@@ -151,11 +153,11 @@ TXT;
     /**
      * @throws \Exception
      */
-    public function testKeepCommentsWithoutLinefeedAtEnd()
+    public function testKeepCommentsWithoutLinefeedAtEnd(): void
     {
         $zone = self::readFile(__DIR__.'/Resources/testKeepCommentsWithoutLinefeedAtEnd_sample.txt');
         $expectation = self::readFile(__DIR__.'/Resources/testKeepCommentsWithoutLinefeedAtEnd_expectation.txt');
-        $normalisedZone = Normaliser::normalise($zone, true);
+        $normalisedZone = Normaliser::normalise($zone, Comments::END_OF_ENTRY);
 
         $this->assertEquals($expectation, $normalisedZone);
     }
@@ -163,7 +165,7 @@ TXT;
     /**
      * @throws \Exception
      */
-    public function testCommentOptions()
+    public function testCommentOptions(): void
     {
         $option_1 = Comments::END_OF_ENTRY;
         $expectation_1 = 'example.com. IN SOA example.com. post.example.com. 2014110501 3600 14400'.

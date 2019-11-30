@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -20,7 +22,7 @@ class FactoryTest extends TestCase
     /**
      * @throws UnsupportedTypeException
      */
-    public function testNewRdataFromName()
+    public function testNewRdataFromName(): void
     {
         $namespace = '\\Badcow\\DNS\\Rdata\\';
         $this->assertInstanceOf($namespace.'CNAME', Factory::newRdataFromName('cname'));

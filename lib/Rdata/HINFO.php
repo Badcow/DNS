@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -11,6 +13,9 @@
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\StringIterator;
+use Badcow\DNS\Parser\Tokens;
+
 /**
  * @see https://tools.ietf.org/html/rfc1035#section-3.3.2
  */
@@ -19,6 +24,7 @@ class HINFO implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'HINFO';
+    const TYPE_CODE = 13;
 
     /**
      * @var string|null
@@ -65,8 +71,67 @@ class HINFO implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return sprintf('"%s" "%s"', $this->cpu ?? '', $this->os ?? '');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toWire(): string
+    {
+        return $this->toText();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return HINFO
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        return self::fromText($rdata);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return HINFO
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $string = new StringIterator($text);
+        $hinfo = new self();
+        $hinfo->setCpu(self::extractText($string));
+        $hinfo->setOs(self::extractText($string));
+
+        return $hinfo;
+    }
+
+    /**
+     * @param StringIterator $string
+     *
+     * @return string
+     */
+    private static function extractText(StringIterator $string): string
+    {
+        $txt = new StringIterator();
+
+        if ($string->is(Tokens::DOUBLE_QUOTES)) {
+            TXT::handleTxt($string, $txt);
+            $string->next();
+        } else {
+            while ($string->isNot(Tokens::SPACE) && $string->valid()) {
+                $txt->append($string->current());
+                $string->next();
+            }
+        }
+
+        if ($string->is(Tokens::SPACE)) {
+            $string->next();
+        }
+
+        return (string) $txt;
     }
 }

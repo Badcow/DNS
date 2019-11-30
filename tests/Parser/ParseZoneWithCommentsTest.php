@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -25,7 +27,7 @@ class ParseZoneWithCommentsTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testParseZoneWithComments()
+    public function testParseZoneWithComments(): void
     {
         $zoneFile = NormaliserTest::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $zone = Parser::parse('example.com.', $zoneFile, Comments::ALL);
@@ -53,7 +55,7 @@ class ParseZoneWithCommentsTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testCommentOnlyLinesParse()
+    public function testCommentOnlyLinesParse(): void
     {
         $zoneFile = NormaliserTest::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $zone = Parser::parse('example.com.', $zoneFile, Comments::ALL);
@@ -69,7 +71,7 @@ class ParseZoneWithCommentsTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testMultilineTxtRecords()
+    public function testMultilineTxtRecords(): void
     {
         $zoneFile = NormaliserTest::readFile(__DIR__.'/Resources/testMultilineTxtRecords_sample.txt');
         $zone = Parser::parse('acme.com.', $zoneFile, Comments::ALL);

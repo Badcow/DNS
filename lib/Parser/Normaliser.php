@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -13,12 +15,6 @@ namespace Badcow\DNS\Parser;
 
 class Normaliser
 {
-    const COMMENTS_NONE = Comments::NONE;
-    const COMMENTS_END_OF_RECORD_ENTRY = Comments::END_OF_ENTRY;
-    const COMMENTS_WITHIN_MULTILINE = Comments::MULTILINE;
-    const COMMENTS_WITHOUT_RECORD_ENTRY = Comments::ORPHAN;
-    const COMMENTS_ALL = Comments::ALL;
-
     /**
      * @var StringIterator
      */

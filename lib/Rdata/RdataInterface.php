@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -14,14 +16,48 @@ namespace Badcow\DNS\Rdata;
 interface RdataInterface
 {
     /**
-     * @return string
-     */
-    public function output(): string;
-
-    /**
-     * Get the R-Data type.
+     * Get the string representation of the Rdata type.
      *
      * @return string
      */
     public function getType(): string;
+
+    /**
+     * Get the integer index of the Rdata type.
+     *
+     * @return int
+     */
+    public function getTypeCode(): int;
+
+    /**
+     * Return the string representation of the Rdata.
+     *
+     * @return string
+     */
+    public function toText(): string;
+
+    /**
+     * Return a DNS Server response formatted representation of the Rdata.
+     *
+     * @return string
+     */
+    public function toWire(): string;
+
+    /**
+     * Return an instance of Rdata from its textual representation.
+     *
+     * @param string $text
+     *
+     * @return RdataInterface
+     */
+    public static function fromText(string $text): RdataInterface;
+
+    /**
+     * Return an instance of Rdata from its wire representation.
+     *
+     * @param string $rdata
+     *
+     * @return RdataInterface
+     */
+    public static function fromWire(string $rdata): RdataInterface;
 }

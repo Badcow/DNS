@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -19,6 +21,7 @@ class CNAME implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'CNAME';
+    const TYPE_CODE = 5;
 
     /**
      * @var string|null
@@ -28,7 +31,7 @@ class CNAME implements RdataInterface
     /**
      * @param string $target
      */
-    public function setTarget(string $target)
+    public function setTarget(string $target): void
     {
         $this->target = $target;
     }
@@ -44,8 +47,42 @@ class CNAME implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return $this->target ?? '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toWire(): string
+    {
+        if (!isset($this->target)) {
+            throw new \InvalidArgumentException('Target must be set.');
+        }
+
+        return self::encodeName($this->target);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $cname = new static();
+        $cname->setTarget($text);
+
+        return $cname;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        $cname = new static();
+        $cname->setTarget(self::decodeName($rdata));
+
+        return $cname;
     }
 }

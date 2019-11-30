@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -19,7 +21,7 @@ class PolymorphicRdata implements RdataInterface
     /**
      * The RData type.
      *
-     * @var string|null
+     * @var string
      */
     private $type;
 
@@ -27,6 +29,11 @@ class PolymorphicRdata implements RdataInterface
      * @var string|null
      */
     private $data;
+
+    /**
+     * @var int|null
+     */
+    private $typeCode;
 
     /**
      * PolymorphicRdata constructor.
@@ -50,15 +57,28 @@ class PolymorphicRdata implements RdataInterface
      */
     public function setType(string $type): void
     {
+        try {
+            $this->typeCode = Types::getTypeCode($type);
+        } catch (UnsupportedTypeException $e) {
+            $this->typeCode = 0;
+        }
         $this->type = $type;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getType(): string
     {
-        return $this->type ?? '';
+        return $this->type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeCode(): int
+    {
+        return $this->getTypeCode();
     }
 
     /**
@@ -78,10 +98,34 @@ class PolymorphicRdata implements RdataInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return $this->getData() ?? '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toWire(): string
+    {
+        return $this->data ?? '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        return new self(null, $text);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        return new self(null, $rdata);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -16,9 +18,9 @@ use Badcow\DNS\Rdata\RdataInterface;
 class ResourceRecord
 {
     /**
-     * @var string|null
+     * @var int|null
      */
-    private $class = Classes::INTERNET;
+    private $classId = 1;
 
     /**
      * @var RdataInterface|null
@@ -46,26 +48,19 @@ class ResourceRecord
      * @param int            $ttl
      * @param string         $class
      * @param string         $comment
+     *
+     * @return ResourceRecord
      */
-    public function __construct(string $name = null, RdataInterface $rdata = null, int $ttl = null, string $class = null, string $comment = null)
+    public static function create(string $name, RdataInterface $rdata, int $ttl = null, string $class = Classes::INTERNET, string $comment = null): ResourceRecord
     {
-        if (null !== $name) {
-            $this->setName($name);
-        }
+        $rr = new self();
+        $rr->setName($name);
+        $rr->setRdata($rdata);
+        $rr->setTtl($ttl);
+        $rr->setClass($class);
+        $rr->setComment($comment);
 
-        if (null !== $rdata) {
-            $this->setRdata($rdata);
-        }
-
-        if (null !== $ttl) {
-            $this->setTtl($ttl);
-        }
-
-        $this->setClass($class);
-
-        if (null !== $comment) {
-            $this->setComment($comment);
-        }
+        return $rr;
     }
 
     /**
@@ -74,15 +69,21 @@ class ResourceRecord
      *
      * @param string $class
      *
-     * @throws \UnexpectedValueException
+     * @throws \InvalidArgumentException
      */
     public function setClass(?string $class): void
     {
         if (null !== $class && !Classes::isValid($class)) {
-            throw new \UnexpectedValueException(sprintf('No such class as "%s"', $class));
+            throw new \InvalidArgumentException(sprintf('No such class as "%s"', $class));
         }
 
-        $this->class = $class;
+        if (null === $class) {
+            $this->classId = null;
+
+            return;
+        }
+
+        $this->classId = Classes::getClassId($class);
     }
 
     /**
@@ -109,7 +110,24 @@ class ResourceRecord
      */
     public function getClass(): ?string
     {
-        return $this->class;
+        if (null === $this->classId) {
+            return null;
+        }
+
+        return Classes::getClassName($this->classId);
+    }
+
+    public function setClassId(int $classId): void
+    {
+        $this->classId = $classId;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getClassId(): ?int
+    {
+        return $this->classId;
     }
 
     /**

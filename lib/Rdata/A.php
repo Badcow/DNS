@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -19,17 +21,22 @@ class A implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'A';
+    const TYPE_CODE = 1;
 
     /**
-     * @var string|null
+     * @var string
      */
     protected $address;
 
     /**
      * @param string $address
      */
-    public function setAddress(string $address)
+    public function setAddress(string $address): void
     {
+        if (false === @inet_pton($address)) {
+            throw new \InvalidArgumentException(sprintf('The address "%s" is not a valid IP address.', $address));
+        }
+
         $this->address = $address;
     }
 
@@ -44,8 +51,50 @@ class A implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return $this->address ?? '';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function toWire(): string
+    {
+        if (false === $encoded = inet_pton($this->address)) {
+            throw new \InvalidArgumentException(sprintf('The IP address "%s" cannot be encoded. Check that it is a valid IP address.', $this->address));
+        }
+
+        return $encoded;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $a = new static();
+        $a->setAddress($text);
+
+        return $a;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws DecodeException
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        if (false === $address = @inet_ntop($rdata)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
+
+        $a = new static();
+        $a->setAddress($address);
+
+        return $a;
     }
 }

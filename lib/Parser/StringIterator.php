@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -48,6 +50,6 @@ class StringIterator extends \ArrayIterator
      */
     public function __toString()
     {
-        return implode($this->getArrayCopy());
+        return implode('', $this->getArrayCopy());
     }
 }

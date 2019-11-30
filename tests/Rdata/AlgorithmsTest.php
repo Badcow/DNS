@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -16,16 +18,18 @@ use PHPUnit\Framework\TestCase;
 
 class AlgorithmsTest extends TestCase
 {
-    public function testGetMnemonic()
+    public function testGetMnemonic(): void
     {
         $this->assertEquals('RSASHA1', Algorithms::getMnemonic(5));
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
-    public function testGetMnemonicThrowsExceptionOnInvalidAlgorithm()
+    public function testGetMnemonicThrowsExceptionOnInvalidAlgorithm(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('"1337" is not a valid algorithm.');
         Algorithms::getMnemonic(1337);
     }
 }

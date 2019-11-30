@@ -5,7 +5,7 @@ ns1.beget.ru. hostmaster.beget.ru. 2015060403
  300 600 86400 300
 )
 @ 600 IN A 5.101.153.38
-@ 600 IN AAAA ::ffff:a.b.c.d
+@ 600 IN AAAA ::ffff:192.168.10.23
 @ 300 IN NS ns1.beget.ru.
 _xmpp-server._tcp.icq.beget.ru 600 IN SRV 10 0 5247 jabber
 autoconfig 600 IN CNAME cf-ssl00000-protected.example.com.

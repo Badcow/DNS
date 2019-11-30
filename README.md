@@ -1,11 +1,13 @@
-Badcow DNS Zone Library
-=======================
+Badcow DNS Library
+==================
 The aim of this project is to create abstract object representations of DNS records in PHP. The project consists of various
 classes representing DNS objects (such as `Zone`, `ResourceRecord`, and various `RData` types), a parser to convert BIND
 style text files to the PHP objects, and builders to create aesthetically pleasing BIND records.
 
 ## Build Status
-[![Build Status](https://travis-ci.org/Badcow/DNS.png)](https://travis-ci.org/Badcow/DNS) [![Code Coverage](https://scrutinizer-ci.com/g/Badcow/DNS/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Badcow/DNS/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=master)
+[![Build Status](https://travis-ci.org/Badcow/DNS.png)](https://travis-ci.org/Badcow/DNS)
+[![Code Coverage](https://scrutinizer-ci.com/g/Badcow/DNS/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Badcow/DNS/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=master)
 
 ## Contents
 1. [Example usage](#example-usage)
@@ -72,20 +74,7 @@ $mx3 = new ResourceRecord;
 $mx3->setName('@');
 $mx3->setRdata(Factory::Mx(30, 'mail-gw3.example.net.'));
 
-$loc = new ResourceRecord;
-$loc->setName('canberra');
-$loc->setRdata(Factory::Loc(
-    -35.3075,   //Lat
-    149.1244,   //Lon
-    500,        //Alt
-    20.12,      //Size
-    200.3,      //HP
-    300.1       //VP
-));
-$loc->setComment('This is Canberra');
-
 $zone->addResourceRecord($soa);
-$zone->addResourceRecord($loc);
 $zone->addResourceRecord($mx2);
 $zone->addResourceRecord($ns1);
 $zone->addResourceRecord($mx3);
@@ -125,16 +114,6 @@ ipv6.domain     AAAA ::1; This is an IPv6 domain.
 @               MX   10 mail-gw1.example.net.
 @               MX   20 mail-gw2.example.net.
 @               MX   30 mail-gw3.example.net.
-
-; LOC RECORDS
-canberra        LOC  (
-                     35 18 27.000 S ; LATITUDE
-                     149 7 27.840 E ; LONGITUDE
-                     500.00m        ; ALTITUDE
-                     20.12m         ; SIZE
-                     200.30m        ; HORIZONTAL PRECISION
-                     300.10m        ; VERTICAL PRECISION
-                     ); This is Canberra
 ```
 
 The above is an example of the `AlignedBuilder` which creates records that are much more aesthetically pleasing. You can
@@ -148,7 +127,6 @@ echo ZoneBuilder::build($zone);
 $ORIGIN example.com.
 $TTL 3600
 @ IN SOA example.com. post.example.com. 2014110501 3600 14400 604800 3600
-canberra LOC 35 18 27.000 S 149 7 27.840 E 500.00m 20.12m 200.30m 300.10m; This is Canberra
 @ MX 20 mail-gw2.example.net.
 @ IN NS ns1.nameserver.com.
 @ MX 30 mail-gw3.example.net.
@@ -159,24 +137,7 @@ ipv6.domain AAAA ::1; This is an IPv6 domain.
 ```
 
 ## Supported Types
-* `A`
-* `AAAA`
-* `APL`
-* `CNAME`
-* `CAA`
-* `DNAME`
-* `HINFO`
-* `LOC`
-* `MX`
-* `NS`
-* `PTR`
-* `SOA`
-* `SRV`
-* `TXT`
-* `DNSKEY`
-* `DS`
-* `NSEC`
-* `RRSIG`
+All ubiquitous DNS types are supported. For full details on supported types see [the Documentation](docs/Supported-Types.md).
 
 ## Parsing BIND Records
 

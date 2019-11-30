@@ -23,6 +23,9 @@ $config = PhpCsFixer\Config::create()
         'header_comment' => ['header' => $header],
         'array_syntax' => ['syntax' => 'short'],
         'ordered_imports' => ['sort_algorithm' => 'alpha'],
+        'void_return' => true,
+        'declare_strict_types' => true,
+        'no_superfluous_phpdoc_tags' => false,
     ])
     ->setFinder($finder)
 ;

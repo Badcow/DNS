@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -10,6 +12,8 @@
  */
 
 namespace Badcow\DNS\Rdata;
+
+use Badcow\DNS\Parser\Tokens;
 
 /**
  * Class LocRdata.
@@ -24,13 +28,10 @@ class LOC implements RdataInterface
     use RdataTrait;
 
     const TYPE = 'LOC';
-
+    const TYPE_CODE = 29;
     const LATITUDE = 'LATITUDE';
-
     const LONGITUDE = 'LONGITUDE';
-
     const FORMAT_DECIMAL = 'DECIMAL';
-
     const FORMAT_DMS = 'DMS';
 
     /**
@@ -136,8 +137,8 @@ class LOC implements RdataInterface
      */
     public function setHorizontalPrecision(float $horizontalPrecision): void
     {
-        if ($horizontalPrecision < 0 || $horizontalPrecision > 90000000.0) {
-            throw new \OutOfRangeException('The horizontal precision must be on [0, 90000000.0].');
+        if ($horizontalPrecision < 0 || $horizontalPrecision > 9e9) {
+            throw new \OutOfRangeException('The horizontal precision must be on [0, 9e9].');
         }
 
         $this->horizontalPrecision = (float) $horizontalPrecision;
@@ -158,8 +159,8 @@ class LOC implements RdataInterface
      */
     public function setSize(float $size): void
     {
-        if ($size < 0 || $size > 90000000.0) {
-            throw new \OutOfRangeException('The size must be on [0, 90000000.0].');
+        if ($size < 0 || $size > 9e9) {
+            throw new \OutOfRangeException('The size must be on [0, 9e9].');
         }
 
         $this->size = (float) $size;
@@ -180,8 +181,8 @@ class LOC implements RdataInterface
      */
     public function setVerticalPrecision(float $verticalPrecision): void
     {
-        if ($verticalPrecision < 0 || $verticalPrecision > 90000000.0) {
-            throw new \OutOfRangeException('The vertical precision must be on [0, 90000000.0].');
+        if ($verticalPrecision < 0 || $verticalPrecision > 9e9) {
+            throw new \OutOfRangeException('The vertical precision must be on [0, 9e9].');
         }
 
         $this->verticalPrecision = $verticalPrecision;
@@ -198,7 +199,7 @@ class LOC implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return sprintf(
                 '%s %s %.2fm %.2fm %.2fm %.2fm',
@@ -231,5 +232,95 @@ class LOC implements RdataInterface
         }
 
         return sprintf('%d %d %.3f %s', $d, $m, $s, $h);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toWire(): string
+    {
+        return pack('CCCClll',
+            0,
+            self::numberToExponentValue($this->size),
+            self::numberToExponentValue($this->horizontalPrecision),
+            self::numberToExponentValue($this->verticalPrecision),
+            (int) floor($this->latitude * 3600000),
+            (int) floor($this->longitude * 3600000),
+            (int) floor($this->altitude)
+        );
+    }
+
+    private static function numberToExponentValue(float $num): int
+    {
+        $exponent = (int) floor(log($num, 10));
+        $base = (int) ceil($num / (10 ** $exponent));
+
+        return $base * 16 + $exponent;
+    }
+
+    private static function exponentValueToNumber(int $val): float
+    {
+        $base = ($val & 0b11110000) / 16;
+        $exponent = ($val & 0b00001111);
+
+        return $base * 10 ** $exponent;
+    }
+
+    /**
+     * Transform a DMS string to a decimal representation. Used for LOC records.
+     *
+     * @param int    $deg        Degrees
+     * @param int    $min        Minutes
+     * @param float  $sec        Seconds
+     * @param string $hemisphere Either 'N', 'S', 'E', or 'W'
+     *
+     * @return float
+     */
+    public static function dmsToDecimal(int $deg, int $min, float $sec, string $hemisphere): float
+    {
+        $multiplier = ('S' === $hemisphere || 'W' === $hemisphere) ? -1 : 1;
+
+        return $multiplier * ($deg + ($min / 60) + ($sec / 3600));
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return LOC
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $rdata = explode(Tokens::SPACE, $text);
+        $lat = self::dmsToDecimal((int) array_shift($rdata), (int) array_shift($rdata), (float) array_shift($rdata), (string) array_shift($rdata));
+        $lon = self::dmsToDecimal((int) array_shift($rdata), (int) array_shift($rdata), (float) array_shift($rdata), (string) array_shift($rdata));
+
+        return Factory::LOC(
+            $lat,
+            $lon,
+            (float) array_shift($rdata),
+            (float) array_shift($rdata),
+            (float) array_shift($rdata),
+            (float) array_shift($rdata)
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return LOC
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        $values = unpack('C<version>/C<size>/C<hp>/C<vp>/l<lat>/l<lon>/l<alt>', $rdata);
+        $loc = new LOC();
+
+        $loc->setSize(self::exponentValueToNumber($values['<size>']));
+        $loc->setHorizontalPrecision(self::exponentValueToNumber($values['<hp>']));
+        $loc->setVerticalPrecision(self::exponentValueToNumber($values['<vp>']));
+        $loc->setLatitude($values['<lat>'] / 3600000);
+        $loc->setLongitude($values['<lon>'] / 3600000);
+        $loc->setAltitude($values['<alt>']);
+
+        return $loc;
     }
 }

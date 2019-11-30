@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -15,7 +17,7 @@ use Badcow\DNS\Classes;
 
 class ClassesTest extends \PHPUnit\Framework\TestCase
 {
-    public function testIsValidClass()
+    public function testIsValidClass(): void
     {
         $this->assertTrue(Classes::isValid('IN'));
         $this->assertTrue(Classes::isValid('HS'));
@@ -25,5 +27,19 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(Classes::isValid('in'));
         $this->assertFalse(Classes::isValid('In'));
         $this->assertFalse(Classes::isValid('hS'));
+    }
+
+    public function testGetClassId(): void
+    {
+        $this->assertEquals(1, Classes::getClassId('IN'));
+        $this->assertEquals(4, Classes::getClassId('HS'));
+        $this->assertEquals(3, Classes::getClassId('CH'));
+    }
+
+    public function testGetClassIdThrowsExceptionForUndefinedClass(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Class "XX" is not a valid DNS class.');
+        Classes::getClassId('XX');
     }
 }

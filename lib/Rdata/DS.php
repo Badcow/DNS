@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -11,12 +13,14 @@
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\Tokens;
+
 class DS implements RdataInterface
 {
     use RdataTrait;
 
     const TYPE = 'DS';
-
+    const TYPE_CODE = 43;
     const DIGEST_SHA1 = 1;
 
     /**
@@ -110,7 +114,7 @@ class DS implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return sprintf(
             '%s %s %s %s',
@@ -119,5 +123,43 @@ class DS implements RdataInterface
             $this->digestType,
             $this->digest
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toWire(): string
+    {
+        return pack('nCC', $this->keyTag, $this->algorithm, $this->digestType).$this->digest;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $rdata = explode(Tokens::SPACE, $text);
+        $ds = new static();
+        $ds->setKeyTag((int) array_shift($rdata));
+        $ds->setAlgorithm((int) array_shift($rdata));
+        $ds->setDigestType((int) array_shift($rdata));
+        $ds->setDigest((string) array_shift($rdata));
+
+        return $ds;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        $integers = unpack('ntag/Calgorithm/Cdtype', $rdata);
+        $ds = new static();
+        $ds->setKeyTag($integers['tag']);
+        $ds->setAlgorithm($integers['algorithm']);
+        $ds->setDigestType($integers['dtype']);
+        $ds->setDigest(substr($rdata, 4));
+
+        return $ds;
     }
 }

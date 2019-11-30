@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -12,7 +14,10 @@
 namespace Badcow\DNS\Parser;
 
 use Badcow\DNS\Classes;
-use Badcow\DNS\Rdata;
+use Badcow\DNS\Rdata\Factory;
+use Badcow\DNS\Rdata\PTR;
+use Badcow\DNS\Rdata\RdataInterface;
+use Badcow\DNS\Rdata\Types;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
 
@@ -31,7 +36,7 @@ class Parser
     /**
      * Array of methods that take an ArrayIterator and return an Rdata object. The array key is the Rdata type.
      *
-     * @var array
+     * @var callable[]
      */
     private $rdataHandlers = [];
 
@@ -63,8 +68,7 @@ class Parser
     public function __construct(array $rdataHandlers = [])
     {
         $this->rdataHandlers = array_merge(
-            RdataHandlers::getHandlers(),
-            ['PTR' => __CLASS__.'::ptrHandler'],
+            [PTR::TYPE => [$this, 'ptrHandler']],
             $rdataHandlers
         );
     }
@@ -237,6 +241,14 @@ class Parser
         return $isName;
     }
 
+    /**
+     * Determine if iterant is a class.
+     *
+     * @param ResourceRecordIterator $iterator
+     * @param string|null            $origin   the previously assumed resource record parameter, either 'TTL' or NULL
+     *
+     * @return bool
+     */
     private function isClass(ResourceRecordIterator $iterator, $origin = null): bool
     {
         if (!Classes::isValid($iterator->current())) {
@@ -254,9 +266,16 @@ class Parser
         return $isClass;
     }
 
+    /**
+     * Determine if current iterant is an Rdata type string.
+     *
+     * @param ResourceRecordIterator $iterator
+     *
+     * @return bool
+     */
     private function isType(ResourceRecordIterator $iterator): bool
     {
-        return RDataTypes::isValid(strtoupper($iterator->current())) || array_key_exists($iterator->current(), $this->rdataHandlers);
+        return Types::isValid(strtoupper($iterator->current())) || array_key_exists($iterator->current(), $this->rdataHandlers);
     }
 
     /**
@@ -275,7 +294,7 @@ class Parser
      * Determine if the iterant is a TTL (i.e. it is an integer).
      *
      * @param ResourceRecordIterator $iterator
-     * @param string                 $origin
+     * @param string                 $origin   the previously assumed resource record parameter, either 'CLASS' or NULL
      *
      * @return bool
      */
@@ -350,24 +369,24 @@ class Parser
     /**
      * @param ResourceRecordIterator $iterator
      *
-     * @return RData\RdataInterface
+     * @return RdataInterface
      *
      * @throws ParseException
      */
-    private function extractRdata(ResourceRecordIterator $iterator): Rdata\RdataInterface
+    private function extractRdata(ResourceRecordIterator $iterator): RdataInterface
     {
         $type = strtoupper($iterator->current());
         $iterator->next();
 
         if (array_key_exists($type, $this->rdataHandlers)) {
-            try {
-                return call_user_func($this->rdataHandlers[$type], $iterator);
-            } catch (\Exception $exception) {
-                throw new ParseException($exception->getMessage(), null, $exception);
-            }
+            return call_user_func($this->rdataHandlers[$type], $iterator);
         }
 
-        return RdataHandlers::catchAll($type, $iterator);
+        try {
+            return Factory::textToRdataType($type, $iterator->getRemainingAsString());
+        } catch (\Exception $exception) {
+            throw new ParseException(sprintf('Could not extract Rdata from resource record "%s".', (string) $iterator), null, $exception);
+        }
     }
 
     /**
@@ -378,9 +397,9 @@ class Parser
      *
      * @param ResourceRecordIterator $iterator
      *
-     * @return Rdata\PTR
+     * @return PTR
      */
-    private function ptrHandler(ResourceRecordIterator $iterator): Rdata\PTR
+    private function ptrHandler(ResourceRecordIterator $iterator): PTR
     {
         if (null === $this->currentResourceRecord->getName() && null !== $this->currentResourceRecord->getTtl()) {
             if ($this->currentResourceRecord->getTtl() < 256) {
@@ -389,10 +408,8 @@ class Parser
             }
         }
 
-        $ptr = RdataHandlers::catchAll(Rdata\PTR::TYPE, $iterator);
-        if (!$ptr instanceof Rdata\PTR) {
-            throw new \UnexpectedValueException();
-        }
+        /** @var PTR $ptr */
+        $ptr = PTR::fromText($iterator->getRemainingAsString());
 
         return $ptr;
     }

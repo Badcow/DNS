@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -12,11 +14,12 @@
 namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\Classes;
-use Badcow\DNS\Ip\Toolbox;
 use Badcow\DNS\Rdata\Factory;
+use Badcow\DNS\Rdata\PTR;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
 use Badcow\DNS\ZoneBuilder;
+use PHPUnit\Framework\TestCase;
 
 class ReverseTest extends TestCase
 {
@@ -54,17 +57,17 @@ c IN PTR fooc.example.com.
 
 TXT;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->normaliseLineFeeds($this->expectedIpv4Record);
-        $this->normaliseLineFeeds($this->expectedIpv6Record);
+        $this->expectedIpv4Record = str_replace("\r", '', $this->expectedIpv4Record);
+        $this->expectedIpv6Record = str_replace("\r", '', $this->expectedIpv6Record);
     }
 
-    public function testReverseIpv4Record()
+    public function testReverseIpv4Record(): void
     {
-        $origin = Toolbox::reverseIpv4('192.168.8');
+        $origin = PTR::reverseIpv4('192.168.8');
 
-        $soa = new ResourceRecord('@', Factory::Soa(
+        $soa = ResourceRecord::create('@', Factory::SOA(
             'example.com.',
             'post.example.com.',
             2015010101,
@@ -74,14 +77,14 @@ TXT;
             3600
         ), null, Classes::INTERNET);
 
-        $ns1 = new ResourceRecord('@', Factory::Ns('ns1.example.com.'), null, Classes::INTERNET);
-        $ns2 = new ResourceRecord('@', Factory::Ns('ns2.example.com.'), null, Classes::INTERNET);
+        $ns1 = ResourceRecord::create('@', Factory::NS('ns1.example.com.'), null, Classes::INTERNET);
+        $ns2 = ResourceRecord::create('@', Factory::NS('ns2.example.com.'), null, Classes::INTERNET);
 
-        $foo1 = new ResourceRecord('1', Factory::Ptr('foo1.example.com.'), null, Classes::INTERNET);
-        $foo2 = new ResourceRecord('2', Factory::Ptr('foo2.example.com.'), null, Classes::INTERNET);
-        $foo3 = new ResourceRecord('3', Factory::Ptr('foo3.example.com.'), null, Classes::INTERNET);
-        $foo4 = new ResourceRecord('4', Factory::Ptr('foo4.example.com.'), null, Classes::INTERNET);
-        $foo5 = new ResourceRecord('5', Factory::Ptr('foo5.example.com.'), null, Classes::INTERNET);
+        $foo1 = ResourceRecord::create('1', Factory::PTR('foo1.example.com.'), null, Classes::INTERNET);
+        $foo2 = ResourceRecord::create('2', Factory::PTR('foo2.example.com.'), null, Classes::INTERNET);
+        $foo3 = ResourceRecord::create('3', Factory::PTR('foo3.example.com.'), null, Classes::INTERNET);
+        $foo4 = ResourceRecord::create('4', Factory::PTR('foo4.example.com.'), null, Classes::INTERNET);
+        $foo5 = ResourceRecord::create('5', Factory::PTR('foo5.example.com.'), null, Classes::INTERNET);
 
         $zone = new Zone($origin, 14400, [
             $soa,
@@ -99,11 +102,11 @@ TXT;
         $this->assertEquals($this->expectedIpv4Record, $builder->build($zone));
     }
 
-    public function testReverseIpv6Record()
+    public function testReverseIpv6Record(): void
     {
-        $origin = Toolbox::reverseIpv6('2001:f83:21');
+        $origin = PTR::reverseIpv6('2001:f83:21');
 
-        $soa = new ResourceRecord('@', Factory::Soa(
+        $soa = ResourceRecord::create('@', Factory::SOA(
             'example.com.',
             'post.example.com.',
             2015010101,
@@ -113,14 +116,14 @@ TXT;
             3600
         ), null, Classes::INTERNET);
 
-        $ns1 = new ResourceRecord('@', Factory::Ns('ns1.example.com.'), null, Classes::INTERNET);
-        $ns2 = new ResourceRecord('@', Factory::Ns('ns2.example.com.'), null, Classes::INTERNET);
+        $ns1 = ResourceRecord::create('@', Factory::NS('ns1.example.com.'), null, Classes::INTERNET);
+        $ns2 = ResourceRecord::create('@', Factory::NS('ns2.example.com.'), null, Classes::INTERNET);
 
-        $foo8 = new ResourceRecord('8', Factory::Ptr('foo8.example.com.'), null, Classes::INTERNET);
-        $foo9 = new ResourceRecord('9', Factory::Ptr('foo9.example.com.'), null, Classes::INTERNET);
-        $fooa = new ResourceRecord('a', Factory::Ptr('fooa.example.com.'), null, Classes::INTERNET);
-        $foob = new ResourceRecord('b', Factory::Ptr('foob.example.com.'), null, Classes::INTERNET);
-        $fooc = new ResourceRecord('c', Factory::Ptr('fooc.example.com.'), null, Classes::INTERNET);
+        $foo8 = ResourceRecord::create('8', Factory::PTR('foo8.example.com.'), null, Classes::INTERNET);
+        $foo9 = ResourceRecord::create('9', Factory::PTR('foo9.example.com.'), null, Classes::INTERNET);
+        $fooa = ResourceRecord::create('a', Factory::PTR('fooa.example.com.'), null, Classes::INTERNET);
+        $foob = ResourceRecord::create('b', Factory::PTR('foob.example.com.'), null, Classes::INTERNET);
+        $fooc = ResourceRecord::create('c', Factory::PTR('fooc.example.com.'), null, Classes::INTERNET);
 
         $zone = new Zone($origin, 14400, [
             $soa,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -17,4 +19,5 @@ namespace Badcow\DNS\Rdata;
 class NS extends CNAME
 {
     const TYPE = 'NS';
+    const TYPE_CODE = 2;
 }

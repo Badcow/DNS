@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -11,11 +13,18 @@
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\Tokens;
+
+/**
+ * {@link https://tools.ietf.org/html/rfc4034}.
+ */
 class RRSIG implements RdataInterface
 {
     use RdataTrait;
 
     const TYPE = 'RRSIG';
+    const TYPE_CODE = 46;
+    const TIME_FORMAT = 'YmdHis';
 
     /**
      *  The Type Covered field identifies the type of the RRset that is
@@ -56,7 +65,7 @@ class RRSIG implements RdataInterface
      * 32-bit unsigned integer specifying the expiration date of a signature.
      * {@link https://tools.ietf.org/html/rfc4034#section-3.1.5}.
      *
-     * @var int
+     * @var \DateTime
      */
     private $signatureExpiration;
 
@@ -64,7 +73,7 @@ class RRSIG implements RdataInterface
      * 32-bit unsigned integer specifying the inception date of a signature.
      * {@link https://tools.ietf.org/html/rfc4034#section-3.1.5}.
      *
-     * @var int
+     * @var \DateTime
      */
     private $signatureInception;
 
@@ -142,7 +151,7 @@ class RRSIG implements RdataInterface
     /**
      * @param int $labels
      */
-    public function setLabels(int $labels)
+    public function setLabels(int $labels): void
     {
         $this->labels = $labels;
     }
@@ -164,33 +173,33 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * @return int
+     * @return \DateTime
      */
-    public function getSignatureExpiration(): int
+    public function getSignatureExpiration(): \DateTime
     {
         return $this->signatureExpiration;
     }
 
     /**
-     * @param int $signatureExpiration
+     * @param \DateTime $signatureExpiration
      */
-    public function setSignatureExpiration(int $signatureExpiration): void
+    public function setSignatureExpiration(\DateTime $signatureExpiration): void
     {
         $this->signatureExpiration = $signatureExpiration;
     }
 
     /**
-     * @return int
+     * @return \DateTime
      */
-    public function getSignatureInception(): int
+    public function getSignatureInception(): \DateTime
     {
         return $this->signatureInception;
     }
 
     /**
-     * @param int $signatureInception
+     * @param \DateTime $signatureInception
      */
-    public function setSignatureInception(int $signatureInception): void
+    public function setSignatureInception(\DateTime $signatureInception): void
     {
         $this->signatureInception = $signatureInception;
     }
@@ -246,7 +255,7 @@ class RRSIG implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public function output(): string
+    public function toText(): string
     {
         return sprintf(
             '%s %s %s %s %s %s %s %s %s',
@@ -254,11 +263,104 @@ class RRSIG implements RdataInterface
             $this->algorithm,
             $this->labels,
             $this->originalTtl,
-            $this->signatureExpiration,
-            $this->signatureInception,
+            $this->signatureExpiration->format(self::TIME_FORMAT),
+            $this->signatureInception->format(self::TIME_FORMAT),
             $this->keyTag,
             $this->signersName,
             $this->signature
         );
+    }
+
+    /**
+     * @return string
+     *
+     * @throws UnsupportedTypeException
+     */
+    public function toWire(): string
+    {
+        $wire = pack('nCCNNNn',
+            Types::getTypeCode($this->typeCovered),
+            $this->algorithm,
+            $this->labels,
+            $this->originalTtl,
+            (int) $this->signatureExpiration->format('U'),
+            (int) $this->signatureInception->format('U'),
+            $this->keyTag
+        );
+
+        $wire .= RdataTrait::encodeName($this->signersName);
+        $wire .= $this->signature;
+
+        return $wire;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return RRSIG
+     */
+    public static function fromText(string $text): RdataInterface
+    {
+        $rdata = explode(Tokens::SPACE, $text);
+        $rrsig = new RRSIG();
+        $rrsig->setTypeCovered((string) array_shift($rdata));
+        $rrsig->setAlgorithm((int) array_shift($rdata));
+        $rrsig->setLabels((int) array_shift($rdata));
+        $rrsig->setOriginalTtl((int) array_shift($rdata));
+        $sigExpiration = (string) array_shift($rdata);
+        $sigInception = (string) array_shift($rdata);
+        $rrsig->setKeyTag((int) array_shift($rdata));
+        $rrsig->setSignersName((string) array_shift($rdata));
+        $rrsig->setSignature(implode('', $rdata));
+
+        $rrsig->setSignatureExpiration(self::makeDateTime($sigExpiration));
+        $rrsig->setSignatureInception(self::makeDateTime($sigInception));
+
+        return $rrsig;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return RRSIG
+     *
+     * @throws UnsupportedTypeException
+     */
+    public static function fromWire(string $rdata): RdataInterface
+    {
+        $offset = 0;
+        $values = unpack('n<type>/C<algorithm>/C<labels>/N<originalTtl>/N<sigExpiration>/N<sigInception>/n<keyTag>', $rdata, $offset);
+        $offset += 18;
+        $signersName = RdataTrait::decodeName($rdata, $offset);
+        $signature = substr($rdata, $offset);
+
+        $rrsig = new RRSIG();
+        $rrsig->setTypeCovered(Types::getName($values['<type>']));
+        $rrsig->setAlgorithm($values['<algorithm>']);
+        $rrsig->setLabels($values['<labels>']);
+        $rrsig->setOriginalTtl($values['<originalTtl>']);
+        $rrsig->setKeyTag($values['<keyTag>']);
+        $rrsig->setSignersName($signersName);
+        $rrsig->setSignature($signature);
+
+        $rrsig->setSignatureExpiration(self::makeDateTime((string) $values['<sigExpiration>']));
+        $rrsig->setSignatureInception(self::makeDateTime((string) $values['<sigInception>']));
+
+        return $rrsig;
+    }
+
+    /**
+     * @param string $timeString
+     *
+     * @return \DateTime
+     */
+    private static function makeDateTime(string $timeString): \DateTime
+    {
+        $timeFormat = (14 === strlen($timeString)) ? self::TIME_FORMAT : 'U';
+        if (false === $dateTime = \DateTime::createFromFormat($timeFormat, $timeString)) {
+            throw new \InvalidArgumentException(sprintf('Unable to create \DateTime object from date "%s".', $timeString));
+        }
+
+        return $dateTime;
     }
 }

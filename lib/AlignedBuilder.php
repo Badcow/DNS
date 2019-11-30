@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Badcow DNS Library.
  *
@@ -11,9 +13,9 @@
 
 namespace Badcow\DNS;
 
+use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\AAAA;
-use Badcow\DNS\Rdata\APL;
 use Badcow\DNS\Rdata\CNAME;
 use Badcow\DNS\Rdata\DNAME;
 use Badcow\DNS\Rdata\HINFO;
@@ -28,12 +30,6 @@ use Badcow\DNS\Rdata\TXT;
 
 class AlignedBuilder
 {
-    const COMMENT_DELIMINATOR = '; ';
-
-    const MULTILINE_BEGIN = '(';
-
-    const MULTILINE_END = ')';
-
     /**
      * The order in which Resource Records should appear in a zone.
      *
@@ -75,7 +71,7 @@ class AlignedBuilder
             }
 
             if ($resourceRecord->getType() !== $current) {
-                $master .= PHP_EOL.self::COMMENT_DELIMINATOR.$resourceRecord->getType().' RECORDS'.PHP_EOL;
+                $master .= Tokens::LINE_FEED.Tokens::SEMICOLON.Tokens::SPACE.$resourceRecord->getType().' RECORDS'.Tokens::LINE_FEED;
                 $current = $resourceRecord->getType();
             }
 
@@ -88,7 +84,7 @@ class AlignedBuilder
             );
 
             $master .= self::generateComment($resourceRecord);
-            $master .= PHP_EOL;
+            $master .= Tokens::LINE_FEED;
         }
 
         return $master;
@@ -96,9 +92,9 @@ class AlignedBuilder
 
     private static function generateControlEntries(Zone $zone): string
     {
-        $master = '$ORIGIN '.$zone->getName().PHP_EOL;
+        $master = '$ORIGIN '.$zone->getName().Tokens::LINE_FEED;
         if (null !== $zone->getDefaultTtl()) {
-            $master .= '$TTL '.$zone->getDefaultTtl().PHP_EOL;
+            $master .= '$TTL '.$zone->getDefaultTtl().Tokens::LINE_FEED;
         }
 
         return $master;
@@ -107,7 +103,7 @@ class AlignedBuilder
     private static function generateComment(ResourceRecord $resourceRecord): string
     {
         if (null !== $resourceRecord->getComment()) {
-            return self::COMMENT_DELIMINATOR.$resourceRecord->getComment();
+            return Tokens::SEMICOLON.Tokens::SPACE.$resourceRecord->getComment();
         }
 
         return '';
@@ -123,8 +119,8 @@ class AlignedBuilder
      */
     public static function compareResourceRecords(ResourceRecord $a, ResourceRecord $b): int
     {
-        $a_rdata = (null === $a->getRdata()) ? '' : $a->getRdata()->output();
-        $b_rdata = (null === $b->getRdata()) ? '' : $b->getRdata()->output();
+        $a_rdata = (null === $a->getRdata()) ? '' : $a->getRdata()->toText();
+        $b_rdata = (null === $b->getRdata()) ? '' : $b->getRdata()->toText();
 
         if ($a->getType() === $b->getType()) {
             return strcmp($a->getName().$a_rdata, $b->getName().$b_rdata);
@@ -152,119 +148,12 @@ class AlignedBuilder
      */
     private static function generateRdataOutput(RdataInterface $rdata, int $padding): string
     {
-        if ($rdata instanceof SOA) {
-            return self::outputSoa($rdata, $padding);
+        $rdataFormatters = AlignedRdataFormatters::getRdataFormatters();
+        if (array_key_exists($rdata->getType(), $rdataFormatters)) {
+            return call_user_func($rdataFormatters[$rdata->getType()], $rdata, $padding);
         }
 
-        if ($rdata instanceof APL) {
-            return self::outputApl($rdata, $padding);
-        }
-
-        if ($rdata instanceof LOC) {
-            return self::outputLoc($rdata, $padding);
-        }
-
-        return $rdata->output();
-    }
-
-    /**
-     * @param SOA $rdata
-     * @param int $padding
-     *
-     * @return string
-     */
-    private static function outputSoa(SOA $rdata, int $padding): string
-    {
-        $vars = [
-            $rdata->getMname(),
-            $rdata->getRname(),
-            $rdata->getSerial(),
-            $rdata->getRefresh(),
-            $rdata->getRetry(),
-            $rdata->getExpire(),
-            $rdata->getMinimum(),
-        ];
-
-        $longestVarLength = max(array_map('strlen', $vars));
-
-        return self::MULTILINE_BEGIN.PHP_EOL.
-        self::makeLine((string) $rdata->getMname(), 'MNAME', $longestVarLength, $padding).
-        self::makeLine((string) $rdata->getRname(), 'RNAME', $longestVarLength, $padding).
-        self::makeLine((string) $rdata->getSerial(), 'SERIAL', $longestVarLength, $padding).
-        self::makeLine((string) $rdata->getRefresh(), 'REFRESH', $longestVarLength, $padding).
-        self::makeLine((string) $rdata->getRetry(), 'RETRY', $longestVarLength, $padding).
-        self::makeLine((string) $rdata->getExpire(), 'EXPIRE', $longestVarLength, $padding).
-        self::makeLine((string) $rdata->getMinimum(), 'MINIMUM', $longestVarLength, $padding).
-        str_repeat(' ', $padding).self::MULTILINE_END;
-    }
-
-    /**
-     * @param APL $rdata
-     * @param int $padding
-     *
-     * @return string
-     */
-    private static function outputApl(APL $rdata, int $padding): string
-    {
-        $blocks = explode(' ', $rdata->output());
-        $longestVarLength = max(array_map('strlen', $blocks));
-        $string = self::MULTILINE_BEGIN.PHP_EOL;
-
-        foreach ($blocks as $block) {
-            $string .= self::makeLine($block, null, $longestVarLength, $padding);
-        }
-
-        return $string.str_repeat(' ', $padding).self::MULTILINE_END;
-    }
-
-    /**
-     * @param LOC $rdata
-     * @param int $padding
-     *
-     * @return string
-     */
-    private static function outputLoc(LOC $rdata, int $padding): string
-    {
-        $parts = [
-            $rdata->getLatitude(LOC::FORMAT_DMS),
-            $rdata->getLongitude(LOC::FORMAT_DMS),
-            sprintf('%.2fm', $rdata->getAltitude()),
-            sprintf('%.2fm', $rdata->getSize()),
-            sprintf('%.2fm', $rdata->getHorizontalPrecision()),
-            sprintf('%.2fm', $rdata->getVerticalPrecision()),
-        ];
-
-        $longestVarLength = max(array_map('strlen', $parts));
-
-        return self::MULTILINE_BEGIN.PHP_EOL.
-            self::makeLine((string) $rdata->getLatitude(LOC::FORMAT_DMS), 'LATITUDE', $longestVarLength, $padding).
-            self::makeLine((string) $rdata->getLongitude(LOC::FORMAT_DMS), 'LONGITUDE', $longestVarLength, $padding).
-            self::makeLine(sprintf('%.2fm', $rdata->getAltitude()), 'ALTITUDE', $longestVarLength, $padding).
-            self::makeLine(sprintf('%.2fm', $rdata->getSize()), 'SIZE', $longestVarLength, $padding).
-            self::makeLine(sprintf('%.2fm', $rdata->getHorizontalPrecision()), 'HORIZONTAL PRECISION', $longestVarLength, $padding).
-            self::makeLine(sprintf('%.2fm', $rdata->getVerticalPrecision()), 'VERTICAL PRECISION', $longestVarLength, $padding).
-            str_repeat(' ', $padding).self::MULTILINE_END;
-    }
-
-    /**
-     * Returns a padded line with comment.
-     *
-     * @param string $text
-     * @param string $comment
-     * @param int    $longestVarLength
-     * @param int    $padding
-     *
-     * @return string
-     */
-    private static function makeLine(string $text, ?string $comment, int $longestVarLength, int $padding): string
-    {
-        $output = str_repeat(' ', $padding).str_pad($text, $longestVarLength);
-
-        if (null !== $comment) {
-            $output .= ' '.self::COMMENT_DELIMINATOR.$comment;
-        }
-
-        return $output.PHP_EOL;
+        return $rdata->toText();
     }
 
     /**
@@ -279,9 +168,9 @@ class AlignedBuilder
         $name = $ttl = $type = 0;
 
         foreach ($zone as $resourceRecord) {
-            $name = max($name, strlen($resourceRecord->getName()));
-            $ttl = max($ttl, strlen($resourceRecord->getTtl()));
-            $type = max($type, strlen($resourceRecord->getType()));
+            $name = max($name, strlen($resourceRecord->getName() ?? ''));
+            $ttl = max($ttl, strlen((string) $resourceRecord->getTtl()));
+            $type = max($type, strlen($resourceRecord->getType() ?? ''));
         }
 
         return [
