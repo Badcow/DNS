@@ -120,7 +120,7 @@ class NSEC3PARAM implements RdataInterface
      */
     public function setSalt(string $salt): void
     {
-        if (false === $bin = hex2bin($salt)) {
+        if (false === $bin = @hex2bin($salt)) {
             throw new \InvalidArgumentException('Salt must be a hexadecimal string.');
         }
         $this->salt = $bin;

@@ -105,7 +105,7 @@ class SSHFP implements RdataInterface
      */
     public function setFingerprint(string $fingerprint): void
     {
-        if (!Validator::isBase16Encoded($fingerprint) || false === $fp = hex2bin($fingerprint)) {
+        if (!Validator::isBase16Encoded($fingerprint) || false === $fp = @hex2bin($fingerprint)) {
             throw new \InvalidArgumentException('The fingerprint MUST be a hexadecimal value.');
         }
         $this->fingerprint = $fp;

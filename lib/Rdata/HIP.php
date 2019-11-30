@@ -169,7 +169,7 @@ class HIP implements RdataInterface
         $hip = new self();
         $hip->setPublicKeyAlgorithm((int) array_shift($rdata));
 
-        if (false === $hostIdentityTag = hex2bin((string) array_shift($rdata))) {
+        if (false === $hostIdentityTag = @hex2bin((string) array_shift($rdata))) {
             throw new ParseException(sprintf('Unable to parse host identity tag of rdata string "%s".', $text));
         }
         $hip->setHostIdentityTag($hostIdentityTag);
