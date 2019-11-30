@@ -254,10 +254,23 @@ class Factory
      */
     public static function TXT(string $text): TXT
     {
-        $rdata = new TXT();
-        $rdata->setText($text);
+        $txt = new TXT();
+        $txt->setText($text);
 
-        return $rdata;
+        return $txt;
+    }
+
+    /**
+     * @param string $text
+     *
+     * @return SPF
+     */
+    public static function SPF(string $text): SPF
+    {
+        $spf = new SPF();
+        $spf->setText($text);
+
+        return $spf;
     }
 
     /**

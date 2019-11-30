@@ -17,7 +17,6 @@ use Badcow\DNS\AlignedBuilder;
 use Badcow\DNS\Classes;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
-use Badcow\DNS\Tests\Rdata\DummyRdata;
 use PHPUnit\Framework\TestCase;
 
 class AlignedBuilderTest extends TestCase
@@ -131,19 +130,19 @@ DNS;
         $txt->setName('example.net.');
         $txt->setRdata(Factory::TXT('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
 
-        $dummy = new ResourceRecord();
-        $dummy->setName('example.com.');
-        $dummy->setRdata(new DummyRdata());
+        $spf = new ResourceRecord();
+        $spf->setName('example.com.');
+        $spf->setRdata(Factory::SPF('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
 
         $this->assertTrue(AlignedBuilder::compareResourceRecords($soa, $ns1) < 0);
         $this->assertTrue(AlignedBuilder::compareResourceRecords($aaaa, $cname) < 0);
         $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $mx2) < 0);
         $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $mx2) < 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $dummy) < 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $spf) < 0);
 
         $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $a) > 0);
         $this->assertTrue(AlignedBuilder::compareResourceRecords($ns2, $ns1) > 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($dummy, $txt) > 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($spf, $txt) > 0);
     }
 
     public function testBuild(): void
