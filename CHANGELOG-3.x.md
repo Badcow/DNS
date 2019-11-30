@@ -52,3 +52,5 @@ CHANGELOG for 3.x
   * `NSEC::clearTypeMap()` replaced with `NSEC::clearTypes()`
   * `NSEC::getTypeBitMaps()` replaced with `NSEC::getTypes()`
 * Deleted ResourceRecord::__construct(); the same functionality has been moved to static method ResourceRecord::create();
+* Rename class `Bacow\DNS\Rdata\TypeCodes` to `Badcow\DNS\Rdata\Types`.
+* Delete class `Badcow\DNS\Parser\RDataTypes` as the same functionality exists in `Badcow\DNS\Rdata\Types`.

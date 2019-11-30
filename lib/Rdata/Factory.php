@@ -48,7 +48,7 @@ class Factory
      */
     public static function newRdataFromId(int $id): RdataInterface
     {
-        return self::newRdataFromName(TypeCodes::getName($id));
+        return self::newRdataFromName(Types::getName($id));
     }
 
     /**
@@ -69,7 +69,7 @@ class Factory
     public static function isTypeCodeImplemented(int $typeCode): bool
     {
         try {
-            return self::isTypeImplemented(TypeCodes::getName($typeCode));
+            return self::isTypeImplemented(Types::getName($typeCode));
         } catch (UnsupportedTypeException $e) {
             return false;
         }
@@ -89,7 +89,7 @@ class Factory
         if (1 === preg_match('/^TYPE(\d+)$/', $type, $matches)) {
             $typeCode = (int) $matches[1];
             if (self::isTypeCodeImplemented($typeCode)) {
-                $type = TypeCodes::getName($typeCode);
+                $type = Types::getName($typeCode);
             } else {
                 $rdata = UnknownType::fromText($text);
                 $rdata->setTypeCode($typeCode);

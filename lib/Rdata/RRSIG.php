@@ -279,7 +279,7 @@ class RRSIG implements RdataInterface
     public function toWire(): string
     {
         $wire = pack('nCCNNNn',
-            TypeCodes::getTypeCode($this->typeCovered),
+            Types::getTypeCode($this->typeCovered),
             $this->algorithm,
             $this->labels,
             $this->originalTtl,
@@ -335,7 +335,7 @@ class RRSIG implements RdataInterface
         $signature = substr($rdata, $offset);
 
         $rrsig = new RRSIG();
-        $rrsig->setTypeCovered(TypeCodes::getName($values['<type>']));
+        $rrsig->setTypeCovered(Types::getName($values['<type>']));
         $rrsig->setAlgorithm($values['<algorithm>']);
         $rrsig->setLabels($values['<labels>']);
         $rrsig->setOriginalTtl($values['<originalTtl>']);

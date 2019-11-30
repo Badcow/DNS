@@ -154,7 +154,7 @@ class NSEC implements RdataInterface
             }
             $offset = 0;
             while (false !== $pos = strpos($mask, '1', $offset)) {
-                $types[] = TypeCodes::getName((int) $window * 256 + $pos);
+                $types[] = Types::getName((int) $window * 256 + $pos);
                 $offset = $pos + 1;
             }
         }
@@ -174,7 +174,7 @@ class NSEC implements RdataInterface
         $blocks = [];
 
         foreach ($types as $type) {
-            $int = TypeCodes::getTypeCode($type);
+            $int = Types::getTypeCode($type);
             $window = $int >> 8;
             $int = $int & 0b11111111;
             $mod = $int % 8;

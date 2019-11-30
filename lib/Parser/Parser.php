@@ -14,7 +14,10 @@ declare(strict_types=1);
 namespace Badcow\DNS\Parser;
 
 use Badcow\DNS\Classes;
-use Badcow\DNS\Rdata;
+use Badcow\DNS\Rdata\Factory;
+use Badcow\DNS\Rdata\PTR;
+use Badcow\DNS\Rdata\RdataInterface;
+use Badcow\DNS\Rdata\Types;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
 
@@ -65,7 +68,7 @@ class Parser
     public function __construct(array $rdataHandlers = [])
     {
         $this->rdataHandlers = array_merge(
-            [Rdata\PTR::TYPE => [$this, 'ptrHandler']],
+            [PTR::TYPE => [$this, 'ptrHandler']],
             $rdataHandlers
         );
     }
@@ -272,7 +275,7 @@ class Parser
      */
     private function isType(ResourceRecordIterator $iterator): bool
     {
-        return RDataTypes::isValid(strtoupper($iterator->current())) || array_key_exists($iterator->current(), $this->rdataHandlers);
+        return Types::isValid(strtoupper($iterator->current())) || array_key_exists($iterator->current(), $this->rdataHandlers);
     }
 
     /**
@@ -366,11 +369,11 @@ class Parser
     /**
      * @param ResourceRecordIterator $iterator
      *
-     * @return Rdata\RdataInterface
+     * @return RdataInterface
      *
      * @throws ParseException
      */
-    private function extractRdata(ResourceRecordIterator $iterator): Rdata\RdataInterface
+    private function extractRdata(ResourceRecordIterator $iterator): RdataInterface
     {
         $type = strtoupper($iterator->current());
         $iterator->next();
@@ -380,7 +383,7 @@ class Parser
         }
 
         try {
-            return Rdata\Factory::textToRdataType($type, $iterator->getRemainingAsString());
+            return Factory::textToRdataType($type, $iterator->getRemainingAsString());
         } catch (\Exception $exception) {
             throw new ParseException(sprintf('Could not extract Rdata from resource record "%s".', (string) $iterator), null, $exception);
         }
@@ -394,9 +397,9 @@ class Parser
      *
      * @param ResourceRecordIterator $iterator
      *
-     * @return Rdata\PTR
+     * @return PTR
      */
-    private function ptrHandler(ResourceRecordIterator $iterator): Rdata\PTR
+    private function ptrHandler(ResourceRecordIterator $iterator): PTR
     {
         if (null === $this->currentResourceRecord->getName() && null !== $this->currentResourceRecord->getTtl()) {
             if ($this->currentResourceRecord->getTtl() < 256) {
@@ -405,8 +408,8 @@ class Parser
             }
         }
 
-        /** @var Rdata\PTR $ptr */
-        $ptr = Rdata\PTR::fromText($iterator->getRemainingAsString());
+        /** @var PTR $ptr */
+        $ptr = PTR::fromText($iterator->getRemainingAsString());
 
         return $ptr;
     }

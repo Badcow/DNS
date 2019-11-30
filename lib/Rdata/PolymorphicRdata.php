@@ -21,7 +21,7 @@ class PolymorphicRdata implements RdataInterface
     /**
      * The RData type.
      *
-     * @var string|null
+     * @var string
      */
     private $type;
 
@@ -58,9 +58,9 @@ class PolymorphicRdata implements RdataInterface
     public function setType(string $type): void
     {
         try {
-            $this->typeCode = TypeCodes::getTypeCode($type);
-        } catch (\Exception $e) {
-            $this->typeCode = 65535;
+            $this->typeCode = Types::getTypeCode($type);
+        } catch (UnsupportedTypeException $e) {
+            $this->typeCode = 0;
         }
         $this->type = $type;
     }
@@ -70,7 +70,7 @@ class PolymorphicRdata implements RdataInterface
      */
     public function getType(): string
     {
-        return $this->type ?? '';
+        return $this->type;
     }
 
     /**
@@ -79,18 +79,6 @@ class PolymorphicRdata implements RdataInterface
     public function getTypeCode(): int
     {
         return $this->getTypeCode();
-    }
-
-    /**
-     * @deprecated
-     *
-     * @return string
-     */
-    public function output(): string
-    {
-        @trigger_error('Method RdataInterface::output() has been deprecated. Use RdataInterface::toText().', E_USER_DEPRECATED);
-
-        return $this->toText();
     }
 
     /**
@@ -122,7 +110,7 @@ class PolymorphicRdata implements RdataInterface
      */
     public function toWire(): string
     {
-        throw new \BadMethodCallException('Cannot use method PolymorphicRdata::toWire().');
+        return $this->data ?? '';
     }
 
     /**
@@ -138,6 +126,6 @@ class PolymorphicRdata implements RdataInterface
      */
     public static function fromWire(string $rdata): RdataInterface
     {
-        throw new \BadMethodCallException('Cannot use method PolymorphicRdata::fromWire().');
+        return new self(null, $rdata);
     }
 }

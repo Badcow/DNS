@@ -17,7 +17,6 @@ use Badcow\DNS\AlignedBuilder;
 use Badcow\DNS\Classes;
 use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
-use Badcow\DNS\Parser\RDataTypes;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\AAAA;
 use Badcow\DNS\Rdata\APL;
@@ -178,9 +177,7 @@ class ParserTest extends TestCase
      */
     public function testCanHandlePolymorphicRdata(): void
     {
-        RDataTypes::$names[] = 'XX'; //Trick parser into using polymorphic type.
-
-        $string = 'example.com. 7200 IN XX 2001:acad::1337; This is invalid.';
+        $string = 'example.com. 7200 IN A6 2001:acad::1337; This is invalid.';
         $zone = Parser::parse('example.com.', $string);
         $rr = $zone->getResourceRecords()[0];
 
@@ -192,7 +189,7 @@ class ParserTest extends TestCase
             return;
         }
 
-        $this->assertEquals('XX', $rdata->getType());
+        $this->assertEquals('A6', $rdata->getType());
         $this->assertEquals('2001:acad::1337', $rdata->toText());
     }
 
@@ -284,10 +281,10 @@ TXT;
      */
     public function testUnknownRdataTypeThrowsException(): void
     {
-        $zone = 'resource 3600 IN A6 f080:3024:a::1';
+        $zone = 'resource 3600 IN XX f080:3024:a::1';
 
         $this->expectException(ParseException::class);
-        $this->expectExceptionMessage('Could not parse entry "resource 3600 IN A6 f080:3024:a::1".');
+        $this->expectExceptionMessage('Could not parse entry "resource 3600 IN XX f080:3024:a::1".');
 
         Parser::parse('acme.com.', $zone);
     }
