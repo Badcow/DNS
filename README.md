@@ -1,13 +1,13 @@
-Badcow DNS Zone Library
-=======================
+Badcow DNS Library
+==================
 The aim of this project is to create abstract object representations of DNS records in PHP. The project consists of various
 classes representing DNS objects (such as `Zone`, `ResourceRecord`, and various `RData` types), a parser to convert BIND
 style text files to the PHP objects, and builders to create aesthetically pleasing BIND records.
 
 ## Build Status
 [![Build Status](https://travis-ci.org/Badcow/DNS.png)](https://travis-ci.org/Badcow/DNS)
-[![Code Coverage](https://scrutinizer-ci.com/g/Badcow/DNS/badges/coverage.png?b=Version3)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=Version3)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Badcow/DNS/badges/quality-score.png?b=Version3)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=Version3)
+[![Code Coverage](https://scrutinizer-ci.com/g/Badcow/DNS/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Badcow/DNS/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=master)
 
 ## Contents
 1. [Example usage](#example-usage)
@@ -137,24 +137,7 @@ ipv6.domain AAAA ::1; This is an IPv6 domain.
 ```
 
 ## Supported Types
-* `A`
-* `AAAA`
-* `APL`
-* `CNAME`
-* `CAA`
-* `DNAME`
-* `HINFO`
-* `LOC`
-* `MX`
-* `NS`
-* `PTR`
-* `SOA`
-* `SRV`
-* `TXT`
-* `DNSKEY`
-* `DS`
-* `NSEC`
-* `RRSIG`
+All ubiquitous DNS types are supported. For full details on supported types see [the Documentation](docs/Supported-Types.md).
 
 ## Parsing BIND Records
 
