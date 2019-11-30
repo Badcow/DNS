@@ -624,6 +624,16 @@ class Factory
         return $naptr;
     }
 
+    /**
+     * @param int    $hashAlgorithm
+     * @param bool   $unsignedDelegationsCovered
+     * @param int    $iterations
+     * @param string $salt
+     * @param string $nextHashedOwnerName
+     * @param array  $types
+     *
+     * @return NSEC3
+     */
     public static function NSEC3(int $hashAlgorithm, bool $unsignedDelegationsCovered, int $iterations, string $salt, string $nextHashedOwnerName, array $types): NSEC3
     {
         $nsec3 = new NSEC3();
@@ -757,9 +767,23 @@ class Factory
         return $tkey;
     }
 
-    public static function TLSA(): TLSA
+    /**
+     * @param int    $certificateUsage
+     * @param int    $selector
+     * @param int    $matchingType
+     * @param string $certificateAssociationData
+     *
+     * @return TLSA
+     */
+    public static function TLSA(int $certificateUsage, int $selector, int $matchingType, string $certificateAssociationData): TLSA
     {
-        // TODO: Implement TLSA() method.
+        $tlsa = new TLSA();
+        $tlsa->setCertificateUsage($certificateUsage);
+        $tlsa->setSelector($selector);
+        $tlsa->setMatchingType($matchingType);
+        $tlsa->setCertificateAssociationData($certificateAssociationData);
+
+        return $tlsa;
     }
 
     /**
