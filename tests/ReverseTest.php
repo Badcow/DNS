@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\Classes;
-use Badcow\DNS\Ip\Toolbox;
 use Badcow\DNS\Rdata\Factory;
+use Badcow\DNS\Rdata\PTR;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
 use Badcow\DNS\ZoneBuilder;
@@ -64,7 +64,7 @@ TXT;
 
     public function testReverseIpv4Record(): void
     {
-        $origin = Toolbox::reverseIpv4('192.168.8');
+        $origin = PTR::reverseIpv4('192.168.8');
 
         $soa = ResourceRecord::create('@', Factory::SOA(
             'example.com.',
@@ -103,7 +103,7 @@ TXT;
 
     public function testReverseIpv6Record(): void
     {
-        $origin = Toolbox::reverseIpv6('2001:f83:21');
+        $origin = PTR::reverseIpv6('2001:f83:21');
 
         $soa = ResourceRecord::create('@', Factory::SOA(
             'example.com.',

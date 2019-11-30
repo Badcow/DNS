@@ -60,11 +60,7 @@ class Classes
             return true;
         }
 
-        if (1 === preg_match('/^CLASS\d+$/', $class)) {
-            return true;
-        }
-
-        return false;
+        return 1 === preg_match('/^CLASS\d+$/', $class);
     }
 
     /**

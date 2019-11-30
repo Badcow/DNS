@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Badcow\DNS;
 
-use Badcow\DNS\Ip\Toolbox;
 use Badcow\DNS\Rdata\AAAA;
 use Badcow\DNS\Rdata\CNAME;
 use Badcow\DNS\Rdata\DNAME;
@@ -156,6 +155,6 @@ class ZoneBuilder
      */
     protected static function fillOutAaaa(AAAA $rdata): void
     {
-        $rdata->setAddress(Toolbox::expandIpv6($rdata->getAddress() ?? ''));
+        $rdata->setAddress(PTR::expandIpv6($rdata->getAddress() ?? ''));
     }
 }

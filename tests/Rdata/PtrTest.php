@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Badcow\DNS\Tests\Ip;
+namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Ip\Toolbox;
+use Badcow\DNS\Rdata\PTR;
 use PHPUnit\Framework\TestCase;
 
-class ToolboxTest extends TestCase
+class PtrTest extends TestCase
 {
     public function provider_expandIPv6(): array
     {
@@ -48,7 +48,7 @@ class ToolboxTest extends TestCase
      */
     public function testExpandIpv6(string $expectation, string $ip): void
     {
-        $this->assertEquals($expectation, Toolbox::expandIpv6($ip));
+        $this->assertEquals($expectation, PTR::expandIpv6($ip));
     }
 
     /**
@@ -59,7 +59,7 @@ class ToolboxTest extends TestCase
      */
     public function testContractIpv6(string $ip, string $expectation): void
     {
-        $this->assertEquals($expectation, Toolbox::contractIpv6($ip));
+        $this->assertEquals($expectation, PTR::contractIpv6($ip));
     }
 
     public function testContractIpv6ThrowsException(): void
@@ -67,7 +67,7 @@ class ToolboxTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('"127.0.0.1" is not a valid IPv6 address.');
 
-        Toolbox::contractIpv6('127.0.0.1');
+        PTR::contractIpv6('127.0.0.1');
     }
 
     public function testReverseIpv4(): void
@@ -75,7 +75,7 @@ class ToolboxTest extends TestCase
         $case_1 = '192.168.1.213';
         $exp_1 = '213.1.168.192.in-addr.arpa.';
 
-        $this->assertEquals($exp_1, Toolbox::reverseIpv4($case_1));
+        $this->assertEquals($exp_1, PTR::reverseIpv4($case_1));
     }
 
     public function testReverseIpv6(): void
@@ -86,7 +86,7 @@ class ToolboxTest extends TestCase
         $exp_1 = 'b.a.9.8.7.6.5.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.';
         $exp_2 = '9.1.0.0.a.e.0.0.7.0.0.8.ip6.arpa.';
 
-        $this->assertEquals($exp_1, Toolbox::reverseIpv6($case_1));
-        $this->assertEquals($exp_2, Toolbox::reverseIpv6($case_2));
+        $this->assertEquals($exp_1, PTR::reverseIpv6($case_1));
+        $this->assertEquals($exp_2, PTR::reverseIpv6($case_2));
     }
 }

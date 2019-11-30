@@ -54,3 +54,6 @@ CHANGELOG for 3.x
 * Deleted ResourceRecord::__construct(); the same functionality has been moved to static method ResourceRecord::create();
 * Rename class `Bacow\DNS\Rdata\TypeCodes` to `Badcow\DNS\Rdata\Types`.
 * Delete class `Badcow\DNS\Parser\RDataTypes` as the same functionality exists in `Badcow\DNS\Rdata\Types`.
+* Added the Unknown Record Type `Badcow\DNS\Rdata\UnknownType` which complies with [RFC 3597 - Handling of Unknown DNS Resource
+  Record (RR) Types](https://tools.ietf.org/html/rfc3597).
+* Deleted class `Badcow\DNS\IP\Toolbox`, moved all methods to `Badcow\DNS\IP\PTR`.
