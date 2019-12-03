@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\Parser\Tokens;
+use Badcow\DNS\Validator;
 
 /**
  * Class CaaRdata.
@@ -30,7 +31,7 @@ class CAA implements RdataInterface
 
     const TYPE = 'CAA';
     const TYPE_CODE = 257;
-    const MAX_FLAG = 255;
+
     const TAG_ISSUE = 'issue';
     const TAG_ISSUEWILD = 'issuewild';
     const TAG_IODEF = 'iodef';
@@ -74,8 +75,8 @@ class CAA implements RdataInterface
      */
     public function setFlag(int $flag): void
     {
-        if ($flag < 0 || $flag > static::MAX_FLAG) {
-            throw new \InvalidArgumentException('Flag must be an unsigned integer on the range [0-255]');
+        if (!Validator::isUnsignedInteger($flag, 8)) {
+            throw new \InvalidArgumentException('Flag must be an unsigned 8-bit integer.');
         }
 
         $this->flag = $flag;
@@ -136,6 +137,9 @@ class CAA implements RdataInterface
         );
     }
 
+    /**
+     * @return string
+     */
     public function toWire(): string
     {
         if (!isset($this->tag) || !isset($this->flag) || !isset($this->value)) {
@@ -148,6 +152,11 @@ class CAA implements RdataInterface
             $this->value;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return CAA
+     */
     public static function fromWire(string $rdata): RdataInterface
     {
         $caa = new self();
@@ -159,6 +168,11 @@ class CAA implements RdataInterface
         return $caa;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return CAA
+     */
     public static function fromText(string $string): RdataInterface
     {
         $caa = new self();

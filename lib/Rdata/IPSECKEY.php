@@ -274,7 +274,6 @@ class IPSECKEY implements RdataInterface
         array_shift($rdata); //Gateway type is inferred from setGateway.
         $algorithm = (int) array_shift($rdata);
         $ipseckey->setGateway((string) array_shift($rdata));
-
         $publicKey = (0 === $algorithm) ? null : implode('', $rdata);
         $ipseckey->setPublicKey($algorithm, $publicKey);
 
@@ -285,6 +284,8 @@ class IPSECKEY implements RdataInterface
      * {@inheritdoc}
      *
      * @return IPSECKEY
+     *
+     * @throws DecodeException
      */
     public static function fromWire(string $rdata): RdataInterface
     {
@@ -296,31 +297,7 @@ class IPSECKEY implements RdataInterface
         $gatewayType = $integers['GatewayType'];
         $algorithm = $integers['Algorithm'];
         $offset += 3;
-        $gateway = null;
-
-        switch ($gatewayType) {
-            case 0:
-            case 3:
-                $gateway = RdataTrait::decodeName($rdata, $offset);
-                break;
-            case 1:
-                $gateway = inet_ntop(substr($rdata, $offset, 4));
-                $offset += 4;
-                break;
-            case 2:
-                $gateway = inet_ntop(substr($rdata, $offset, 16));
-                $offset += 16;
-                break;
-            default:
-                throw new \InvalidArgumentException(sprintf('Expected gateway type to be integer on [0,3], got "%d".', $gatewayType));
-                break;
-        }
-
-        if (false === $gateway) {
-            throw new \RuntimeException('Could not decode IP address.');
-        }
-
-        $ipseckey->setGateway($gateway);
+        $ipseckey->setGateway(self::extractGateway($gatewayType, $rdata, $offset));
 
         if (self::ALGORITHM_NONE !== $algorithm) {
             $publicKey = base64_encode(substr($rdata, $offset));
@@ -328,5 +305,40 @@ class IPSECKEY implements RdataInterface
         }
 
         return $ipseckey;
+    }
+
+    /**
+     * @param int    $gatewayType
+     * @param string $rdata
+     * @param int    $offset
+     *
+     * @return string
+     *
+     * @throws DecodeException
+     */
+    private static function extractGateway(int $gatewayType, string $rdata, int &$offset): string
+    {
+        switch ($gatewayType) {
+            case 0:
+            case 3:
+                $gateway = RdataTrait::decodeName($rdata, $offset);
+                break;
+            case 1:
+            case 2:
+                $len = (1 === $gatewayType) ? 4 : 16;
+                $gateway = @inet_ntop(substr($rdata, $offset, $len));
+                $offset += $len;
+                break;
+            default:
+                $invalidArgumentException = new \InvalidArgumentException(sprintf('Expected gateway type to be integer on [0,3], got "%d".', $gatewayType));
+                throw new DecodeException(static::TYPE, $rdata, 0, $invalidArgumentException);
+                break;
+        }
+
+        if (false === $gateway) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
+
+        return $gateway;
     }
 }

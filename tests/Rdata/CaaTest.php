@@ -36,10 +36,10 @@ class CaaTest extends TestCase
     public function testFlagException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Flag must be an unsigned integer on the range [0-255]');
+        $this->expectExceptionMessage('Flag must be an unsigned 8-bit integer.');
 
         $srv = new CAA();
-        $srv->setFlag(CAA::MAX_FLAG + 1);
+        $srv->setFlag(256);
     }
 
     /**
