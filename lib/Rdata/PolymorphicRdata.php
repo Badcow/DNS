@@ -78,7 +78,7 @@ class PolymorphicRdata implements RdataInterface
      */
     public function getTypeCode(): int
     {
-        return $this->getTypeCode();
+        return $this->typeCode;
     }
 
     /**
