@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS;
 
-class Zone implements \Countable, \IteratorAggregate
+class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
 {
     /**
      * @var string
@@ -194,5 +194,25 @@ class Zone implements \Countable, \IteratorAggregate
         }
 
         return Classes::INTERNET;
+    }
+
+    public function offsetExists($offset): bool
+    {
+        return array_key_exists($offset, $this->resourceRecords);
+    }
+
+    public function offsetGet($offset): ResourceRecord
+    {
+        return $this->resourceRecords[$offset];
+    }
+
+    public function offsetSet($offset, $value): void
+    {
+        $this->resourceRecords[$offset] = $value;
+    }
+
+    public function offsetUnset($offset): void
+    {
+        unset($this->resourceRecords[$offset]);
     }
 }
