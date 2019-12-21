@@ -31,9 +31,9 @@ class PolymorphicRdata implements RdataInterface
     private $data;
 
     /**
-     * @var int|null
+     * @var int
      */
-    private $typeCode;
+    private $typeCode = 0;
 
     /**
      * PolymorphicRdata constructor.
@@ -71,6 +71,14 @@ class PolymorphicRdata implements RdataInterface
     public function getType(): string
     {
         return $this->type;
+    }
+
+    /**
+     * @param int $typeCode
+     */
+    public function setTypeCode(int $typeCode): void
+    {
+        $this->typeCode = $typeCode;
     }
 
     /**
