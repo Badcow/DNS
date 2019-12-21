@@ -25,18 +25,7 @@ use PHPUnit\Framework\TestCase;
 
 class ZoneTest extends TestCase
 {
-    public function testSetName(): void
-    {
-        $zone = new Zone();
-        $zone->setName('example.com.');
-        $this->assertEquals('example.com.', $zone->getName());
-
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Zone "example.com" is not a fully qualified domain name.');
-        $zone->setName('example.com');
-    }
-
-    public function testFillOut(): void
+    private static function buildTestZone(): Zone
     {
         $zone = new Zone('example.com.');
         $zone->setDefaultTtl(3600);
@@ -116,6 +105,24 @@ class ZoneTest extends TestCase
 
         $zone->addResourceRecord($multicast);
 
+        return $zone;
+    }
+
+    public function testSetName(): void
+    {
+        $zone = new Zone();
+        $zone->setName('example.com.');
+        $this->assertEquals('example.com.', $zone->getName());
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Zone "example.com" is not a fully qualified domain name.');
+        $zone->setName('example.com');
+    }
+
+    public function testFillOut(): void
+    {
+        $zone = self::buildTestZone();
+
         ZoneBuilder::fillOutZone($zone);
         $expectation = file_get_contents(__DIR__.'/Resources/example.com_filled-out.txt');
 
@@ -158,5 +165,15 @@ class ZoneTest extends TestCase
         $this->assertNull($h3->getClass());
 
         $this->assertEquals(Classes::INTERNET, $zone->getClass());
+    }
+
+    public function testArrayAccess(): void
+    {
+        $zone = TestZone::buildTestZone();
+        $this->assertInstanceOf(ResourceRecord::class, $zone[3]);
+        $this->assertEquals('SOA', $zone[0]->getType());
+        unset($zone[0]);
+        $this->assertArrayNotHasKey(0, $zone);
+        $this->assertTrue(isset($zone[1]));
     }
 }
