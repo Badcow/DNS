@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Tests\Parser;
 
+use Badcow\DNS\Classes;
 use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
+use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\PolymorphicRdata;
 use Badcow\DNS\Rdata\UnknownType;
 use Badcow\DNS\ResourceRecord;
@@ -63,5 +65,21 @@ class ParseUnknownTypesTest extends TestCase
         $this->assertEquals(1800, $rr->getTtl());
         $this->assertInstanceOf(PolymorphicRdata::class, $rr->getRdata());
         $this->assertEquals('"A Tale of Two Cities"', $rr->getRdata()->getData());
+    }
+
+    public function testSupportedTypeInUnknownFormatIsOutputtedAsCorrectType(): void
+    {
+        //  files.example.com. IN 3600 IN A 192.168.1.100
+        $record = 'files.example.com.  IN  3600    TYPE1   \# 4 c0 a8 01 64';
+        $zone = Parser::parse('example.com.', $record);
+        $this->assertCount(1, $zone);
+        /** @var ResourceRecord $rr */
+        $rr = $zone[0];
+
+        $this->assertEquals('files.example.com.', $rr->getName());
+        $this->assertEquals(Classes::INTERNET, $rr->getClass());
+        $this->assertEquals(3600, $rr->getTtl());
+        $this->assertInstanceOf(A::class, $rr->getRdata());
+        $this->assertEquals('192.168.1.100', $rr->getRdata()->getAddress());
     }
 }
