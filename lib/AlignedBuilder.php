@@ -129,14 +129,22 @@ class AlignedBuilder
         $_a = array_search($a->getType(), self::$order);
         $_b = array_search($b->getType(), self::$order);
 
+        //If neither types have defined precedence.
+        if (!is_int($_a) && !is_int($_b)) {
+            return strcmp($a->getType() ?? '', $b->getType() ?? '');
+        }
+
+        //If both types have defined precedence.
         if (is_int($_a) && is_int($_b)) {
             return $_a - $_b;
         }
 
+        //If only $b has defined precedence.
         if (false === $_a) {
             return 1;
         }
 
+        //If only $a has defined precedence.
         return -1;
     }
 
