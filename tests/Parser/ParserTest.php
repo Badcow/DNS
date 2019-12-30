@@ -19,10 +19,12 @@ use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\AAAA;
+use Badcow\DNS\Rdata\Algorithms;
 use Badcow\DNS\Rdata\APL;
 use Badcow\DNS\Rdata\CAA;
 use Badcow\DNS\Rdata\CNAME;
 use Badcow\DNS\Rdata\Factory;
+use Badcow\DNS\Rdata\RRSIG;
 use Badcow\DNS\Rdata\TXT;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
@@ -389,6 +391,56 @@ DNS;
         $d = self::findRecord('d.example.com.', $zone)[0];
         $this->assertInstanceOf(A::class, $d->getRdata());
         $this->assertEquals('10.0.0.2', $d->getRdata()->getAddress());
+    }
+
+    /**
+     * @throws ParseException
+     */
+    public function testParserRecognisesResourceNameOnRrsigRecords(): void
+    {
+        $record = <<<DNS
+dns.badcow.co. 3600 IN SOA   ns.badcow.co. hostmaster.badcow.co. (
+                             2020010101 ; serial
+                             10800      ; refresh (3 hours)
+                             3600       ; retry (1 hour)
+                             2419200    ; expire (4 weeks)
+                             3600       ; minimum (1 hour)
+                             )
+               3600    RRSIG A 4 2 86400 (
+                             20050322173103 20030220173103 2642 example.com.
+                             oJB1W6WNGv+ldvQ3WDG0MQkg5IEhjRip
+                             8WTrPYGv07h108dUKGMeDPKijVCHX3DD
+                             Kdfb+v6oB9wfuh3DTJXUAfI/M0zmO/zz
+                             8bW0Rznl8O3tGNazPwQKkRN20XPXV6nw
+                             wfoXmJQbsLNrLfkGJ5D6fwFm8nN+6pBz
+                             eDQfsS3Ap3o= )
+DNS;
+
+        $expectedSignature = 'oJB1W6WNGv+ldvQ3WDG0MQkg5IEhjRip8WTrPYGv07h108dUKGMeDPKijVCHX3DDKdfb+v6oB9wfuh3DTJXUAfI/'.
+            'M0zmO/zz8bW0Rznl8O3tGNazPwQKkRN20XPXV6nwwfoXmJQbsLNrLfkGJ5D6fwFm8nN+6pBzeDQfsS3Ap3o=';
+        $expectedExpiration = \DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20050322173103');
+        $expectedInception = \DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20030220173103');
+
+        $zone = Parser::parse('badcow.co.', $record);
+
+        $this->assertCount(2, $zone);
+        /** @var ResourceRecord $rr */
+        $rr = $zone[1];
+
+        $this->assertEquals('dns.badcow.co.', $rr->getName());
+        $this->assertEquals(3600, $rr->getTtl());
+        /** @var RRSIG $rrsig */
+        $rrsig = $rr->getRdata();
+        $this->assertInstanceOf(RRSIG::class, $rrsig);
+        $this->assertEquals('A', $rrsig->getTypeCovered());
+        $this->assertEquals(Algorithms::ECC, $rrsig->getAlgorithm());
+        $this->assertEquals(2, $rrsig->getLabels());
+        $this->assertEquals(86400, $rrsig->getOriginalTtl());
+        $this->assertEquals($expectedExpiration, $rrsig->getSignatureExpiration());
+        $this->assertEquals($expectedInception, $rrsig->getSignatureInception());
+        $this->assertEquals(2642, $rrsig->getKeyTag());
+        $this->assertEquals('example.com.', $rrsig->getSignersName());
+        $this->assertEquals($expectedSignature, $rrsig->getSignature());
     }
 
     /**
