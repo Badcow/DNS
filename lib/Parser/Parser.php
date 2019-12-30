@@ -227,6 +227,7 @@ class Parser
      */
     private function isResourceName(ResourceRecordIterator $iterator): bool
     {
+        // Look ahead and determine if the next token is a TTL, Class, or valid Type.
         $iterator->next();
 
         if (!$iterator->valid()) {
@@ -238,7 +239,15 @@ class Parser
             $this->isType($iterator);
         $iterator->prev();
 
-        return $isName;
+        if (!$isName) {
+            return false;
+        }
+
+        if (0 === $iterator->key()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
