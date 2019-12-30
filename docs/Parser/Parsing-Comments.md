@@ -57,7 +57,7 @@ on the `Badcow\DNS\Parser\Parser::parse()` method.
 E.g.
 ```php
 $exampleZone = file_get_contents('/path/to/example.com.db');
-$zone = Parser::parse('example.com.', $exampleZone, Normaliser::COMMENTS_END_OF_RECORD_ENTRY);
+$zone = Parser::parse('example.com.', $exampleZone, Comments::END_OF_ENTRY);
 ```
 
 The above will only include comments that are at the end of the resource record (i.e. no block headers or multi-line
