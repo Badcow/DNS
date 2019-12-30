@@ -1,5 +1,9 @@
 CHANGELOG for 3.x
 =================
+## 3.2.0
+* [Issue #60](https://github.com/Badcow/DNS/issues/60): Correct resource name verification in `Parser`.
+* [Issue #61](https://github.com/Badcow/DNS/issues/61): Order unordered types in `AlignedBuilder`.
+* [Issue #61](https://github.com/Badcow/DNS/issues/61): Add an alignment formatter for RRSIG records that breaks the signature over multiple lines.
 ## 3.0
 * Use `rlanvin/php-ip` version 2 [Issue #43](https://github.com/Badcow/DNS/issues/43).
 * Namespace `Badcow\DNS\Rdata\DNSSEC` is deprecated and deleted. [Issue #42](https://github.com/Badcow/DNS/issues/42).
