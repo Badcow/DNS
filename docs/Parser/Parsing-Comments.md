@@ -69,7 +69,7 @@ constants are contained within the `\Badcow\DNS\Parser\Comments` class.
 | Name                   | Integer Value | Comment Type                                                                         |
 | ---------------------- | :----------:  | :----------------------------------------------------------------------------------- |
 | Comments::NONE         | 0             | No comments are parsed                                                               |
-| Comments::END_OF_ENTRY | 1             | Inline comments that appear t the end of a resource record.                          |
+| Comments::END_OF_ENTRY | 1             | Inline comments that appear at the end of a resource record.                         |
 | Comments::MULTILINE    | 2             | Multi-line record comments: those comments that appear within multi-line brackets.   |
 | Comments::ORPHAN       | 4             | Orphan comments appear without a resource record. Usually these are section headers. |
 | Comments::ALL          | 7             | Include all comments.                                                                |
