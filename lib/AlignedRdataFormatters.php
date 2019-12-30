@@ -16,6 +16,7 @@ namespace Badcow\DNS;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Rdata\APL;
 use Badcow\DNS\Rdata\LOC;
+use Badcow\DNS\Rdata\RRSIG;
 use Badcow\DNS\Rdata\SOA;
 
 class AlignedRdataFormatters
@@ -33,6 +34,7 @@ class AlignedRdataFormatters
             SOA::TYPE => __CLASS__.'::SOA',
             APL::TYPE => __CLASS__.'::APL',
             LOC::TYPE => __CLASS__.'::LOC',
+            RRSIG::TYPE => __CLASS__.'::RRSIG',
         ];
     }
 
@@ -87,6 +89,38 @@ class AlignedRdataFormatters
     }
 
     /**
+     * Splits the RRSIG Signature into 32 character chunks.
+     *
+     * @param RRSIG $rrsig
+     * @param int   $padding
+     *
+     * @return string
+     */
+    public static function RRSIG(RRSIG $rrsig, int $padding): string
+    {
+        $strPadding = str_repeat(Tokens::SPACE, $padding);
+        $signatureParts = str_split($rrsig->getSignature(), 32);
+
+        $rdata = $rrsig->getTypeCovered().Tokens::SPACE.
+            $rrsig->getAlgorithm().Tokens::SPACE.
+            $rrsig->getLabels().Tokens::SPACE.
+            $rrsig->getOriginalTtl().Tokens::SPACE.Tokens::OPEN_BRACKET.Tokens::LINE_FEED.
+            $strPadding.
+            $rrsig->getSignatureExpiration()->format(RRSIG::TIME_FORMAT).Tokens::SPACE.
+            $rrsig->getSignatureInception()->format(RRSIG::TIME_FORMAT).Tokens::SPACE.
+            $rrsig->getKeyTag().Tokens::SPACE.
+            $rrsig->getSignersName();
+
+        foreach ($signatureParts as $line) {
+            $rdata .= Tokens::LINE_FEED.$strPadding.$line;
+        }
+
+        $rdata .= Tokens::SPACE.Tokens::CLOSE_BRACKET;
+
+        return $rdata;
+    }
+
+    /**
      * @param LOC $rdata
      * @param int $padding
      *
@@ -127,10 +161,10 @@ class AlignedRdataFormatters
      */
     public static function makeLine(string $text, ?string $comment, int $longestVarLength, int $padding): string
     {
-        $output = str_repeat(' ', $padding).str_pad($text, $longestVarLength);
+        $output = str_repeat(Tokens::SPACE, $padding).str_pad($text, $longestVarLength);
 
         if (null !== $comment) {
-            $output .= ' '.Tokens::SEMICOLON.Tokens::SPACE.$comment;
+            $output .= Tokens::SPACE.Tokens::SEMICOLON.Tokens::SPACE.$comment;
         }
 
         return $output.Tokens::LINE_FEED;

@@ -134,6 +134,24 @@ DNS;
         $spf->setName('example.com.');
         $spf->setRdata(Factory::SPF('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
 
+        $rrsig = new ResourceRecord();
+        $rrsig->setName('example.com.');
+        $rrsig->setRdata(Factory::RRSIG(
+            'A',
+            14,
+            2,
+            3600,
+            new \DateTime('2070-01-01 00:00:00'),
+            new \DateTime('1970-01-01 00:00:00'),
+            65535,
+            'example.com.',
+            'aaaaaaaaaaaaaaaaaaaaaaaaa'
+            ));
+
+        $nsec3 = new ResourceRecord();
+        $nsec3->setName('example.com.');
+        $nsec3->setRdata(Factory::NSEC3PARAM(1, 0, 5, '9474017E'));
+
         $this->assertTrue(AlignedBuilder::compareResourceRecords($soa, $ns1) < 0);
         $this->assertTrue(AlignedBuilder::compareResourceRecords($aaaa, $cname) < 0);
         $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $mx2) < 0);
@@ -143,6 +161,9 @@ DNS;
         $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $a) > 0);
         $this->assertTrue(AlignedBuilder::compareResourceRecords($ns2, $ns1) > 0);
         $this->assertTrue(AlignedBuilder::compareResourceRecords($spf, $txt) > 0);
+
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($nsec3, $rrsig) < 0);
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($rrsig, $nsec3) > 0);
     }
 
     public function testBuild(): void
