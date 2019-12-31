@@ -18,9 +18,18 @@ use Badcow\DNS\Rdata\APL;
 use Badcow\DNS\Rdata\LOC;
 use Badcow\DNS\Rdata\RRSIG;
 use Badcow\DNS\Rdata\SOA;
+use Badcow\DNS\Rdata\TXT;
 
 class AlignedRdataFormatters
 {
+    public static $rdataFormatters = [
+        SOA::TYPE => __CLASS__.'::SOA',
+        APL::TYPE => __CLASS__.'::APL',
+        LOC::TYPE => __CLASS__.'::LOC',
+        RRSIG::TYPE => __CLASS__.'::RRSIG',
+        TXT::TYPE => __CLASS__.'::TXT',
+    ];
+
     private function __construct()
     {
     }
@@ -35,6 +44,7 @@ class AlignedRdataFormatters
             APL::TYPE => __CLASS__.'::APL',
             LOC::TYPE => __CLASS__.'::LOC',
             RRSIG::TYPE => __CLASS__.'::RRSIG',
+            TXT::TYPE => __CLASS__.'::TXT',
         ];
     }
 
@@ -86,6 +96,33 @@ class AlignedRdataFormatters
         }
 
         return $string.str_repeat(' ', $padding).Tokens::CLOSE_BRACKET;
+    }
+
+    /**
+     * Split the TXT string into 40 character lines if the string is larger than 50 characters.
+     *
+     * @param TXT $txt
+     * @param int $padding
+     *
+     * @return string
+     */
+    public static function TXT(TXT $txt, int $padding): string
+    {
+        if (null === $txt->getText() || strlen($txt->getText()) <= 50) {
+            return $txt->toText();
+        }
+
+        $lines = str_split($txt->getText(), 40);
+        $padString = str_repeat(Tokens::SPACE, $padding);
+
+        $rdata = Tokens::OPEN_BRACKET.Tokens::SPACE;
+        foreach ($lines as $line) {
+            $rdata .= Tokens::LINE_FEED.$padString.Tokens::SPACE.Tokens::SPACE.
+                Tokens::DOUBLE_QUOTES.$line.Tokens::DOUBLE_QUOTES;
+        }
+        $rdata .= Tokens::LINE_FEED.$padString.Tokens::CLOSE_BRACKET;
+
+        return $rdata;
     }
 
     /**
