@@ -16,7 +16,7 @@ These five components have been mapped to the `Badcow\DNS\ResourceRecord` class.
 - `$name (string)` - This can be a fully-qualified domain name, and unqualified domain name, `@` (meaning it takes the
 name of the parent zone), or `null`.
 - `$classId (int)` - This is an 8-bit integer that refers to a class as defined by IANA. The default is `1` (INTERNET).
-- `$ttl (int)` - This is a 16-bit integer. This can be `null` (default).
+- `$ttl (int)` - This is a 32-bit signed integer. This can be `null` (default).
 - `$rdata (\Badcow\DNS\Rdata\RdataInterface)` - Any of the over forty RDATA classes that have been defined in this library.
 - `$comment (string)` - A string of any length that gives additional details about the resource record. This is intended
 for human use only.
