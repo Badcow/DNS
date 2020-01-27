@@ -74,7 +74,7 @@ class TXT implements RdataInterface
      */
     public static function fromWire(string $rdata): RdataInterface
     {
-        $txt = new self();
+        $txt = new static();
         $txt->setText($rdata);
 
         return $txt;
@@ -93,7 +93,7 @@ class TXT implements RdataInterface
             $string->next();
         }
 
-        $rdata = new self();
+        $rdata = new static();
         $rdata->setText((string) $txt);
 
         return $rdata;
