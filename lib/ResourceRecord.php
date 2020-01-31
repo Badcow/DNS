@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Badcow\DNS;
 
 use Badcow\DNS\Rdata\RdataInterface;
+use Badcow\DNS\Rdata\RdataTrait;
+use InvalidArgumentException;
 
 class ResourceRecord
 {
@@ -69,12 +71,12 @@ class ResourceRecord
      *
      * @param string $class
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setClass(?string $class): void
     {
         if (null !== $class && !Classes::isValid($class)) {
-            throw new \InvalidArgumentException(sprintf('No such class as "%s"', $class));
+            throw new InvalidArgumentException(sprintf('No such class as "%s"', $class));
         }
 
         if (null === $class) {
@@ -194,5 +196,46 @@ class ResourceRecord
     public function getComment(): ?string
     {
         return $this->comment;
+    }
+
+    /**
+     * @return string
+     *
+     * @throws UnsetValueException|InvalidArgumentException
+     */
+    public function toWire(): string
+    {
+        if (null === $this->name) {
+            throw new UnsetValueException('ResourceRecord name has not been set.');
+        }
+
+        if (null === $this->rdata) {
+            throw new UnsetValueException('ResourceRecord rdata has not been set.');
+        }
+
+        if (null === $this->classId) {
+            throw new UnsetValueException('ResourceRecord class has not been set.');
+        }
+
+        if (null === $this->ttl) {
+            throw new UnsetValueException('ResourceRecord TTL has not been set.');
+        }
+
+        if (!Validator::fullyQualifiedDomainName($this->name)) {
+            throw new InvalidArgumentException(sprintf('"%s" is not a fully qualified domain name.', $this->name));
+        }
+
+        $rdata = $this->rdata->toWire();
+
+        $encoded = RdataTrait::encodeName($this->name);
+        $encoded .= pack('nnNn',
+            $this->rdata->getTypeCode(),
+            $this->classId,
+            $this->ttl,
+            strlen($rdata)
+        );
+        $encoded .= $rdata;
+
+        return $encoded;
     }
 }
