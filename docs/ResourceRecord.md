@@ -57,3 +57,11 @@ $resourceRecord = \Badcow\DNS\ResourceRecord::create('example.com.', $a, 3600, '
 ```
 
 **Note:** Only the `$name` and `$rdata` parameters are required.
+
+## To and From Wire-formatted Binary Strings.
+`ResourceRecord::toWire()` will return a string that is "wire ready" - that is, a form that can be transmitted to DNS
+clients or servers. **NOTE:** all fields of the `ResourceRecord` object must be filled and the name must be a FQDN;
+otherwise this method will throw a `\Badcow\DNS\UnsetValueException`.
+
+Similarly, `ResourceRecord::fromWire(string $encoded, int &$offset = 0)` will construct a `ResourceRecord` object from
+an encoded, "wire-formatted" string.

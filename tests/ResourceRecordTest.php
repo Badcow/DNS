@@ -92,4 +92,31 @@ class ResourceRecordTest extends TestCase
 
         $this->assertEquals($expectation, $rr->toWire());
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testFromWire(): void
+    {
+        $encoded = pack('C*',
+            0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, //8-bytes to test the offset
+            0x03, 0x61, 0x62, 0x63, 0x07, 0x65, 0x78, 0x61, 0x6D, 0x70, 0x6C, 0x65, 0x03, 0x63, 0x6F, 0x6D, 0x00, //(3)abc(7)example(3)com(NULL)
+            0x00, 0x01, //A (1)
+            0x00, 0x01, //IN (1)
+            0x00, 0x00, 0x0E, 0x10, //3600
+            0x00, 0x04, //4 (RDLENGTH)
+            0xC0, 0xA8, 0x01, 0x01 //192.168.1.1
+        );
+
+        $offset = 8;
+        $a = Factory::A('192.168.1.1');
+        $expectation = new ResourceRecord();
+        $expectation->setName('abc.example.com.');
+        $expectation->setClass(Classes::INTERNET);
+        $expectation->setRdata($a);
+        $expectation->setTtl(3600);
+
+        $this->assertEquals($expectation, ResourceRecord::fromWire($encoded, $offset));
+        $this->assertEquals(39, $offset);
+    }
 }

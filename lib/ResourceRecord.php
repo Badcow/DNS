@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Badcow\DNS;
 
+use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\RdataInterface;
 use Badcow\DNS\Rdata\RdataTrait;
+use Badcow\DNS\Rdata\Types;
 use InvalidArgumentException;
 
 class ResourceRecord
@@ -237,5 +239,34 @@ class ResourceRecord
         $encoded .= $rdata;
 
         return $encoded;
+    }
+
+    /**
+     * @param string $encoded
+     * @param int    $offset
+     *
+     * @return ResourceRecord
+     *
+     * @throws Rdata\UnsupportedTypeException
+     */
+    public static function fromWire(string $encoded, int &$offset = 0): ResourceRecord
+    {
+        $rr = new self();
+        $rr->setName(RdataTrait::decodeName($encoded, $offset));
+        $integers = unpack('ntype/nclass/Nttl/ndlength', $encoded, $offset);
+        $offset += 10;
+        $rr->setClassId($integers['class']);
+        $rr->setTtl($integers['ttl']);
+        $rdataLen = $integers['dlength'];
+
+        /** @var callable $callable */
+        $callable = Factory::getRdataClassName(Types::getName($integers['type'])).'::fromWire';
+        /** @var RdataInterface $rdata */
+        $rdata = call_user_func($callable, substr($encoded, $offset, $rdataLen));
+
+        $offset += $rdataLen;
+        $rr->setRdata($rdata);
+
+        return $rr;
     }
 }
