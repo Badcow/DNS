@@ -164,16 +164,19 @@ class NSEC3PARAM implements RdataInterface
      *
      * @return NSEC3PARAM
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $integers = unpack('C<algorithm>/C<flags>/n<iterations>/C<saltLen>', $rdata);
+        $integers = unpack('C<algorithm>/C<flags>/n<iterations>/C<saltLen>', $rdata, $offset);
+        $saltLen = (int) $integers['<saltLen>'];
+        $offset += 5;
         $nsec3param = new self();
         $nsec3param->setHashAlgorithm($integers['<algorithm>']);
         $nsec3param->setFlags($integers['<flags>']);
         $nsec3param->setIterations($integers['<iterations>']);
 
-        $saltBin = substr($rdata, 5, $integers['<saltLen>']);
+        $saltBin = substr($rdata, $offset, $saltLen);
         $nsec3param->setSalt(bin2hex($saltBin));
+        $offset += $saltLen;
 
         return $nsec3param;
     }

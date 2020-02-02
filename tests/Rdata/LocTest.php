@@ -196,8 +196,10 @@ class LocTest extends TestCase
         $loc->setHorizontalPrecision(200);
         $loc->setVerticalPrecision(300);
 
-        $wireFormat = $loc->toWire();
+        $wireFormat = 'abc'.$loc->toWire();
+        $offset = 3;
 
-        $this->assertEquals($loc, LOC::fromWire($wireFormat));
+        $this->assertEquals($loc, LOC::fromWire($wireFormat, $offset));
+        $this->assertEquals(19, $offset);
     }
 }

@@ -309,9 +309,10 @@ class LOC implements RdataInterface
      *
      * @return LOC
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $values = unpack('C<version>/C<size>/C<hp>/C<vp>/l<lat>/l<lon>/l<alt>', $rdata);
+        $values = unpack('C<version>/C<size>/C<hp>/C<vp>/l<lat>/l<lon>/l<alt>', $rdata, $offset);
+        $offset += 16;
         $loc = new LOC();
 
         $loc->setSize(self::exponentValueToNumber($values['<size>']));

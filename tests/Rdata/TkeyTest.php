@@ -112,7 +112,11 @@ DATA;
         $tkey->setOtherData(base64_decode($this->dummyOtherData));
 
         $wireFormat = $tkey->toWire();
-        $this->assertEquals($tkey, TKEY::fromWire($wireFormat));
+        $rdLength = strlen($wireFormat);
+        $wireFormat = 'abcdefg'.$wireFormat;
+        $offset = 7;
+        $this->assertEquals($tkey, TKEY::fromWire($wireFormat, $offset, $rdLength));
+        $this->assertEquals(7 + $rdLength, $offset);
     }
 
     public function testFromText(): void

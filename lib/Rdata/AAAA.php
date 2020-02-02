@@ -20,4 +20,22 @@ class AAAA extends A
 {
     const TYPE = 'AAAA';
     const TYPE_CODE = 28;
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws DecodeException
+     */
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    {
+        if (false === $address = @inet_ntop(substr($rdata, $offset, 16))) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
+        $offset += 16;
+
+        $a = new static();
+        $a->setAddress($address);
+
+        return $a;
+    }
 }

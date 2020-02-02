@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Tests\Rdata;
 
+use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\IPSECKEY;
 use PHPUnit\Framework\TestCase;
@@ -73,6 +74,8 @@ class IpseckeyTest extends TestCase
      * @param int         $algorithm
      * @param string|null $gateway
      * @param string|null $publicKey
+     *
+     * @throws DecodeException
      */
     public function testToFromWire(string $text, int $precedence, int $gatewayType, int $algorithm, ?string $gateway, ?string $publicKey): void
     {
@@ -82,7 +85,11 @@ class IpseckeyTest extends TestCase
         $ipseckey->setPublicKey($algorithm, $publicKey);
 
         $wireFormat = $ipseckey->toWire();
-        $this->assertEquals($ipseckey, IPSECKEY::fromWire($wireFormat));
+        $rdLength = strlen($wireFormat);
+        $wireFormat = 'abc'.$wireFormat;
+        $offset = 3;
+        $this->assertEquals($ipseckey, IPSECKEY::fromWire($wireFormat, $offset, $rdLength));
+        $this->assertEquals(3 + $rdLength, $offset);
     }
 
     /**

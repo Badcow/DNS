@@ -85,8 +85,12 @@ class NaptrTest extends TestCase
         $naptr->setRegexp($regexp);
         $naptr->setReplacement($replacement);
         $wireFormat = $naptr->toWire();
+        $rdLength = strlen($wireFormat);
+        $wireFormat = 'abc'.$wireFormat;
+        $offset = 3;
 
-        $this->assertEquals($naptr, NAPTR::fromWire($wireFormat));
+        $this->assertEquals($naptr, NAPTR::fromWire($wireFormat, $offset, $rdLength));
+        $this->assertEquals(3 + $rdLength, $offset);
     }
 
     /**

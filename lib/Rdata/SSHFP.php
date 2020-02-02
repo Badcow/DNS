@@ -144,13 +144,16 @@ class SSHFP implements RdataInterface
      *
      * @return SSHFP
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $integers = unpack('C<algorithm>/C<fpType>', $rdata);
+        $integers = unpack('C<algorithm>/C<fpType>', $rdata, $offset);
+        $offset += 2;
         $sshfp = new self();
         $sshfp->setAlgorithm($integers['<algorithm>']);
         $sshfp->setFingerprintType($integers['<fpType>']);
-        $sshfp->setFingerprint(bin2hex(substr($rdata, 2)));
+        $fpLen = ($rdLength ?? strlen($rdata)) - 2;
+        $sshfp->setFingerprint(bin2hex(substr($rdata, $offset, $fpLen)));
+        $offset += $fpLen;
 
         return $sshfp;
     }

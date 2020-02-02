@@ -66,10 +66,12 @@ class AaaaTest extends TestCase
      */
     public function testFromWire(): void
     {
-        $wire = inet_pton('beef::1');
-        $aaaa = AAAA::fromWire($wire);
+        $wire = chr(0x07).inet_pton('beef::1').chr(0x07);
+        $offset = 1;
+        $aaaa = AAAA::fromWire($wire, $offset);
 
         $this->assertEquals('beef::1', $aaaa->getAddress());
+        $this->assertEquals(17, $offset);
     }
 
     public function testFactory(): void
@@ -78,16 +80,5 @@ class AaaaTest extends TestCase
         $aaaa->setAddress('2001:acad:1::');
 
         $this->assertEquals(Factory::AAAA('2001:acad:1::'), $aaaa);
-    }
-
-    /**
-     * @throws DecodeException
-     */
-    public function testException(): void
-    {
-        $wire = pack('C18', 0x14, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01); //2001:0:0:0:0:0:0:1:1
-        $this->expectException(DecodeException::class);
-        $this->expectExceptionMessage('Unable to decode AAAA record rdata from binary data "0x14 0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x01 0x00 0x01"');
-        AAAA::fromWire($wire);
     }
 }

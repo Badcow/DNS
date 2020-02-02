@@ -99,14 +99,11 @@ class RP implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $pos = strpos($rdata, "\0");
-        $mbox = substr($rdata, 0, $pos + 1);
-        $txt = substr($rdata, $pos + 1);
         $rp = new self();
-        $rp->setMailboxDomainName(self::decodeName($mbox));
-        $rp->setTxtDomainName(self::decodeName($txt));
+        $rp->setMailboxDomainName(self::decodeName($rdata, $offset));
+        $rp->setTxtDomainName(self::decodeName($rdata, $offset));
 
         return $rp;
     }

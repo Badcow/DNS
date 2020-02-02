@@ -67,6 +67,16 @@ trait RdataTrait
         $len = ord($string[$offset]);
         ++$offset;
 
+        $isCompressed = (bool) (0b11000000 & $len);
+        $_offset = 0;
+
+        if ($isCompressed) {
+            $_offset = $offset + 1;
+            $offset = (0b00111111 & $len) * 256 + ord($string[$offset]);
+            $len = ord($string[$offset]);
+            ++$offset;
+        }
+
         if (0 === $len) {
             return '.';
         }
@@ -76,7 +86,16 @@ trait RdataTrait
             $name .= substr($string, $offset, $len).'.';
             $offset += $len;
             $len = ord($string[$offset]);
+            if ($len & 0b11000000) {
+                $name .= self::decodeName($string, $offset);
+                break;
+            }
+
             ++$offset;
+        }
+
+        if ($isCompressed) {
+            $offset = $_offset;
         }
 
         return $name;

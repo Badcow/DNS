@@ -106,12 +106,17 @@ class SoaTest extends TestCase
         $soa->setExpire($expire);
         $soa->setMinimum($minimum);
 
-        $expectation =
+        $wireFormat =
             chr(7).'example'.chr(3).'com'."\0".
             chr(4).'post'.chr(7).'example'.chr(3).'com'."\0".
             pack('NNNNN', 1970010101, 3600, 14400, 604800, 3600);
 
-        $this->assertEquals($expectation, $soa->toWire());
-        $this->assertEquals($soa, SOA::fromWire($expectation));
+        $this->assertEquals($wireFormat, $soa->toWire());
+
+        $rdLength = strlen($wireFormat);
+        $wireFormat = 'abcde'.$wireFormat;
+        $offset = 5;
+        $this->assertEquals($soa, SOA::fromWire($wireFormat, $offset, $rdLength));
+        $this->assertEquals(5 + $rdLength, $offset);
     }
 }

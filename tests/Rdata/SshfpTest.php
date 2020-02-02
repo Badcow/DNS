@@ -84,13 +84,17 @@ class SshfpTest extends TestCase
 
     public function testWire(): void
     {
+        $wireFormat = chr(2).chr(1).hex2bin('123456789abcdef67890123456789abcdef67890');
         $sshfp = new SSHFP();
         $sshfp->setAlgorithm(2);
         $sshfp->setFingerprintType(1);
         $sshfp->setFingerprint('123456789abcdef67890123456789abcdef67890');
 
-        $wireFormat = $sshfp->toWire();
-        $this->assertEquals($sshfp, SSHFP::fromWire($wireFormat));
+        $this->assertEquals($wireFormat, $sshfp->toWire());
+
+        $wireFormat = 'zyxwvut'.$wireFormat;
+        $offset = 7;
+        $this->assertEquals($sshfp, SSHFP::fromWire($wireFormat, $offset, 40));
     }
 
     public function testFromText(): void

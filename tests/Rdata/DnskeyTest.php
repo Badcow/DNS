@@ -63,14 +63,20 @@ class DnskeyTest extends TestCase
 
     public function testWire(): void
     {
-        $expecation = pack('nCC', 256, 3, 5).self::$publicKey;
+        $wireFormat = pack('nCC', 256, 3, 5).base64_decode(self::$publicKey);
 
         $dnskey = new DNSKEY();
         $dnskey->setFlags(256);
         $dnskey->setAlgorithm(Algorithms::RSASHA1);
         $dnskey->setPublicKey("AQPSKmynfzW4kyBv015MUG2DeIQ3Cbl+BBZH4b/\r\n0PY1kxkmvHjcZc8nokfzj31GajIQKY+5CptLr3buXA10hWqTkF7H6RfoRqXQe   ogmMHfpftf6zMv1LyBUgia7za6ZEzOJBOztyvhjL742iU\n/TpPSEDhm2SNKLijfUppn1UaNvv4w==");
 
-        $this->assertEquals($expecation, $dnskey->toWire());
-        $this->assertEquals($dnskey, DNSKEY::fromWire($expecation));
+        $this->assertEquals($wireFormat, $dnskey->toWire());
+
+        $rdLength = strlen($wireFormat);
+        $wireFormat = 'abcde'.$wireFormat.'fghijk';
+        $offset = 5;
+
+        $this->assertEquals($dnskey, DNSKEY::fromWire($wireFormat, $offset, $rdLength));
+        $this->assertEquals(5 + $rdLength, $offset);
     }
 }
