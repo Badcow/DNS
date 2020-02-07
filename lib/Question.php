@@ -68,6 +68,7 @@ class Question
 
     /**
      * @return string
+     *
      * @throws UnsupportedTypeException
      */
     public function getType(): string
@@ -93,6 +94,7 @@ class Question
 
     /**
      * @param string $type
+     *
      * @throws UnsupportedTypeException
      */
     public function setType(string $type): void
