@@ -18,8 +18,11 @@ use Badcow\DNS\Message;
 use Badcow\DNS\Opcode;
 use Badcow\DNS\Rcode;
 use Badcow\DNS\Rdata\A;
+use Badcow\DNS\Rdata\MX;
 use Badcow\DNS\Rdata\NS;
+use Badcow\DNS\Rdata\UnsupportedTypeException;
 use Badcow\DNS\ResourceRecord;
+use Badcow\DNS\UnsetValueException;
 use PHPUnit\Framework\TestCase;
 
 class MessageTest extends TestCase
@@ -27,11 +30,14 @@ class MessageTest extends TestCase
     private function getWireTestData(int $n): string
     {
         $filename = sprintf(__DIR__.'/Resources/wire/wire_test.data%d', $n);
-        $data = preg_replace(['/0x/', '/\#.*/', '/(?:\r|\n|\s)*/'], '', file_get_contents($filename));
+        $data = preg_replace(['/0x/', '/#.*/', '/(?:\r|\n|\s)*/'], '', file_get_contents($filename));
 
         return hex2bin($data);
     }
 
+    /**
+     * @throws UnsupportedTypeException
+     */
     public function testWire1(): void
     {
         $data = $this->getWireTestData(1);
@@ -47,7 +53,9 @@ class MessageTest extends TestCase
         $this->assertEquals(false, $msg->isTruncated());
         $this->assertEquals(true, $msg->isRecursionDesired());
         $this->assertEquals(true, $msg->isRecursionAvailable());
-        $this->assertEquals(0, $msg->getZ());
+        $this->assertEquals(0, $msg->getBit9());
+        $this->assertEquals(false, $msg->isAuthenticData());
+        $this->assertEquals(false, $msg->isCheckingDisabled());
         $this->assertEquals(Rcode::NOERROR, $msg->getRcode());
 
         $this->assertEquals(1, $msg->countQuestions());
@@ -57,8 +65,8 @@ class MessageTest extends TestCase
 
         $question = $msg->getQuestions()[0];
         $this->assertEquals('vix.com.', $question->getName());
-        $this->assertEquals(1, $question->getClass());
-        $this->assertEquals(2, $question->getType());
+        $this->assertEquals(1, $question->getClassId());
+        $this->assertEquals(2, $question->getTypeCode());
 
         $ns1 = $msg->getAnswers()[0];
         $this->assertInstanceOf(ResourceRecord::class, $ns1);
@@ -109,6 +117,9 @@ class MessageTest extends TestCase
         $this->assertEquals('198.151.248.246', $a3->getRdata()->getAddress());
     }
 
+    /**
+     * @throws UnsupportedTypeException
+     */
     public function testWire2(): void
     {
         $data = $this->getWireTestData(2);
@@ -117,6 +128,9 @@ class MessageTest extends TestCase
         $this->assertInstanceOf(Message::class, $msg);
     }
 
+    /**
+     * @throws UnsupportedTypeException
+     */
     public function testWire3(): void
     {
         $data = $this->getWireTestData(3);
@@ -125,7 +139,69 @@ class MessageTest extends TestCase
         $this->assertInstanceOf(Message::class, $msg);
     }
 
+    /**
+     * @throws UnsupportedTypeException
+     */
     public function testWire4(): void
+    {
+        $data = $this->getWireTestData(4);
+        $msg = Message::fromWire($data);
+
+        $this->assertInstanceOf(Message::class, $msg);
+
+        $this->assertEquals(6, $msg->getId());
+        $this->assertEquals(true, $msg->isResponse());
+        $this->assertEquals(Opcode::QUERY, $msg->getOpcode());
+        $this->assertEquals(false, $msg->isAuthoritative());
+        $this->assertEquals(false, $msg->isTruncated());
+        $this->assertEquals(true, $msg->isRecursionDesired());
+        $this->assertEquals(true, $msg->isRecursionAvailable());
+        $this->assertEquals(0, $msg->getBit9());
+        $this->assertEquals(false, $msg->isAuthenticData());
+        $this->assertEquals(false, $msg->isCheckingDisabled());
+        $this->assertEquals(Rcode::NOERROR, $msg->getRcode());
+
+        $this->assertEquals(1, $msg->countQuestions());
+        $this->assertEquals(7, $msg->countAnswers());
+        $this->assertEquals(2, $msg->countAuthoritatives());
+        $this->assertEquals(17, $msg->countAdditionals());
+
+        $question = $msg->getQuestions()[0];
+        $this->assertEquals('aol.com.', $question->getName());
+        $this->assertEquals(1, $question->getClassId());
+        $this->assertEquals(15, $question->getTypeCode());
+
+        $mx = $msg->getAnswers()[6];
+        $this->assertInstanceOf(ResourceRecord::class, $mx);
+        $this->assertEquals('aol.com.', $mx->getName());
+        $this->assertEquals(3355, $mx->getTtl());
+        $this->assertEquals(Classes::INTERNET, $mx->getClass());
+        $this->assertInstanceOf(MX::class, $mx->getRdata());
+        $this->assertEquals(15, $mx->getRdata()->getPreference());
+        $this->assertEquals('zc.mx.aol.com.', $mx->getRdata()->getExchange());
+
+        $ns = $msg->getAuthoritatives()[1];
+        $this->assertInstanceOf(ResourceRecord::class, $ns);
+        $this->assertEquals('aol.com.', $ns->getName());
+        $this->assertEquals(3355, $ns->getTtl());
+        $this->assertEquals(Classes::INTERNET, $ns->getClass());
+        $this->assertInstanceOf(NS::class, $ns->getRdata());
+        $this->assertEquals('DNS-02.NS.aol.com.', $ns->getRdata()->getTarget());
+
+        $a = $msg->getAdditionals()[14];
+        $this->assertInstanceOf(ResourceRecord::class, $a);
+        $this->assertEquals('yc.mx.aol.com.', $a->getName());
+        $this->assertEquals(3356, $a->getTtl());
+        $this->assertEquals(Classes::INTERNET, $a->getClass());
+        $this->assertInstanceOf(A::class, $a->getRdata());
+        $this->assertEquals('205.188.156.130', $a->getRdata()->getAddress());
+    }
+
+    /**
+     * @throws UnsupportedTypeException
+     * @throws UnsetValueException
+     */
+    public function testWire5(): void
     {
         $expectation = $this->getWireTestData(5);
         $msg = Message::fromWire($this->getWireTestData(1));

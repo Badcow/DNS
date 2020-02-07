@@ -29,12 +29,12 @@ class Question
     /**
      * @var int
      */
-    private $type;
+    private $typeCode;
 
     /**
      * @var int
      */
-    private $class;
+    private $classId;
 
     /**
      * @return string
@@ -61,46 +61,64 @@ class Question
     /**
      * @return int
      */
-    public function getType(): int
+    public function getTypeCode(): int
     {
-        return $this->type;
+        return $this->typeCode;
     }
 
     /**
-     * @param string|int $type
+     * @return string
+     * @throws UnsupportedTypeException
+     */
+    public function getType(): string
+    {
+        return Types::getName($this->typeCode);
+    }
+
+    /**
+     * @param string|int $typeCode
      *
      * @throws UnsupportedTypeException
      */
-    public function setType($type): void
+    public function setTypeCode($typeCode): void
     {
-        if (is_string($type)) {
-            $this->type = Types::getTypeCode($type);
-        } elseif (is_int($type)) {
-            $this->type = $type;
+        if (is_string($typeCode)) {
+            $this->typeCode = Types::getTypeCode($typeCode);
+        } elseif (is_int($typeCode)) {
+            $this->typeCode = $typeCode;
         } else {
-            throw new UnsupportedTypeException(sprintf('Library does not support type "%s".', $type));
+            throw new UnsupportedTypeException(sprintf('Library does not support type "%s".', $typeCode));
         }
+    }
+
+    /**
+     * @param string $type
+     * @throws UnsupportedTypeException
+     */
+    public function setType(string $type): void
+    {
+        $this->setTypeCode(Types::getTypeCode($type));
     }
 
     /**
      * @return int
      */
-    public function getClass(): int
+    public function getClassId(): int
     {
-        return $this->class;
+        return $this->classId;
     }
 
     /**
-     * @param string|int $class
+     * @param string|int $classId
      */
-    public function setClass($class): void
+    public function setClassId($classId): void
     {
-        if (is_string($class)) {
-            $this->class = Classes::getClassId($class);
-        } elseif (Validator::isUnsignedInteger($class, 16)) {
-            $this->class = $class;
+        if (is_string($classId)) {
+            $this->classId = Classes::getClassId($classId);
+        } elseif (Validator::isUnsignedInteger($classId, 16)) {
+            $this->classId = $classId;
         } else {
-            throw new InvalidArgumentException(sprintf('Invalid class: "%s".', $class));
+            throw new InvalidArgumentException(sprintf('Invalid class: "%s".', $classId));
         }
     }
 
@@ -109,7 +127,7 @@ class Question
      */
     public function toWire(): string
     {
-        return RdataTrait::encodeName($this->name).pack('nn', $this->type, $this->class);
+        return RdataTrait::encodeName($this->name).pack('nn', $this->typeCode, $this->classId);
     }
 
     /**
@@ -126,8 +144,8 @@ class Question
         $question = new self();
         $question->setName(RdataTrait::decodeName($encoded, $offset));
         $integers = unpack('ntype/nclass', $encoded, $offset);
-        $question->setType($integers['type']);
-        $question->setClass($integers['class']);
+        $question->setTypeCode($integers['type']);
+        $question->setClassId($integers['class']);
         $offset += 4;
 
         return $question;

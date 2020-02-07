@@ -1,7 +1,7 @@
 # message header
 000a #id=10
 85 # QR=1 (response) OPCODE=0 AA=1 TC=0 RD=1
-80 # RA=1 Z=0 RCODE=0
+80 # RA=1 BIT9=0 AD=0 CD=0 RCODE=0
 0001 #QDCOUNT
 0003 #ANCOUNT
 0000 #NSCOUNT

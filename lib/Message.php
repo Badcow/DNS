@@ -67,11 +67,29 @@ class Message
     private $isRecursionAvailable;
 
     /**
-     * A.
+     * Bit 9 of the header flags.
      *
      * @var int
      */
-    private $z = 0;
+    private $bit9 = 0;
+
+    /**
+     * AD.
+     *
+     * {@link https://tools.ietf.org/html/rfc4035#section-3.2.3}
+     *
+     * @var bool
+     */
+    private $isAuthenticData;
+
+    /**
+     * CD.
+     *
+     * {@link https://tools.ietf.org/html/rfc4035#section-3.2.2}
+     *
+     * @var bool
+     */
+    private $isCheckingDisabled;
 
     /**
      * RCODE.
@@ -231,17 +249,49 @@ class Message
     /**
      * @return int
      */
-    public function getZ(): int
+    public function getBit9(): int
     {
-        return $this->z;
+        return $this->bit9;
     }
 
     /**
-     * @param int $z
+     * @param int $bit9
      */
-    public function setZ(int $z): void
+    public function setBit9(int $bit9): void
     {
-        $this->z = $z;
+        $this->bit9 = $bit9;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAuthenticData(): bool
+    {
+        return $this->isAuthenticData;
+    }
+
+    /**
+     * @param bool $isAuthenticData
+     */
+    public function setAuthenticData(bool $isAuthenticData): void
+    {
+        $this->isAuthenticData = $isAuthenticData;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCheckingDisabled(): bool
+    {
+        return $this->isCheckingDisabled;
+    }
+
+    /**
+     * @param bool $isCheckingDisabled
+     */
+    public function setCheckingDisabled(bool $isCheckingDisabled): void
+    {
+        $this->isCheckingDisabled = $isCheckingDisabled;
     }
 
     /**
@@ -402,7 +452,9 @@ class Message
             ($this->isTruncated & 0x1) << 9 |
             ($this->isRecursionDesired & 0x1) << 8 |
             ($this->isRecursionAvailable & 0x1) << 7 |
-            ($this->z & 0x7) << 4 |
+            ($this->bit9 & 0x1) << 6 |
+            ($this->isAuthenticData & 0x1) << 5 |
+            ($this->isCheckingDisabled & 0x1) << 4 |
             ($this->rcode & 0xf);
 
         $encoded = pack(
@@ -460,7 +512,9 @@ class Message
         $message->setTruncated((bool) ($flags >> 9 & 0x1));
         $message->setRecursionDesired((bool) ($flags >> 8 & 0x1));
         $message->setRecursionAvailable((bool) ($flags >> 7 & 0x1));
-        $message->setZ($flags >> 4 & 0x7);
+        $message->setBit9($flags >> 6 & 0x1);
+        $message->setAuthenticData((bool) ($flags >> 5 & 0x1));
+        $message->setCheckingDisabled((bool) ($flags >> 4 & 0x1));
         $message->setRcode($flags & 0xf);
 
         for ($i = 0; $i < $qdCount; ++$i) {
