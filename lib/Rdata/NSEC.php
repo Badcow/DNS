@@ -138,10 +138,16 @@ class NSEC implements RdataInterface
      * @return string[]
      *
      * @throws UnsupportedTypeException
+     * @throws DecodeException
      */
     public static function parseBitmap(string $rdata, int &$offset): array
     {
         $bytes = unpack('C*', $rdata, $offset);
+
+        if (!is_array($bytes)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
+
         $types = [];
 
         while (count($bytes) > 0) {

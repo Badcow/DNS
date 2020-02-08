@@ -85,6 +85,8 @@ class RP implements RdataInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return RP
      */
     public static function fromText(string $text): RdataInterface
     {
