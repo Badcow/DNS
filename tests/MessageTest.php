@@ -16,6 +16,7 @@ namespace Badcow\DNS\Tests;
 use Badcow\DNS\Classes;
 use Badcow\DNS\Message;
 use Badcow\DNS\Opcode;
+use Badcow\DNS\Question;
 use Badcow\DNS\Rcode;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\MX;
@@ -27,16 +28,33 @@ use PHPUnit\Framework\TestCase;
 
 class MessageTest extends TestCase
 {
+    /**
+     * @param int $n
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
     private function getWireTestData(int $n): string
     {
         $filename = sprintf(__DIR__.'/Resources/wire/wire_test.data%d', $n);
-        $data = preg_replace(['/0x/', '/#.*/', '/(?:\r|\n|\s)*/'], '', file_get_contents($filename));
+
+        if (!file_exists($filename)) {
+            throw new \Exception(sprintf('Could not locate resource "%s". FILE NOT FOUND.', $filename));
+        }
+
+        if (false === $data = file_get_contents($filename)) {
+            throw new \Exception(sprintf('Could not access resource "%s".', $filename));
+        }
+
+        $data = preg_replace(['/0x/', '/#.*/', '/(?:\r|\n|\s)*/'], '', $data);
 
         return hex2bin($data);
     }
 
     /**
      * @throws UnsupportedTypeException
+     * @throws \Exception
      */
     public function testWire1(): void
     {
@@ -48,6 +66,7 @@ class MessageTest extends TestCase
 
         $this->assertEquals(10, $msg->getId());
         $this->assertEquals(true, $msg->isResponse());
+        $this->assertEquals(false, $msg->isQuery());
         $this->assertEquals(Opcode::QUERY, $msg->getOpcode());
         $this->assertEquals(true, $msg->isAuthoritative());
         $this->assertEquals(false, $msg->isTruncated());
@@ -119,6 +138,7 @@ class MessageTest extends TestCase
 
     /**
      * @throws UnsupportedTypeException
+     * @throws \Exception
      */
     public function testWire2(): void
     {
@@ -130,6 +150,7 @@ class MessageTest extends TestCase
 
     /**
      * @throws UnsupportedTypeException
+     * @throws \Exception
      */
     public function testWire3(): void
     {
@@ -141,6 +162,7 @@ class MessageTest extends TestCase
 
     /**
      * @throws UnsupportedTypeException
+     * @throws \Exception
      */
     public function testWire4(): void
     {
@@ -200,11 +222,86 @@ class MessageTest extends TestCase
     /**
      * @throws UnsupportedTypeException
      * @throws UnsetValueException
+     * @throws \Exception
      */
     public function testWire5(): void
     {
         $expectation = $this->getWireTestData(5);
         $msg = Message::fromWire($this->getWireTestData(1));
+
+        $this->assertEquals($expectation, $msg->toWire());
+    }
+
+    /**
+     * @throws UnsetValueException
+     * @throws UnsupportedTypeException
+     * @throws \Exception
+     */
+    public function testWire6(): void
+    {
+        $expectation = $this->getWireTestData(6);
+        $msg = Message::fromWire($this->getWireTestData(4));
+
+        $this->assertEquals($expectation, $msg->toWire());
+    }
+
+    /**
+     * @throws UnsupportedTypeException
+     * @throws \Exception
+     */
+    public function testSetters(): void
+    {
+        $msg = Message::fromWire($this->getWireTestData(4));
+
+        $questions = $msg->getQuestions();
+        $answers = $msg->getAnswers();
+        $additionals = $msg->getAdditionals();
+        $authoritatives = $msg->getAuthoritatives();
+
+        $this->assertEquals(1, $msg->countQuestions());
+        $this->assertEquals(7, $msg->countAnswers());
+        $this->assertEquals(2, $msg->countAuthoritatives());
+        $this->assertEquals(17, $msg->countAdditionals());
+
+        $msg->setQuestions([]);
+        $msg->setAnswers([]);
+        $msg->setAdditionals([]);
+        $msg->setAuthoritatives([]);
+
+        $this->assertEquals(0, $msg->countQuestions());
+        $this->assertEquals(0, $msg->countAnswers());
+        $this->assertEquals(0, $msg->countAuthoritatives());
+        $this->assertEquals(0, $msg->countAdditionals());
+
+        $msg->setQuestions($questions);
+        $msg->setAnswers($answers);
+        $msg->setAdditionals($additionals);
+        $msg->setAuthoritatives($authoritatives);
+
+        $this->assertEquals(1, $msg->countQuestions());
+        $this->assertEquals(7, $msg->countAnswers());
+        $this->assertEquals(2, $msg->countAuthoritatives());
+        $this->assertEquals(17, $msg->countAdditionals());
+    }
+
+    /**
+     * @throws UnsetValueException
+     * @throws UnsupportedTypeException
+     * @throws \Exception
+     */
+    public function testMessage0(): void
+    {
+        $expectation = $this->getWireTestData(0);
+        $msg = new Message();
+        $msg->setId(42);
+        $msg->setQuery(true);
+
+        $question = new Question();
+        $question->setName('foo.bar.com.');
+        $question->setType('A');
+        $question->setClass('IN');
+
+        $msg->addQuestion($question);
 
         $this->assertEquals($expectation, $msg->toWire());
     }

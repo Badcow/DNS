@@ -112,8 +112,10 @@ class Question
 
     /**
      * @param string|int $classId
+     *
+     * @throws \InvalidArgumentException
      */
-    public function setClassId($classId): void
+    public function setClass($classId): void
     {
         if (is_string($classId)) {
             $this->classId = Classes::getClassId($classId);
@@ -147,7 +149,7 @@ class Question
         $question->setName(RdataTrait::decodeName($encoded, $offset));
         $integers = unpack('ntype/nclass', $encoded, $offset);
         $question->setTypeCode($integers['type']);
-        $question->setClassId($integers['class']);
+        $question->setClass($integers['class']);
         $offset += 4;
 
         return $question;
