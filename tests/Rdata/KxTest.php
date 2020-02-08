@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Tests\Rdata;
 
+use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\KX;
 use PHPUnit\Framework\TestCase;
 
@@ -58,6 +59,13 @@ class KxTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('No exchanger has been set on KX object.');
         $kx->toText();
+    }
+
+    public function testFactory(): void
+    {
+        $kx = Factory::KX(15, 'mx.example.com.');
+        $this->assertInstanceOf(KX::class, $kx);
+        $this->assertEquals('15 mx.example.com.', $kx->toText());
     }
 
     public function testFromText(): void

@@ -118,5 +118,17 @@ class DhcidTest extends TestCase
     {
         $dhcid = Factory::DHCID(null, $identifierType, $identifier, $fqdn);
         $this->assertEquals($text, $dhcid->toText());
+
+        $digest = $dhcid->getDigest();
+        $_dhcid = Factory::DHCID($digest, $identifierType);
+
+        $this->assertEquals($dhcid->toText(), $_dhcid->toText());
+    }
+
+    public function testFactoryThrowsExceptionIfIdAndFqdnAreNull(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Identifier and FQDN cannot be null if digest is null.');
+        $dhcid = Factory::DHCID(null, 2, null);
     }
 }

@@ -19,16 +19,37 @@ use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {
+    public function getTestData(): array
+    {
+        $namespace = '\\Badcow\\DNS\\Rdata\\';
+
+        return [
+            ['CNAME', 5, $namespace.'CNAME'],
+            ['AAAA', 28, $namespace.'AAAA'],
+            ['RRSIG', 46, $namespace.'RRSIG'],
+        ];
+    }
+
+    /**
+     * @dataProvider getTestData
+     *
+     * @param string $type
+     * @param int    $typeCode
+     * @param string $classname
+     *
+     * @throws UnsupportedTypeException
+     */
+    public function testNewRdataFromNameAndId(string $type, int $typeCode, string $classname): void
+    {
+        $this->assertInstanceOf($classname, Factory::newRdataFromName($type));
+        $this->assertInstanceOf($classname, Factory::newRdataFromId($typeCode));
+    }
+
     /**
      * @throws UnsupportedTypeException
      */
-    public function testNewRdataFromName(): void
+    public function testNewRdataFromNameThrowsExceptionForUnknownType(): void
     {
-        $namespace = '\\Badcow\\DNS\\Rdata\\';
-        $this->assertInstanceOf($namespace.'CNAME', Factory::newRdataFromName('cname'));
-        $this->assertInstanceOf($namespace.'AAAA', Factory::newRdataFromName('Aaaa'));
-        $this->assertInstanceOf($namespace.'RRSIG', Factory::newRdataFromName('rrsig'));
-
         $this->expectException(UnsupportedTypeException::class);
         Factory::newRdataFromName('rsig');
     }
