@@ -14,7 +14,10 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\Classes;
+use Badcow\DNS\Rdata\A;
+use Badcow\DNS\Rdata\Algorithms;
 use Badcow\DNS\Rdata\Factory;
+use Badcow\DNS\Rdata\RRSIG;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
 
@@ -39,6 +42,7 @@ bar.example.com. IN DNAME foo.example.com.
 alias IN CNAME subdomain.au.example.com.
 example.net. IN TXT "v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all"
 @ IN HINFO "2.7GHz" "Ubuntu 12.04"
+example.com. IN RRSIG A 14 2 3600 20200112073532 20191229133101 12345 example.com. bDts/7a5qbal6s3ZYzS5puPSjEfys5yI6R/kprBBRDEfVcT6YwPaDT3VkVjKXdvpKX2/DwpijNAWkjpfsewCLmeImx3RgkzfuxfipRKtBUguiPTBhkj/ft2halJziVXl
 
 DNS;
 
@@ -138,6 +142,20 @@ DNS;
         $hinfo->setClass(Classes::INTERNET);
         $hinfo->setRdata(Factory::HINFO('2.7GHz', 'Ubuntu 12.04'));
 
+        $rrsig = new ResourceRecord();
+        $rrsig->setName('example.com.');
+        $rrsig->setRdata(Factory::RRSIG(
+            A::TYPE,
+            Algorithms::ECDSAP384SHA384,
+            2,
+            3600,
+            \DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20200112073532'),
+            \DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20191229133101'),
+            12345,
+            'example.com.',
+            'bDts/7a5qbal6s3ZYzS5puPSjEfys5yI6R/kprBBRDEfVcT6YwPaDT3VkVjKXdvpKX2/DwpijNAWkjpfsewCLmeImx3RgkzfuxfipRKtBUguiPTBhkj/ft2halJziVXl'
+        ));
+
         return new Zone('example.com.', 3600, [
             $soa,
             $ns1,
@@ -152,6 +170,7 @@ DNS;
             $cname,
             $txt,
             $hinfo,
+            $rrsig,
         ]);
     }
 }

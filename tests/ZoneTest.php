@@ -135,7 +135,7 @@ class ZoneTest extends TestCase
     public function testOtherFunctions(): void
     {
         $zone = TestZone::buildTestZone();
-        $this->assertCount(13, $zone);
+        $this->assertCount(14, $zone);
         $this->assertFalse($zone->isEmpty());
 
         $rr = $zone->getResourceRecords()[0];

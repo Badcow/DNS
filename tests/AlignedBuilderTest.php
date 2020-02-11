@@ -71,6 +71,14 @@ canberra               IN LOC   (
 ; TXT RECORDS
 example.net.           IN TXT   "v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all"
 
+; RRSIG RECORDS
+example.com.           IN RRSIG A 14 2 3600 (
+                                20200112073532 20191229133101 12345 example.com.
+                                bDts/7a5qbal6s3ZYzS5puPSjEfys5yI
+                                6R/kprBBRDEfVcT6YwPaDT3VkVjKXdvp
+                                KX2/DwpijNAWkjpfsewCLmeImx3Rgkzf
+                                uxfipRKtBUguiPTBhkj/ft2halJziVXl )
+
 DNS;
 
     protected function getExpected(): string
