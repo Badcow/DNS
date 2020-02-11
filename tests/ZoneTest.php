@@ -143,6 +143,11 @@ class ZoneTest extends TestCase
         $this->assertTrue($zone->remove($rr));
         $this->assertFalse($zone->remove($rr));
         $this->assertFalse($zone->contains($rr));
+
+        //Test Zone:offsetSet()
+        $this->assertArrayNotHasKey(0, $zone);
+        $zone[0] = $rr;
+        $this->assertArrayHasKey(0, $zone);
     }
 
     public function testGetClassReturnsDefaultClass(): void
