@@ -370,4 +370,29 @@ class ValidatorTest extends TestCase
 
         $this->assertFalse(Validator::noAliasInZone($zone, $txt2));
     }
+
+    public function testIsUnsignedInteger(): void
+    {
+        $this->assertFalse(Validator::isUnsignedInteger(-1, 16));
+        $this->assertFalse(Validator::isUnsignedInteger(65536, 16));
+        $this->assertTrue(Validator::isUnsignedInteger(65535, 16));
+        $this->assertTrue(Validator::isUnsignedInteger(0, 16));
+
+        $this->expectException(\RuntimeException::class);
+        Validator::isUnsignedInteger(10, 64);
+    }
+
+    public function testIsBase32Encoded(): void
+    {
+        $this->assertTrue(Validator::isBase32Encoded('JBSWY3DPFQQHI2DJOMQGS4ZAMEQGEYLTMUZTEIDFNZRW6ZDFMQQHG5DSNFXGOLQ='));
+        $this->assertFalse(Validator::isBase32Encoded('JBSWY3DPFQQHI2DJOMQGS8ZAMEQGEYLTMUZTEIDFNZRW6ZDFMQQHG5DSNFXGOLQ='));
+        $this->assertFalse(Validator::isBase32Encoded('JBSWY3DPFQQHI2DJOMQGS8ZAMEQGEYLTMUZTEIDFNZRW6ZDFMQQHG5DSNFXGOLQ='));
+    }
+
+    public function testIsBase64Encoded(): void
+    {
+        $this->assertTrue(Validator::isBase64Encoded('VGhpcyBpcyBhIGJhc2U2NCBlbmNvZGVkIHN0cmluZy4='));
+        $this->assertFalse(Validator::isBase64Encoded('VGhpcyBpcyBhIGJhc2U2NCBlbmNvZGVkIHN0cmluZy4=='));
+        $this->assertFalse(Validator::isBase64Encoded('VGhpcyBpcyBhIGJhc2U2NCBlbmNvZGV\IHN0cmluZy4='));
+    }
 }
