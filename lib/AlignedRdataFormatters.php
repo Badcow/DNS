@@ -18,9 +18,18 @@ use Badcow\DNS\Rdata\APL;
 use Badcow\DNS\Rdata\LOC;
 use Badcow\DNS\Rdata\RRSIG;
 use Badcow\DNS\Rdata\SOA;
+use Badcow\DNS\Rdata\TXT;
 
 class AlignedRdataFormatters
 {
+    public static $rdataFormatters = [
+        SOA::TYPE => __CLASS__.'::SOA',
+        APL::TYPE => __CLASS__.'::APL',
+        LOC::TYPE => __CLASS__.'::LOC',
+        RRSIG::TYPE => __CLASS__.'::RRSIG',
+        TXT::TYPE => __CLASS__.'::TXT',
+    ];
+
     private function __construct()
     {
     }
@@ -35,6 +44,7 @@ class AlignedRdataFormatters
             APL::TYPE => __CLASS__.'::APL',
             LOC::TYPE => __CLASS__.'::LOC',
             RRSIG::TYPE => __CLASS__.'::RRSIG',
+            TXT::TYPE => __CLASS__.'::TXT',
         ];
     }
 
@@ -89,6 +99,33 @@ class AlignedRdataFormatters
     }
 
     /**
+     * Split the TXT string into 40 character lines if the string is larger than 50 characters.
+     *
+     * @param TXT $txt
+     * @param int $padding
+     *
+     * @return string
+     */
+    public static function TXT(TXT $txt, int $padding): string
+    {
+        if (null === $txt->getText() || strlen($txt->getText()) <= 50) {
+            return $txt->toText();
+        }
+
+        $lines = str_split($txt->getText(), 40);
+        $padString = str_repeat(Tokens::SPACE, $padding);
+
+        $rdata = Tokens::OPEN_BRACKET.Tokens::SPACE;
+        foreach ($lines as $line) {
+            $rdata .= Tokens::LINE_FEED.$padString.Tokens::SPACE.Tokens::SPACE.
+                Tokens::DOUBLE_QUOTES.$line.Tokens::DOUBLE_QUOTES;
+        }
+        $rdata .= Tokens::LINE_FEED.$padString.Tokens::CLOSE_BRACKET;
+
+        return $rdata;
+    }
+
+    /**
      * Splits the RRSIG Signature into 32 character chunks.
      *
      * @param RRSIG $rrsig
@@ -121,32 +158,31 @@ class AlignedRdataFormatters
     }
 
     /**
-     * @param LOC $rdata
+     * @param LOC $loc
      * @param int $padding
      *
      * @return string
      */
-    public static function LOC(LOC $rdata, int $padding): string
+    public static function LOC(LOC $loc, int $padding): string
     {
         $parts = [
-            $rdata->getLatitude(LOC::FORMAT_DMS),
-            $rdata->getLongitude(LOC::FORMAT_DMS),
-            sprintf('%.2fm', $rdata->getAltitude()),
-            sprintf('%.2fm', $rdata->getSize()),
-            sprintf('%.2fm', $rdata->getHorizontalPrecision()),
-            sprintf('%.2fm', $rdata->getVerticalPrecision()),
+            'LATITUDE' => (string) $loc->getLatitude(LOC::FORMAT_DMS),
+            'LONGITUDE' => (string) $loc->getLongitude(LOC::FORMAT_DMS),
+            'ALTITUDE' => sprintf('%.2fm', $loc->getAltitude()),
+            'SIZE' => sprintf('%.2fm', $loc->getSize()),
+            'HORIZONTAL PRECISION' => sprintf('%.2fm', $loc->getHorizontalPrecision()),
+            'VERTICAL PRECISION' => sprintf('%.2fm', $loc->getVerticalPrecision()),
         ];
 
         $longestVarLength = max(array_map('strlen', $parts));
+        $rdata = Tokens::OPEN_BRACKET.Tokens::LINE_FEED;
 
-        return Tokens::OPEN_BRACKET.Tokens::LINE_FEED.
-            self::makeLine((string) $rdata->getLatitude(LOC::FORMAT_DMS), 'LATITUDE', $longestVarLength, $padding).
-            self::makeLine((string) $rdata->getLongitude(LOC::FORMAT_DMS), 'LONGITUDE', $longestVarLength, $padding).
-            self::makeLine(sprintf('%.2fm', $rdata->getAltitude()), 'ALTITUDE', $longestVarLength, $padding).
-            self::makeLine(sprintf('%.2fm', $rdata->getSize()), 'SIZE', $longestVarLength, $padding).
-            self::makeLine(sprintf('%.2fm', $rdata->getHorizontalPrecision()), 'HORIZONTAL PRECISION', $longestVarLength, $padding).
-            self::makeLine(sprintf('%.2fm', $rdata->getVerticalPrecision()), 'VERTICAL PRECISION', $longestVarLength, $padding).
-            str_repeat(' ', $padding).Tokens::CLOSE_BRACKET;
+        foreach ($parts as $comment => $text) {
+            $rdata .= self::makeLine($text, $comment, $longestVarLength, $padding);
+        }
+        $rdata .= str_repeat(Tokens::SPACE, $padding).Tokens::CLOSE_BRACKET;
+
+        return $rdata;
     }
 
     /**
