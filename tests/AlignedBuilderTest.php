@@ -70,6 +70,27 @@ canberra               IN LOC   (
 
 ; TXT RECORDS
 example.net.           IN TXT   "v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all"
+two.cities             IN TXT   ( 
+                                  "It was the best of times, it was the wor"
+                                  "st of times, it was the age of wisdom, i"
+                                  "t was the age of foolishness, it was the"
+                                  " epoch of belief, it was the epoch of in"
+                                  "credulity, it was the season of Light, i"
+                                  "t was the season of Darkness, it was the"
+                                  " spring of hope, it was the winter of de"
+                                  "spair, we had everything before us, we h"
+                                  "ad nothing before us, we were all going "
+                                  "direct to Heaven, we were all going dire"
+                                  "ct the other way—in short, the period "
+                                  "was so far like the present period, that"
+                                  " some of its noisiest authorities insist"
+                                  "ed on its being received, for good or fo"
+                                  "r evil, in the superlative degree of com"
+                                  "parison only."
+                                )
+
+; SRV RECORDS
+_ftp._tcp              IN SRV   10 10 21 files
 
 ; RRSIG RECORDS
 example.com.           IN RRSIG A 14 2 3600 (
@@ -177,6 +198,12 @@ DNS;
     public function testBuild(): void
     {
         $zone = TestZone::buildTestZone();
+        $twoCities = new ResourceRecord();
+        $twoCities->setName('two.cities');
+        $twoCities->setRdata(Factory::TXT('It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair, we had everything before us, we had nothing before us, we were all going direct to Heaven, we were all going direct the other way—in short, the period was so far like the present period, that some of its noisiest authorities insisted on its being received, for good or for evil, in the superlative degree of comparison only.'));
+
+        $zone->addResourceRecord($twoCities);
+
         $resourceRecord = new ResourceRecord();
         $resourceRecord->setName('null');
         $zone->addResourceRecord($resourceRecord);

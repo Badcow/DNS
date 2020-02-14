@@ -30,10 +30,6 @@ class AlignedRdataFormatters
         TXT::TYPE => __CLASS__.'::TXT',
     ];
 
-    private function __construct()
-    {
-    }
-
     /**
      * @return callable[]
      */

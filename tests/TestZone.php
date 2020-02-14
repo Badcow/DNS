@@ -42,6 +42,7 @@ bar.example.com. IN DNAME foo.example.com.
 alias IN CNAME subdomain.au.example.com.
 example.net. IN TXT "v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all"
 @ IN HINFO "2.7GHz" "Ubuntu 12.04"
+_ftp._tcp IN SRV 10 10 21 files
 example.com. IN RRSIG A 14 2 3600 20200112073532 20191229133101 12345 example.com. bDts/7a5qbal6s3ZYzS5puPSjEfys5yI6R/kprBBRDEfVcT6YwPaDT3VkVjKXdvpKX2/DwpijNAWkjpfsewCLmeImx3RgkzfuxfipRKtBUguiPTBhkj/ft2halJziVXl
 
 DNS;
@@ -142,6 +143,11 @@ DNS;
         $hinfo->setClass(Classes::INTERNET);
         $hinfo->setRdata(Factory::HINFO('2.7GHz', 'Ubuntu 12.04'));
 
+        $srv = new ResourceRecord();
+        $srv->setName('_ftp._tcp');
+        $srv->setClass('IN');
+        $srv->setRdata(Factory::SRV(10, 10, 21, 'files'));
+
         $rrsig = new ResourceRecord();
         $rrsig->setName('example.com.');
         $rrsig->setRdata(Factory::RRSIG(
@@ -170,6 +176,7 @@ DNS;
             $cname,
             $txt,
             $hinfo,
+            $srv,
             $rrsig,
         ]);
     }
