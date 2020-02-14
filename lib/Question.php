@@ -77,19 +77,16 @@ class Question
     }
 
     /**
-     * @param string|int $typeCode
+     * @param int $typeCode
      *
-     * @throws UnsupportedTypeException
+     * @throws \DomainException
      */
-    public function setTypeCode($typeCode): void
+    public function setTypeCode(int $typeCode): void
     {
-        if (is_string($typeCode)) {
-            $this->typeCode = Types::getTypeCode($typeCode);
-        } elseif (is_int($typeCode)) {
-            $this->typeCode = $typeCode;
-        } else {
-            throw new UnsupportedTypeException(sprintf('Library does not support type "%s".', $typeCode));
+        if (!Validator::isUnsignedInteger($typeCode, 16)) {
+            throw new \DomainException(sprintf('TypeCode must be an unsigned 16-bit integer. "%d" given.', $typeCode));
         }
+        $this->typeCode = $typeCode;
     }
 
     /**
@@ -111,19 +108,33 @@ class Question
     }
 
     /**
-     * @param string|int $classId
+     * @return string
+     */
+    public function getClass(): string
+    {
+        return Classes::getClassName($this->classId);
+    }
+
+    /**
+     * @param int $classId
      *
      * @throws \InvalidArgumentException
      */
-    public function setClass($classId): void
+    public function setClassId(int $classId): void
     {
-        if (is_string($classId)) {
-            $this->classId = Classes::getClassId($classId);
-        } elseif (Validator::isUnsignedInteger($classId, 16)) {
-            $this->classId = $classId;
-        } else {
+        if (!Validator::isUnsignedInteger($classId, 16)) {
             throw new InvalidArgumentException(sprintf('Invalid class: "%s".', $classId));
         }
+
+        $this->classId = $classId;
+    }
+
+    /**
+     * @param string $class
+     */
+    public function setClass(string $class): void
+    {
+        $this->setClassId(Classes::getClassId($class));
     }
 
     /**
@@ -149,7 +160,7 @@ class Question
         $question->setName(RdataTrait::decodeName($encoded, $offset));
         $integers = unpack('ntype/nclass', $encoded, $offset);
         $question->setTypeCode($integers['type']);
-        $question->setClass($integers['class']);
+        $question->setClassId($integers['class']);
         $offset += 4;
 
         return $question;
