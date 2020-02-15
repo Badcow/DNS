@@ -445,42 +445,19 @@ class Message
      */
     public function toWire(): string
     {
-        $flags = 0x0 |
-            ($this->isResponse & 0x1) << 15 |
-            ($this->opcode & 0xf) << 11 |
-            ($this->isAuthoritative & 0x1) << 10 |
-            ($this->isTruncated & 0x1) << 9 |
-            ($this->isRecursionDesired & 0x1) << 8 |
-            ($this->isRecursionAvailable & 0x1) << 7 |
-            ($this->bit9 & 0x1) << 6 |
-            ($this->isAuthenticData & 0x1) << 5 |
-            ($this->isCheckingDisabled & 0x1) << 4 |
-            ($this->rcode & 0xf);
-
         $encoded = pack(
             'nnnnnn',
             $this->id,
-            $flags,
+            $this->encodeFlags(),
             $this->countQuestions(),
             $this->countAnswers(),
             $this->countAuthoritatives(),
             $this->countAdditionals()
         );
 
-        foreach ($this->questions as $question) {
-            $encoded .= $question->toWire();
-        }
-
-        foreach ($this->answers as $answer) {
-            $encoded .= $answer->toWire();
-        }
-
-        foreach ($this->authoritatives as $authoritative) {
-            $encoded .= $authoritative->toWire();
-        }
-
-        foreach ($this->additionals as $additional) {
-            $encoded .= $additional->toWire();
+        foreach (array_merge($this->questions, $this->answers, $this->authoritatives, $this->additionals) as $resource) {
+            /* @var ResourceRecord|Question $resource */
+            $encoded .= $resource->toWire();
         }
 
         return $encoded;
@@ -534,5 +511,23 @@ class Message
         }
 
         return $message;
+    }
+
+    /**
+     * @return int
+     */
+    private function encodeFlags(): int
+    {
+        return 0x0 |
+            ($this->isResponse & 0x1) << 15 |
+            ($this->opcode & 0xf) << 11 |
+            ($this->isAuthoritative & 0x1) << 10 |
+            ($this->isTruncated & 0x1) << 9 |
+            ($this->isRecursionDesired & 0x1) << 8 |
+            ($this->isRecursionAvailable & 0x1) << 7 |
+            ($this->bit9 & 0x1) << 6 |
+            ($this->isAuthenticData & 0x1) << 5 |
+            ($this->isCheckingDisabled & 0x1) << 4 |
+            ($this->rcode & 0xf);
     }
 }
