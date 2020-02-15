@@ -335,31 +335,15 @@ class Parser
     {
         $string = new StringIterator($rr);
         $entry = '';
-        $comment = '';
+        $comment = null;
 
         while ($string->valid()) {
             //If a semicolon is within double quotes, it will not be treated as the beginning of a comment.
-            if ($string->is(Tokens::DOUBLE_QUOTES)) {
-                $entry .= $string->current();
-                $string->next();
-
-                while ($string->isNot(Tokens::DOUBLE_QUOTES)) {
-                    //If the current char is a backslash, treat the next char as being escaped.
-                    if ($string->is(Tokens::BACKSLASH)) {
-                        $entry .= $string->current();
-                        $string->next();
-                    }
-                    $entry .= $string->current();
-                    $string->next();
-                }
-            }
+            $entry .= $this->extractDoubleQuotedText($string);
 
             if ($string->is(Tokens::SEMICOLON)) {
                 $string->next();
-                while ($string->valid()) {
-                    $comment .= $string->current();
-                    $string->next();
-                }
+                $comment = $string->getRemainingAsString();
 
                 break;
             }
@@ -368,11 +352,36 @@ class Parser
             $string->next();
         }
 
-        if ('' === $comment) {
-            $comment = null;
+        return [$entry, $comment];
+    }
+
+    /**
+     * Extract text within double quotation context.
+     *
+     * @param StringIterator $string
+     *
+     * @return string
+     */
+    private function extractDoubleQuotedText(StringIterator $string): string
+    {
+        if ($string->isNot(Tokens::DOUBLE_QUOTES)) {
+            return '';
         }
 
-        return [$entry, $comment];
+        $entry = $string->current();
+        $string->next();
+
+        while ($string->isNot(Tokens::DOUBLE_QUOTES)) {
+            //If the current char is a backslash, treat the next char as being escaped.
+            if ($string->is(Tokens::BACKSLASH)) {
+                $entry .= $string->current();
+                $string->next();
+            }
+            $entry .= $string->current();
+            $string->next();
+        }
+
+        return $entry;
     }
 
     /**

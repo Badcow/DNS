@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Validator;
+
 /**
  * @see https://tools.ietf.org/html/rfc3596#section-2.1
  */
@@ -20,6 +22,18 @@ class AAAA extends A
 {
     const TYPE = 'AAAA';
     const TYPE_CODE = 28;
+
+    /**
+     * @param string $address
+     */
+    public function setAddress(string $address): void
+    {
+        if (!Validator::ipv6($address)) {
+            throw new \InvalidArgumentException(sprintf('The address "%s" is not a valid IPv6 address.', $address));
+        }
+
+        $this->address = $address;
+    }
 
     /**
      * {@inheritdoc}

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Validator;
+
 /**
  * @see https://tools.ietf.org/html/rfc1035#section-3.4.1
  */
@@ -33,8 +35,8 @@ class A implements RdataInterface
      */
     public function setAddress(string $address): void
     {
-        if (false === @inet_pton($address)) {
-            throw new \InvalidArgumentException(sprintf('The address "%s" is not a valid IP address.', $address));
+        if (!Validator::ipv4($address)) {
+            throw new \InvalidArgumentException(sprintf('The address "%s" is not a valid IPv4 address.', $address));
         }
 
         $this->address = $address;
