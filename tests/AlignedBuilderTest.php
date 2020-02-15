@@ -181,6 +181,12 @@ DNS;
         $nsec3->setName('example.com.');
         $nsec3->setRdata(Factory::NSEC3PARAM(1, 0, 5, '9474017E'));
 
+        $rp = new ResourceRecord();
+        $rp->setRdata(Factory::RP('mail.example.com.', 'example.com.'));
+
+        $spf = new ResourceRecord();
+        $spf->setRdata(Factory::SPF('skjdfskjasdfjh'));
+
         $this->assertTrue(AlignedBuilder::compareResourceRecords($soa, $ns1) < 0);
         $this->assertTrue(AlignedBuilder::compareResourceRecords($aaaa, $cname) < 0);
         $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $mx2) < 0);
@@ -193,6 +199,8 @@ DNS;
 
         $this->assertTrue(AlignedBuilder::compareResourceRecords($nsec3, $rrsig) < 0);
         $this->assertTrue(AlignedBuilder::compareResourceRecords($rrsig, $nsec3) > 0);
+
+        $this->assertTrue(AlignedBuilder::compareResourceRecords($rp, $spf) < 0);
     }
 
     public function testBuild(): void

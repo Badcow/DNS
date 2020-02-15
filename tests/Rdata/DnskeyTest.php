@@ -37,6 +37,13 @@ class DnskeyTest extends TestCase
         $this->assertEquals($expectation, $dnskey->toText());
     }
 
+    public function testSetProtocolThrowsException(): void
+    {
+        $dnskey = new DNSKEY();
+        $this->expectException(\InvalidArgumentException::class);
+        $dnskey->setProtocol(2);
+    }
+
     public function testFactory(): void
     {
         $dnskey = Factory::DNSKEY(256, Algorithms::RSASHA1, self::$publicKey);
