@@ -445,10 +445,22 @@ class Message
      */
     public function toWire(): string
     {
+        $flags = 0x0 |
+        ($this->isResponse & 0x1) << 15 |
+        ($this->opcode & 0xf) << 11 |
+        ($this->isAuthoritative & 0x1) << 10 |
+        ($this->isTruncated & 0x1) << 9 |
+        ($this->isRecursionDesired & 0x1) << 8 |
+        ($this->isRecursionAvailable & 0x1) << 7 |
+        ($this->bit9 & 0x1) << 6 |
+        ($this->isAuthenticData & 0x1) << 5 |
+        ($this->isCheckingDisabled & 0x1) << 4 |
+        ($this->rcode & 0xf);
+
         $encoded = pack(
             'nnnnnn',
             $this->id,
-            $this->encodeFlags(),
+            $flags,
             $this->countQuestions(),
             $this->countAnswers(),
             $this->countAuthoritatives(),
@@ -477,10 +489,6 @@ class Message
         $header = unpack('nid/nflags/nqdcount/nancount/nnscount/narcount', $encoded, $offset);
         $offset += 12;
         $flags = $header['flags'];
-        $qdCount = $header['qdcount'];
-        $anCount = $header['ancount'];
-        $nsCount = $header['nscount'];
-        $arCount = $header['arcount'];
 
         $message->setId($header['id']);
         $message->setResponse((bool) ($flags >> 15 & 0x1));
@@ -494,40 +502,19 @@ class Message
         $message->setCheckingDisabled((bool) ($flags >> 4 & 0x1));
         $message->setRcode($flags & 0xf);
 
-        for ($i = 0; $i < $qdCount; ++$i) {
+        for ($i = 0; $i < $header['qdcount']; ++$i) {
             $message->addQuestion(Question::fromWire($encoded, $offset));
         }
 
-        for ($i = 0; $i < $anCount; ++$i) {
-            $message->addAnswer(ResourceRecord::fromWire($encoded, $offset));
+        $rrs = [];
+        while ($offset < strlen($encoded)) {
+            $rrs[] = ResourceRecord::fromWire($encoded, $offset);
         }
 
-        for ($i = 0; $i < $nsCount; ++$i) {
-            $message->addAuthoritative(ResourceRecord::fromWire($encoded, $offset));
-        }
-
-        for ($i = 0; $i < $arCount; ++$i) {
-            $message->addAdditional(ResourceRecord::fromWire($encoded, $offset));
-        }
+        $message->setAnswers(array_splice($rrs, 0, $header['ancount']));
+        $message->setAuthoritatives(array_splice($rrs, 0, $header['nscount']));
+        $message->setAdditionals(array_splice($rrs, 0, $header['arcount']));
 
         return $message;
-    }
-
-    /**
-     * @return int
-     */
-    private function encodeFlags(): int
-    {
-        return 0x0 |
-            ($this->isResponse & 0x1) << 15 |
-            ($this->opcode & 0xf) << 11 |
-            ($this->isAuthoritative & 0x1) << 10 |
-            ($this->isTruncated & 0x1) << 9 |
-            ($this->isRecursionDesired & 0x1) << 8 |
-            ($this->isRecursionAvailable & 0x1) << 7 |
-            ($this->bit9 & 0x1) << 6 |
-            ($this->isAuthenticData & 0x1) << 5 |
-            ($this->isCheckingDisabled & 0x1) << 4 |
-            ($this->rcode & 0xf);
     }
 }
