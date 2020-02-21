@@ -22,8 +22,11 @@ use Badcow\DNS\Rdata\HINFO;
 use Badcow\DNS\Rdata\LOC;
 use Badcow\DNS\Rdata\MX;
 use Badcow\DNS\Rdata\NS;
+use Badcow\DNS\Rdata\NSEC3;
+use Badcow\DNS\Rdata\NSEC3PARAM;
 use Badcow\DNS\Rdata\PTR;
 use Badcow\DNS\Rdata\RdataInterface;
+use Badcow\DNS\Rdata\RRSIG;
 use Badcow\DNS\Rdata\SOA;
 use Badcow\DNS\Rdata\SRV;
 use Badcow\DNS\Rdata\TXT;
@@ -48,9 +51,14 @@ class AlignedBuilder
         TXT::TYPE,
         PTR::TYPE,
         SRV::TYPE,
+        NSEC3::TYPE,
+        NSEC3PARAM::TYPE,
+        RRSIG::TYPE,
     ];
 
     /**
+     * Build an aligned BIND zone file.
+     *
      * @param Zone $zone
      *
      * @return string
@@ -62,7 +70,7 @@ class AlignedBuilder
         $current = SOA::TYPE;
         usort($resourceRecords, [__CLASS__, 'compareResourceRecords']);
 
-        list($namePadding, $ttlPadding, $typePadding, $rdataPadding) = self::getPadding($zone);
+        list($namePadding, $ttlPadding, $typePadding, $classPadding, $rdataPadding) = self::getPadding($zone);
 
         foreach ($resourceRecords as $resourceRecord) {
             $rdata = $resourceRecord->getRdata();
@@ -70,16 +78,16 @@ class AlignedBuilder
                 continue;
             }
 
-            if ($resourceRecord->getType() !== $current) {
-                $master .= Tokens::LINE_FEED.Tokens::SEMICOLON.Tokens::SPACE.$resourceRecord->getType().' RECORDS'.Tokens::LINE_FEED;
-                $current = $resourceRecord->getType();
+            if ($rdata->getType() !== $current) {
+                $master .= Tokens::LINE_FEED.Tokens::SEMICOLON.Tokens::SPACE.$rdata->getType().' RECORDS'.Tokens::LINE_FEED;
+                $current = $rdata->getType();
             }
 
             $master .= sprintf('%s %s %s %s %s',
-                str_pad((string) $resourceRecord->getName(), $namePadding, ' ', STR_PAD_RIGHT),
-                str_pad((string) $resourceRecord->getTtl(), $ttlPadding, ' ', STR_PAD_RIGHT),
-                str_pad((string) $resourceRecord->getClass(), 2, ' ', STR_PAD_RIGHT),
-                str_pad($rdata->getType(), $typePadding, ' ', STR_PAD_RIGHT),
+                str_pad((string) $resourceRecord->getName(), $namePadding, Tokens::SPACE, STR_PAD_RIGHT),
+                str_pad((string) $resourceRecord->getTtl(), $ttlPadding, Tokens::SPACE, STR_PAD_RIGHT),
+                str_pad((string) $resourceRecord->getClass(), $classPadding, Tokens::SPACE, STR_PAD_RIGHT),
+                str_pad($rdata->getType(), $typePadding, Tokens::SPACE, STR_PAD_RIGHT),
                 self::generateRdataOutput($rdata, $rdataPadding)
             );
 
@@ -90,6 +98,13 @@ class AlignedBuilder
         return $master;
     }
 
+    /**
+     * Returns the control entries as strings.
+     *
+     * @param Zone $zone
+     *
+     * @return string
+     */
     private static function generateControlEntries(Zone $zone): string
     {
         $master = '$ORIGIN '.$zone->getName().Tokens::LINE_FEED;
@@ -100,6 +115,13 @@ class AlignedBuilder
         return $master;
     }
 
+    /**
+     * Returns a comment string if the comments are not null, returns empty string otherwise.
+     *
+     * @param ResourceRecord $resourceRecord
+     *
+     * @return string
+     */
     private static function generateComment(ResourceRecord $resourceRecord): string
     {
         if (null !== $resourceRecord->getComment()) {
@@ -122,10 +144,12 @@ class AlignedBuilder
         $a_rdata = (null === $a->getRdata()) ? '' : $a->getRdata()->toText();
         $b_rdata = (null === $b->getRdata()) ? '' : $b->getRdata()->toText();
 
+        //If the types are the same, do a simple alphabetical comparison.
         if ($a->getType() === $b->getType()) {
             return strcmp($a->getName().$a_rdata, $b->getName().$b_rdata);
         }
 
+        //Find the precedence (if any) for the two types.
         $_a = array_search($a->getType(), self::$order);
         $_b = array_search($b->getType(), self::$order);
 
@@ -149,6 +173,8 @@ class AlignedBuilder
     }
 
     /**
+     * Composes the RDATA of the Resource Record.
+     *
      * @param RdataInterface $rdata
      * @param int            $padding
      *
@@ -169,15 +195,18 @@ class AlignedBuilder
      *
      * @param Zone $zone
      *
-     * @return int[] Array order: name, ttl, type, rdata
+     * @return int[] Array order: [name, ttl, type, class, rdata]
      */
     private static function getPadding(Zone $zone): array
     {
         $name = $ttl = $type = 0;
+        $class = 2;
 
+        /** @var ResourceRecord $resourceRecord */
         foreach ($zone as $resourceRecord) {
             $name = max($name, strlen($resourceRecord->getName() ?? ''));
             $ttl = max($ttl, strlen((string) $resourceRecord->getTtl()));
+            $class = max($class, strlen($resourceRecord->getClass() ?? ''));
             $type = max($type, strlen($resourceRecord->getType() ?? ''));
         }
 
@@ -185,7 +214,8 @@ class AlignedBuilder
             $name,
             $ttl,
             $type,
-            $name + $ttl + $type + 6,
+            $class,
+            $name + $ttl + $class + $type + 4,
         ];
     }
 }

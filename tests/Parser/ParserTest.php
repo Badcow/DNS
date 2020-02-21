@@ -448,7 +448,7 @@ DNS;
      *
      * @throws \Exception
      */
-    public function testParserOverwritesZoneNameIfOriginControlEntryIsPresent()
+    public function testParserOverwritesZoneNameIfOriginControlEntryIsPresent(): void
     {
         $file = NormaliserTest::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $zone = Parser::parse('test.com.', $file);

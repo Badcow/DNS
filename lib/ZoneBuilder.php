@@ -22,6 +22,7 @@ use Badcow\DNS\Rdata\NS;
 use Badcow\DNS\Rdata\PTR;
 use Badcow\DNS\Rdata\RdataInterface;
 use Badcow\DNS\Rdata\SOA;
+use Badcow\DNS\Rdata\SRV;
 
 class ZoneBuilder
 {
@@ -108,6 +109,7 @@ class ZoneBuilder
             SOA::TYPE => 'static::fillOutSoa',
             CNAME::TYPE => 'static::fillOutCname',
             DNAME::TYPE => 'static::fillOutCname',
+            SRV::TYPE => 'static::fillOutSrv',
             NS::TYPE => 'static::fillOutCname',
             PTR::TYPE => 'static::fillOutCname',
             MX::TYPE => 'static::fillOutMx',
@@ -138,6 +140,15 @@ class ZoneBuilder
      * @param Zone  $zone
      */
     protected static function fillOutCname(Cname $rdata, Zone $zone): void
+    {
+        $rdata->setTarget(self::fullyQualify($rdata->getTarget(), $zone->getName()));
+    }
+
+    /**
+     * @param SRV  $rdata
+     * @param Zone $zone
+     */
+    protected static function fillOutSrv(SRV $rdata, Zone $zone): void
     {
         $rdata->setTarget(self::fullyQualify($rdata->getTarget(), $zone->getName()));
     }
