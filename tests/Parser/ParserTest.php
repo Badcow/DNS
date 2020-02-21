@@ -444,6 +444,19 @@ DNS;
     }
 
     /**
+     * Tests if a control entry on a zone file will overwrite the initial parameter in Parser::parse().
+     *
+     * @throws \Exception
+     */
+    public function testParserOverwritesZoneNameIfOriginControlEntryIsPresent()
+    {
+        $file = NormaliserTest::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
+        $zone = Parser::parse('test.com.', $file);
+
+        $this->assertEquals('example.com.', $zone->getName());
+    }
+
+    /**
      * Find all records in a Zone named $name.
      *
      * @param string|null $name

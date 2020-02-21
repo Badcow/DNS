@@ -216,6 +216,11 @@ class Parser
             $iterator->next();
             $this->zone->setDefaultTtl((int) $iterator->current());
         }
+
+        if ('$ORIGIN' === strtoupper($iterator->current())) {
+            $iterator->next();
+            $this->zone->setName((string) $iterator->current());
+        }
     }
 
     /**
