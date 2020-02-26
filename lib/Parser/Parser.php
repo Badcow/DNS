@@ -118,6 +118,7 @@ class Parser
         list($entry, $comment) = $this->extractComment($line);
 
         $this->currentResourceRecord = new ResourceRecord();
+        $this->currentResourceRecord->setTtl($this->zone->getDefaultTtl());
         $this->currentResourceRecord->setComment($comment);
 
         if ('' === $entry) {
