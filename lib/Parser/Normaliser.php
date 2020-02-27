@@ -221,10 +221,10 @@ class Normaliser
 
     private function appendComment(): void
     {
-        $zone = rtrim($this->normalisedString, ' ');
+        $zone = rtrim($this->normalisedString, Tokens::SPACE);
 
         //If there is no Resource Record on the line
-        if ((Tokens::LINE_FEED === substr($zone, -1, 0) || 0 === strlen($zone))) {
+        if ((Tokens::LINE_FEED === substr($zone, -1, 1) || 0 === strlen($zone))) {
             if ($this->commentOptions & Comments::ORPHAN) {
                 $this->normalisedString = sprintf('%s;%s', $zone, trim($this->comment));
             }
@@ -236,11 +236,11 @@ class Normaliser
 
         $comments = '';
 
-        if ($this->commentOptions & Comments::MULTILINE && '' !== $this->multilineComments) {
+        if (($this->commentOptions & Comments::MULTILINE) && '' !== $this->multilineComments) {
             $comments .= $this->multilineComments;
         }
 
-        if ($this->commentOptions & Comments::END_OF_ENTRY && '' !== $this->comment) {
+        if (($this->commentOptions & Comments::END_OF_ENTRY) && '' !== $this->comment) {
             $comments .= $this->comment;
         }
 

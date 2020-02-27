@@ -15,6 +15,7 @@ namespace Badcow\DNS\Tests\Parser;
 
 use Badcow\DNS\AlignedBuilder;
 use Badcow\DNS\Classes;
+use Badcow\DNS\Parser\Comments;
 use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
 use Badcow\DNS\Rdata\A;
@@ -124,10 +125,12 @@ class ParserTest extends TestCase
 
         $expectation = $this->getTestZone();
         foreach ($expectation->getResourceRecords() as $rr) {
-            $rr->setComment('');
+            $rr->setTtl($rr->getTtl() ?? $expectation->getDefaultTtl());
         }
 
-        $this->assertEquals($expectation, Parser::parse('example.com.', $zone));
+        $actual = Parser::parse('example.com.', $zone, Comments::END_OF_ENTRY);
+
+        $this->assertEquals($expectation, $actual);
     }
 
     /**
