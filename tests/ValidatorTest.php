@@ -22,55 +22,39 @@ use PHPUnit\Framework\TestCase;
 
 class ValidatorTest extends TestCase
 {
-    public function testValidateResourceRecordName(): void
+    public function dp_testValidateResourceRecordName(): array
     {
-        //Pass cases
-        $fqdn1 = 'example.com.';
-        $fqdn2 = 'www.example.com.';
-        $fqdn3 = 'ex-ample.com.';
-        $fqdn4 = 'ex-ampl3.com.au.';
-        $fqdn5 = '@';
-        $fqdn6 = 'alt2.aspmx.l.google.com.';
-        $fqdn7 = 'www.eXAMple.cOm.';
-        $fqdn8 = '3xample.com.';
-        $fqdn9 = '_example.com.';
+        return [
+            [true, 'example.com.'],
+            [true, 'www.example.com.'],
+            [true, 'ex-ample.com.'],
+            [true, 'ex-ampl3.com.au.'],
+            [true, '@'],
+            [true, 'alt2.aspmx.l.google.com.'],
+            [true, 'www.eXAMple.cOm.'],
+            [true, '3xample.com.'],
+            [true, '_example.com.'],
+            [true, 'example.com'],
+            [true, 'www.example.com'],
+            [true, 'example'],
+            [true, '@'],
+            [true, 'wWw.EXample.com'],
+            [true, '_sip._udp.test.sx.'],
+            [false, '-example.com.'],
+            [false, 'exam*ple.com'],
+            [false, 'wheres-wally?.com'],
+        ];
+    }
 
-        //Fail cases
-        $fqdn10 = '-example.com.';
-
-        //Pass cases
-        $uqdn1 = 'example.com';
-        $uqdn2 = 'www.example.com';
-        $uqdn3 = 'example';
-        $uqdn4 = '@';
-        $uqdn5 = 'wWw.EXample.com';
-
-        //Fail cases
-        $uqdn6 = 'exam*ple.com';
-        $uqdn7 = 'wheres-wally?.com';
-        $uqdn9 = '-example.com.';
-
-        $this->assertTrue(Validator::resourceRecordName($fqdn1));
-        $this->assertTrue(Validator::resourceRecordName($fqdn2));
-        $this->assertTrue(Validator::resourceRecordName($fqdn3));
-        $this->assertTrue(Validator::resourceRecordName($fqdn4));
-        $this->assertTrue(Validator::resourceRecordName($fqdn5));
-        $this->assertTrue(Validator::resourceRecordName($fqdn6));
-        $this->assertTrue(Validator::resourceRecordName($fqdn7));
-        $this->assertTrue(Validator::resourceRecordName($fqdn8));
-        $this->assertTrue(Validator::resourceRecordName($fqdn9));
-
-        $this->assertFalse(Validator::resourceRecordName($fqdn10));
-
-        $this->assertTrue(Validator::resourceRecordName($uqdn1));
-        $this->assertTrue(Validator::resourceRecordName($uqdn2));
-        $this->assertTrue(Validator::resourceRecordName($uqdn3));
-        $this->assertTrue(Validator::resourceRecordName($uqdn4));
-        $this->assertTrue(Validator::resourceRecordName($uqdn5));
-
-        $this->assertFalse(Validator::resourceRecordName($uqdn6));
-        $this->assertFalse(Validator::resourceRecordName($uqdn7));
-        $this->assertFalse(Validator::resourceRecordName($uqdn9));
+    /**
+     * @dataProvider dp_testValidateResourceRecordName
+     *
+     * @param bool $isValid
+     * @param string $resourceName
+     */
+    public function testValidateResourceRecordName(bool $isValid, string $resourceName): void
+    {
+        $this->assertEquals($isValid, Validator::resourceRecordName($resourceName));
     }
 
     public function testValidateIpv4Address(): void
