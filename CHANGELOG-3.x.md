@@ -1,5 +1,11 @@
 CHANGELOG for 3.x
 =================
+## 3.4.0
+* If the default TTL control entry `$TTL` is set, the `Parser` will set the TTL on all resource records to that TTL if one is not explicitly set.
+If no `$TTL` is set, then the resource record will adopt the last defined $TTL.
+* Fixed bug where orphan comments were not being ignored.
+## 3.3.0
+* Parser no longer ignores $ORIGIN control entry. The $ORIGIN will overwrite the first parameter of `Parser::Parse()`.
 ## 3.2.0
 * [Issue #60](https://github.com/Badcow/DNS/issues/60): Correct resource name verification in `Parser`.
 * [Issue #61](https://github.com/Badcow/DNS/issues/61): Order unordered types in `AlignedBuilder`.

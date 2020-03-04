@@ -1,5 +1,4 @@
 $ORIGIN ambiguous.acme.org.
-$TTL 10800
 
 ambiguous.acme.org. IN SOA ambiguous.acme.org. post.acme.org. 2019092401 3600 14400 604800 1800
 
