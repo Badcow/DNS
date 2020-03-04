@@ -1,5 +1,7 @@
 CHANGELOG for 3.x
 =================
+## 3.4.1
+* [Issue #65](https://github.com/Badcow/DNS/issues/65): Correct replacement name validation in `NAPTR` Rdata.
 ## 3.4.0
 * If the default TTL control entry `$TTL` is set, the `Parser` will set the TTL on all resource records to that TTL if one is not explicitly set.
 If no `$TTL` is set, then the resource record will adopt the last defined $TTL.
