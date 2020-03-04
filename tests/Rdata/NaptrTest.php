@@ -25,6 +25,8 @@ class NaptrTest extends TestCase
             //Text                                                 Order Pref Flags Service             Regexp                                 Replacement
             ['100 50 "s" "http+N2L+N2C+N2R" "" www.example.com.',  100,  50,  's',  'http+N2L+N2C+N2R', '',                                    'www.example.com.'],
             ['100 10 "" "" "!^urn:cid:.+@([^\.]+\.)(.*)$!\2!i" .', 100,  10,  '',   '',                 '!^urn:cid:.+@([^\.]+\.)(.*)$!\2!i',   '.'],
+            ['100 50 "s" "SIP+D2U" "" _sip2._udp.testnaptr.at.',   100,  50,  's',  'SIP+D2U',          '',                                    '_sip2._udp.testnaptr.at.'],
+            ['100 10 "u" "sip+E2U" "!^.*$!sip:information@foo.se!i" .', 100, 10, 'u', 'sip+E2U',        '!^.*$!sip:information@foo.se!i',      '.'],
         ];
     }
 
