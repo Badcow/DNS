@@ -56,8 +56,10 @@ interface RdataInterface
      * Return an instance of Rdata from its wire representation.
      *
      * @param string $rdata
+     * @param int    $offset
+     * @param int    $rdLength
      *
      * @return RdataInterface
      */
-    public static function fromWire(string $rdata): RdataInterface;
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface;
 }

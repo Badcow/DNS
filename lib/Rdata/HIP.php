@@ -188,11 +188,11 @@ class HIP implements RdataInterface
      *
      * @return HIP
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
         $hip = new self();
-        $offset = 0;
-        $rdLen = strlen($rdata);
+
+        $end = $offset + ($rdLength ?? strlen($rdata));
         $integers = unpack('C<hitLen>/C<algorithm>/n<pkLen>', $rdata, $offset);
         $offset += 4;
         $hitLen = (int) $integers['<hitLen>'];
@@ -206,7 +206,7 @@ class HIP implements RdataInterface
         $hip->setPublicKey(substr($rdata, $offset, $pkLen));
         $offset += $pkLen;
 
-        while ($offset < $rdLen) {
+        while ($offset < $end) {
             $hip->addRendezvousServer(self::decodeName($rdata, $offset));
         }
 

@@ -293,10 +293,8 @@ class TKEY implements RdataInterface
      *
      * @return TKEY
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $offset = 0;
-
         $algorithm = RdataTrait::decodeName($rdata, $offset);
         $integers = unpack('N<inception>/N<expiration>/n<mode>/n<error>/n<keySize>', $rdata, $offset);
         $offset += 14;
@@ -306,6 +304,7 @@ class TKEY implements RdataInterface
         $otherDataSize = unpack('n', $rdata, $offset)[1];
         $offset += 2;
         $otherData = substr($rdata, $offset, $otherDataSize);
+        $offset += $otherDataSize;
 
         $tkey = new self();
         $tkey->setAlgorithm($algorithm);

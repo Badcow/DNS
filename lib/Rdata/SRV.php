@@ -189,9 +189,8 @@ class SRV implements RdataInterface
         return $srv;
     }
 
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $offset = 0;
         $integers = unpack('npriority/nweight/nport', $rdata, $offset);
         $offset += 6;
         $srv = new self();

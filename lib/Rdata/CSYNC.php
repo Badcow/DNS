@@ -106,6 +106,8 @@ class CSYNC implements RdataInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws UnsupportedTypeException
      */
     public function toWire(): string
     {
@@ -128,10 +130,11 @@ class CSYNC implements RdataInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws UnsupportedTypeException
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $offset = 0;
         $integers = unpack('Nserial/nflags', $rdata, $offset);
         $offset += 6;
         $types = NSEC::parseBitmap($rdata, $offset);

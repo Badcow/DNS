@@ -1,0 +1,32 @@
+# message header
+000a #id=10
+85 # QR=1 (response) OPCODE=0 AA=1 TC=0 RD=1
+80 # RA=1 BIT9=0 AD=0 CD=0 RCODE=0
+0001 #QDCOUNT
+0003 #ANCOUNT
+0000 #NSCOUNT
+0003 #ARCOUNT
+
+#QUERY
+#[3] vix [3] com    .  NS   IN
+03 766978 03 636f6d 00 0002 0001 	# question section: vix.com IN NS
+
+#ANSWERS
+#[12] NS  IN   3600   rdlen=11    [5] isrv1          [2]  p  a  [12] (vix.com.)
+c00c 0002 0001 00000e10 000b       05  69 73 72 76 31 02   70 61 c00c 	# vix.com IN NS 3600
+
+#[12] NS  IN   3600    rdlen=9  [6] n  s  -  e  x  t  [12] (vix.com.)
+c00c 0002 0001 00000e10 0009    06  6e 73 2d 65 78 74 c00c
+
+#[12] NS  IN   3600    rdlen=14 [3] n  s  1 [4] g  n  a  c [3] c  o  m  [.]
+c00c 0002 0001 00000e10 000e    03  6e 73 31 04 67 6e 61 63 03 63 6f 6d 00
+
+#ADDITIONALS
+#[37] A   IN   3600   rdlen=4 204.152.184.134 (37=isrv1.pa.vix.com.)
+c025 0001 0001 00000e10 0004  cc98b886
+
+#[60] A   IN   3600   rdlen=4 204.152.184.64 (60=ns-ext.vix.com.)
+c03c 0001 0001 00000e10 0004  cc98b840
+
+#[81] A   IN   172362 rdlen=4 198.151.248.246 (81=ns1.gnac.com.)
+c051 0001 0001 0002a14a 0004 c697f8f6

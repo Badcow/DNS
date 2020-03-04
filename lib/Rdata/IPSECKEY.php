@@ -287,22 +287,25 @@ class IPSECKEY implements RdataInterface
      *
      * @throws DecodeException
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
         $ipseckey = new self();
-        $offset = 0;
+        $end = $offset + $rdLength ?? strlen($rdata);
 
         $integers = unpack('CPrecedence/CGatewayType/CAlgorithm', $rdata, $offset);
+        $offset += 3;
         $ipseckey->setPrecedence((int) $integers['Precedence']);
         $gatewayType = $integers['GatewayType'];
         $algorithm = $integers['Algorithm'];
-        $offset += 3;
+
         $ipseckey->setGateway(self::extractGateway($gatewayType, $rdata, $offset));
 
         if (self::ALGORITHM_NONE !== $algorithm) {
-            $publicKey = base64_encode(substr($rdata, $offset));
+            $publicKey = base64_encode(substr($rdata, $offset, $end - $offset));
             $ipseckey->setPublicKey($algorithm, $publicKey);
         }
+
+        $offset = $end;
 
         return $ipseckey;
     }
@@ -324,10 +327,12 @@ class IPSECKEY implements RdataInterface
                 $gateway = RdataTrait::decodeName($rdata, $offset);
                 break;
             case 1:
+                $gateway = @inet_ntop(substr($rdata, $offset, 4));
+                $offset += 4;
+                break;
             case 2:
-                $len = (1 === $gatewayType) ? 4 : 16;
-                $gateway = @inet_ntop(substr($rdata, $offset, $len));
-                $offset += $len;
+                $gateway = @inet_ntop(substr($rdata, $offset, 16));
+                $offset += 16;
                 break;
             default:
                 $invalidArgumentException = new \InvalidArgumentException(sprintf('Expected gateway type to be integer on [0,3], got "%d".', $gatewayType));

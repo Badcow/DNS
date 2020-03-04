@@ -108,7 +108,11 @@ class RrsigTest extends TestCase
         $rrsig->setSignature(self::$signature);
 
         $wireFormat = $rrsig->toWire();
+        $rdLength = strlen($wireFormat);
+        $wireFormat = 'abcd'.$wireFormat;
+        $offset = 4;
 
-        $this->assertEquals($rrsig, RRSIG::fromWire($wireFormat));
+        $this->assertEquals($rrsig, RRSIG::fromWire($wireFormat, $offset, $rdLength));
+        $this->assertEquals(4 + $rdLength, $offset);
     }
 }

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\Parser\Tokens;
-use Badcow\DNS\Validator;
 
 /**
  * {@link https://tools.ietf.org/html/rfc2535#section-3.1}.
@@ -87,11 +86,11 @@ class KEY implements RdataInterface
      */
     public function setPublicKey(string $publicKey): void
     {
-        if (!Validator::isBase64Encoded($publicKey)) {
+        if (false === $key = base64_decode($publicKey)) {
             throw new \InvalidArgumentException('The public key must be a valid base64 encoded string.');
         }
 
-        $this->publicKey = (string) preg_replace('/[^a-zA-Z0-9\/+=]/', '', $publicKey);
+        $this->publicKey = $key;
     }
 
     /**
@@ -123,7 +122,7 @@ class KEY implements RdataInterface
      */
     public function getPublicKey(): string
     {
-        return $this->publicKey;
+        return base64_encode($this->publicKey);
     }
 
     /**
@@ -131,7 +130,7 @@ class KEY implements RdataInterface
      */
     public function toText(): string
     {
-        return sprintf('%d %d %d %s', $this->flags, $this->protocol, $this->algorithm, $this->publicKey);
+        return sprintf('%d %d %d %s', $this->flags, $this->protocol, $this->algorithm, base64_encode($this->publicKey));
     }
 
     /**
@@ -139,10 +138,7 @@ class KEY implements RdataInterface
      */
     public function toWire(): string
     {
-        $encoded = pack('nCC', $this->flags, $this->protocol, $this->algorithm);
-        $encoded .= $this->publicKey;
-
-        return $encoded;
+        return pack('nCC', $this->flags, $this->protocol, $this->algorithm).$this->publicKey;
     }
 
     /**
@@ -163,14 +159,17 @@ class KEY implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $integers = unpack('nflags/Cprotocol/Calgorithm', $rdata);
+        $rdLength = $rdLength ?? strlen($rdata);
+        $integers = unpack('nflags/Cprotocol/Calgorithm', $rdata, $offset);
+        $offset += 4;
         $key = new static();
         $key->setFlags((int) $integers['flags']);
         $key->setProtocol((int) $integers['protocol']);
         $key->setAlgorithm((int) $integers['algorithm']);
-        $key->setPublicKey(substr($rdata, 4));
+        $key->publicKey = substr($rdata, $offset, $rdLength - 4);
+        $offset += $rdLength - 4;
 
         return $key;
     }

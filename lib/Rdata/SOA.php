@@ -270,25 +270,19 @@ class SOA implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $string): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $offset = 0;
-        $rdata = array_merge(
-            [
-                'mname' => self::decodeName($string, $offset),
-                'rname' => self::decodeName($string, $offset),
-            ],
-            unpack('Nserial/Nrefresh/Nretry/Nexpire/Nminimum', substr($string, $offset))
-        );
+        $soa = new static();
+        $soa->setMname(self::decodeName($rdata, $offset));
+        $soa->setRname(self::decodeName($rdata, $offset));
+        $parameters = unpack('Nserial/Nrefresh/Nretry/Nexpire/Nminimum', $rdata, $offset);
+        $soa->setSerial((int) $parameters['serial']);
+        $soa->setRefresh((int) $parameters['refresh']);
+        $soa->setRetry((int) $parameters['retry']);
+        $soa->setExpire((int) $parameters['expire']);
+        $soa->setMinimum((int) $parameters['minimum']);
 
-        $soa = new self();
-        $soa->setMname($rdata['mname']);
-        $soa->setRname($rdata['rname']);
-        $soa->setSerial((int) $rdata['serial']);
-        $soa->setRefresh((int) $rdata['refresh']);
-        $soa->setRetry((int) $rdata['retry']);
-        $soa->setExpire((int) $rdata['expire']);
-        $soa->setMinimum((int) $rdata['minimum']);
+        $offset += 20;
 
         return $soa;
     }

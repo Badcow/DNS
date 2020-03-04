@@ -13,11 +13,28 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Tests\Rdata;
 
+use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\RP;
 use PHPUnit\Framework\TestCase;
 
 class RpTest extends TestCase
 {
+    public function testFactory(): void
+    {
+        $expectation = 'louie.trantor.umd.edu. lam1.people.umd.edu.';
+        $rp = Factory::RP('louie.trantor.umd.edu.', 'lam1.people.umd.edu.');
+
+        $this->assertEquals($expectation, $rp->toText());
+    }
+
+    public function testFromText(): void
+    {
+        $rp = RP::fromText('louie.trantor.umd.edu. lam1.people.umd.edu.');
+
+        $this->assertEquals('louie.trantor.umd.edu.', $rp->getMailboxDomainName());
+        $this->assertEquals('lam1.people.umd.edu.', $rp->getTxtDomainName());
+    }
+
     public function testToText(): void
     {
         $expectation = 'louie.trantor.umd.edu. lam1.people.umd.edu.';
@@ -25,7 +42,6 @@ class RpTest extends TestCase
         $rp->setMailboxDomainName('louie.trantor.umd.edu.');
         $rp->setTxtDomainName('lam1.people.umd.edu.');
 
-        $this->assertEquals($expectation, $rp->toText());
         $this->assertEquals($expectation, $rp->toText());
     }
 

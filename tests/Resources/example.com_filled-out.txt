@@ -35,6 +35,9 @@ canberra.example.com.    3600 IN LOC  (
                                       300.10m        ; VERTICAL PRECISION
                                       ); This is Canberra
 
+; SRV RECORDS
+_ftp._tcp.example.com.   3600 IN SRV  10 10 21 files.example.com.
+
 ; APL RECORDS
 multicast.example.com.   3600 IN APL  (
                                       1:192.168.0.0/23     

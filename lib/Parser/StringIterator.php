@@ -45,6 +45,17 @@ class StringIterator extends \ArrayIterator
         return $value !== $this->current();
     }
 
+    public function getRemainingAsString(): string
+    {
+        $string = '';
+        while ($this->valid()) {
+            $string .= $this->current();
+            $this->next();
+        }
+
+        return $string;
+    }
+
     /**
      * @return string
      */

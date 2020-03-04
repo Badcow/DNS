@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\Classes;
+use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
+use Badcow\DNS\UnsetValueException;
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -91,6 +93,48 @@ class ResourceRecordTest extends TestCase
         $rr->setTtl(3600);
 
         $this->assertEquals($expectation, $rr->toWire());
+    }
+
+    public function dataProviderForTestToWireThrowsExceptionsIfValuesAreNotSet(): array
+    {
+        $rr_noName = new ResourceRecord();
+        $rr_noName->setClass(null);
+
+        $rr_noRdata = clone $rr_noName;
+        $rr_noRdata->setName('@');
+
+        $rr_noClass = clone $rr_noRdata;
+        $rr_noClass->setRdata(new A());
+
+        $rr_noTtl = clone $rr_noClass;
+        $rr_noTtl->setClass('CLASS42');
+
+        $rr_unqualifiedName = clone $rr_noTtl;
+        $rr_unqualifiedName->setTtl(4242);
+
+        return [
+            [$rr_noName, UnsetValueException::class, 'ResourceRecord name has not been set.'],
+            [$rr_noRdata, UnsetValueException::class, 'ResourceRecord rdata has not been set.'],
+            [$rr_noClass, UnsetValueException::class, 'ResourceRecord class has not been set.'],
+            [$rr_noTtl, UnsetValueException::class, 'ResourceRecord TTL has not been set.'],
+            [$rr_unqualifiedName, \InvalidArgumentException::class, '"@" is not a fully qualified domain name.'],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderForTestToWireThrowsExceptionsIfValuesAreNotSet
+     *
+     * @param ResourceRecord $rr
+     * @param string         $exception
+     * @param string         $exceptionMessage
+     *
+     * @throws UnsetValueException
+     */
+    public function testToWireThrowsExceptionsIfValuesAreNotSet(ResourceRecord $rr, string $exception, string $exceptionMessage): void
+    {
+        $this->expectException($exception);
+        $this->expectExceptionMessage($exceptionMessage);
+        $rr->toWire();
     }
 
     /**

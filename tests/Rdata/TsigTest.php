@@ -105,7 +105,12 @@ TXT;
         $tsig->setOtherData(base64_decode($this->sampleOtherData));
 
         $wireFormat = $tsig->toWire();
-        $this->assertEquals($tsig, TSIG::fromWire($wireFormat));
+        $rdLength = strlen($wireFormat);
+        $wireFormat = 'abc'.$wireFormat;
+        $offset = 3;
+
+        $this->assertEquals($tsig, TSIG::fromWire($wireFormat, $offset, $rdLength));
+        $this->assertEquals(3 + $rdLength, $offset);
     }
 
     public function testFactory(): void

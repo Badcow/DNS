@@ -257,14 +257,13 @@ class ResourceRecord
         $offset += 10;
         $rr->setClassId($integers['class']);
         $rr->setTtl($integers['ttl']);
-        $rdataLen = $integers['dlength'];
+        $rdLength = $integers['dlength'];
 
         /** @var callable $callable */
         $callable = Factory::getRdataClassName(Types::getName($integers['type'])).'::fromWire';
         /** @var RdataInterface $rdata */
-        $rdata = call_user_func($callable, substr($encoded, $offset, $rdataLen));
+        $rdata = $callable($encoded, $offset, $rdLength);
 
-        $offset += $rdataLen;
         $rr->setRdata($rdata);
 
         return $rr;

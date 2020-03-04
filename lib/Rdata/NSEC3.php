@@ -258,9 +258,8 @@ class NSEC3 implements RdataInterface
      *
      * @throws UnsupportedTypeException
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $offset = 0;
         $values = unpack('C<hashAlgo>/C<flags>/n<iterations>/C<saltLen>', $rdata, $offset);
         $offset += 5;
         $nsec3 = new self();
