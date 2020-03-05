@@ -89,8 +89,10 @@ class HINFO implements RdataInterface
      *
      * @return HINFO
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
+        $offset += strlen($rdata);
+
         return self::fromText($rdata);
     }
 

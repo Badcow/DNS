@@ -86,7 +86,12 @@ class ZoneTest extends TestCase
         ));
         $loc->setComment('This is Canberra');
 
-        $zone->fromList($loc, $mx2);
+        $srv = new ResourceRecord();
+        $srv->setName('_ftp._tcp');
+        $srv->setClass('IN');
+        $srv->setRdata(Factory::SRV(10, 10, 21, 'files'));
+
+        $zone->fromList($loc, $mx2, $srv);
         $zone->addResourceRecord($soa);
         $zone->addResourceRecord($ns1);
         $zone->addResourceRecord($mx3);
@@ -135,7 +140,7 @@ class ZoneTest extends TestCase
     public function testOtherFunctions(): void
     {
         $zone = TestZone::buildTestZone();
-        $this->assertCount(13, $zone);
+        $this->assertCount(15, $zone);
         $this->assertFalse($zone->isEmpty());
 
         $rr = $zone->getResourceRecords()[0];
@@ -143,6 +148,11 @@ class ZoneTest extends TestCase
         $this->assertTrue($zone->remove($rr));
         $this->assertFalse($zone->remove($rr));
         $this->assertFalse($zone->contains($rr));
+
+        //Test Zone:offsetSet()
+        $this->assertArrayNotHasKey(0, $zone);
+        $zone[0] = $rr;
+        $this->assertArrayHasKey(0, $zone);
     }
 
     public function testGetClassReturnsDefaultClass(): void

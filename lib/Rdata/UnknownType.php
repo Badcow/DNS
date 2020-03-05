@@ -112,10 +112,10 @@ class UnknownType implements RdataInterface
      *
      * @return UnknownType
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
         $_rdata = new self();
-        $_rdata->setData($rdata);
+        $_rdata->setData(substr($rdata, $offset, $rdLength ?? strlen($rdata)));
 
         return $_rdata;
     }

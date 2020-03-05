@@ -139,13 +139,13 @@ class APL implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
         $apl = new self();
-        $rdLength = strlen($rdata);
-        $offset = 0;
 
-        while ($offset < $rdLength) {
+        $end = $offset + ($rdLength ?? strlen($rdata));
+
+        while ($offset < $end) {
             $apItem = unpack('nfamily/Cprefix/Clength', $rdata, $offset);
             $isExcluded = (bool) ($apItem['length'] & 0b10000000);
             $len = $apItem['length'] & 0b01111111;

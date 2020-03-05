@@ -115,11 +115,11 @@ class MX implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $offset = 2;
         $mx = new self();
-        $mx->setPreference(unpack('n', $rdata)[1]);
+        $mx->setPreference(unpack('n', $rdata, $offset)[1]);
+        $offset += 2;
         $mx->setExchange(self::decodeName($rdata, $offset));
 
         return $mx;

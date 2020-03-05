@@ -302,7 +302,7 @@ class RRSIG implements RdataInterface
     public static function fromText(string $text): RdataInterface
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $rrsig = new RRSIG();
+        $rrsig = new static();
         $rrsig->setTypeCovered((string) array_shift($rdata));
         $rrsig->setAlgorithm((int) array_shift($rdata));
         $rrsig->setLabels((int) array_shift($rdata));
@@ -326,15 +326,19 @@ class RRSIG implements RdataInterface
      *
      * @throws UnsupportedTypeException
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $offset = 0;
+        $rdLength = $rdLength ?? strlen($rdata);
+        $end = $offset + $rdLength;
         $values = unpack('n<type>/C<algorithm>/C<labels>/N<originalTtl>/N<sigExpiration>/N<sigInception>/n<keyTag>', $rdata, $offset);
         $offset += 18;
         $signersName = RdataTrait::decodeName($rdata, $offset);
-        $signature = substr($rdata, $offset);
 
-        $rrsig = new RRSIG();
+        $sigLen = $end - $offset;
+        $signature = substr($rdata, $offset, $sigLen);
+        $offset += $sigLen;
+
+        $rrsig = new static();
         $rrsig->setTypeCovered(Types::getName($values['<type>']));
         $rrsig->setAlgorithm($values['<algorithm>']);
         $rrsig->setLabels($values['<labels>']);

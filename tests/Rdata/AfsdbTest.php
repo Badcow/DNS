@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\AFSDB;
+use Badcow\DNS\Rdata\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -71,5 +72,13 @@ class AfsdbTest extends TestCase
 
         $this->assertEquals($expectation, $afsdb->toWire());
         $this->assertEquals($afsdb, AFSDB::fromWire($expectation));
+    }
+
+    public function testFactory(): void
+    {
+        $afsdb = Factory::AFSDB(2, 'foo.example.com.');
+
+        $this->assertInstanceOf(AFSDB::class, $afsdb);
+        $this->assertEquals('2 foo.example.com.', $afsdb->toText());
     }
 }

@@ -73,13 +73,20 @@ class UriTest extends TestCase
 
     public function testWire(): void
     {
-        $expectation = pack('nn', 10, 1).'ftp://ftp1.example.com/public%20data';
+        $wireFormat = pack('nn', 10, 1).'ftp://ftp1.example.com/public%20data';
         $uri = new URI();
         $uri->setPriority(10);
         $uri->setWeight(1);
         $uri->setTarget('ftp://ftp1.example.com/public%20data');
 
-        $this->assertEquals($expectation, $uri->toWire());
-        $this->assertEquals($uri, URI::fromWire($expectation));
+        $this->assertEquals($wireFormat, $uri->toWire());
+        $this->assertEquals($uri, URI::fromWire($wireFormat));
+
+        $rdLength = strlen($wireFormat);
+        $wireFormat = 'abc'.$wireFormat;
+        $offset = 3;
+
+        $this->assertEquals($uri, URI::fromWire($wireFormat, $offset, $rdLength));
+        $this->assertEquals(3 + $rdLength, $offset);
     }
 }

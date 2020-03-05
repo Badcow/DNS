@@ -57,7 +57,7 @@ class CNAME implements RdataInterface
      */
     public function toWire(): string
     {
-        if (!isset($this->target)) {
+        if (null === $this->target) {
             throw new \InvalidArgumentException('Target must be set.');
         }
 
@@ -78,10 +78,10 @@ class CNAME implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
         $cname = new static();
-        $cname->setTarget(self::decodeName($rdata));
+        $cname->setTarget(self::decodeName($rdata, $offset));
 
         return $cname;
     }

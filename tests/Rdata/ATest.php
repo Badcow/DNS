@@ -77,11 +77,14 @@ class ATest extends TestCase
     /**
      * @throws DecodeException
      */
-    public function testException(): void
+    public function testFromWire(): void
     {
-        $wire = pack('nCCC', 0x100, 0xff, 0x01, 0x01); //256.255.1.1
-        $this->expectException(DecodeException::class);
-        $this->expectExceptionMessage('Unable to decode A record rdata from binary data "0x01 0x00 0xff 0x01 0x01"');
-        A::fromWire($wire);
+        $wire = pack('C6', 0x07, 0xC0, 0xff, 0x01, 0x01, 0x07); //⍾192.255.1.1⍾
+        $offset = 1;
+        /** @var A $a */
+        $a = A::fromWire($wire, $offset);
+
+        $this->assertEquals('192.255.1.1', $a->getAddress());
+        $this->assertEquals(chr(0x07), $wire[$offset]);
     }
 }

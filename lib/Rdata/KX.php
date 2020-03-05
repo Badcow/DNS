@@ -113,12 +113,12 @@ class KX implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $offset = 2;
         $kx = new self();
-        $kx->setPreference(unpack('n', $rdata)[1]);
-        $kx->setexchanger(self::decodeName($rdata, $offset));
+        $kx->setPreference(unpack('n', $rdata, $offset)[1]);
+        $offset += 2;
+        $kx->setExchanger(self::decodeName($rdata, $offset));
 
         return $kx;
     }

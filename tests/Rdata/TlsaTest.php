@@ -68,6 +68,13 @@ class TlsaTest extends TestCase
         $this->assertEquals(1, $tlsa->getSelector());
         $this->assertEquals(2, $tlsa->getMatchingType());
         $this->assertEquals(hex2bin($this->cerAssociationData), $tlsa->getCertificateAssociationData());
+
+        $rdLength = strlen($wireFormat);
+        $wireFormat = 'abc'.$wireFormat;
+        $offset = 3;
+
+        $this->assertEquals($tlsa, TLSA::fromWire($wireFormat, $offset, $rdLength));
+        $this->assertEquals(3 + $rdLength, $offset);
     }
 
     /**

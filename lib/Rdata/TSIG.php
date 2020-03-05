@@ -270,10 +270,10 @@ class TSIG implements RdataInterface
      *
      * @return TSIG
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
         $tsig = new self();
-        $offset = 0;
+
         $tsig->setAlgorithmName(self::decodeName($rdata, $offset));
 
         $args = unpack('n<hex1>/n<hex2>/n<hex3>/n<fudge>/n<macLen>', $rdata, $offset);
@@ -284,18 +284,20 @@ class TSIG implements RdataInterface
             throw new DecodeException(static::TYPE, $rdata);
         }
 
-        $macLen = $args['<macLen>'];
+        $macLen = (int) $args['<macLen>'];
         $tsig->setFudge($args['<fudge>']);
         $tsig->setTimeSigned($objTimeSigned);
         $tsig->setMac(substr($rdata, $offset, $macLen));
         $offset += $macLen;
 
-        $args = unpack('n<id>/n<error>/n<otherLen>', $rdata, $offset);
+        $args = unpack('n<id>/n<error>/n<otherLen>', $rdata, (int) $offset);
         $offset += 6;
+        $otherLen = (int) $args['<otherLen>'];
 
         $tsig->setOriginalId($args['<id>']);
         $tsig->setError($args['<error>']);
-        $tsig->setOtherData(substr($rdata, (int) $offset, $args['<otherLen>']));
+        $tsig->setOtherData(substr($rdata, (int) $offset, $otherLen));
+        $offset += $otherLen;
 
         return $tsig;
     }

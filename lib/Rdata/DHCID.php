@@ -241,12 +241,14 @@ class DHCID implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $rdata = unpack('nIdentifierType/CDigestType/H*Digest', $rdata);
+        $rdLength = $rdLength ?? strlen($rdata);
+        $rdata = unpack('nIdentifierType/CDigestType/H*Digest', substr($rdata, $offset, $rdLength));
         $dhcid = new self();
         $dhcid->setIdentifierType((int) $rdata['IdentifierType']);
         $dhcid->setDigest((string) $rdata['Digest']);
+        $offset += $rdLength;
 
         return $dhcid;
     }

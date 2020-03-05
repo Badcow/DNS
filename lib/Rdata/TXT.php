@@ -72,10 +72,12 @@ class TXT implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata): RdataInterface
+    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
+        $rdLength = $rdLength ?? strlen($rdata);
         $txt = new static();
-        $txt->setText($rdata);
+        $txt->setText(substr($rdata, $offset, $rdLength));
+        $offset += $rdLength;
 
         return $txt;
     }
