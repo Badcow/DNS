@@ -2,6 +2,13 @@ CHANGELOG for 3.x
 =================
 ## 3.5.0
 * Deprecate `Bacow\DNS\Rdata\Algorithms`, use `Bacow\DNS\Algorithms` instead. 
+* New classes to support full stack DNS message:
+  * `Badcow\DNS\Message`
+  * `Badcow\DNS\Opcode`
+  * `Badcow\DNS\Question`
+* New method: `Badcow\DNS\Parser\StringIterator::getRemainingAsString()`.
+* Additional parameters added to `Badcow\DNS\Rdata\RdataInterface::fromWire()`: `RdataInterface::fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null)`.
+* `Badcow\DNS\Rdata\RdataTrait::decodeName()` now can interpret RFC1035 compressed names in a DNS message context.
 ## 3.4.1
 * [Issue #65](https://github.com/Badcow/DNS/issues/65): Correct replacement name validation in `NAPTR` Rdata.
 ## 3.4.0
