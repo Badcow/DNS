@@ -9,6 +9,8 @@ The aim of this project is to create abstract object representations of DNS reco
 classes representing DNS objects (such as `Zone`, `ResourceRecord`, and various `RData` types), a parser to convert BIND
 style text files to the PHP objects, and builders to create aesthetically pleasing BIND records.
 
+The library can parse and encode DNS messages enabling developers to create DNS client/server platforms in pure PHP.
+
 ## Build Status
 [![Build Status](https://travis-ci.org/Badcow/DNS.png)](https://travis-ci.org/Badcow/DNS)
 [![Code Coverage](https://scrutinizer-ci.com/g/Badcow/DNS/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=master)
