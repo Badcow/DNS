@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Algorithms as _Algorithms;
+use Badcow\DNS\Parser\Tokens;
+
 /*
  * {@link https://tools.ietf.org/html/rfc4398#section-2.1}.
  */
-use Badcow\DNS\Parser\Tokens;
-
 class CERT implements RdataInterface
 {
     use RdataTrait;
@@ -130,7 +131,7 @@ class CERT implements RdataInterface
             return;
         }
 
-        $this->algorithm = Algorithms::getAlgorithmValue((string) $algorithm);
+        $this->algorithm = _Algorithms::getAlgorithmValue((string) $algorithm);
     }
 
     /**
@@ -161,7 +162,7 @@ class CERT implements RdataInterface
     public function toText(): string
     {
         $type = (array_key_exists($this->certificateType, self::MNEMONICS)) ? self::MNEMONICS[$this->certificateType] : (string) $this->certificateType;
-        $algorithm = (array_key_exists($this->algorithm, Algorithms::MNEMONICS)) ? Algorithms::MNEMONICS[$this->algorithm] : (string) $this->algorithm;
+        $algorithm = (array_key_exists($this->algorithm, _Algorithms::MNEMONICS)) ? _Algorithms::MNEMONICS[$this->algorithm] : (string) $this->algorithm;
 
         return sprintf('%s %s %s %s', $type, (string) $this->keyTag, $algorithm, $this->getCertificate());
     }

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Rdata\Algorithms;
+use Badcow\DNS\Algorithms;
 use Badcow\DNS\Rdata\DLV;
 use Badcow\DNS\Rdata\Factory;
 use PHPUnit\Framework\TestCase;

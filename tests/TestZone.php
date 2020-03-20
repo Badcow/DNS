@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Tests;
 
+use Badcow\DNS\Algorithms;
 use Badcow\DNS\Classes;
 use Badcow\DNS\Rdata\A;
-use Badcow\DNS\Rdata\Algorithms;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\RRSIG;
 use Badcow\DNS\ResourceRecord;

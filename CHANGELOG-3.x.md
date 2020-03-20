@@ -1,5 +1,7 @@
 CHANGELOG for 3.x
 =================
+## 3.5.0
+* Deprecate `Bacow\DNS\Rdata\Algorithms`, use `Bacow\DNS\Algorithms` instead. 
 ## 3.4.1
 * [Issue #65](https://github.com/Badcow/DNS/issues/65): Correct replacement name validation in `NAPTR` Rdata.
 ## 3.4.0

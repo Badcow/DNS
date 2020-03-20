@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Tests\Parser;
 
+use Badcow\DNS\Algorithms;
 use Badcow\DNS\AlignedBuilder;
 use Badcow\DNS\Classes;
 use Badcow\DNS\Parser\Comments;
@@ -20,7 +21,6 @@ use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\AAAA;
-use Badcow\DNS\Rdata\Algorithms;
 use Badcow\DNS\Rdata\APL;
 use Badcow\DNS\Rdata\CAA;
 use Badcow\DNS\Rdata\CNAME;

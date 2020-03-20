@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Badcow\DNS\Tests\Rdata;
+namespace Badcow\DNS\Tests;
 
-use Badcow\DNS\Rdata\Algorithms;
+use Badcow\DNS\Algorithms;
 use PHPUnit\Framework\TestCase;
 
 class AlgorithmsTest extends TestCase

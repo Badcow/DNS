@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Tests\Rdata;
 
+use Badcow\DNS\Algorithms;
 use Badcow\DNS\Rdata\A;
-use Badcow\DNS\Rdata\Algorithms;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\NSEC3;
 use Badcow\DNS\Rdata\RRSIG;
