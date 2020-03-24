@@ -272,7 +272,7 @@ class SOA implements RdataInterface
      */
     public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $soa = new static();
+        $soa = new self();
         $soa->setMname(self::decodeName($rdata, $offset));
         $soa->setRname(self::decodeName($rdata, $offset));
         $parameters = unpack('Nserial/Nrefresh/Nretry/Nexpire/Nminimum', $rdata, $offset);

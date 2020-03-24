@@ -47,7 +47,7 @@ class AAAA extends A
         }
         $offset += 16;
 
-        $a = new static();
+        $a = new self();
         $a->setAddress($address);
 
         return $a;
