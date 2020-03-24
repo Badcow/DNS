@@ -221,7 +221,7 @@ class NAPTR implements RdataInterface
     {
         $encoded = pack('nn', $this->order, $this->preference);
         $encoded .= sprintf('"%s""%s""%s"', $this->flags ?? '', $this->services ?? '', $this->regexp);
-        $encoded .= RdataTrait::encodeName($this->replacement);
+        $encoded .= self::encodeName($this->replacement);
 
         return $encoded;
     }

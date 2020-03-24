@@ -245,7 +245,7 @@ class TKEY implements RdataInterface
      */
     public function toWire(): string
     {
-        $wire = RdataTrait::encodeName($this->algorithm);
+        $wire = self::encodeName($this->algorithm);
         $wire .= pack('NNnnn',
             $this->inception->format('U'),
             $this->expiration->format('U'),
@@ -295,7 +295,7 @@ class TKEY implements RdataInterface
      */
     public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
     {
-        $algorithm = RdataTrait::decodeName($rdata, $offset);
+        $algorithm = self::decodeName($rdata, $offset);
         $integers = unpack('N<inception>/N<expiration>/n<mode>/n<error>/n<keySize>', $rdata, $offset);
         $offset += 14;
         $keySize = (int) $integers['<keySize>'];

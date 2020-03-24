@@ -251,7 +251,7 @@ class IPSECKEY implements RdataInterface
             }
             $wire .= inet_pton($this->gateway);
         } else {
-            $wire .= RdataTrait::encodeName($this->gateway ?? '.');
+            $wire .= self::encodeName($this->gateway ?? '.');
         }
 
         if (self::ALGORITHM_NONE !== $this->algorithm && null !== $this->publicKey) {
@@ -324,7 +324,7 @@ class IPSECKEY implements RdataInterface
         switch ($gatewayType) {
             case 0:
             case 3:
-                $gateway = RdataTrait::decodeName($rdata, $offset);
+                $gateway = self::decodeName($rdata, $offset);
                 break;
             case 1:
                 $gateway = @inet_ntop(substr($rdata, $offset, 4));

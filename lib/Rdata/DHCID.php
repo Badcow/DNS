@@ -186,7 +186,7 @@ class DHCID implements RdataInterface
             throw new \BadMethodCallException('Identifier and Fully Qualified Domain Name (FQDN) must both be set on DHCID object before calling calculateDigest().');
         }
 
-        $fqdn = RdataTrait::encodeName($this->fqdn);
+        $fqdn = self::encodeName($this->fqdn);
         $identifier = pack('H*', str_replace(':', '', strtolower($this->identifier)));
         if (0 === $this->identifierType) {
             $identifier = chr($this->htype).$identifier;

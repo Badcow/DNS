@@ -288,7 +288,7 @@ class RRSIG implements RdataInterface
             $this->keyTag
         );
 
-        $wire .= RdataTrait::encodeName($this->signersName);
+        $wire .= self::encodeName($this->signersName);
         $wire .= $this->signature;
 
         return $wire;
@@ -332,7 +332,7 @@ class RRSIG implements RdataInterface
         $end = $offset + $rdLength;
         $values = unpack('n<type>/C<algorithm>/C<labels>/N<originalTtl>/N<sigExpiration>/N<sigInception>/n<keyTag>', $rdata, $offset);
         $offset += 18;
-        $signersName = RdataTrait::decodeName($rdata, $offset);
+        $signersName = self::decodeName($rdata, $offset);
 
         $sigLen = $end - $offset;
         $signature = substr($rdata, $offset, $sigLen);

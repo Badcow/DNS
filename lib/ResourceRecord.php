@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Badcow\DNS;
 
+use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\RdataInterface;
-use Badcow\DNS\Rdata\RdataTrait;
 use Badcow\DNS\Rdata\Types;
 use InvalidArgumentException;
 
@@ -229,7 +229,7 @@ class ResourceRecord
 
         $rdata = $this->rdata->toWire();
 
-        $encoded = RdataTrait::encodeName($this->name);
+        $encoded = A::encodeName($this->name);
         $encoded .= pack('nnNn',
             $this->rdata->getTypeCode(),
             $this->classId,
@@ -252,7 +252,7 @@ class ResourceRecord
     public static function fromWire(string $encoded, int &$offset = 0): ResourceRecord
     {
         $rr = new self();
-        $rr->setName(RdataTrait::decodeName($encoded, $offset));
+        $rr->setName(A::decodeName($encoded, $offset));
         $integers = unpack('ntype/nclass/Nttl/ndlength', $encoded, $offset);
         $offset += 10;
         $rr->setClassId($integers['class']);
