@@ -66,7 +66,13 @@ class CertTest extends TestCase
 
         $wireFormatted = $cert->toWire();
 
-        $this->assertEquals($cert, CERT::fromWire($wireFormatted));
+        /** @var CERT $fromWire */
+        $fromWire = CERT::fromWire($wireFormatted);
+
+        $this->assertEquals(3, $fromWire->getCertificateType());
+        $this->assertEquals(65, $fromWire->getKeyTag());
+        $this->assertEquals(4, $fromWire->getAlgorithm());
+        $this->assertEquals($this->certificate, $fromWire->getCertificate());
     }
 
     public function testFromText(): void
@@ -91,5 +97,33 @@ class CertTest extends TestCase
         $cert->setCertificate($this->certificate);
 
         $this->assertEquals($cert, Factory::CERT('PGP', 65, Algorithms::ECC, $this->certificate));
+    }
+
+    public function testSetCertificateThrowsErrorWithMalformedBase64EncodedString(): void
+    {
+        $cert = new CERT();
+        $certificate = $this->certificate.'%';
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The certificate must be a valid Base64 encoded string.');
+        $cert->setCertificate($certificate);
+    }
+
+    public function testGetKeyTypeMnemonic(): void
+    {
+        $this->assertEquals('IACPKIX', CERT::getKeyTypeMnemonic(8));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('"256" is not a valid key type.');
+        CERT::getKeyTypeMnemonic(256);
+    }
+
+    public function testGetKeyTypeValue(): void
+    {
+        $this->assertEquals(8, CERT::getKeyTypeValue('IACPKIX'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('"NOT_A_VALUE" is not a valid key type mnemonic.');
+        CERT::getKeyTypeValue('NOT_A_VALUE');
     }
 }

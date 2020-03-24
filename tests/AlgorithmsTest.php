@@ -32,4 +32,14 @@ class AlgorithmsTest extends TestCase
         $this->expectExceptionMessage('"1337" is not a valid algorithm.');
         Algorithms::getMnemonic(1337);
     }
+
+    /**
+     * @throws \InvalidArgumentException
+     */
+    public function testGetAlgorithmValueThrowsExceptionOnInvalidMnemonic(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('"INVALID_MNEMONIC" is not a valid algorithm mnemonic.');
+        Algorithms::getAlgorithmValue('INVALID_MNEMONIC');
+    }
 }

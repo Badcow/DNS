@@ -40,6 +40,10 @@ class ATest extends TestCase
         $this->aRdata->setAddress($address);
 
         $this->assertEquals($address, $this->aRdata->getAddress());
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The address "abc" is not a valid IPv4 address.');
+        $this->aRdata->setAddress('abc');
     }
 
     public function testOutput(): void
@@ -74,6 +78,20 @@ class ATest extends TestCase
         $this->assertEquals($address, $a->getAddress());
     }
 
+    public function testToWireThrowsExceptionIfAddressIsMalformed(): void
+    {
+        $a_prime = new class() extends A {
+            public function __construct()
+            {
+                $this->address = 'abc';
+            }
+        };
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The IP address "abc" cannot be encoded. Check that it is a valid IP address.');
+        $a_prime->toWire();
+    }
+
     /**
      * @throws DecodeException
      */
@@ -86,5 +104,9 @@ class ATest extends TestCase
 
         $this->assertEquals('192.255.1.1', $a->getAddress());
         $this->assertEquals(chr(0x07), $wire[$offset]);
+
+        $wire = pack('C3', 0x61, 0x62, 0x63);
+        $this->expectException(DecodeException::class);
+        $a = A::fromWire($wire);
     }
 }

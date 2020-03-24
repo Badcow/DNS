@@ -46,5 +46,11 @@ class CnameTest extends TestCase
 
         $this->assertEquals($expectation, $cname->toWire());
         $this->assertEquals($host, $cname->getTarget());
+
+        //Test that toWire() will throw an exception if no target is set.
+        $cname = new CNAME();
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Target must be set.');
+        $cname->toWire();
     }
 }
