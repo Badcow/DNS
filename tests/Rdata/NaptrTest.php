@@ -91,7 +91,9 @@ class NaptrTest extends TestCase
         $wireFormat = 'abc'.$wireFormat;
         $offset = 3;
 
-        $this->assertEquals($naptr, NAPTR::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new NAPTR();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $this->assertEquals($naptr, $fromWire);
         $this->assertEquals(3 + $rdLength, $offset);
     }
 

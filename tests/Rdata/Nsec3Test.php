@@ -65,7 +65,9 @@ class Nsec3Test extends TestCase
 
         $wireFormat = $nsec3->toWire();
 
-        $this->assertEquals($nsec3, NSEC3::fromWire($wireFormat));
+        $fromWire = new NSEC3();
+        $fromWire->fromWire($wireFormat);
+        $this->assertEquals($nsec3, $fromWire);
     }
 
     public function testFromText(): void

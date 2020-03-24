@@ -193,20 +193,17 @@ class CERT implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('ntype/nkeyTag/Calgorithm', $rdata, $offset);
         $offset += 5;
-        $cert = new static();
-        $cert->setCertificateType((int) $integers['type']);
-        $cert->setKeyTag((int) $integers['keyTag']);
-        $cert->setAlgorithm((int) $integers['algorithm']);
+        $this->setCertificateType((int) $integers['type']);
+        $this->setKeyTag((int) $integers['keyTag']);
+        $this->setAlgorithm((int) $integers['algorithm']);
 
         $certLen = ($rdLength ?? strlen($rdata)) - 5;
-        $cert->setCertificate(base64_encode(substr($rdata, $offset, $certLen)));
+        $this->setCertificate(base64_encode(substr($rdata, $offset, $certLen)));
         $offset += $certLen;
-
-        return $cert;
     }
 
     /**

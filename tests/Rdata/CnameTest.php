@@ -42,7 +42,8 @@ class CnameTest extends TestCase
         $expectation = chr(4).'host'.chr(7).'example'.chr(3).'com'.chr(0);
 
         /** @var CNAME $cname */
-        $cname = CNAME::fromWire($expectation);
+        $cname = new CNAME();
+        $cname->fromWire($expectation);
 
         $this->assertEquals($expectation, $cname->toWire());
         $this->assertEquals($host, $cname->getTarget());

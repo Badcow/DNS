@@ -283,31 +283,26 @@ class IPSECKEY implements RdataInterface
     /**
      * {@inheritdoc}
      *
-     * @return IPSECKEY
-     *
      * @throws DecodeException
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $ipseckey = new self();
         $end = $offset + $rdLength ?? strlen($rdata);
 
         $integers = unpack('CPrecedence/CGatewayType/CAlgorithm', $rdata, $offset);
         $offset += 3;
-        $ipseckey->setPrecedence((int) $integers['Precedence']);
+        $this->setPrecedence((int) $integers['Precedence']);
         $gatewayType = $integers['GatewayType'];
         $algorithm = $integers['Algorithm'];
 
-        $ipseckey->setGateway(self::extractGateway($gatewayType, $rdata, $offset));
+        $this->setGateway(self::extractGateway($gatewayType, $rdata, $offset));
 
         if (self::ALGORITHM_NONE !== $algorithm) {
             $publicKey = base64_encode(substr($rdata, $offset, $end - $offset));
-            $ipseckey->setPublicKey($algorithm, $publicKey);
+            $this->setPublicKey($algorithm, $publicKey);
         }
 
         $offset = $end;
-
-        return $ipseckey;
     }
 
     /**

@@ -55,6 +55,8 @@ class RpTest extends TestCase
         $rp->setTxtDomainName('lam1.people.umd.edu.');
 
         $this->assertEquals($expectation, $rp->toWire());
-        $this->assertEquals($rp, RP::fromWire($expectation));
+        $fromWire = new RP();
+        $fromWire->fromWire($expectation);
+        $this->assertEquals($rp, $fromWire);
     }
 }

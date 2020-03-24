@@ -159,18 +159,15 @@ class KEY implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $rdLength = $rdLength ?? strlen($rdata);
         $integers = unpack('nflags/Cprotocol/Calgorithm', $rdata, $offset);
         $offset += 4;
-        $key = new static();
-        $key->setFlags((int) $integers['flags']);
-        $key->setProtocol((int) $integers['protocol']);
-        $key->setAlgorithm((int) $integers['algorithm']);
-        $key->publicKey = substr($rdata, $offset, $rdLength - 4);
+        $this->setFlags((int) $integers['flags']);
+        $this->setProtocol((int) $integers['protocol']);
+        $this->setAlgorithm((int) $integers['algorithm']);
+        $this->publicKey = substr($rdata, $offset, $rdLength - 4);
         $offset += $rdLength - 4;
-
-        return $key;
     }
 }

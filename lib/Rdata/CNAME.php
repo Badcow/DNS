@@ -78,11 +78,8 @@ class CNAME implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $cname = new static();
-        $cname->setTarget(self::decodeName($rdata, $offset));
-
-        return $cname;
+        $this->setTarget(self::decodeName($rdata, $offset));
     }
 }

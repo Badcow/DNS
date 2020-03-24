@@ -66,7 +66,10 @@ class CertTest extends TestCase
 
         $wireFormatted = $cert->toWire();
 
-        $this->assertEquals($cert, CERT::fromWire($wireFormatted));
+        $fromWire = new CERT();
+        $fromWire->fromWire($wireFormatted);
+
+        $this->assertEquals($cert, $fromWire);
     }
 
     public function testFromText(): void

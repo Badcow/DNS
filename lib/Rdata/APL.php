@@ -139,10 +139,8 @@ class APL implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $apl = new self();
-
         $end = $offset + ($rdLength ?? strlen($rdata));
 
         while ($offset < $end) {
@@ -156,9 +154,7 @@ class APL implements RdataInterface
             $offset += $len;
 
             $ipBlock = (4 === $version) ? new IPv4Block($address, $apItem['prefix']) : new IPv6Block($address, $apItem['prefix']);
-            $apl->addAddressRange($ipBlock, !$isExcluded);
+            $this->addAddressRange($ipBlock, !$isExcluded);
         }
-
-        return $apl;
     }
 }

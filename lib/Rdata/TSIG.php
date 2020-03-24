@@ -267,14 +267,10 @@ class TSIG implements RdataInterface
      * {@inheritdoc}
      *
      * @throws DecodeException
-     *
-     * @return TSIG
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $tsig = new self();
-
-        $tsig->setAlgorithmName(self::decodeName($rdata, $offset));
+        $this->setAlgorithmName(self::decodeName($rdata, $offset));
 
         $args = unpack('n<hex1>/n<hex2>/n<hex3>/n<fudge>/n<macLen>', $rdata, $offset);
         $offset += 10;
@@ -285,20 +281,18 @@ class TSIG implements RdataInterface
         }
 
         $macLen = (int) $args['<macLen>'];
-        $tsig->setFudge($args['<fudge>']);
-        $tsig->setTimeSigned($objTimeSigned);
-        $tsig->setMac(substr($rdata, $offset, $macLen));
+        $this->setFudge($args['<fudge>']);
+        $this->setTimeSigned($objTimeSigned);
+        $this->setMac(substr($rdata, $offset, $macLen));
         $offset += $macLen;
 
         $args = unpack('n<id>/n<error>/n<otherLen>', $rdata, (int) $offset);
         $offset += 6;
         $otherLen = (int) $args['<otherLen>'];
 
-        $tsig->setOriginalId($args['<id>']);
-        $tsig->setError($args['<error>']);
-        $tsig->setOtherData(substr($rdata, (int) $offset, $otherLen));
+        $this->setOriginalId($args['<id>']);
+        $this->setError($args['<error>']);
+        $this->setOtherData(substr($rdata, (int) $offset, $otherLen));
         $offset += $otherLen;
-
-        return $tsig;
     }
 }

@@ -172,6 +172,9 @@ class SRV implements RdataInterface
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function toWire(): string
     {
         return pack('nnn', $this->priority, $this->weight, $this->port).self::encodeName($this->target);
@@ -189,16 +192,16 @@ class SRV implements RdataInterface
         return $srv;
     }
 
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('npriority/nweight/nport', $rdata, $offset);
         $offset += 6;
-        $srv = new self();
-        $srv->setTarget(self::decodeName($rdata, $offset));
-        $srv->setPriority($integers['priority']);
-        $srv->setWeight($integers['weight']);
-        $srv->setPort($integers['port']);
-
-        return $srv;
+        $this->setTarget(self::decodeName($rdata, $offset));
+        $this->setPriority($integers['priority']);
+        $this->setWeight($integers['weight']);
+        $this->setPort($integers['port']);
     }
 }

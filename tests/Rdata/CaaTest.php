@@ -78,7 +78,10 @@ class CaaTest extends TestCase
         $caa->setTag(CAA::TAG_IODEF);
         $caa->setValue('mailto:security@example.com');
 
+        $fromWire = new CAA();
+        $fromWire->fromWire($expectation);
+
         $this->assertEquals($expectation, $caa->toWire());
-        $this->assertEquals($caa, CAA::fromWire($expectation));
+        $this->assertEquals($caa, $fromWire);
     }
 }

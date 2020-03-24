@@ -151,19 +151,16 @@ class DS implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('ntag/Calgorithm/Cdtype', $rdata);
         $offset += 4;
-        $ds = new static();
-        $ds->setKeyTag($integers['tag']);
-        $ds->setAlgorithm($integers['algorithm']);
-        $ds->setDigestType($integers['dtype']);
+        $this->setKeyTag($integers['tag']);
+        $this->setAlgorithm($integers['algorithm']);
+        $this->setDigestType($integers['dtype']);
 
         $digestLen = ($rdLength ?? strlen($rdata)) - 4;
-        $ds->setDigest(substr($rdata, $offset, $digestLen));
+        $this->setDigest(substr($rdata, $offset, $digestLen));
         $offset += $digestLen;
-
-        return $ds;
     }
 }

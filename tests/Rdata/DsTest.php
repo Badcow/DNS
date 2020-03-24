@@ -66,6 +66,9 @@ class DsTest extends TestCase
         $ds->setDigest(self::$digest);
         $wireFormat = $ds->toWire();
 
-        $this->assertEquals($ds, DS::fromWire($wireFormat));
+        $fromWire = new DS();
+        $fromWire->fromWire($wireFormat);
+
+        $this->assertEquals($ds, $fromWire);
     }
 }

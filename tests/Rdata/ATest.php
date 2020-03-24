@@ -68,7 +68,8 @@ class ATest extends TestCase
         $address = '200.100.50.1';
         $expectation = inet_pton($address);
         /** @var A $a */
-        $a = A::fromWire($expectation);
+        $a = new A();
+        $a->fromWire($expectation);
 
         $this->assertEquals($expectation, $a->toWire());
         $this->assertEquals($address, $a->getAddress());
@@ -82,7 +83,8 @@ class ATest extends TestCase
         $wire = pack('C6', 0x07, 0xC0, 0xff, 0x01, 0x01, 0x07); //⍾192.255.1.1⍾
         $offset = 1;
         /** @var A $a */
-        $a = A::fromWire($wire, $offset);
+        $a = new A();
+        $a->fromWire($wire, $offset);
 
         $this->assertEquals('192.255.1.1', $a->getAddress());
         $this->assertEquals(chr(0x07), $wire[$offset]);

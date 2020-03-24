@@ -54,7 +54,8 @@ class DlvTest extends TestCase
         $dlv->setDigestType(DLV::DIGEST_SHA1);
         $dlv->setDigest(self::$digest);
         $wireFormat = $dlv->toWire();
-        $fromWire = DLV::fromWire($wireFormat);
+        $fromWire = new DLV();
+        $fromWire->fromWire($wireFormat);
 
         $this->assertInstanceOf(DLV::class, $fromWire);
         $this->assertEquals($dlv, $fromWire);

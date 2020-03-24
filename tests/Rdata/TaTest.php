@@ -66,6 +66,8 @@ class TaTest extends TestCase
         $ta->setDigest(self::$digest);
         $wireFormat = $ta->toWire();
 
-        $this->assertEquals($ta, TA::fromWire($wireFormat));
+        $fromWire = new TA();
+        $fromWire->fromWire($wireFormat);
+        $this->assertEquals($ta, $fromWire);
     }
 }

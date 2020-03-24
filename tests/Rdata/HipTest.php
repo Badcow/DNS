@@ -71,7 +71,10 @@ class HipTest extends TestCase
         array_map([$hip, 'addRendezvousServer'], $this->rvs);
         $wireFormat = $hip->toWire();
 
-        $this->assertEquals($hip, HIP::fromWire($wireFormat));
+        $fromWire = new HIP();
+        $fromWire->fromWire($wireFormat);
+
+        $this->assertEquals($hip, $fromWire);
     }
 
     public function testFromText(): void

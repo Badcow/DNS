@@ -119,16 +119,13 @@ class NSEC implements RdataInterface
     /**
      * {@inheritdoc}
      *
-     * @throws UnsupportedTypeException
+     * @throws UnsupportedTypeException|DecodeException
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $nsec = new self();
-        $nsec->setNextDomainName(self::decodeName($rdata, $offset));
+        $this->setNextDomainName(self::decodeName($rdata, $offset));
         $types = self::parseBitmap($rdata, $offset);
-        array_map([$nsec, 'addType'], $types);
-
-        return $nsec;
+        array_map([$this, 'addType'], $types);
     }
 
     /**

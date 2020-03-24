@@ -70,8 +70,11 @@ class AfsdbTest extends TestCase
 
         $expectation = pack('n', 2).chr(3).'foo'.chr(7).'example'.chr(3).'com'.chr(0);
 
+        $fromWire = new AFSDB();
+        $fromWire->fromWire($expectation);
+
         $this->assertEquals($expectation, $afsdb->toWire());
-        $this->assertEquals($afsdb, AFSDB::fromWire($expectation));
+        $this->assertEquals($afsdb, $fromWire);
     }
 
     public function testFactory(): void

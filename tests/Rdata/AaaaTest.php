@@ -43,7 +43,8 @@ class AaaaTest extends TestCase
         $address = '2003:dead:beef:4dad:23:46:bb:101';
         $expectation = inet_pton($address);
         /** @var AAAA $aaaa */
-        $aaaa = AAAA::fromWire($expectation);
+        $aaaa = new AAAA();
+        $aaaa->fromWire($expectation);
 
         $this->assertEquals($expectation, $aaaa->toWire());
         $this->assertEquals($address, $aaaa->getAddress());
@@ -68,7 +69,8 @@ class AaaaTest extends TestCase
     {
         $wire = chr(0x07).inet_pton('beef::1').chr(0x07);
         $offset = 1;
-        $aaaa = AAAA::fromWire($wire, $offset);
+        $aaaa = new AAAA();
+        $aaaa->fromWire($wire, $offset);
 
         $this->assertEquals('beef::1', $aaaa->getAddress());
         $this->assertEquals(17, $offset);

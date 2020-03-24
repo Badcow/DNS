@@ -154,28 +154,22 @@ class CAA implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return CAA
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $caa = new self();
-
-        $caa->setFlag(ord($rdata[$offset]));
+        $this->setFlag(ord($rdata[$offset]));
         ++$offset;
 
         $tagLen = ord($rdata[$offset]);
         ++$offset;
 
-        $caa->setTag(substr($rdata, $offset, $tagLen));
+        $this->setTag(substr($rdata, $offset, $tagLen));
         $offset += $tagLen;
 
         $valueLen = ($rdLength ?? strlen($rdata)) - 2 - $tagLen;
-        $caa->setValue(substr($rdata, $offset, $valueLen));
+        $this->setValue(substr($rdata, $offset, $valueLen));
 
         $offset = $offset += $valueLen;
-
-        return $caa;
     }
 
     /**

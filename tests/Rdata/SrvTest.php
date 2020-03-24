@@ -89,6 +89,8 @@ class SrvTest extends TestCase
         $srv->setTarget('www.example.com.');
 
         $this->assertEquals($expectation, $srv->toWire());
-        $this->assertEquals($srv, SRV::fromWire($expectation));
+        $fromWire = new SRV();
+        $fromWire->fromWire($expectation);
+        $this->assertEquals($srv, $fromWire);
     }
 }

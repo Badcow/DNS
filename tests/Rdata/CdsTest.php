@@ -54,7 +54,8 @@ class CdsTest extends TestCase
         $cds->setDigestType(CDS::DIGEST_SHA1);
         $cds->setDigest(self::$digest);
         $wireFormat = $cds->toWire();
-        $fromWire = CDS::fromWire($wireFormat);
+        $fromWire = new CDS();
+        $fromWire->fromWire($wireFormat);
 
         $this->assertInstanceOf(CDS::class, $fromWire);
         $this->assertEquals($cds, $fromWire);

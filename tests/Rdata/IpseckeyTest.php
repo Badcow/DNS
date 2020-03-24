@@ -88,7 +88,11 @@ class IpseckeyTest extends TestCase
         $rdLength = strlen($wireFormat);
         $wireFormat = 'abc'.$wireFormat;
         $offset = 3;
-        $this->assertEquals($ipseckey, IPSECKEY::fromWire($wireFormat, $offset, $rdLength));
+
+        $fromWire = new IPSECKEY();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+
+        $this->assertEquals($ipseckey, $fromWire);
         $this->assertEquals(3 + $rdLength, $offset);
     }
 

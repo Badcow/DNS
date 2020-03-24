@@ -88,16 +88,13 @@ class A implements RdataInterface
      *
      * @throws DecodeException
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         if (false === $address = @inet_ntop(substr($rdata, $offset, 4))) {
             throw new DecodeException(static::TYPE, $rdata);
         }
         $offset += 4;
 
-        $a = new static();
-        $a->setAddress($address);
-
-        return $a;
+        $this->setAddress($address);
     }
 }

@@ -87,6 +87,8 @@ class KxTest extends TestCase
         $expectation = pack('n', 10).chr(4).'mail'.chr(7).'example'.chr(3).'com'.chr(0);
 
         $this->assertEquals($expectation, $kx->toWire());
-        $this->assertEquals($kx, KX::fromWire($expectation));
+        $fromWire = new KX();
+        $fromWire->fromWire($expectation);
+        $this->assertEquals($kx, $fromWire);
     }
 }

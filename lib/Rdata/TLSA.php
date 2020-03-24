@@ -178,21 +178,16 @@ class TLSA implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return TLSA
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('C<certUsage>/C<selector>/C<matchingType>', $rdata, $offset);
         $offset += 3;
-        $tlsa = new self();
-        $tlsa->setCertificateUsage($integers['<certUsage>']);
-        $tlsa->setSelector($integers['<selector>']);
-        $tlsa->setMatchingType($integers['<matchingType>']);
+        $this->setCertificateUsage($integers['<certUsage>']);
+        $this->setSelector($integers['<selector>']);
+        $this->setMatchingType($integers['<matchingType>']);
         $cadLen = ($rdLength ?? strlen($rdata)) - 3;
-        $tlsa->setCertificateAssociationData(substr($rdata, $offset, $cadLen));
+        $this->setCertificateAssociationData(substr($rdata, $offset, $cadLen));
         $offset += $cadLen;
-
-        return $tlsa;
     }
 }

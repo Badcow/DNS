@@ -306,22 +306,17 @@ class LOC implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return LOC
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $values = unpack('C<version>/C<size>/C<hp>/C<vp>/l<lat>/l<lon>/l<alt>', $rdata, $offset);
         $offset += 16;
-        $loc = new LOC();
 
-        $loc->setSize(self::exponentValueToNumber($values['<size>']));
-        $loc->setHorizontalPrecision(self::exponentValueToNumber($values['<hp>']));
-        $loc->setVerticalPrecision(self::exponentValueToNumber($values['<vp>']));
-        $loc->setLatitude($values['<lat>'] / 3600000);
-        $loc->setLongitude($values['<lon>'] / 3600000);
-        $loc->setAltitude($values['<alt>']);
-
-        return $loc;
+        $this->setSize(self::exponentValueToNumber($values['<size>']));
+        $this->setHorizontalPrecision(self::exponentValueToNumber($values['<hp>']));
+        $this->setVerticalPrecision(self::exponentValueToNumber($values['<vp>']));
+        $this->setLatitude($values['<lat>'] / 3600000);
+        $this->setLongitude($values['<lon>'] / 3600000);
+        $this->setAltitude($values['<alt>']);
     }
 }

@@ -116,7 +116,9 @@ class SoaTest extends TestCase
         $rdLength = strlen($wireFormat);
         $wireFormat = 'abcde'.$wireFormat;
         $offset = 5;
-        $this->assertEquals($soa, SOA::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new SOA();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $this->assertEquals($soa, $fromWire);
         $this->assertEquals(5 + $rdLength, $offset);
     }
 }

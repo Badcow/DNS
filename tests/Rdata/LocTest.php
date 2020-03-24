@@ -199,7 +199,9 @@ class LocTest extends TestCase
         $wireFormat = 'abc'.$loc->toWire();
         $offset = 3;
 
-        $this->assertEquals($loc, LOC::fromWire($wireFormat, $offset));
+        $fromWire = new LOC();
+        $fromWire->fromWire($wireFormat, $offset);
+        $this->assertEquals($loc, $fromWire);
         $this->assertEquals(19, $offset);
     }
 }

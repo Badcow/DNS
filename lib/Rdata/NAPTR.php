@@ -247,23 +247,18 @@ class NAPTR implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return NAPTR
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $naptr = new self();
         $integers = unpack('nOrder/nPreference', $rdata, $offset);
         $offset += 4;
 
-        $naptr->setOrder($integers['Order']);
-        $naptr->setPreference($integers['Preference']);
-        $naptr->setFlags(self::extractText($rdata, $offset));
-        $naptr->setServices(self::extractText($rdata, $offset));
-        $naptr->setRegexp(self::extractText($rdata, $offset));
-        $naptr->setReplacement(self::decodeName($rdata, $offset));
-
-        return $naptr;
+        $this->setOrder($integers['Order']);
+        $this->setPreference($integers['Preference']);
+        $this->setFlags(self::extractText($rdata, $offset));
+        $this->setServices(self::extractText($rdata, $offset));
+        $this->setRegexp(self::extractText($rdata, $offset));
+        $this->setReplacement(self::decodeName($rdata, $offset));
     }
 
     /**

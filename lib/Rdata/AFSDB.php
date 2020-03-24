@@ -104,13 +104,10 @@ class AFSDB implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $afsdb = new self();
-        $afsdb->setSubType(unpack('n', $rdata, $offset)[1]);
+        $this->setSubType(unpack('n', $rdata, $offset)[1]);
         $offset += 2;
-        $afsdb->setHostname(self::decodeName($rdata, $offset));
-
-        return $afsdb;
+        $this->setHostname(self::decodeName($rdata, $offset));
     }
 }

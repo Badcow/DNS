@@ -88,6 +88,8 @@ class NsecTest extends TestCase
         $nsec = NSEC::fromText($text);
 
         $this->assertEquals($expectation, $nsec->toWire());
-        $this->assertEquals($nsec, NSEC::fromWire($expectation));
+        $fromWire = new NSEC();
+        $fromWire->fromWire($expectation);
+        $this->assertEquals($nsec, $fromWire);
     }
 }

@@ -290,10 +290,8 @@ class TKEY implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return TKEY
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $algorithm = self::decodeName($rdata, $offset);
         $integers = unpack('N<inception>/N<expiration>/n<mode>/n<error>/n<keySize>', $rdata, $offset);
@@ -306,24 +304,21 @@ class TKEY implements RdataInterface
         $otherData = substr($rdata, $offset, $otherDataSize);
         $offset += $otherDataSize;
 
-        $tkey = new self();
-        $tkey->setAlgorithm($algorithm);
+        $this->setAlgorithm($algorithm);
 
         if (false === $inception = \DateTime::createFromFormat('U', (string) $integers['<inception>'])) {
             throw new \UnexpectedValueException('Unable to parse inception date of TKEY Rdata.');
         }
-        $tkey->setInception($inception);
+        $this->setInception($inception);
 
         if (false === $expiration = \DateTime::createFromFormat('U', (string) $integers['<expiration>'])) {
             throw new \UnexpectedValueException('Unable to parse expiration date of TKEY Rdata.');
         }
-        $tkey->setExpiration($expiration);
+        $this->setExpiration($expiration);
 
-        $tkey->setMode((int) $integers['<mode>']);
-        $tkey->setError((int) $integers['<error>']);
-        $tkey->setKeyData($keyData);
-        $tkey->setOtherData($otherData);
-
-        return $tkey;
+        $this->setMode((int) $integers['<mode>']);
+        $this->setError((int) $integers['<error>']);
+        $this->setKeyData($keyData);
+        $this->setOtherData($otherData);
     }
 }

@@ -109,7 +109,9 @@ TXT;
         $wireFormat = 'abc'.$wireFormat;
         $offset = 3;
 
-        $this->assertEquals($tsig, TSIG::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new TSIG();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $this->assertEquals($tsig, $fromWire);
         $this->assertEquals(3 + $rdLength, $offset);
     }
 

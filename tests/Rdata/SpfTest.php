@@ -48,7 +48,9 @@ class SpfTest extends TestCase
         $spf = new SPF();
         $spf->setText('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all');
 
-        $this->assertEquals($spf, SPF::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new SPF();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $this->assertEquals($spf, $fromWire);
     }
 
     public function testFactory(): void

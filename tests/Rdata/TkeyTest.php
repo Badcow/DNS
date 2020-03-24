@@ -115,7 +115,9 @@ DATA;
         $rdLength = strlen($wireFormat);
         $wireFormat = 'abcdefg'.$wireFormat;
         $offset = 7;
-        $this->assertEquals($tkey, TKEY::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new TKEY();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $this->assertEquals($tkey, $fromWire);
         $this->assertEquals(7 + $rdLength, $offset);
     }
 

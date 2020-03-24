@@ -83,7 +83,10 @@ class DnskeyTest extends TestCase
         $wireFormat = 'abcde'.$wireFormat.'fghijk';
         $offset = 5;
 
-        $this->assertEquals($dnskey, DNSKEY::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new DNSKEY();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+
+        $this->assertEquals($dnskey, $fromWire);
         $this->assertEquals(5 + $rdLength, $offset);
     }
 }

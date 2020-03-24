@@ -52,7 +52,8 @@ class NsTest extends TestCase
         $expectation = chr(4).'host'.chr(7).'example'.chr(3).'com'.chr(0);
 
         /** @var NS $ns */
-        $ns = NS::fromWire($expectation);
+        $ns = new NS();
+        $ns->fromWire($expectation);
 
         $this->assertEquals($expectation, $ns->toWire());
         $this->assertEquals($host, $ns->getTarget());

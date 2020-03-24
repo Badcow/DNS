@@ -78,7 +78,9 @@ class KeyTest extends TestCase
         $wireFormat = 'abcde'.$wireFormat.'fghijk';
         $offset = 5;
 
-        $this->assertEquals($key, KEY::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new KEY();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $this->assertEquals($key, $fromWire);
         $this->assertEquals(5 + $rdLength, $offset);
     }
 }

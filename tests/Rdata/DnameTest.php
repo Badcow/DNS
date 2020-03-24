@@ -52,7 +52,8 @@ class DnameTest extends TestCase
         $expectation = chr(4).'host'.chr(7).'example'.chr(3).'com'.chr(0);
 
         /** @var DNAME $dname */
-        $dname = DNAME::fromWire($expectation);
+        $dname = new DNAME();
+        $dname->fromWire($expectation);
 
         $this->assertEquals($expectation, $dname->toWire());
         $this->assertEquals($host, $dname->getTarget());

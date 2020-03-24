@@ -131,19 +131,16 @@ class CSYNC implements RdataInterface
     /**
      * {@inheritdoc}
      *
-     * @throws UnsupportedTypeException
+     * @throws UnsupportedTypeException|DecodeException
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('Nserial/nflags', $rdata, $offset);
         $offset += 6;
         $types = NSEC::parseBitmap($rdata, $offset);
 
-        $csync = new static();
-        $csync->setSoaSerial((int) $integers['serial']);
-        $csync->setFlags((int) $integers['flags']);
-        array_map([$csync, 'addType'], $types);
-
-        return $csync;
+        $this->setSoaSerial((int) $integers['serial']);
+        $this->setFlags((int) $integers['flags']);
+        array_map([$this, 'addType'], $types);
     }
 }

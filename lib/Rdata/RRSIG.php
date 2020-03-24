@@ -322,11 +322,9 @@ class RRSIG implements RdataInterface
     /**
      * {@inheritdoc}
      *
-     * @return RRSIG
-     *
      * @throws UnsupportedTypeException
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $rdLength = $rdLength ?? strlen($rdata);
         $end = $offset + $rdLength;
@@ -338,19 +336,16 @@ class RRSIG implements RdataInterface
         $signature = substr($rdata, $offset, $sigLen);
         $offset += $sigLen;
 
-        $rrsig = new static();
-        $rrsig->setTypeCovered(Types::getName($values['<type>']));
-        $rrsig->setAlgorithm($values['<algorithm>']);
-        $rrsig->setLabels($values['<labels>']);
-        $rrsig->setOriginalTtl($values['<originalTtl>']);
-        $rrsig->setKeyTag($values['<keyTag>']);
-        $rrsig->setSignersName($signersName);
-        $rrsig->setSignature($signature);
+        $this->setTypeCovered(Types::getName($values['<type>']));
+        $this->setAlgorithm($values['<algorithm>']);
+        $this->setLabels($values['<labels>']);
+        $this->setOriginalTtl($values['<originalTtl>']);
+        $this->setKeyTag($values['<keyTag>']);
+        $this->setSignersName($signersName);
+        $this->setSignature($signature);
 
-        $rrsig->setSignatureExpiration(self::makeDateTime((string) $values['<sigExpiration>']));
-        $rrsig->setSignatureInception(self::makeDateTime((string) $values['<sigInception>']));
-
-        return $rrsig;
+        $this->setSignatureExpiration(self::makeDateTime((string) $values['<sigExpiration>']));
+        $this->setSignatureInception(self::makeDateTime((string) $values['<sigInception>']));
     }
 
     /**

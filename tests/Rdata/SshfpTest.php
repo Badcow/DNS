@@ -94,7 +94,9 @@ class SshfpTest extends TestCase
 
         $wireFormat = 'zyxwvut'.$wireFormat;
         $offset = 7;
-        $this->assertEquals($sshfp, SSHFP::fromWire($wireFormat, $offset, 40));
+        $fromWire = new SSHFP();
+        $fromWire->fromWire($wireFormat, $offset, 40);
+        $this->assertEquals($sshfp, $fromWire);
     }
 
     public function testFromText(): void

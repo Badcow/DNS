@@ -72,7 +72,8 @@ class DhcidTest extends TestCase
         $expectation->setIdentifier($identifierType, $identifier);
         $expectation->setFqdn($fqdn);
 
-        $dhcid = DHCID::fromWire($expectation->toWire());
+        $dhcid = new DHCID();
+        $dhcid->fromWire($expectation->toWire());
 
         $this->assertEquals($expectation->getIdentifierType(), $dhcid->getIdentifierType());
         $this->assertEquals($expectation->getDigestType(), $dhcid->getDigestType());

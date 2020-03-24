@@ -37,9 +37,9 @@ class HINFO implements RdataInterface
     private $os;
 
     /**
-     * @param string $cpu
+     * @param string|null $cpu
      */
-    public function setCpu(string $cpu): void
+    public function setCpu(?string $cpu): void
     {
         $this->cpu = $cpu;
     }
@@ -53,9 +53,9 @@ class HINFO implements RdataInterface
     }
 
     /**
-     * @param string $os
+     * @param string|null $os
      */
-    public function setOs(string $os): void
+    public function setOs(?string $os): void
     {
         $this->os = $os;
     }
@@ -86,20 +86,20 @@ class HINFO implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return HINFO
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $offset += strlen($rdata);
+        //$this->fromText(substr($rdata, $offset, $rdLength ?? strlen($rdata)));
 
-        return self::fromText($rdata);
+        /** @var HINFO $hinfo */
+        $hinfo = self::fromText(substr($rdata, $offset, $rdLength ?? strlen($rdata)));
+        $this->setCpu($hinfo->getCpu());
+        $this->setOs($hinfo->getOs());
+        $offset += $rdLength;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return HINFO
      */
     public static function fromText(string $text): RdataInterface
     {

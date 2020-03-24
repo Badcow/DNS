@@ -270,20 +270,17 @@ class SOA implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $soa = new self();
-        $soa->setMname(self::decodeName($rdata, $offset));
-        $soa->setRname(self::decodeName($rdata, $offset));
+        $this->setMname(self::decodeName($rdata, $offset));
+        $this->setRname(self::decodeName($rdata, $offset));
         $parameters = unpack('Nserial/Nrefresh/Nretry/Nexpire/Nminimum', $rdata, $offset);
-        $soa->setSerial((int) $parameters['serial']);
-        $soa->setRefresh((int) $parameters['refresh']);
-        $soa->setRetry((int) $parameters['retry']);
-        $soa->setExpire((int) $parameters['expire']);
-        $soa->setMinimum((int) $parameters['minimum']);
+        $this->setSerial((int) $parameters['serial']);
+        $this->setRefresh((int) $parameters['refresh']);
+        $this->setRetry((int) $parameters['retry']);
+        $this->setExpire((int) $parameters['expire']);
+        $this->setMinimum((int) $parameters['minimum']);
 
         $offset += 20;
-
-        return $soa;
     }
 }

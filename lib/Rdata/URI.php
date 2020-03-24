@@ -146,18 +146,18 @@ class URI implements RdataInterface
         return $uri;
     }
 
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('npriority/nweight', $rdata, $offset);
         $offset += 4;
         $targetLen = ($rdLength ?? strlen($rdata)) - 4;
 
-        $uri = new self();
-        $uri->setTarget(substr($rdata, $offset, $targetLen));
-        $uri->setPriority($integers['priority']);
-        $uri->setWeight($integers['weight']);
+        $this->setTarget(substr($rdata, $offset, $targetLen));
+        $this->setPriority($integers['priority']);
+        $this->setWeight($integers['weight']);
         $offset += $targetLen;
-
-        return $uri;
     }
 }

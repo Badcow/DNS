@@ -55,6 +55,8 @@ class TxtTest extends TestCase
         $txt->setText($expectation);
 
         $this->assertEquals($expectation, $txt->toWire());
-        $this->assertEquals($txt, TXT::fromWire($expectation));
+        $fromWire = new TXT();
+        $fromWire->fromWire($expectation);
+        $this->assertEquals($txt, $fromWire);
     }
 }

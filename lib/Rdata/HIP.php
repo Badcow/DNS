@@ -185,31 +185,25 @@ class HIP implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return HIP
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $hip = new self();
-
         $end = $offset + ($rdLength ?? strlen($rdata));
         $integers = unpack('C<hitLen>/C<algorithm>/n<pkLen>', $rdata, $offset);
         $offset += 4;
         $hitLen = (int) $integers['<hitLen>'];
         $pkLen = (int) $integers['<pkLen>'];
 
-        $hip->setPublicKeyAlgorithm((int) $integers['<algorithm>']);
+        $this->setPublicKeyAlgorithm((int) $integers['<algorithm>']);
 
-        $hip->setHostIdentityTag(substr($rdata, $offset, $hitLen));
+        $this->setHostIdentityTag(substr($rdata, $offset, $hitLen));
         $offset += $hitLen;
 
-        $hip->setPublicKey(substr($rdata, $offset, $pkLen));
+        $this->setPublicKey(substr($rdata, $offset, $pkLen));
         $offset += $pkLen;
 
         while ($offset < $end) {
-            $hip->addRendezvousServer(self::decodeName($rdata, $offset));
+            $this->addRendezvousServer(self::decodeName($rdata, $offset));
         }
-
-        return $hip;
     }
 }
