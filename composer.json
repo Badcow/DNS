@@ -10,7 +10,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^7.4",
         "rlanvin/php-ip": "^2.0",
         "ademarre/binary-to-text-php": "~3.0.0"
     },
