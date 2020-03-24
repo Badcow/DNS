@@ -337,7 +337,6 @@ class IPSECKEY implements RdataInterface
             default:
                 $invalidArgumentException = new \InvalidArgumentException(sprintf('Expected gateway type to be integer on [0,3], got "%d".', $gatewayType));
                 throw new DecodeException(static::TYPE, $rdata, 0, $invalidArgumentException);
-                break;
         }
 
         if (false === $gateway) {

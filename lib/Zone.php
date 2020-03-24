@@ -196,21 +196,38 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
         return Classes::INTERNET;
     }
 
+    /**
+     * @param mixed $offset
+     *
+     * @return bool
+     */
     public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->resourceRecords);
     }
 
+    /**
+     * @param mixed $offset
+     *
+     * @return ResourceRecord
+     */
     public function offsetGet($offset): ResourceRecord
     {
         return $this->resourceRecords[$offset];
     }
 
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
     public function offsetSet($offset, $value): void
     {
         $this->resourceRecords[$offset] = $value;
     }
 
+    /**
+     * @param mixed $offset
+     */
     public function offsetUnset($offset): void
     {
         unset($this->resourceRecords[$offset]);

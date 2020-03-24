@@ -1,6 +1,7 @@
 parameters:
   level: max
   checkMissingIterableValueType: false
+  checkGenericClassInNonGenericObjectType: false
   paths:
     - lib/
   autoload_files:
