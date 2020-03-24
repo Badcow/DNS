@@ -64,7 +64,8 @@ class MxTest extends TestCase
     {
         $text = '10 mail.example.com.';
         /** @var MX $mx */
-        $mx = MX::fromText($text);
+        $mx = new MX();
+        $mx->fromText($text);
 
         $this->assertEquals(10, $mx->getPreference());
         $this->assertEquals('mail.example.com.', $mx->getExchange());

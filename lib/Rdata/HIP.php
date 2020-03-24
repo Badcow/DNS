@@ -159,28 +159,23 @@ class HIP implements RdataInterface
     /**
      * {@inheritdoc}
      *
-     * @return HIP
-     *
      * @throws ParseException
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $hip = new self();
-        $hip->setPublicKeyAlgorithm((int) array_shift($rdata));
+        $this->setPublicKeyAlgorithm((int) array_shift($rdata));
 
         if (false === $hostIdentityTag = @hex2bin((string) array_shift($rdata))) {
             throw new ParseException(sprintf('Unable to parse host identity tag of rdata string "%s".', $text));
         }
-        $hip->setHostIdentityTag($hostIdentityTag);
+        $this->setHostIdentityTag($hostIdentityTag);
 
         if (false === $publicKey = base64_decode((string) array_shift($rdata), true)) {
             throw new ParseException(sprintf('Unable to parse public key of rdata string "%s".', $text));
         }
-        $hip->setPublicKey($publicKey);
-        array_map([$hip, 'addRendezvousServer'], $rdata);
-
-        return $hip;
+        $this->setPublicKey($publicKey);
+        array_map([$this, 'addRendezvousServer'], $rdata);
     }
 
     /**

@@ -81,7 +81,9 @@ class Nsec3Test extends TestCase
         $expectation->addType(A::TYPE);
         $expectation->addType(RRSIG::TYPE);
 
-        $this->assertEquals($expectation, NSEC3::fromText('1 1 12 aabbccdd 2vptu5timamqttgl4luu9kg21e0aor3s A RRSIG'));
+        $fromText = new NSEC3();
+        $fromText->fromText('1 1 12 aabbccdd 2vptu5timamqttgl4luu9kg21e0aor3s A RRSIG');
+        $this->assertEquals($expectation, $fromText);
     }
 
     public function testFactory(): void

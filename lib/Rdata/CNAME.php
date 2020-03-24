@@ -67,12 +67,9 @@ class CNAME implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
-        $cname = new static();
-        $cname->setTarget($text);
-
-        return $cname;
+        $this->setTarget($text);
     }
 
     /**

@@ -157,23 +157,18 @@ class TLSA implements RdataInterface
     /**
      * {@inheritdoc}
      *
-     * @return TLSA
-     *
      * @throws ParseException
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $tlsa = new self();
-        $tlsa->setCertificateUsage((int) array_shift($rdata));
-        $tlsa->setSelector((int) array_shift($rdata));
-        $tlsa->setMatchingType((int) array_shift($rdata));
+        $this->setCertificateUsage((int) array_shift($rdata));
+        $this->setSelector((int) array_shift($rdata));
+        $this->setMatchingType((int) array_shift($rdata));
         if (false === $certificateAssociationData = @hex2bin(implode('', $rdata))) {
             throw new ParseException('Unable to parse certificate association data of TLSA record. Malformed hex value.');
         }
-        $tlsa->setCertificateAssociationData($certificateAssociationData);
-
-        return $tlsa;
+        $this->setCertificateAssociationData($certificateAssociationData);
     }
 
     /**

@@ -99,7 +99,8 @@ class DhcidTest extends TestCase
         $expectation->setFqdn($fqdn);
         $expectation->calculateDigest();
 
-        $dhcid = DHCID::fromText($text);
+        $dhcid = new DHCID();
+        $dhcid->fromText($text);
 
         $this->assertEquals($expectation->getIdentifierType(), $dhcid->getIdentifierType());
         $this->assertEquals($expectation->getDigestType(), $dhcid->getDigestType());

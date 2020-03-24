@@ -41,7 +41,8 @@ class CdsTest extends TestCase
         $expectation->setDigestType(CDS::DIGEST_SHA1);
         $expectation->setDigest(self::$digest);
 
-        $cds = CDS::fromText('60485 5 1 '.self::$digest);
+        $cds = new CDS();
+        $cds->fromText('60485 5 1 '.self::$digest);
         $this->assertInstanceOf(CDS::class, $cds);
         $this->assertEquals($expectation, $cds);
     }

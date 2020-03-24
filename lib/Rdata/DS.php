@@ -136,16 +136,13 @@ class DS implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $ds = new static();
-        $ds->setKeyTag((int) array_shift($rdata));
-        $ds->setAlgorithm((int) array_shift($rdata));
-        $ds->setDigestType((int) array_shift($rdata));
-        $ds->setDigest((string) array_shift($rdata));
-
-        return $ds;
+        $this->setKeyTag((int) array_shift($rdata));
+        $this->setAlgorithm((int) array_shift($rdata));
+        $this->setDigestType((int) array_shift($rdata));
+        $this->setDigest((string) array_shift($rdata));
     }
 
     /**

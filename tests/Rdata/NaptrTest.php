@@ -110,7 +110,8 @@ class NaptrTest extends TestCase
      */
     public function testFromText(string $text, int $order, int $preference, string $flags, string $services, string $regexp, string $replacement): void
     {
-        $naptr = NAPTR::fromText($text);
+        $naptr = new NAPTR();
+        $naptr->fromText($text);
 
         $this->assertEquals($order, $naptr->getOrder());
         $this->assertEquals($preference, $naptr->getPreference());

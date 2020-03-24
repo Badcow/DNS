@@ -228,21 +228,16 @@ class NAPTR implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return NAPTR
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $naptr = new self();
-        $naptr->setOrder((int) array_shift($rdata));
-        $naptr->setPreference((int) array_shift($rdata));
-        $naptr->setFlags(trim((string) array_shift($rdata), Tokens::DOUBLE_QUOTES));
-        $naptr->setServices(trim((string) array_shift($rdata), Tokens::DOUBLE_QUOTES));
-        $naptr->setRegexp(trim((string) array_shift($rdata), Tokens::DOUBLE_QUOTES));
-        $naptr->setReplacement((string) array_shift($rdata));
-
-        return $naptr;
+        $this->setOrder((int) array_shift($rdata));
+        $this->setPreference((int) array_shift($rdata));
+        $this->setFlags(trim((string) array_shift($rdata), Tokens::DOUBLE_QUOTES));
+        $this->setServices(trim((string) array_shift($rdata), Tokens::DOUBLE_QUOTES));
+        $this->setRegexp(trim((string) array_shift($rdata), Tokens::DOUBLE_QUOTES));
+        $this->setReplacement((string) array_shift($rdata));
     }
 
     /**

@@ -220,22 +220,17 @@ class DHCID implements RdataInterface
     /**
      * {@inheritdoc}
      *
-     * @return DHCID
-     *
      * @throws \Exception
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         if (false === $decoded = base64_decode($text, true)) {
             throw new \Exception(sprintf('Unable to base64 decode text "%s".', $text));
         }
 
         $rdata = unpack('nIdentifierType/CDigestType/H*Digest', $decoded);
-        $dhcid = new self();
-        $dhcid->setIdentifierType((int) $rdata['IdentifierType']);
-        $dhcid->setDigest((string) $rdata['Digest']);
-
-        return $dhcid;
+        $this->setIdentifierType((int) $rdata['IdentifierType']);
+        $this->setDigest((string) $rdata['Digest']);
     }
 
     /**

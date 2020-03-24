@@ -89,26 +89,18 @@ class HINFO implements RdataInterface
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        //$this->fromText(substr($rdata, $offset, $rdLength ?? strlen($rdata)));
-
-        /** @var HINFO $hinfo */
-        $hinfo = self::fromText(substr($rdata, $offset, $rdLength ?? strlen($rdata)));
-        $this->setCpu($hinfo->getCpu());
-        $this->setOs($hinfo->getOs());
+        $this->fromText(substr($rdata, $offset, $rdLength ?? strlen($rdata)));
         $offset += $rdLength;
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $string = new StringIterator($text);
-        $hinfo = new self();
-        $hinfo->setCpu(self::extractText($string));
-        $hinfo->setOs(self::extractText($string));
-
-        return $hinfo;
+        $this->setCpu(self::extractText($string));
+        $this->setOs(self::extractText($string));
     }
 
     /**

@@ -41,7 +41,8 @@ class NsTest extends TestCase
     {
         $text = 'host.example.com.';
         /** @var NS $cname */
-        $cname = NS::fromText($text);
+        $cname = new NS();
+        $cname->fromText($text);
 
         $this->assertEquals($text, $cname->getTarget());
     }

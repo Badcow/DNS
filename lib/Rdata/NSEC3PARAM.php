@@ -144,19 +144,14 @@ class NSEC3PARAM implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return NSEC3PARAM
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $nsec3param = new self();
-        $nsec3param->setHashAlgorithm((int) array_shift($rdata));
-        $nsec3param->setFlags((int) array_shift($rdata));
-        $nsec3param->setIterations((int) array_shift($rdata));
-        $nsec3param->setSalt((string) array_shift($rdata));
-
-        return $nsec3param;
+        $this->setHashAlgorithm((int) array_shift($rdata));
+        $this->setFlags((int) array_shift($rdata));
+        $this->setIterations((int) array_shift($rdata));
+        $this->setSalt((string) array_shift($rdata));
     }
 
     /**

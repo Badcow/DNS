@@ -232,35 +232,30 @@ class TSIG implements RdataInterface
     /**
      * {@inheritdoc}
      *
-     * @return TSIG
-     *
      * @throws ParseException
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $tsig = new self();
-        $tsig->setAlgorithmName((string) array_shift($rdata));
+        $this->setAlgorithmName((string) array_shift($rdata));
         if (false === $timeSigned = \DateTime::createFromFormat('U', (string) array_shift($rdata))) {
             throw new ParseException('Unable to decode TSIG time signed.');
         }
-        $tsig->setTimeSigned($timeSigned);
-        $tsig->setFudge((int) array_shift($rdata));
+        $this->setTimeSigned($timeSigned);
+        $this->setFudge((int) array_shift($rdata));
 
         if (false === $mac = base64_decode((string) array_shift($rdata), true)) {
             throw new ParseException('Unable to decode TSIG MAC. Malformed base64 string.');
         }
-        $tsig->setMac($mac);
+        $this->setMac($mac);
 
-        $tsig->setOriginalId((int) array_shift($rdata));
-        $tsig->setError((int) array_shift($rdata));
+        $this->setOriginalId((int) array_shift($rdata));
+        $this->setError((int) array_shift($rdata));
 
         if (false === $otherData = base64_decode((string) array_shift($rdata), true)) {
             throw new ParseException('Unable to decode TSIG other data. Malformed base64 string.');
         }
-        $tsig->setOtherData($otherData);
-
-        return $tsig;
+        $this->setOtherData($otherData);
     }
 
     /**

@@ -117,15 +117,12 @@ class CSYNC implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $csync = new static();
-        $csync->setSoaSerial((int) array_shift($rdata));
-        $csync->setFlags((int) array_shift($rdata));
-        array_map([$csync, 'addType'], $rdata);
-
-        return $csync;
+        $this->setSoaSerial((int) array_shift($rdata));
+        $this->setFlags((int) array_shift($rdata));
+        array_map([$this, 'addType'], $rdata);
     }
 
     /**

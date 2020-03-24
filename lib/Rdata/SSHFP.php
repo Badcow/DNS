@@ -129,14 +129,14 @@ class SSHFP implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return SSHFP
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
 
-        return Factory::SSHFP((int) array_shift($rdata), (int) array_shift($rdata), (string) array_shift($rdata));
+        $this->setAlgorithm((int) array_shift($rdata));
+        $this->setFingerprintType((int) array_shift($rdata));
+        $this->setFingerprint((string) array_shift($rdata));
     }
 
     /**

@@ -178,16 +178,13 @@ class CERT implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $cert = new static();
-        $cert->setCertificateType((string) array_shift($rdata));
-        $cert->setKeyTag((int) array_shift($rdata));
-        $cert->setAlgorithm((string) array_shift($rdata));
-        $cert->setCertificate(implode('', $rdata));
-
-        return $cert;
+        $this->setCertificateType((string) array_shift($rdata));
+        $this->setKeyTag((int) array_shift($rdata));
+        $this->setAlgorithm((string) array_shift($rdata));
+        $this->setCertificate(implode('', $rdata));
     }
 
     /**

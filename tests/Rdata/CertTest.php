@@ -82,7 +82,9 @@ class CertTest extends TestCase
 
         $text = 'PGP 65 ECC '.$this->certificate;
 
-        $this->assertEquals($cert, CERT::fromText($text));
+        $fromText = new CERT();
+        $fromText->fromText($text);
+        $this->assertEquals($cert, $fromText);
     }
 
     public function testFactory(): void

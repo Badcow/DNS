@@ -144,16 +144,13 @@ class KEY implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $key = new static();
-        $key->setFlags((int) array_shift($rdata));
-        $key->setProtocol((int) array_shift($rdata));
-        $key->setAlgorithm((int) array_shift($rdata));
-        $key->setPublicKey(implode('', $rdata));
-
-        return $key;
+        $this->setFlags((int) array_shift($rdata));
+        $this->setProtocol((int) array_shift($rdata));
+        $this->setAlgorithm((int) array_shift($rdata));
+        $this->setPublicKey(implode('', $rdata));
     }
 
     /**

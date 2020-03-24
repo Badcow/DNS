@@ -31,7 +31,8 @@ class CnameTest extends TestCase
     {
         $text = 'host.example.com.';
         /** @var CNAME $cname */
-        $cname = CNAME::fromText($text);
+        $cname = new CNAME();
+        $cname->fromText($text);
 
         $this->assertEquals($text, $cname->getTarget());
     }

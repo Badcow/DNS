@@ -56,7 +56,8 @@ class AfsdbTest extends TestCase
     {
         $text = '2 foo.example.com.';
         /** @var AFSDB $afsdb */
-        $afsdb = AFSDB::fromText($text);
+        $afsdb = new AFSDB();
+        $afsdb->fromText($text);
 
         $this->assertEquals(2, $afsdb->getSubType());
         $this->assertEquals('foo.example.com.', $afsdb->getHostname());

@@ -102,18 +102,15 @@ class NSEC implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $iterator = new \ArrayIterator(explode(Tokens::SPACE, $text));
-        $nsec = new self();
-        $nsec->setNextDomainName($iterator->current());
+        $this->setNextDomainName($iterator->current());
         $iterator->next();
         while ($iterator->valid()) {
-            $nsec->addType($iterator->current());
+            $this->addType($iterator->current());
             $iterator->next();
         }
-
-        return $nsec;
     }
 
     /**

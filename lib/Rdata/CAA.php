@@ -174,18 +174,13 @@ class CAA implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return CAA
      */
-    public static function fromText(string $string): RdataInterface
+    public function fromText(string $text): void
     {
-        $caa = new self();
-        $rdata = explode(Tokens::SPACE, $string);
-        $caa->setFlag((int) array_shift($rdata));
-        $caa->setTag((string) array_shift($rdata));
+        $rdata = explode(Tokens::SPACE, $text);
+        $this->setFlag((int) array_shift($rdata));
+        $this->setTag((string) array_shift($rdata));
         $rdata = implode('', $rdata);
-        $caa->setValue(trim($rdata, '"'));
-
-        return $caa;
+        $this->setValue(trim($rdata, '"'));
     }
 }

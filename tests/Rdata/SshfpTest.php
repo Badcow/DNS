@@ -106,7 +106,9 @@ class SshfpTest extends TestCase
         $expectation->setFingerprintType(1);
         $expectation->setFingerprint('123456789abcdef67890123456789abcdef67890');
 
-        $this->assertEquals($expectation, SSHFP::fromText('2 1 123456789abcdef67890123456789abcdef67890'));
+        $fromText = new SSHFP();
+        $fromText->fromText('2 1 123456789abcdef67890123456789abcdef67890');
+        $this->assertEquals($expectation, $fromText);
     }
 
     public function testFactory(): void

@@ -136,7 +136,9 @@ DATA;
         $text .= str_replace([Tokens::CARRIAGE_RETURN, Tokens::LINE_FEED], '', $this->dummyKeyData).' ';
         $text .= str_replace([Tokens::CARRIAGE_RETURN, Tokens::LINE_FEED], '', $this->dummyOtherData);
 
-        $this->assertEquals($expectation, TKEY::fromText($text));
+        $fromText = new TKEY();
+        $fromText->fromText($text);
+        $this->assertEquals($expectation, $fromText);
     }
 
     public function testFactory(): void

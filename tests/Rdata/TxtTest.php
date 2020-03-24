@@ -44,7 +44,8 @@ class TxtTest extends TestCase
         $expectation = 'Some text; another some text';
 
         /** @var TXT $txt */
-        $txt = TXT::fromText($text);
+        $txt = new TXT();
+        $txt->fromText($text);
         $this->assertEquals($expectation, $txt->getText());
     }
 

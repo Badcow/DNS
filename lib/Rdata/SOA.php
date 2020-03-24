@@ -252,19 +252,16 @@ class SOA implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $soa = new self();
-        $soa->setMname($rdata[0]);
-        $soa->setRname($rdata[1]);
-        $soa->setSerial((int) $rdata[2]);
-        $soa->setRefresh((int) $rdata[3]);
-        $soa->setRetry((int) $rdata[4]);
-        $soa->setExpire((int) $rdata[5]);
-        $soa->setMinimum((int) $rdata[6]);
-
-        return $soa;
+        $this->setMname($rdata[0]);
+        $this->setRname($rdata[1]);
+        $this->setSerial((int) $rdata[2]);
+        $this->setRefresh((int) $rdata[3]);
+        $this->setRetry((int) $rdata[4]);
+        $this->setExpire((int) $rdata[5]);
+        $this->setMinimum((int) $rdata[6]);
     }
 
     /**

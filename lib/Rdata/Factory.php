@@ -90,7 +90,8 @@ class Factory
             if (self::isTypeCodeImplemented($typeCode)) {
                 $type = Types::getName($typeCode);
             } else {
-                $rdata = UnknownType::fromText($text);
+                $rdata = new UnknownType();
+                $rdata->fromText($text);
                 $rdata->setTypeCode($typeCode);
 
                 return $rdata;
@@ -117,10 +118,10 @@ class Factory
             return $rdata;
         }
 
-        /** @var callable $callable */
-        $callable = self::getRdataClassName($type).'::fromText';
+        $rdata = self::newRdataFromName($type);
+        $rdata->fromText($text);
 
-        return call_user_func($callable, $text);
+        return $rdata;
     }
 
     /**

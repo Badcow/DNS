@@ -285,23 +285,19 @@ class LOC implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return LOC
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
         $lat = self::dmsToDecimal((int) array_shift($rdata), (int) array_shift($rdata), (float) array_shift($rdata), (string) array_shift($rdata));
         $lon = self::dmsToDecimal((int) array_shift($rdata), (int) array_shift($rdata), (float) array_shift($rdata), (string) array_shift($rdata));
 
-        return Factory::LOC(
-            $lat,
-            $lon,
-            (float) array_shift($rdata),
-            (float) array_shift($rdata),
-            (float) array_shift($rdata),
-            (float) array_shift($rdata)
-        );
+        $this->setLatitude($lat);
+        $this->setLongitude($lon);
+        $this->setAltitude((float) array_shift($rdata));
+        $this->setSize((float) array_shift($rdata));
+        $this->setHorizontalPrecision((float) array_shift($rdata));
+        $this->setVerticalPrecision((float) array_shift($rdata));
     }
 
     /**

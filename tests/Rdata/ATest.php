@@ -55,7 +55,8 @@ class ATest extends TestCase
     {
         $text = '200.100.50.1';
         /** @var A $a */
-        $a = A::fromText($text);
+        $a = new A();
+        $a->fromText($text);
 
         $this->assertEquals($text, $a->getAddress());
     }

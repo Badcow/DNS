@@ -88,7 +88,9 @@ class RrsigTest extends TestCase
         $rrsig->setSignersName('example.com.');
         $rrsig->setSignature(self::$signature);
 
-        $this->assertEquals($rrsig, RRSIG::fromText($text));
+        $fromText = new RRSIG();
+        $fromText->fromText($text);
+        $this->assertEquals($rrsig, $fromText);
     }
 
     /**

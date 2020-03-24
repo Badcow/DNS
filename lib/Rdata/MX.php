@@ -102,14 +102,11 @@ class MX implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(' ', $text);
-        $mx = new self();
-        $mx->setPreference((int) $rdata[0]);
-        $mx->setExchange($rdata[1]);
-
-        return $mx;
+        $this->setPreference((int) $rdata[0]);
+        $this->setExchange($rdata[1]);
     }
 
     /**

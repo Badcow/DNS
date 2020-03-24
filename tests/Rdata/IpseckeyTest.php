@@ -108,7 +108,8 @@ class IpseckeyTest extends TestCase
      */
     public function testFromText(string $text, int $precedence, int $gatewayType, int $algorithm, ?string $gateway, ?string $publicKey): void
     {
-        $ipseckey = IPSECKEY::fromText($text);
+        $ipseckey = new IPSECKEY();
+        $ipseckey->fromText($text);
 
         $this->assertEquals($precedence, $ipseckey->getPrecedence());
         $this->assertEquals($gatewayType, $ipseckey->getGatewayType());

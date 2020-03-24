@@ -85,17 +85,12 @@ class RP implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return RP
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $rp = new self();
-        $rp->setMailboxDomainName($rdata[0]);
-        $rp->setTxtDomainName($rdata[1]);
-
-        return $rp;
+        $this->setMailboxDomainName($rdata[0]);
+        $this->setTxtDomainName($rdata[1]);
     }
 
     /**

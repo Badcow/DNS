@@ -234,21 +234,16 @@ class NSEC3 implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return NSEC3
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $nsec3 = new self();
-        $nsec3->setHashAlgorithm((int) array_shift($rdata));
-        $nsec3->setUnsignedDelegationsCovered((bool) array_shift($rdata));
-        $nsec3->setIterations((int) array_shift($rdata));
-        $nsec3->setSalt((string) array_shift($rdata));
-        $nsec3->setNextHashedOwnerName((string) array_shift($rdata));
-        array_map([$nsec3, 'addType'], $rdata);
-
-        return $nsec3;
+        $this->setHashAlgorithm((int) array_shift($rdata));
+        $this->setUnsignedDelegationsCovered((bool) array_shift($rdata));
+        $this->setIterations((int) array_shift($rdata));
+        $this->setSalt((string) array_shift($rdata));
+        $this->setNextHashedOwnerName((string) array_shift($rdata));
+        array_map([$this, 'addType'], $rdata);
     }
 
     /**

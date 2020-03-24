@@ -432,8 +432,8 @@ class Parser
             }
         }
 
-        /** @var PTR $ptr */
-        $ptr = PTR::fromText($iterator->getRemainingAsString());
+        $ptr = new PTR();
+        $ptr->fromText($iterator->getRemainingAsString());
 
         return $ptr;
     }

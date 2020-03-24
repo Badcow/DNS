@@ -54,7 +54,9 @@ class TaTest extends TestCase
         $expectation->setDigestType(TA::DIGEST_SHA1);
         $expectation->setDigest(self::$digest);
 
-        $this->assertEquals($expectation, TA::fromText('60485 5 1 '.self::$digest));
+        $fromText = new TA();
+        $fromText->fromText('60485 5 1 '.self::$digest);
+        $this->assertEquals($expectation, $fromText);
     }
 
     public function testWire(): void

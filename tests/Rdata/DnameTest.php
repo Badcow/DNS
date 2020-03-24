@@ -41,7 +41,8 @@ class DnameTest extends TestCase
     {
         $text = 'host.example.com.';
         /** @var DNAME $cname */
-        $cname = DNAME::fromText($text);
+        $cname = new DNAME();
+        $cname->fromText($text);
 
         $this->assertEquals($text, $cname->getTarget());
     }

@@ -76,7 +76,8 @@ class SoaTest extends TestCase
         $expire = 604800;
         $minimum = 3600;
 
-        $soa = SOA::fromText($text);
+        $soa = new SOA();
+        $soa->fromText($text);
 
         $this->assertEquals($mname, $soa->getMname());
         $this->assertEquals($rname, $soa->getRname());

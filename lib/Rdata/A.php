@@ -75,12 +75,9 @@ class A implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
-        $a = new static();
-        $a->setAddress($text);
-
-        return $a;
+        $this->setAddress($text);
     }
 
     /**

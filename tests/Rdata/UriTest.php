@@ -68,7 +68,9 @@ class UriTest extends TestCase
         $uri->setWeight(1);
         $uri->setTarget('ftp://ftp1.example.com/public%20data');
 
-        $this->assertEquals($uri, URI::fromText($text));
+        $fromText = new URI();
+        $fromText->fromText($text);
+        $this->assertEquals($uri, $fromText);
     }
 
     public function testWire(): void

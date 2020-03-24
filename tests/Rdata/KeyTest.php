@@ -59,7 +59,9 @@ class KeyTest extends TestCase
         $key->setAlgorithm(Algorithms::RSASHA1);
         $key->setPublicKey(self::$publicKey);
 
-        $this->assertEquals($key, KEY::fromText($rdata));
+        $fromText = new KEY();
+        $fromText->fromText($rdata);
+        $this->assertEquals($key, $fromText);
     }
 
     public function testWire(): void

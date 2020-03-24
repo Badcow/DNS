@@ -296,27 +296,20 @@ class RRSIG implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return RRSIG
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $rrsig = new static();
-        $rrsig->setTypeCovered((string) array_shift($rdata));
-        $rrsig->setAlgorithm((int) array_shift($rdata));
-        $rrsig->setLabels((int) array_shift($rdata));
-        $rrsig->setOriginalTtl((int) array_shift($rdata));
-        $sigExpiration = (string) array_shift($rdata);
-        $sigInception = (string) array_shift($rdata);
-        $rrsig->setKeyTag((int) array_shift($rdata));
-        $rrsig->setSignersName((string) array_shift($rdata));
-        $rrsig->setSignature(implode('', $rdata));
 
-        $rrsig->setSignatureExpiration(self::makeDateTime($sigExpiration));
-        $rrsig->setSignatureInception(self::makeDateTime($sigInception));
-
-        return $rrsig;
+        $this->setTypeCovered((string) array_shift($rdata));
+        $this->setAlgorithm((int) array_shift($rdata));
+        $this->setLabels((int) array_shift($rdata));
+        $this->setOriginalTtl((int) array_shift($rdata));
+        $this->setSignatureExpiration(self::makeDateTime((string) array_shift($rdata)));
+        $this->setSignatureInception(self::makeDateTime((string) array_shift($rdata)));
+        $this->setKeyTag((int) array_shift($rdata));
+        $this->setSignersName((string) array_shift($rdata));
+        $this->setSignature(implode('', $rdata));
     }
 
     /**

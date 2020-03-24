@@ -91,14 +91,12 @@ class AFSDB implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(' ', $text);
-        $afsdb = new self();
-        $afsdb->setSubType((int) $rdata[0]);
-        $afsdb->setHostname($rdata[1]);
 
-        return $afsdb;
+        $this->setSubType((int) $rdata[0]);
+        $this->setHostname($rdata[1]);
     }
 
     /**

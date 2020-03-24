@@ -71,7 +71,9 @@ class CsyncTest extends TestCase
         $csync->addType(NS::TYPE);
         $csync->addType(AAAA::TYPE);
 
-        $this->assertEquals($csync, CSYNC::fromText('66 3 A NS AAAA'));
+        $fromText = new CSYNC();
+        $fromText->fromText('66 3 A NS AAAA');
+        $this->assertEquals($csync, $fromText);
     }
 
     /**

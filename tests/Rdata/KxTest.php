@@ -72,7 +72,8 @@ class KxTest extends TestCase
     {
         $text = '10 mail.example.com.';
         /** @var KX $kx */
-        $kx = KX::fromText($text);
+        $kx = new KX();
+        $kx->fromText($text);
 
         $this->assertEquals(10, $kx->getPreference());
         $this->assertEquals('mail.example.com.', $kx->getExchanger());

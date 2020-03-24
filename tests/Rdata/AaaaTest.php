@@ -33,7 +33,8 @@ class AaaaTest extends TestCase
     {
         $text = '2003:dead:beef:4dad:23:46:bb:101';
         /** @var AAAA $aaaa */
-        $aaaa = AAAA::fromText($text);
+        $aaaa = new AAAA();
+        $aaaa->fromText($text);
 
         $this->assertEquals($text, $aaaa->getAddress());
     }

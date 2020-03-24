@@ -82,7 +82,7 @@ class TXT implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $string = new StringIterator($text);
         $txt = new StringIterator();
@@ -92,10 +92,7 @@ class TXT implements RdataInterface
             $string->next();
         }
 
-        $rdata = new static();
-        $rdata->setText((string) $txt);
-
-        return $rdata;
+        $this->setText((string) $txt);
     }
 
     /**

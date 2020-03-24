@@ -100,14 +100,11 @@ class KX implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(' ', $text);
-        $kx = new self();
-        $kx->setPreference((int) $rdata[0]);
-        $kx->setExchanger($rdata[1]);
-
-        return $kx;
+        $this->setPreference((int) $rdata[0]);
+        $this->setExchanger($rdata[1]);
     }
 
     /**

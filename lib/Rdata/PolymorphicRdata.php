@@ -124,9 +124,9 @@ class PolymorphicRdata implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
-        return new self(null, $text);
+        $this->setData($text);
     }
 
     /**

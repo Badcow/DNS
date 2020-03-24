@@ -117,10 +117,9 @@ class APL implements RdataInterface
      *
      * @throws \Exception
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $iterator = new \ArrayIterator(explode(' ', $text));
-        $apl = new self();
 
         while ($iterator->valid()) {
             $matches = [];
@@ -129,11 +128,9 @@ class APL implements RdataInterface
             }
 
             $ipBlock = IPBlock::create($matches['block']);
-            $apl->addAddressRange($ipBlock, '!' !== $matches['negate']);
+            $this->addAddressRange($ipBlock, '!' !== $matches['negate']);
             $iterator->next();
         }
-
-        return $apl;
     }
 
     /**
