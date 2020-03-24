@@ -55,6 +55,7 @@ class DhcidTest extends TestCase
         $dhcid->setIdentifier($identifierType, $identifier);
         $dhcid->setFqdn($fqdn);
 
+        $this->assertEquals($identifier, $dhcid->getIdentifier());
         $this->assertEquals($text, $dhcid->toText());
     }
 

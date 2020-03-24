@@ -29,6 +29,19 @@ class AaaaTest extends TestCase
         $this->assertEquals($address, $aaaa->toText());
     }
 
+    public function testSetAddress(): void
+    {
+        $address = 'fe80::1';
+        $aaaa = new AAAA();
+        $aaaa->setAddress($address);
+
+        $this->assertEquals($address, $aaaa->getAddress());
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The address "abc" is not a valid IPv6 address.');
+        $aaaa->setAddress('abc');
+    }
+
     public function testFromText(): void
     {
         $text = '2003:dead:beef:4dad:23:46:bb:101';
@@ -39,6 +52,9 @@ class AaaaTest extends TestCase
         $this->assertEquals($text, $aaaa->getAddress());
     }
 
+    /**
+     * @throws DecodeException
+     */
     public function testToWire(): void
     {
         $address = '2003:dead:beef:4dad:23:46:bb:101';
@@ -49,6 +65,20 @@ class AaaaTest extends TestCase
 
         $this->assertEquals($expectation, $aaaa->toWire());
         $this->assertEquals($address, $aaaa->getAddress());
+    }
+
+    public function testToWireThrowsExceptionIfAddressIsMalformed(): void
+    {
+        $aaaa_prime = new class() extends AAAA {
+            public function __construct()
+            {
+                $this->address = 'abc';
+            }
+        };
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The IP address "abc" cannot be encoded. Check that it is a valid IP address.');
+        $aaaa_prime->toWire();
     }
 
     public function testGetType(): void
@@ -75,6 +105,11 @@ class AaaaTest extends TestCase
 
         $this->assertEquals('beef::1', $aaaa->getAddress());
         $this->assertEquals(17, $offset);
+
+        $wire = pack('C3', 0x61, 0x62, 0x63);
+        $aaaa = new AAAA();
+        $this->expectException(DecodeException::class);
+        $aaaa->fromWire($wire);
     }
 
     public function testFactory(): void

@@ -85,4 +85,26 @@ class CaaTest extends TestCase
         $this->assertEquals($expectation, $caa->toWire());
         $this->assertEquals($caa, $fromWire);
     }
+
+    public function testToWireThrowsExceptionIfNotAllParametersAreSet(): void
+    {
+        $caa = new CAA();
+        $caa->setTag(CAA::TAG_IODEF);
+        $caa->setValue('mailto:security@example.com');
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('All CAA parameters must be set.');
+        $caa->toWire();
+    }
+
+    public function testToTextThrowsExceptionIfNotAllParametersAreSet(): void
+    {
+        $caa = new CAA();
+        $caa->setFlag(0);
+        $caa->setTag(CAA::TAG_IODEF);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('All CAA parameters must be set.');
+        $caa->toText();
+    }
 }

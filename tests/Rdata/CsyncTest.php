@@ -108,4 +108,13 @@ class CsyncTest extends TestCase
         $this->assertEquals(3, $csync->getFlags());
         $this->assertEquals($types, $csync->getTypes());
     }
+
+    public function testClearTypes(): void
+    {
+        $csync = new CSYNC();
+        $csync->addType('A');
+        $this->assertCount(1, $csync->getTypes());
+        $csync->clearTypes();
+        $this->assertCount(0, $csync->getTypes());
+    }
 }

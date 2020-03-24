@@ -32,14 +32,14 @@ class ZoneBuilder
      * @var callable[]
      */
     private static array $rdataFillers = [
-        SOA::TYPE => __CLASS__ . '::fillOutSoa',
-        CNAME::TYPE => __CLASS__ . '::fillOutCname',
-        DNAME::TYPE => __CLASS__ . '::fillOutCname',
-        SRV::TYPE => __CLASS__ . '::fillOutSrv',
-        NS::TYPE => __CLASS__ . '::fillOutCname',
-        PTR::TYPE => __CLASS__ . '::fillOutCname',
-        MX::TYPE => __CLASS__ . '::fillOutMx',
-        AAAA::TYPE => __CLASS__ . '::fillOutAaaa',
+        SOA::TYPE => __CLASS__.'::fillOutSoa',
+        CNAME::TYPE => __CLASS__.'::fillOutCname',
+        DNAME::TYPE => __CLASS__.'::fillOutCname',
+        SRV::TYPE => __CLASS__.'::fillOutSrv',
+        NS::TYPE => __CLASS__.'::fillOutCname',
+        PTR::TYPE => __CLASS__.'::fillOutCname',
+        MX::TYPE => __CLASS__.'::fillOutMx',
+        AAAA::TYPE => __CLASS__.'::fillOutAaaa',
     ];
 
     /**
