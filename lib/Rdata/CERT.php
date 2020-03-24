@@ -141,7 +141,7 @@ class CERT implements RdataInterface
      */
     public function setCertificate(string $certificate): void
     {
-        if (false === $decoded = base64_decode($certificate)) {
+        if (false === $decoded = base64_decode($certificate, true)) {
             throw new \InvalidArgumentException('The certificate must be a valid Base64 encoded string.');
         }
 

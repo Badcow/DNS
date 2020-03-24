@@ -174,7 +174,7 @@ class HIP implements RdataInterface
         }
         $hip->setHostIdentityTag($hostIdentityTag);
 
-        if (false === $publicKey = base64_decode((string) array_shift($rdata))) {
+        if (false === $publicKey = base64_decode((string) array_shift($rdata), true)) {
             throw new ParseException(sprintf('Unable to parse public key of rdata string "%s".', $text));
         }
         $hip->setPublicKey($publicKey);

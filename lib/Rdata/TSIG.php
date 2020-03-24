@@ -247,7 +247,7 @@ class TSIG implements RdataInterface
         $tsig->setTimeSigned($timeSigned);
         $tsig->setFudge((int) array_shift($rdata));
 
-        if (false === $mac = base64_decode((string) array_shift($rdata))) {
+        if (false === $mac = base64_decode((string) array_shift($rdata), true)) {
             throw new ParseException('Unable to decode TSIG MAC. Malformed base64 string.');
         }
         $tsig->setMac($mac);
@@ -255,7 +255,7 @@ class TSIG implements RdataInterface
         $tsig->setOriginalId((int) array_shift($rdata));
         $tsig->setError((int) array_shift($rdata));
 
-        if (false === $otherData = base64_decode((string) array_shift($rdata))) {
+        if (false === $otherData = base64_decode((string) array_shift($rdata), true)) {
             throw new ParseException('Unable to decode TSIG other data. Malformed base64 string.');
         }
         $tsig->setOtherData($otherData);

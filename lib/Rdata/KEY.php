@@ -86,7 +86,7 @@ class KEY implements RdataInterface
      */
     public function setPublicKey(string $publicKey): void
     {
-        if (false === $key = base64_decode($publicKey)) {
+        if (false === $key = base64_decode($publicKey, true)) {
             throw new \InvalidArgumentException('The public key must be a valid base64 encoded string.');
         }
 

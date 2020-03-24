@@ -226,7 +226,7 @@ class DHCID implements RdataInterface
      */
     public static function fromText(string $text): RdataInterface
     {
-        if (false === $decoded = base64_decode($text)) {
+        if (false === $decoded = base64_decode($text, true)) {
             throw new \Exception(sprintf('Unable to base64 decode text "%s".', $text));
         }
 
