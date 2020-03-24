@@ -22,6 +22,9 @@ use Badcow\DNS\Rdata\TXT;
 
 class AlignedRdataFormatters
 {
+    /**
+     * @var callable[]
+     */
     public static $rdataFormatters = [
         SOA::TYPE => __CLASS__.'::SOA',
         APL::TYPE => __CLASS__.'::APL',
@@ -35,13 +38,7 @@ class AlignedRdataFormatters
      */
     public static function getRdataFormatters(): array
     {
-        return [
-            SOA::TYPE => __CLASS__.'::SOA',
-            APL::TYPE => __CLASS__.'::APL',
-            LOC::TYPE => __CLASS__.'::LOC',
-            RRSIG::TYPE => __CLASS__.'::RRSIG',
-            TXT::TYPE => __CLASS__.'::TXT',
-        ];
+        return self::$rdataFormatters;
     }
 
     /**
