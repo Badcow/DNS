@@ -116,9 +116,19 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * @param ResourceRecord $resourceRecord
+     * @param bool           $verify
+     *
+     * @throws \Exception
      */
-    public function addResourceRecord(ResourceRecord $resourceRecord): void
+    public function addResourceRecord(ResourceRecord $resourceRecord, bool $verify = false): void
     {
+        $class = __NAMESPACE__.'\\Validator\\'.$resourceRecord->getClass().'Validator';
+        if ($verify && class_exists($class)) {
+            if (!$class::canAddToZone($this, $resourceRecord)) {
+                throw new \Exception('Invalid resource record');
+            }
+        }
+
         $this->resourceRecords[] = $resourceRecord;
     }
 

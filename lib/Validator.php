@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Badcow\DNS;
 
-use Badcow\DNS\Rdata\CNAME;
 use Badcow\DNS\Rdata\NS;
 use Badcow\DNS\Rdata\SOA;
+use Badcow\DNS\Validator\AbstractValidator;
 
 class Validator
 {
@@ -257,17 +257,12 @@ class Validator
      * @param ResourceRecord $newRecord
      *
      * @return bool
+     *
+     * @deprecated Use \Badcow\DNS\Validator\AbstractValidator instead
      */
     public static function noAliasInZone(Zone $zone, ResourceRecord $newRecord): bool
     {
-        foreach ($zone as $rr) {
-            if (CNAME::TYPE === $rr->getType()
-                && $newRecord->getName() === $rr->getName()) {
-                return false;
-            }
-        }
-
-        return true;
+        return AbstractValidator::noCNAMEinZone($zone, $newRecord);
     }
 
     /**
