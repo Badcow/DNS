@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
+
 class AFSDB implements RdataInterface
 {
     use RdataTrait;
@@ -85,7 +87,7 @@ class AFSDB implements RdataInterface
      */
     public function toWire(): string
     {
-        return pack('n', $this->subType).self::encodeName($this->hostname);
+        return pack('n', $this->subType).Message::encodeName($this->hostname);
     }
 
     /**
@@ -106,6 +108,6 @@ class AFSDB implements RdataInterface
     {
         $this->setSubType(unpack('n', $rdata, $offset)[1]);
         $offset += 2;
-        $this->setHostname(self::decodeName($rdata, $offset));
+        $this->setHostname(Message::decodeName($rdata, $offset));
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Validator;
 
@@ -175,7 +176,7 @@ class SRV implements RdataInterface
      */
     public function toWire(): string
     {
-        return pack('nnn', $this->priority, $this->weight, $this->port).self::encodeName($this->target);
+        return pack('nnn', $this->priority, $this->weight, $this->port).Message::encodeName($this->target);
     }
 
     public function fromText(string $text): void
@@ -194,7 +195,7 @@ class SRV implements RdataInterface
     {
         $integers = unpack('npriority/nweight/nport', $rdata, $offset);
         $offset += 6;
-        $this->setTarget(self::decodeName($rdata, $offset));
+        $this->setTarget(Message::decodeName($rdata, $offset));
         $this->setPriority($integers['priority']);
         $this->setWeight($integers['weight']);
         $this->setPort($integers['port']);

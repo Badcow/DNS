@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Validator;
 
@@ -251,7 +252,7 @@ class IPSECKEY implements RdataInterface
             }
             $wire .= inet_pton($this->gateway);
         } else {
-            $wire .= self::encodeName($this->gateway ?? '.');
+            $wire .= Message::encodeName($this->gateway ?? '.');
         }
 
         if (self::ALGORITHM_NONE !== $this->algorithm && null !== $this->publicKey) {
@@ -314,7 +315,7 @@ class IPSECKEY implements RdataInterface
         switch ($gatewayType) {
             case 0:
             case 3:
-                $gateway = self::decodeName($rdata, $offset);
+                $gateway = Message::decodeName($rdata, $offset);
                 break;
             case 1:
                 $gateway = @inet_ntop(substr($rdata, $offset, 4));

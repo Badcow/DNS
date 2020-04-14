@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Badcow\DNS;
 
-use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\Types;
 use Badcow\DNS\Rdata\UnsupportedTypeException;
 use InvalidArgumentException;
@@ -142,7 +141,7 @@ class Question
      */
     public function toWire(): string
     {
-        return A::encodeName($this->name).pack('nn', $this->typeCode, $this->classId);
+        return Message::encodeName($this->name).pack('nn', $this->typeCode, $this->classId);
     }
 
     /**
@@ -157,7 +156,7 @@ class Question
     public static function fromWire(string $encoded, int &$offset = 0): Question
     {
         $question = new self();
-        $question->setName(A::decodeName($encoded, $offset));
+        $question->setName(Message::decodeName($encoded, $offset));
         $integers = unpack('ntype/nclass', $encoded, $offset);
         $question->setTypeCode($integers['type']);
         $question->setClassId($integers['class']);

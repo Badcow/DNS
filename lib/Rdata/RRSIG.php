@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 
 /**
@@ -288,7 +289,7 @@ class RRSIG implements RdataInterface
             $this->keyTag
         );
 
-        $wire .= self::encodeName($this->signersName);
+        $wire .= Message::encodeName($this->signersName);
         $wire .= $this->signature;
 
         return $wire;
@@ -323,7 +324,7 @@ class RRSIG implements RdataInterface
         $end = $offset + $rdLength;
         $values = unpack('n<type>/C<algorithm>/C<labels>/N<originalTtl>/N<sigExpiration>/N<sigInception>/n<keyTag>', $rdata, $offset);
         $offset += 18;
-        $signersName = self::decodeName($rdata, $offset);
+        $signersName = Message::decodeName($rdata, $offset);
 
         $sigLen = $end - $offset;
         $signature = substr($rdata, $offset, $sigLen);

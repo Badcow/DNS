@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Validator;
@@ -150,7 +151,7 @@ class HIP implements RdataInterface
         $rdata .= $this->hostIdentityTag;
         $rdata .= $this->publicKey;
         foreach ($this->rendezvousServers as $server) {
-            $rdata .= self::encodeName($server);
+            $rdata .= Message::encodeName($server);
         }
 
         return $rdata;
@@ -198,7 +199,7 @@ class HIP implements RdataInterface
         $offset += $pkLen;
 
         while ($offset < $end) {
-            $this->addRendezvousServer(self::decodeName($rdata, $offset));
+            $this->addRendezvousServer(Message::decodeName($rdata, $offset));
         }
     }
 }

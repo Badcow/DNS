@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 
 /**
@@ -80,7 +81,7 @@ class RP implements RdataInterface
      */
     public function toWire(): string
     {
-        return self::encodeName($this->mailboxDomainName).self::encodeName($this->txtDomainName);
+        return Message::encodeName($this->mailboxDomainName).Message::encodeName($this->txtDomainName);
     }
 
     /**
@@ -98,7 +99,7 @@ class RP implements RdataInterface
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $this->setMailboxDomainName(self::decodeName($rdata, $offset));
-        $this->setTxtDomainName(self::decodeName($rdata, $offset));
+        $this->setMailboxDomainName(Message::decodeName($rdata, $offset));
+        $this->setTxtDomainName(Message::decodeName($rdata, $offset));
     }
 }

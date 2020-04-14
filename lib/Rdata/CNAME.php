@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
+
 /**
  * @see https://tools.ietf.org/html/rfc1035#section-3.3.1
  */
@@ -61,7 +63,7 @@ class CNAME implements RdataInterface
             throw new \InvalidArgumentException('Target must be set.');
         }
 
-        return self::encodeName($this->target);
+        return Message::encodeName($this->target);
     }
 
     /**
@@ -77,6 +79,6 @@ class CNAME implements RdataInterface
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $this->setTarget(self::decodeName($rdata, $offset));
+        $this->setTarget(Message::decodeName($rdata, $offset));
     }
 }

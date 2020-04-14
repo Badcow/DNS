@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 
 class NSEC implements RdataInterface
@@ -96,7 +97,7 @@ class NSEC implements RdataInterface
      */
     public function toWire(): string
     {
-        return self::encodeName($this->nextDomainName).self::renderBitmap($this->types);
+        return Message::encodeName($this->nextDomainName).self::renderBitmap($this->types);
     }
 
     /**
@@ -120,7 +121,7 @@ class NSEC implements RdataInterface
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $this->setNextDomainName(self::decodeName($rdata, $offset));
+        $this->setNextDomainName(Message::decodeName($rdata, $offset));
         $types = self::parseBitmap($rdata, $offset);
         array_map([$this, 'addType'], $types);
     }

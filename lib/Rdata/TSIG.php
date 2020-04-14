@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Rcode;
@@ -220,7 +221,7 @@ class TSIG implements RdataInterface
         $hex2 = (0x0000ffff0000 & $timeSigned) >> 16;
         $hex3 = 0x00000000ffff & $timeSigned;
 
-        $wire = self::encodeName($this->algorithmName);
+        $wire = Message::encodeName($this->algorithmName);
         $wire .= pack('nnnnn', $hex1, $hex2, $hex3, $this->fudge, strlen($this->mac));
         $wire .= $this->mac;
         $wire .= pack('nnn', $this->originalId, $this->error, strlen($this->otherData));
@@ -265,7 +266,7 @@ class TSIG implements RdataInterface
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $this->setAlgorithmName(self::decodeName($rdata, $offset));
+        $this->setAlgorithmName(Message::decodeName($rdata, $offset));
 
         $args = unpack('n<hex1>/n<hex2>/n<hex3>/n<fudge>/n<macLen>', $rdata, $offset);
         $offset += 10;

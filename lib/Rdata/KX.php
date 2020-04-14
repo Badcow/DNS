@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
+
 /**
  * {@link https://tools.ietf.org/html/rfc2230}.
  */
@@ -94,7 +96,7 @@ class KX implements RdataInterface
             throw new \InvalidArgumentException('No exchanger has been set on KX object.');
         }
 
-        return pack('n', $this->preference).self::encodeName($this->exchanger);
+        return pack('n', $this->preference).Message::encodeName($this->exchanger);
     }
 
     /**
@@ -114,6 +116,6 @@ class KX implements RdataInterface
     {
         $this->setPreference(unpack('n', $rdata, $offset)[1]);
         $offset += 2;
-        $this->setExchanger(self::decodeName($rdata, $offset));
+        $this->setExchanger(Message::decodeName($rdata, $offset));
     }
 }

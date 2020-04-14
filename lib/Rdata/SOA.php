@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 
 /**
@@ -237,8 +238,8 @@ class SOA implements RdataInterface
         }
 
         return
-            self::encodeName($this->mname).
-            self::encodeName($this->rname).
+            Message::encodeName($this->mname).
+            Message::encodeName($this->rname).
             pack(
                 'NNNNN',
                 $this->serial,
@@ -269,8 +270,8 @@ class SOA implements RdataInterface
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $this->setMname(self::decodeName($rdata, $offset));
-        $this->setRname(self::decodeName($rdata, $offset));
+        $this->setMname(Message::decodeName($rdata, $offset));
+        $this->setRname(Message::decodeName($rdata, $offset));
         $parameters = unpack('Nserial/Nrefresh/Nretry/Nexpire/Nminimum', $rdata, $offset);
         $this->setSerial((int) $parameters['serial']);
         $this->setRefresh((int) $parameters['refresh']);

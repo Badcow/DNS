@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Validator;
 
@@ -237,7 +238,7 @@ class TKEY implements RdataInterface
      */
     public function toWire(): string
     {
-        $wire = self::encodeName($this->algorithm);
+        $wire = Message::encodeName($this->algorithm);
         $wire .= pack('NNnnn',
             $this->inception->format('U'),
             $this->expiration->format('U'),
@@ -280,7 +281,7 @@ class TKEY implements RdataInterface
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $algorithm = self::decodeName($rdata, $offset);
+        $algorithm = Message::decodeName($rdata, $offset);
         $integers = unpack('N<inception>/N<expiration>/n<mode>/n<error>/n<keySize>', $rdata, $offset);
         $offset += 14;
         $keySize = (int) $integers['<keySize>'];

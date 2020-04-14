@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Validator;
 
@@ -221,7 +222,7 @@ class NAPTR implements RdataInterface
     {
         $encoded = pack('nn', $this->order, $this->preference);
         $encoded .= sprintf('"%s""%s""%s"', $this->flags ?? '', $this->services ?? '', $this->regexp);
-        $encoded .= self::encodeName($this->replacement);
+        $encoded .= Message::encodeName($this->replacement);
 
         return $encoded;
     }
@@ -253,7 +254,7 @@ class NAPTR implements RdataInterface
         $this->setFlags(self::extractText($rdata, $offset));
         $this->setServices(self::extractText($rdata, $offset));
         $this->setRegexp(self::extractText($rdata, $offset));
-        $this->setReplacement(self::decodeName($rdata, $offset));
+        $this->setReplacement(Message::decodeName($rdata, $offset));
     }
 
     /**
