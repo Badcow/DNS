@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\TimeFormat;
 use Badcow\DNS\Parser\Tokens;
 
 /**
@@ -259,10 +260,10 @@ class SOA implements RdataInterface
         $soa->setMname($rdata[0]);
         $soa->setRname($rdata[1]);
         $soa->setSerial((int) $rdata[2]);
-        $soa->setRefresh((int) $rdata[3]);
-        $soa->setRetry((int) $rdata[4]);
-        $soa->setExpire((int) $rdata[5]);
-        $soa->setMinimum((int) $rdata[6]);
+        $soa->setRefresh(TimeFormat::toSeconds($rdata[3]));
+        $soa->setRetry(TimeFormat::toSeconds($rdata[4]));
+        $soa->setExpire(TimeFormat::toSeconds($rdata[5]));
+        $soa->setMinimum(TimeFormat::toSeconds($rdata[6]));
 
         return $soa;
     }
@@ -277,10 +278,10 @@ class SOA implements RdataInterface
         $soa->setRname(self::decodeName($rdata, $offset));
         $parameters = unpack('Nserial/Nrefresh/Nretry/Nexpire/Nminimum', $rdata, $offset);
         $soa->setSerial((int) $parameters['serial']);
-        $soa->setRefresh((int) $parameters['refresh']);
-        $soa->setRetry((int) $parameters['retry']);
-        $soa->setExpire((int) $parameters['expire']);
-        $soa->setMinimum((int) $parameters['minimum']);
+        $soa->setRefresh(TimeFormat::toSeconds($parameters['refresh']));
+        $soa->setRetry(TimeFormat::toSeconds($parameters['retry']));
+        $soa->setExpire(TimeFormat::toSeconds($parameters['expire']));
+        $soa->setMinimum(TimeFormat::toSeconds($parameters['minimum']));
 
         $offset += 20;
 

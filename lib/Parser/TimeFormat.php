@@ -26,9 +26,10 @@ class TimeFormat
     ];
 
     /**
-     * Check if given token looks like time format
+     * Check if given token looks like time format.
      *
      * @param string $value
+     *
      * @return bool
      */
     public static function isTimeFormat($value): bool
@@ -37,9 +38,10 @@ class TimeFormat
     }
 
     /**
-     * Convert human readable time format to seconds
+     * Convert human readable time format to seconds.
      *
      * @param string $value
+     *
      * @return int
      */
     public static function toSeconds($value): int
@@ -50,18 +52,19 @@ class TimeFormat
             $seconds = (int) $value;
         } elseif (1 === \preg_match(self::TIME_FORMAT_REGEX, $value, $matches)) {
             \array_shift($matches);
-            $seconds = \array_sum(\array_map(function($fragment, $multiplier) {
+            $seconds = (int) \array_sum(\array_map(function ($fragment, $multiplier) {
                 return (int) $fragment * $multiplier;
             }, $matches, self::TIME_MULTIPLIERS));
         }
 
-        return \min([$seconds, 2**31-1]);
+        return $seconds < 2 ** 31 ? $seconds : 0;
     }
 
     /**
-     * Convert number of seconds to human readable format
+     * Convert number of seconds to human readable format.
      *
      * @param int $seconds
+     *
      * @return string
      */
     public static function toHumanReadable(int $seconds): string
