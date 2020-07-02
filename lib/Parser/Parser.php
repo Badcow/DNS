@@ -147,7 +147,7 @@ class Parser
     private function processEntry(ResourceRecordIterator $iterator): void
     {
         if ($this->isTTL($iterator)) {
-            $this->currentResourceRecord->setTtl((int) $iterator->current());
+            $this->currentResourceRecord->setTtl(TimeFormat::toSeconds($iterator->current()));
             $iterator->next();
             $this->processEntry($iterator);
 
@@ -215,7 +215,7 @@ class Parser
     {
         if ('$TTL' === strtoupper($iterator->current())) {
             $iterator->next();
-            $this->zone->setDefaultTtl((int) $iterator->current());
+            $this->zone->setDefaultTtl(TimeFormat::toSeconds($iterator->current()));
         }
 
         if ('$ORIGIN' === strtoupper($iterator->current())) {
@@ -315,7 +315,7 @@ class Parser
      */
     private function isTTL(ResourceRecordIterator $iterator, $origin = null): bool
     {
-        if (1 !== preg_match('/^\d+$/', $iterator->current())) {
+        if (!TimeFormat::isTimeFormat($iterator->current())) {
             return false;
         }
 

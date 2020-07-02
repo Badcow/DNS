@@ -19,6 +19,7 @@ use Badcow\DNS\Classes;
 use Badcow\DNS\Parser\Comments;
 use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
+use Badcow\DNS\Parser\TimeFormat;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\AAAA;
 use Badcow\DNS\Rdata\APL;
@@ -394,6 +395,42 @@ DNS;
         $d = self::findRecord('d.example.com.', $zone)[0];
         $this->assertInstanceOf(A::class, $d->getRdata());
         $this->assertEquals('10.0.0.2', $d->getRdata()->getAddress());
+    }
+
+    /**
+     * @throws ParseException
+     */
+    public function testParserRecognisesHumanReadableTimeFormats(): void
+    {
+        $record = <<<DNS
+\$TTL 1h1m3s
+badcow.co.     1h5m IN SOA   ns.badcow.co. hostmaster.badcow.co. (
+                             2020070101 ; serial
+                             3h10s      ; refresh
+                             59m        ; retry
+                             4w1d       ; expire
+                             1h         ; minimum
+                             )
+overflow      3551w IN A     4.3.2.1
+numeric       12345 IN A     9.9.9.9
+DNS;
+        $zone = Parser::parse('badcow.co.', $record);
+        $this->assertEquals(3663, $zone->getDefaultTtl());
+        $this->assertCount(3, $zone);
+
+        $this->assertEquals(3900, $zone[0]->getTtl());
+        $soa = $zone[0]->getRdata();
+        $this->assertEquals(10810, $soa->getRefresh());
+        $this->assertEquals(3540, $soa->getRetry());
+        $this->assertEquals(2505600, $soa->getExpire());
+        $this->assertEquals(3600, $soa->getMinimum());
+
+        $this->assertEquals(0, $zone[1]->getTtl());
+        $this->assertEquals(12345, $zone[2]->getTtl());
+
+        // Ensure coverage
+        $this->assertEquals('1w4d13h46m39s', TimeFormat::toHumanReadable(999999));
+        $this->assertEquals('1h', TimeFormat::toHumanReadable(3600));
     }
 
     /**
