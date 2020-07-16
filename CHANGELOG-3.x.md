@@ -1,5 +1,7 @@
 CHANGELOG for 3.x
 =================
+## 3.6.0
+ * [PR #71](https://github.com/Badcow/DNS/pull/71/): Support human readable time formats in parser.
 ## 3.5.0
 * Deprecate `Bacow\DNS\Rdata\Algorithms`, use `Bacow\DNS\Algorithms` instead. 
 * New classes to support full stack DNS message:
