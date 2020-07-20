@@ -187,7 +187,7 @@ class Parser
      */
     private function populateWithLastStated(): void
     {
-        if (null === $this->currentResourceRecord->getName()) {
+        if (empty($this->currentResourceRecord->getName())) {
             $this->currentResourceRecord->setName($this->lastStatedDomain);
         } else {
             $this->lastStatedDomain = $this->currentResourceRecord->getName();
