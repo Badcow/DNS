@@ -259,7 +259,7 @@ TXT;
      */
     public function testParserCanHandleUriRecords(): void
     {
-        $txt = '   _ftp._tcp    IN URI 10 1 "ftp://ftp1.example.com/public%20data"';
+        $txt = '_ftp._tcp    IN URI 10 1 "ftp://ftp1.example.com/public%20data"';
         $zone = Parser::parse('example.com.', $txt);
 
         $rrs = self::findRecord('_ftp._tcp', $zone, 'URI');
