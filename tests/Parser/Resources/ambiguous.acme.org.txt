@@ -2,8 +2,8 @@ $ORIGIN ambiguous.acme.org.
 
 ambiguous.acme.org. IN SOA ambiguous.acme.org. post.acme.org. 2019092401 3600 14400 604800 1800
 
-mx 900 IN A 200.100.50.35
-aaaa IN AAAA 2001:acdc:5889::35
-3600 TXT "This name is silly."
-mx cname aaaa
-IN TXT "Mail Exchange IPv6 Address"
+ mx 900 IN A 200.100.50.35
+ aaaa IN AAAA 2001:acdc:5889::35
+ 3600 TXT "This name is silly."
+ mx cname aaaa
+ IN TXT "Mail Exchange IPv6 Address"
