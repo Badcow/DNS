@@ -306,7 +306,7 @@ class Parser
     }
 
     /**
-     * Determine if the iterant is a TTL (i.e. it is an integer).
+     * Determine if the iterant is a TTL (i.e. it is an integer after domain-name).
      *
      * @param ResourceRecordIterator $iterator
      * @param string                 $origin   the previously assumed resource record parameter, either 'CLASS' or NULL
@@ -319,6 +319,10 @@ class Parser
             return false;
         }
 
+        if ($iterator->key() <= 1) {
+            return false;
+        }
+        
         $iterator->next();
         if ('CLASS' === $origin) {
             $isTtl = $this->isType($iterator);
