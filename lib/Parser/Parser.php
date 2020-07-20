@@ -118,7 +118,6 @@ class Parser
         list($entry, $comment) = $this->extractComment($line);
 
         $this->currentResourceRecord = new ResourceRecord();
-        $this->currentResourceRecord->setTtl($this->zone->getDefaultTtl());
         $this->currentResourceRecord->setComment($comment);
 
         if ('' === $entry) {
@@ -194,7 +193,7 @@ class Parser
         }
 
         if (null === $this->currentResourceRecord->getTtl()) {
-            $this->currentResourceRecord->setTtl($this->lastStatedTtl);
+            $this->currentResourceRecord->setTtl($this->lastStatedTtl ?? $this->zone->getDefaultTTl());
         } else {
             $this->lastStatedTtl = $this->currentResourceRecord->getTtl();
         }
