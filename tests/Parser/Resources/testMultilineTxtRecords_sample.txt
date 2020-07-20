@@ -1,6 +1,6 @@
 
 
-    test	IN		7230           TXT "This is an "(
+test	IN		7230           TXT "This is an "(
 
 										"example of a "
 										"multiline TXT "
