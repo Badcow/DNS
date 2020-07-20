@@ -18,9 +18,9 @@ test 600 IN TXT (;11111
 testtxt 600 IN TXT ("v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDZKI3U+9acu3NfEy0NJHIPydxnPLPpnAJ7"
 "k2JdrsLqAK1uouMudHI20pgE8RMldB/TeWKXYoRidcGCZWXleUzldDTwZAMDQNpdH1uuxym0VhoZpPbI1RXwpgHRTbCk49VqlC")
 testmx 600    IN MX 20 @;345345
-300 IN MX 30 mail.com.
-IN MX 35 mail-gw3
-MX 40 mail-gw4
+ 300 IN MX 30 mail.com.
+ IN MX 35 mail-gw3
+ MX 40 mail-gw4
 testmx2 600 IN MX 20 .;23''33'123;;123;
 _domainkeytxt 600 IN TXT "t=y;o=~;\0";312
 www 600 IN TXT "@ A 79.125.10.157 "
