@@ -319,7 +319,7 @@ class Parser
             return false;
         }
 
-        if ($iterator->key() <= 1) {
+        if ($iterator->key() < 1) {
             return false;
         }
         
