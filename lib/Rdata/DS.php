@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\Parser\Tokens;
+use InvalidArgumentException;
 
 class DS implements RdataInterface
 {
@@ -77,11 +78,17 @@ class DS implements RdataInterface
         $this->digestType = $digestType;
     }
 
+    /**
+     * @return string the digest in its binary representation
+     */
     public function getDigest(): string
     {
         return $this->digest;
     }
 
+    /**
+     * @param string $digest the digest in its binary representation
+     */
     public function setDigest(string $digest): void
     {
         $this->digest = $digest;
@@ -97,7 +104,7 @@ class DS implements RdataInterface
             $this->keyTag,
             $this->algorithm,
             $this->digestType,
-            $this->digest
+            strtoupper(bin2hex($this->digest))
         );
     }
 
@@ -118,7 +125,10 @@ class DS implements RdataInterface
         $this->setKeyTag((int) array_shift($rdata));
         $this->setAlgorithm((int) array_shift($rdata));
         $this->setDigestType((int) array_shift($rdata));
-        $this->setDigest((string) array_shift($rdata));
+        if (false === $digest = hex2bin((string) array_shift($rdata))) {
+            throw new InvalidArgumentException(sprintf('The digest is not a valid hexadecimal string.'));
+        }
+        $this->setDigest($digest);
     }
 
     /**
@@ -126,14 +136,16 @@ class DS implements RdataInterface
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $integers = unpack('ntag/Calgorithm/Cdtype', $rdata);
+        $digestLen = ($rdLength ?? strlen($rdata)) - 4;
+
+        $integers = unpack('ntag/Calgorithm/Cdtype', $rdata, $offset);
         $offset += 4;
+
         $this->setKeyTag($integers['tag']);
         $this->setAlgorithm($integers['algorithm']);
         $this->setDigestType($integers['dtype']);
-
-        $digestLen = ($rdLength ?? strlen($rdata)) - 4;
         $this->setDigest(substr($rdata, $offset, $digestLen));
+
         $offset += $digestLen;
     }
 }

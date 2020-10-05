@@ -25,11 +25,11 @@ class CdsTest extends TestCase
     public function testFactory(): void
     {
         $keyTag = 60485;
-        $ds = Factory::CDS($keyTag, Algorithms::RSASHA1, self::$digest, CDS::DIGEST_SHA1);
+        $ds = Factory::CDS($keyTag, Algorithms::RSASHA1, hex2bin(self::$digest), CDS::DIGEST_SHA1);
 
         $this->assertEquals($keyTag, $ds->getKeyTag());
         $this->assertEquals(Algorithms::RSASHA1, $ds->getAlgorithm());
-        $this->assertEquals(self::$digest, $ds->getDigest());
+        $this->assertEquals(hex2bin(self::$digest), $ds->getDigest());
         $this->assertEquals(CDS::DIGEST_SHA1, $ds->getDigestType());
     }
 
@@ -39,7 +39,7 @@ class CdsTest extends TestCase
         $expectation->setKeyTag(60485);
         $expectation->setAlgorithm(Algorithms::RSASHA1);
         $expectation->setDigestType(CDS::DIGEST_SHA1);
-        $expectation->setDigest(self::$digest);
+        $expectation->setDigest(hex2bin(self::$digest));
 
         $cds = new CDS();
         $cds->fromText('60485 5 1 '.self::$digest);
@@ -53,7 +53,7 @@ class CdsTest extends TestCase
         $cds->setKeyTag(60485);
         $cds->setAlgorithm(Algorithms::RSASHA1);
         $cds->setDigestType(CDS::DIGEST_SHA1);
-        $cds->setDigest(self::$digest);
+        $cds->setDigest(hex2bin(self::$digest));
         $wireFormat = $cds->toWire();
         $fromWire = new CDS();
         $fromWire->fromWire($wireFormat);

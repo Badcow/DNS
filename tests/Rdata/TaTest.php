@@ -30,7 +30,7 @@ class TaTest extends TestCase
         $ta->setKeyTag(60485);
         $ta->setAlgorithm(Algorithms::RSASHA1);
         $ta->setDigestType(TA::DIGEST_SHA1);
-        $ta->setDigest(self::$digest);
+        $ta->setDigest(hex2bin(self::$digest));
 
         $this->assertEquals($expectation, $ta->toText());
     }
@@ -52,7 +52,7 @@ class TaTest extends TestCase
         $expectation->setKeyTag(60485);
         $expectation->setAlgorithm(Algorithms::RSASHA1);
         $expectation->setDigestType(TA::DIGEST_SHA1);
-        $expectation->setDigest(self::$digest);
+        $expectation->setDigest(hex2bin(self::$digest));
 
         $fromText = new TA();
         $fromText->fromText('60485 5 1 '.self::$digest);
@@ -65,7 +65,7 @@ class TaTest extends TestCase
         $ta->setKeyTag(60485);
         $ta->setAlgorithm(Algorithms::RSASHA1);
         $ta->setDigestType(TA::DIGEST_SHA1);
-        $ta->setDigest(self::$digest);
+        $ta->setDigest(hex2bin(self::$digest));
         $wireFormat = $ta->toWire();
 
         $fromWire = new TA();

@@ -25,11 +25,11 @@ class DlvTest extends TestCase
     public function testFactory(): void
     {
         $keyTag = 60485;
-        $ds = Factory::DLV($keyTag, Algorithms::RSASHA1, self::$digest, DLV::DIGEST_SHA1);
+        $ds = Factory::DLV($keyTag, Algorithms::RSASHA1, hex2bin(self::$digest), DLV::DIGEST_SHA1);
 
         $this->assertEquals($keyTag, $ds->getKeyTag());
         $this->assertEquals(Algorithms::RSASHA1, $ds->getAlgorithm());
-        $this->assertEquals(self::$digest, $ds->getDigest());
+        $this->assertEquals(hex2bin(self::$digest), $ds->getDigest());
         $this->assertEquals(DLV::DIGEST_SHA1, $ds->getDigestType());
     }
 
@@ -39,7 +39,7 @@ class DlvTest extends TestCase
         $expectation->setKeyTag(60485);
         $expectation->setAlgorithm(Algorithms::RSASHA1);
         $expectation->setDigestType(DLV::DIGEST_SHA1);
-        $expectation->setDigest(self::$digest);
+        $expectation->setDigest(hex2bin(self::$digest));
 
         $dlv = new DLV();
         $dlv->fromText('60485 5 1 '.self::$digest);
@@ -53,7 +53,7 @@ class DlvTest extends TestCase
         $dlv->setKeyTag(60485);
         $dlv->setAlgorithm(Algorithms::RSASHA1);
         $dlv->setDigestType(DLV::DIGEST_SHA1);
-        $dlv->setDigest(self::$digest);
+        $dlv->setDigest(hex2bin(self::$digest));
         $wireFormat = $dlv->toWire();
         $fromWire = new DLV();
         $fromWire->fromWire($wireFormat);
