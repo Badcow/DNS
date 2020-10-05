@@ -81,8 +81,7 @@ class Factory
      *
      * @return RdataInterface
      *
-     * @throws ParseException
-     * @throws UnsupportedTypeException
+     * @throws ParseException|UnsupportedTypeException
      */
     public static function textToRdataType(string $type, string $text): RdataInterface
     {
@@ -91,7 +90,8 @@ class Factory
             if (self::isTypeCodeImplemented($typeCode)) {
                 $type = Types::getName($typeCode);
             } else {
-                $rdata = UnknownType::fromText($text);
+                $rdata = new UnknownType();
+                $rdata->fromText($text);
                 $rdata->setTypeCode($typeCode);
 
                 return $rdata;
@@ -108,18 +108,20 @@ class Factory
 
                 return new $className();
             }
-            $wireFormat = hex2bin(str_replace(Tokens::SPACE, '', $matches[2]));
 
-            /** @var callable $callable */
-            $callable = self::getRdataClassName($type).'::fromWire';
+            if (false === $wireFormat = hex2bin(str_replace(Tokens::SPACE, '', $matches[2]))) {
+                throw new ParseException(sprintf('Unable to decode hexadecimal parameter in "%s".', $text));
+            }
+            $rdata = self::newRdataFromName($type);
+            $rdata->fromWire($wireFormat);
 
-            return call_user_func($callable, $wireFormat);
+            return $rdata;
         }
 
-        /** @var callable $callable */
-        $callable = self::getRdataClassName($type).'::fromText';
+        $rdata = self::newRdataFromName($type);
+        $rdata->fromText($text);
 
-        return call_user_func($callable, $text);
+        return $rdata;
     }
 
     /**

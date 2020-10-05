@@ -154,44 +154,33 @@ class CAA implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return CAA
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $caa = new self();
-
-        $caa->setFlag(ord($rdata[$offset]));
+        $this->setFlag(ord($rdata[$offset]));
         ++$offset;
 
         $tagLen = ord($rdata[$offset]);
         ++$offset;
 
-        $caa->setTag(substr($rdata, $offset, $tagLen));
+        $this->setTag(substr($rdata, $offset, $tagLen));
         $offset += $tagLen;
 
         $valueLen = ($rdLength ?? strlen($rdata)) - 2 - $tagLen;
-        $caa->setValue(substr($rdata, $offset, $valueLen));
+        $this->setValue(substr($rdata, $offset, $valueLen));
 
         $offset = $offset += $valueLen;
-
-        return $caa;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return CAA
      */
-    public static function fromText(string $string): RdataInterface
+    public function fromText(string $text): void
     {
-        $caa = new self();
-        $rdata = explode(Tokens::SPACE, $string);
-        $caa->setFlag((int) array_shift($rdata));
-        $caa->setTag((string) array_shift($rdata));
+        $rdata = explode(Tokens::SPACE, $text);
+        $this->setFlag((int) array_shift($rdata));
+        $this->setTag((string) array_shift($rdata));
         $rdata = implode('', $rdata);
-        $caa->setValue(trim($rdata, '"'));
-
-        return $caa;
+        $this->setValue(trim($rdata, '"'));
     }
 }

@@ -80,21 +80,18 @@ class UnknownType implements RdataInterface
     }
 
     /**
-     * @param string $text
-     *
-     * @return UnknownType
+     * {@inheritdoc}
      *
      * @throws ParseException
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         if (1 !== preg_match('/^\\\#\s+(\d+)(\s[a-f0-9\s]+)?$/i', $text, $matches)) {
             throw new ParseException('Could not parse rdata of unknown type. Malformed string.');
         }
 
-        $rdata = new self();
         if ('0' === $matches[1]) {
-            return $rdata;
+            return;
         }
 
         $hexVal = str_replace(Tokens::SPACE, '', $matches[2]);
@@ -102,21 +99,14 @@ class UnknownType implements RdataInterface
         if (false === $data = hex2bin($hexVal)) {
             throw new ParseException(sprintf('Could not parse hexadecimal data "%s".', $hexVal));
         }
-        $rdata->setData($data);
-
-        return $rdata;
+        $this->setData($data);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return UnknownType
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $_rdata = new self();
-        $_rdata->setData(substr($rdata, $offset, $rdLength ?? strlen($rdata)));
-
-        return $_rdata;
+        $this->setData(substr($rdata, $offset, $rdLength ?? strlen($rdata)));
     }
 }

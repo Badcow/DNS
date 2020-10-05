@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\TimeFormat;
 use Badcow\DNS\Parser\Tokens;
+use InvalidArgumentException;
 
 /**
  * @see https://tools.ietf.org/html/rfc1035#section-3.3.13
@@ -207,7 +209,7 @@ class SOA implements RdataInterface
             !isset($this->retry) ||
             !isset($this->expire) ||
             !isset($this->minimum)) {
-            throw new \InvalidArgumentException('All parameters of SOA must be set.');
+            throw new InvalidArgumentException('All parameters of SOA must be set.');
         }
 
         return sprintf(
@@ -234,12 +236,12 @@ class SOA implements RdataInterface
             !isset($this->retry) ||
             !isset($this->expire) ||
             !isset($this->minimum)) {
-            throw new \InvalidArgumentException('All parameters of SOA must be set.');
+            throw new InvalidArgumentException('All parameters of SOA must be set.');
         }
 
         return
-            self::encodeName($this->mname).
-            self::encodeName($this->rname).
+            Message::encodeName($this->mname).
+            Message::encodeName($this->rname).
             pack(
                 'NNNNN',
                 $this->serial,
@@ -253,38 +255,34 @@ class SOA implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $soa = new self();
-        $soa->setMname($rdata[0]);
-        $soa->setRname($rdata[1]);
-        $soa->setSerial((int) $rdata[2]);
-        $soa->setRefresh(TimeFormat::toSeconds($rdata[3]));
-        $soa->setRetry(TimeFormat::toSeconds($rdata[4]));
-        $soa->setExpire(TimeFormat::toSeconds($rdata[5]));
-        $soa->setMinimum(TimeFormat::toSeconds($rdata[6]));
 
-        return $soa;
+        $this->setMname($rdata[0]);
+        $this->setRname($rdata[1]);
+        $this->setSerial((int) $rdata[2]);
+        $this->setRefresh(TimeFormat::toSeconds($rdata[3]));
+        $this->setRetry(TimeFormat::toSeconds($rdata[4]));
+        $this->setExpire(TimeFormat::toSeconds($rdata[5]));
+        $this->setMinimum(TimeFormat::toSeconds($rdata[6]));
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $soa = new self();
-        $soa->setMname(self::decodeName($rdata, $offset));
-        $soa->setRname(self::decodeName($rdata, $offset));
+        $this->setMname(Message::decodeName($rdata, $offset));
+        $this->setRname(Message::decodeName($rdata, $offset));
         $parameters = unpack('Nserial/Nrefresh/Nretry/Nexpire/Nminimum', $rdata, $offset);
-        $soa->setSerial((int) $parameters['serial']);
-        $soa->setRefresh(TimeFormat::toSeconds($parameters['refresh']));
-        $soa->setRetry(TimeFormat::toSeconds($parameters['retry']));
-        $soa->setExpire(TimeFormat::toSeconds($parameters['expire']));
-        $soa->setMinimum(TimeFormat::toSeconds($parameters['minimum']));
+
+        $this->setSerial((int) $parameters['serial']);
+        $this->setRefresh(TimeFormat::toSeconds($parameters['refresh']));
+        $this->setRetry(TimeFormat::toSeconds($parameters['retry']));
+        $this->setExpire(TimeFormat::toSeconds($parameters['expire']));
+        $this->setMinimum(TimeFormat::toSeconds($parameters['minimum']));
 
         $offset += 20;
-
-        return $soa;
     }
 }

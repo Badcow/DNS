@@ -88,7 +88,11 @@ class IpseckeyTest extends TestCase
         $rdLength = strlen($wireFormat);
         $wireFormat = 'abc'.$wireFormat;
         $offset = 3;
-        $this->assertEquals($ipseckey, IPSECKEY::fromWire($wireFormat, $offset, $rdLength));
+
+        $fromWire = new IPSECKEY();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+
+        $this->assertEquals($ipseckey, $fromWire);
         $this->assertEquals(3 + $rdLength, $offset);
     }
 
@@ -104,7 +108,8 @@ class IpseckeyTest extends TestCase
      */
     public function testFromText(string $text, int $precedence, int $gatewayType, int $algorithm, ?string $gateway, ?string $publicKey): void
     {
-        $ipseckey = IPSECKEY::fromText($text);
+        $ipseckey = new IPSECKEY();
+        $ipseckey->fromText($text);
 
         $this->assertEquals($precedence, $ipseckey->getPrecedence());
         $this->assertEquals($gatewayType, $ipseckey->getGatewayType());

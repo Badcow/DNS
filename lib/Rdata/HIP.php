@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Validator;
@@ -150,7 +151,7 @@ class HIP implements RdataInterface
         $rdata .= $this->hostIdentityTag;
         $rdata .= $this->publicKey;
         foreach ($this->rendezvousServers as $server) {
-            $rdata .= self::encodeName($server);
+            $rdata .= Message::encodeName($server);
         }
 
         return $rdata;
@@ -159,57 +160,46 @@ class HIP implements RdataInterface
     /**
      * {@inheritdoc}
      *
-     * @return HIP
-     *
      * @throws ParseException
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $hip = new self();
-        $hip->setPublicKeyAlgorithm((int) array_shift($rdata));
+        $this->setPublicKeyAlgorithm((int) array_shift($rdata));
 
         if (false === $hostIdentityTag = @hex2bin((string) array_shift($rdata))) {
             throw new ParseException(sprintf('Unable to parse host identity tag of rdata string "%s".', $text));
         }
-        $hip->setHostIdentityTag($hostIdentityTag);
+        $this->setHostIdentityTag($hostIdentityTag);
 
         if (false === $publicKey = base64_decode((string) array_shift($rdata), true)) {
             throw new ParseException(sprintf('Unable to parse public key of rdata string "%s".', $text));
         }
-        $hip->setPublicKey($publicKey);
-        array_map([$hip, 'addRendezvousServer'], $rdata);
-
-        return $hip;
+        $this->setPublicKey($publicKey);
+        array_map([$this, 'addRendezvousServer'], $rdata);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return HIP
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $hip = new self();
-
         $end = $offset + ($rdLength ?? strlen($rdata));
         $integers = unpack('C<hitLen>/C<algorithm>/n<pkLen>', $rdata, $offset);
         $offset += 4;
         $hitLen = (int) $integers['<hitLen>'];
         $pkLen = (int) $integers['<pkLen>'];
 
-        $hip->setPublicKeyAlgorithm((int) $integers['<algorithm>']);
+        $this->setPublicKeyAlgorithm((int) $integers['<algorithm>']);
 
-        $hip->setHostIdentityTag(substr($rdata, $offset, $hitLen));
+        $this->setHostIdentityTag(substr($rdata, $offset, $hitLen));
         $offset += $hitLen;
 
-        $hip->setPublicKey(substr($rdata, $offset, $pkLen));
+        $this->setPublicKey(substr($rdata, $offset, $pkLen));
         $offset += $pkLen;
 
         while ($offset < $end) {
-            $hip->addRendezvousServer(self::decodeName($rdata, $offset));
+            $this->addRendezvousServer(Message::decodeName($rdata, $offset));
         }
-
-        return $hip;
     }
 }

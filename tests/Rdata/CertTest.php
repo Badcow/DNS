@@ -66,8 +66,8 @@ class CertTest extends TestCase
 
         $wireFormatted = $cert->toWire();
 
-        /** @var CERT $fromWire */
-        $fromWire = CERT::fromWire($wireFormatted);
+        $fromWire = new CERT();
+        $fromWire->fromWire($wireFormatted);
 
         $this->assertEquals(3, $fromWire->getCertificateType());
         $this->assertEquals(65, $fromWire->getKeyTag());
@@ -85,7 +85,9 @@ class CertTest extends TestCase
 
         $text = 'PGP 65 ECC '.$this->certificate;
 
-        $this->assertEquals($cert, CERT::fromText($text));
+        $fromText = new CERT();
+        $fromText->fromText($text);
+        $this->assertEquals($cert, $fromText);
     }
 
     public function testFactory(): void

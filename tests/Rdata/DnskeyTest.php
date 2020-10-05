@@ -65,7 +65,9 @@ class DnskeyTest extends TestCase
         $dnskey->setAlgorithm(Algorithms::RSASHA1);
         $dnskey->setPublicKey(self::$publicKey);
 
-        $this->assertEquals($dnskey, DNSKEY::fromText($rdata));
+        $fromText = new DNSKEY();
+        $fromText->fromText($rdata);
+        $this->assertEquals($dnskey, $fromText);
     }
 
     public function testWire(): void
@@ -83,7 +85,10 @@ class DnskeyTest extends TestCase
         $wireFormat = 'abcde'.$wireFormat.'fghijk';
         $offset = 5;
 
-        $this->assertEquals($dnskey, DNSKEY::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new DNSKEY();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+
+        $this->assertEquals($dnskey, $fromWire);
         $this->assertEquals(5 + $rdLength, $offset);
     }
 }

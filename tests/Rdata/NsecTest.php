@@ -63,7 +63,8 @@ class NsecTest extends TestCase
     {
         $text = 'host.example.com. A MX RRSIG NSEC TYPE1234';
         /** @var NSEC $nsec */
-        $nsec = NSEC::fromText($text);
+        $nsec = new NSEC();
+        $nsec->fromText($text);
 
         $this->assertEquals('host.example.com.', $nsec->getNextDomainName());
         $this->assertEquals(['A', 'MX', 'RRSIG', 'NSEC', 'TYPE1234'], $nsec->getTypes());
@@ -85,9 +86,12 @@ class NsecTest extends TestCase
 
         $text = 'host.example.com. A MX RRSIG NSEC CAA DLV';
         /** @var NSEC $nsec */
-        $nsec = NSEC::fromText($text);
+        $nsec = new NSEC();
+        $nsec->fromText($text);
 
         $this->assertEquals($expectation, $nsec->toWire());
-        $this->assertEquals($nsec, NSEC::fromWire($expectation));
+        $fromWire = new NSEC();
+        $fromWire->fromWire($expectation);
+        $this->assertEquals($nsec, $fromWire);
     }
 }

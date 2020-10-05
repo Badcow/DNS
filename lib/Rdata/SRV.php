@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
+use Badcow\DNS\Validator;
 
 /**
  * Class SrvRdata.
@@ -30,9 +32,6 @@ class SRV implements RdataInterface
 
     const TYPE = 'SRV';
     const TYPE_CODE = 33;
-    const HIGHEST_PORT = 65535;
-    const MAX_PRIORITY = 65535;
-    const MAX_WEIGHT = 65535;
 
     /**
      * The priority of this target host. A client MUST attempt to
@@ -92,7 +91,7 @@ class SRV implements RdataInterface
      */
     public function setPriority(int $priority): void
     {
-        if ($priority < 0 || $priority > static::MAX_PRIORITY) {
+        if (!Validator::isUnsignedInteger($priority, 16)) {
             throw new \InvalidArgumentException('Priority must be an unsigned integer on the range [0-65535]');
         }
 
@@ -114,7 +113,7 @@ class SRV implements RdataInterface
      */
     public function setWeight(int $weight): void
     {
-        if ($weight < 0 || $weight > static::MAX_WEIGHT) {
+        if (!Validator::isUnsignedInteger($weight, 16)) {
             throw new \InvalidArgumentException('Weight must be an unsigned integer on the range [0-65535]');
         }
 
@@ -136,7 +135,7 @@ class SRV implements RdataInterface
      */
     public function setPort(int $port): void
     {
-        if ($port < 0 || $port > static::HIGHEST_PORT) {
+        if (!Validator::isUnsignedInteger($port, 16)) {
             throw new \InvalidArgumentException('Port must be an unsigned integer on the range [0-65535]');
         }
 
@@ -172,33 +171,33 @@ class SRV implements RdataInterface
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function toWire(): string
     {
-        return pack('nnn', $this->priority, $this->weight, $this->port).self::encodeName($this->target);
+        return pack('nnn', $this->priority, $this->weight, $this->port).Message::encodeName($this->target);
     }
 
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $srv = new SRV();
-        $srv->setPriority((int) $rdata[0]);
-        $srv->setWeight((int) $rdata[1]);
-        $srv->setPort((int) $rdata[2]);
-        $srv->setTarget($rdata[3]);
-
-        return $srv;
+        $this->setPriority((int) $rdata[0]);
+        $this->setWeight((int) $rdata[1]);
+        $this->setPort((int) $rdata[2]);
+        $this->setTarget($rdata[3]);
     }
 
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('npriority/nweight/nport', $rdata, $offset);
         $offset += 6;
-        $srv = new self();
-        $srv->setTarget(self::decodeName($rdata, $offset));
-        $srv->setPriority($integers['priority']);
-        $srv->setWeight($integers['weight']);
-        $srv->setPort($integers['port']);
-
-        return $srv;
+        $this->setTarget(Message::decodeName($rdata, $offset));
+        $this->setPriority($integers['priority']);
+        $this->setWeight($integers['weight']);
+        $this->setPort($integers['port']);
     }
 }

@@ -54,7 +54,9 @@ class DsTest extends TestCase
         $expectation->setDigestType(DS::DIGEST_SHA1);
         $expectation->setDigest(self::$digest);
 
-        $this->assertEquals($expectation, DS::fromText('60485 5 1 '.self::$digest));
+        $fromText = new DS();
+        $fromText->fromText('60485 5 1 '.self::$digest);
+        $this->assertEquals($expectation, $fromText);
     }
 
     public function testWire(): void
@@ -66,6 +68,9 @@ class DsTest extends TestCase
         $ds->setDigest(self::$digest);
         $wireFormat = $ds->toWire();
 
-        $this->assertEquals($ds, DS::fromWire($wireFormat));
+        $fromWire = new DS();
+        $fromWire->fromWire($wireFormat);
+
+        $this->assertEquals($ds, $fromWire);
     }
 }

@@ -88,7 +88,9 @@ class RrsigTest extends TestCase
         $rrsig->setSignersName('example.com.');
         $rrsig->setSignature(self::$signature);
 
-        $this->assertEquals($rrsig, RRSIG::fromText($text));
+        $fromText = new RRSIG();
+        $fromText->fromText($text);
+        $this->assertEquals($rrsig, $fromText);
     }
 
     /**
@@ -112,7 +114,9 @@ class RrsigTest extends TestCase
         $wireFormat = 'abcd'.$wireFormat;
         $offset = 4;
 
-        $this->assertEquals($rrsig, RRSIG::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new RRSIG();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $this->assertEquals($rrsig, $fromWire);
         $this->assertEquals(4 + $rdLength, $offset);
     }
 }

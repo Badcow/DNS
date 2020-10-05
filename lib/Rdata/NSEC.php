@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 
 class NSEC implements RdataInterface
@@ -96,39 +97,33 @@ class NSEC implements RdataInterface
      */
     public function toWire(): string
     {
-        return self::encodeName($this->nextDomainName).self::renderBitmap($this->types);
+        return Message::encodeName($this->nextDomainName).self::renderBitmap($this->types);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $iterator = new \ArrayIterator(explode(Tokens::SPACE, $text));
-        $nsec = new self();
-        $nsec->setNextDomainName($iterator->current());
+        $this->setNextDomainName($iterator->current());
         $iterator->next();
         while ($iterator->valid()) {
-            $nsec->addType($iterator->current());
+            $this->addType($iterator->current());
             $iterator->next();
         }
-
-        return $nsec;
     }
 
     /**
      * {@inheritdoc}
      *
-     * @throws UnsupportedTypeException
+     * @throws UnsupportedTypeException|DecodeException
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $nsec = new self();
-        $nsec->setNextDomainName(self::decodeName($rdata, $offset));
+        $this->setNextDomainName(Message::decodeName($rdata, $offset));
         $types = self::parseBitmap($rdata, $offset);
-        array_map([$nsec, 'addType'], $types);
-
-        return $nsec;
+        array_map([$this, 'addType'], $types);
     }
 
     /**

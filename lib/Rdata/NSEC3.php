@@ -234,54 +234,44 @@ class NSEC3 implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return NSEC3
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $nsec3 = new self();
-        $nsec3->setHashAlgorithm((int) array_shift($rdata));
-        $nsec3->setUnsignedDelegationsCovered((bool) array_shift($rdata));
-        $nsec3->setIterations((int) array_shift($rdata));
-        $nsec3->setSalt((string) array_shift($rdata));
-        $nsec3->setNextHashedOwnerName((string) array_shift($rdata));
-        array_map([$nsec3, 'addType'], $rdata);
-
-        return $nsec3;
+        $this->setHashAlgorithm((int) array_shift($rdata));
+        $this->setUnsignedDelegationsCovered((bool) array_shift($rdata));
+        $this->setIterations((int) array_shift($rdata));
+        $this->setSalt((string) array_shift($rdata));
+        $this->setNextHashedOwnerName((string) array_shift($rdata));
+        array_map([$this, 'addType'], $rdata);
     }
 
     /**
      * {@inheritdoc}
      *
-     * @return NSEC3
-     *
-     * @throws UnsupportedTypeException
+     * @throws UnsupportedTypeException|DecodeException
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $values = unpack('C<hashAlgo>/C<flags>/n<iterations>/C<saltLen>', $rdata, $offset);
         $offset += 5;
-        $nsec3 = new self();
-        $nsec3->setHashAlgorithm((int) $values['<hashAlgo>']);
-        $nsec3->setUnsignedDelegationsCovered((bool) $values['<flags>']);
-        $nsec3->setIterations((int) $values['<iterations>']);
+        $this->setHashAlgorithm((int) $values['<hashAlgo>']);
+        $this->setUnsignedDelegationsCovered((bool) $values['<flags>']);
+        $this->setIterations((int) $values['<iterations>']);
 
         $saltLen = (int) $values['<saltLen>'];
         $salt = unpack('H*', substr($rdata, $offset, $saltLen))[1];
-        $nsec3->setSalt($salt);
+        $this->setSalt($salt);
         $offset += $saltLen;
 
         $hashLen = ord(substr($rdata, $offset, 1));
         ++$offset;
         $hash = substr($rdata, $offset, $hashLen);
         $offset += $hashLen;
-        $nsec3->setNextHashedOwnerName(self::base32encode($hash));
+        $this->setNextHashedOwnerName(self::base32encode($hash));
 
         $types = NSEC::parseBitmap($rdata, $offset);
-        array_map([$nsec3, 'addType'], $types);
-
-        return $nsec3;
+        array_map([$this, 'addType'], $types);
     }
 
     /**

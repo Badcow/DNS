@@ -72,7 +72,8 @@ class KxTest extends TestCase
     {
         $text = '10 mail.example.com.';
         /** @var KX $kx */
-        $kx = KX::fromText($text);
+        $kx = new KX();
+        $kx->fromText($text);
 
         $this->assertEquals(10, $kx->getPreference());
         $this->assertEquals('mail.example.com.', $kx->getExchanger());
@@ -87,6 +88,8 @@ class KxTest extends TestCase
         $expectation = pack('n', 10).chr(4).'mail'.chr(7).'example'.chr(3).'com'.chr(0);
 
         $this->assertEquals($expectation, $kx->toWire());
-        $this->assertEquals($kx, KX::fromWire($expectation));
+        $fromWire = new KX();
+        $fromWire->fromWire($expectation);
+        $this->assertEquals($kx, $fromWire);
     }
 }

@@ -124,16 +124,16 @@ class PolymorphicRdata implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
-        return new self(null, $text);
+        $this->setData($text);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        return new self(null, substr($rdata, $offset, $rdLength ?? strlen($rdata)));
+        $this->setData(substr($rdata, $offset, $rdLength ?? strlen($rdata)));
     }
 }

@@ -157,42 +157,32 @@ class TLSA implements RdataInterface
     /**
      * {@inheritdoc}
      *
-     * @return TLSA
-     *
      * @throws ParseException
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $tlsa = new self();
-        $tlsa->setCertificateUsage((int) array_shift($rdata));
-        $tlsa->setSelector((int) array_shift($rdata));
-        $tlsa->setMatchingType((int) array_shift($rdata));
+        $this->setCertificateUsage((int) array_shift($rdata));
+        $this->setSelector((int) array_shift($rdata));
+        $this->setMatchingType((int) array_shift($rdata));
         if (false === $certificateAssociationData = @hex2bin(implode('', $rdata))) {
             throw new ParseException('Unable to parse certificate association data of TLSA record. Malformed hex value.');
         }
-        $tlsa->setCertificateAssociationData($certificateAssociationData);
-
-        return $tlsa;
+        $this->setCertificateAssociationData($certificateAssociationData);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return TLSA
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('C<certUsage>/C<selector>/C<matchingType>', $rdata, $offset);
         $offset += 3;
-        $tlsa = new self();
-        $tlsa->setCertificateUsage($integers['<certUsage>']);
-        $tlsa->setSelector($integers['<selector>']);
-        $tlsa->setMatchingType($integers['<matchingType>']);
+        $this->setCertificateUsage($integers['<certUsage>']);
+        $this->setSelector($integers['<selector>']);
+        $this->setMatchingType($integers['<matchingType>']);
         $cadLen = ($rdLength ?? strlen($rdata)) - 3;
-        $tlsa->setCertificateAssociationData(substr($rdata, $offset, $cadLen));
+        $this->setCertificateAssociationData(substr($rdata, $offset, $cadLen));
         $offset += $cadLen;
-
-        return $tlsa;
     }
 }

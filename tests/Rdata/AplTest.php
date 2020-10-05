@@ -75,7 +75,8 @@ class AplTest extends TestCase
         ];
 
         /** @var APL $apl */
-        $apl = APL::fromText($text);
+        $apl = new APL();
+        $apl->fromText($text);
 
         $this->assertCount(2, $apl->getIncludedAddressRanges());
         $this->assertCount(2, $apl->getExcludedAddressRanges());
@@ -104,7 +105,8 @@ class AplTest extends TestCase
         $apl->addAddressRange(IPBlock::create('2001:acad:dead:beef::/64'), false);
 
         $this->assertEquals($expectation, $apl->toWire());
-        $aplFromWire = APL::fromWire($expectation);
+        $aplFromWire = new APL();
+        $aplFromWire->fromWire($expectation);
 
         $this->assertCount(1, $apl->getIncludedAddressRanges());
         $this->assertCount(1, $apl->getExcludedAddressRanges());

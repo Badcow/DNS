@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Validator;
 
@@ -251,7 +252,7 @@ class IPSECKEY implements RdataInterface
             }
             $wire .= inet_pton($this->gateway);
         } else {
-            $wire .= self::encodeName($this->gateway ?? '.');
+            $wire .= Message::encodeName($this->gateway ?? '.');
         }
 
         if (self::ALGORITHM_NONE !== $this->algorithm && null !== $this->publicKey) {
@@ -263,51 +264,41 @@ class IPSECKEY implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return IPSECKEY
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $ipseckey = new self();
-        $ipseckey->setPrecedence((int) array_shift($rdata));
+        $this->setPrecedence((int) array_shift($rdata));
         array_shift($rdata); //Gateway type is inferred from setGateway.
         $algorithm = (int) array_shift($rdata);
-        $ipseckey->setGateway((string) array_shift($rdata));
+        $this->setGateway((string) array_shift($rdata));
         $publicKey = (0 === $algorithm) ? null : implode('', $rdata);
-        $ipseckey->setPublicKey($algorithm, $publicKey);
-
-        return $ipseckey;
+        $this->setPublicKey($algorithm, $publicKey);
     }
 
     /**
      * {@inheritdoc}
      *
-     * @return IPSECKEY
-     *
      * @throws DecodeException
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $ipseckey = new self();
         $end = $offset + $rdLength ?? strlen($rdata);
 
         $integers = unpack('CPrecedence/CGatewayType/CAlgorithm', $rdata, $offset);
         $offset += 3;
-        $ipseckey->setPrecedence((int) $integers['Precedence']);
+        $this->setPrecedence((int) $integers['Precedence']);
         $gatewayType = $integers['GatewayType'];
         $algorithm = $integers['Algorithm'];
 
-        $ipseckey->setGateway(self::extractGateway($gatewayType, $rdata, $offset));
+        $this->setGateway(self::extractGateway($gatewayType, $rdata, $offset));
 
         if (self::ALGORITHM_NONE !== $algorithm) {
             $publicKey = base64_encode(substr($rdata, $offset, $end - $offset));
-            $ipseckey->setPublicKey($algorithm, $publicKey);
+            $this->setPublicKey($algorithm, $publicKey);
         }
 
         $offset = $end;
-
-        return $ipseckey;
     }
 
     /**
@@ -324,7 +315,7 @@ class IPSECKEY implements RdataInterface
         switch ($gatewayType) {
             case 0:
             case 3:
-                $gateway = self::decodeName($rdata, $offset);
+                $gateway = Message::decodeName($rdata, $offset);
                 break;
             case 1:
                 $gateway = @inet_ntop(substr($rdata, $offset, 4));

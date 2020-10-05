@@ -59,7 +59,8 @@ class ATest extends TestCase
     {
         $text = '200.100.50.1';
         /** @var A $a */
-        $a = A::fromText($text);
+        $a = new A();
+        $a->fromText($text);
 
         $this->assertEquals($text, $a->getAddress());
     }
@@ -72,7 +73,8 @@ class ATest extends TestCase
         $address = '200.100.50.1';
         $expectation = inet_pton($address);
         /** @var A $a */
-        $a = A::fromWire($expectation);
+        $a = new A();
+        $a->fromWire($expectation);
 
         $this->assertEquals($expectation, $a->toWire());
         $this->assertEquals($address, $a->getAddress());
@@ -100,13 +102,15 @@ class ATest extends TestCase
         $wire = pack('C6', 0x07, 0xC0, 0xff, 0x01, 0x01, 0x07); //⍾192.255.1.1⍾
         $offset = 1;
         /** @var A $a */
-        $a = A::fromWire($wire, $offset);
+        $a = new A();
+        $a->fromWire($wire, $offset);
 
         $this->assertEquals('192.255.1.1', $a->getAddress());
         $this->assertEquals(chr(0x07), $wire[$offset]);
 
         $wire = pack('C3', 0x61, 0x62, 0x63);
+        $a = new A();
         $this->expectException(DecodeException::class);
-        $a = A::fromWire($wire);
+        $a->fromWire($wire);
     }
 }

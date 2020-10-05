@@ -64,7 +64,8 @@ class MxTest extends TestCase
     {
         $text = '10 mail.example.com.';
         /** @var MX $mx */
-        $mx = MX::fromText($text);
+        $mx = new MX();
+        $mx->fromText($text);
 
         $this->assertEquals(10, $mx->getPreference());
         $this->assertEquals('mail.example.com.', $mx->getExchange());
@@ -79,6 +80,8 @@ class MxTest extends TestCase
         $expectation = pack('n', 10).chr(4).'mail'.chr(7).'example'.chr(3).'com'.chr(0);
 
         $this->assertEquals($expectation, $mx->toWire());
-        $this->assertEquals($mx, MX::fromWire($expectation));
+        $fromWire = new MX();
+        $fromWire->fromWire($expectation);
+        $this->assertEquals($mx, $fromWire);
     }
 }

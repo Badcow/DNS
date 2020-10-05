@@ -41,7 +41,8 @@ class DlvTest extends TestCase
         $expectation->setDigestType(DLV::DIGEST_SHA1);
         $expectation->setDigest(self::$digest);
 
-        $dlv = DLV::fromText('60485 5 1 '.self::$digest);
+        $dlv = new DLV();
+        $dlv->fromText('60485 5 1 '.self::$digest);
         $this->assertInstanceOf(DLV::class, $dlv);
         $this->assertEquals($expectation, $dlv);
     }
@@ -54,7 +55,8 @@ class DlvTest extends TestCase
         $dlv->setDigestType(DLV::DIGEST_SHA1);
         $dlv->setDigest(self::$digest);
         $wireFormat = $dlv->toWire();
-        $fromWire = DLV::fromWire($wireFormat);
+        $fromWire = new DLV();
+        $fromWire->fromWire($wireFormat);
 
         $this->assertInstanceOf(DLV::class, $fromWire);
         $this->assertEquals($dlv, $fromWire);

@@ -285,43 +285,34 @@ class LOC implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return LOC
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
         $lat = self::dmsToDecimal((int) array_shift($rdata), (int) array_shift($rdata), (float) array_shift($rdata), (string) array_shift($rdata));
         $lon = self::dmsToDecimal((int) array_shift($rdata), (int) array_shift($rdata), (float) array_shift($rdata), (string) array_shift($rdata));
 
-        return Factory::LOC(
-            $lat,
-            $lon,
-            (float) array_shift($rdata),
-            (float) array_shift($rdata),
-            (float) array_shift($rdata),
-            (float) array_shift($rdata)
-        );
+        $this->setLatitude($lat);
+        $this->setLongitude($lon);
+        $this->setAltitude((float) array_shift($rdata));
+        $this->setSize((float) array_shift($rdata));
+        $this->setHorizontalPrecision((float) array_shift($rdata));
+        $this->setVerticalPrecision((float) array_shift($rdata));
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return LOC
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $values = unpack('C<version>/C<size>/C<hp>/C<vp>/l<lat>/l<lon>/l<alt>', $rdata, $offset);
         $offset += 16;
-        $loc = new LOC();
 
-        $loc->setSize(self::exponentValueToNumber($values['<size>']));
-        $loc->setHorizontalPrecision(self::exponentValueToNumber($values['<hp>']));
-        $loc->setVerticalPrecision(self::exponentValueToNumber($values['<vp>']));
-        $loc->setLatitude($values['<lat>'] / 3600000);
-        $loc->setLongitude($values['<lon>'] / 3600000);
-        $loc->setAltitude($values['<alt>']);
-
-        return $loc;
+        $this->setSize(self::exponentValueToNumber($values['<size>']));
+        $this->setHorizontalPrecision(self::exponentValueToNumber($values['<hp>']));
+        $this->setVerticalPrecision(self::exponentValueToNumber($values['<vp>']));
+        $this->setLatitude($values['<lat>'] / 3600000);
+        $this->setLongitude($values['<lon>'] / 3600000);
+        $this->setAltitude($values['<alt>']);
     }
 }

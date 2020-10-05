@@ -27,6 +27,22 @@ use Badcow\DNS\Rdata\SRV;
 class ZoneBuilder
 {
     /**
+     * Mapping of Rdata types to functions that fill them out.
+     *
+     * @var callable[]
+     */
+    private static array $rdataFillers = [
+        SOA::TYPE => __CLASS__.'::fillOutSoa',
+        CNAME::TYPE => __CLASS__.'::fillOutCname',
+        DNAME::TYPE => __CLASS__.'::fillOutCname',
+        SRV::TYPE => __CLASS__.'::fillOutSrv',
+        NS::TYPE => __CLASS__.'::fillOutCname',
+        PTR::TYPE => __CLASS__.'::fillOutCname',
+        MX::TYPE => __CLASS__.'::fillOutMx',
+        AAAA::TYPE => __CLASS__.'::fillOutAaaa',
+    ];
+
+    /**
      * @param Zone $zone
      *
      * @return string
@@ -50,7 +66,7 @@ class ZoneBuilder
             }
 
             if (null !== $rr->getComment()) {
-                $master .= '; '.$rr->getComment();
+                $master .= Tokens::SEMICOLON.Tokens::SPACE.$rr->getComment();
             }
 
             $master .= Tokens::LINE_FEED;
@@ -73,8 +89,7 @@ class ZoneBuilder
             $rr->setName(self::fullyQualify($rr->getName(), $zone->getName()));
             $rr->setTtl($rr->getTtl() ?? $zone->getDefaultTtl());
             $rr->setClass($class);
-            $rdata = $rr->getRdata();
-            static::fillOutRdata($rdata, $zone);
+            static::fillOutRdata($rr->getRdata(), $zone);
         }
     }
 
@@ -105,24 +120,9 @@ class ZoneBuilder
      */
     protected static function fillOutRdata(RdataInterface $rdata, Zone $zone): void
     {
-        $mappings = [
-            SOA::TYPE => 'static::fillOutSoa',
-            CNAME::TYPE => 'static::fillOutCname',
-            DNAME::TYPE => 'static::fillOutCname',
-            SRV::TYPE => 'static::fillOutSrv',
-            NS::TYPE => 'static::fillOutCname',
-            PTR::TYPE => 'static::fillOutCname',
-            MX::TYPE => 'static::fillOutMx',
-            AAAA::TYPE => 'static::fillOutAaaa',
-        ];
-
-        if (!array_key_exists($rdata->getType(), $mappings)) {
-            return;
+        if (array_key_exists($rdata->getType(), self::$rdataFillers)) {
+            call_user_func(self::$rdataFillers[$rdata->getType()], $rdata, $zone);
         }
-
-        /** @var callable $callable */
-        $callable = $mappings[$rdata->getType()];
-        call_user_func($callable, $rdata, $zone);
     }
 
     /**

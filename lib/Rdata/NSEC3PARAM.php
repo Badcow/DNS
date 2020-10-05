@@ -144,40 +144,30 @@ class NSEC3PARAM implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return NSEC3PARAM
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $nsec3param = new self();
-        $nsec3param->setHashAlgorithm((int) array_shift($rdata));
-        $nsec3param->setFlags((int) array_shift($rdata));
-        $nsec3param->setIterations((int) array_shift($rdata));
-        $nsec3param->setSalt((string) array_shift($rdata));
-
-        return $nsec3param;
+        $this->setHashAlgorithm((int) array_shift($rdata));
+        $this->setFlags((int) array_shift($rdata));
+        $this->setIterations((int) array_shift($rdata));
+        $this->setSalt((string) array_shift($rdata));
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return NSEC3PARAM
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('C<algorithm>/C<flags>/n<iterations>/C<saltLen>', $rdata, $offset);
         $saltLen = (int) $integers['<saltLen>'];
         $offset += 5;
-        $nsec3param = new self();
-        $nsec3param->setHashAlgorithm($integers['<algorithm>']);
-        $nsec3param->setFlags($integers['<flags>']);
-        $nsec3param->setIterations($integers['<iterations>']);
+        $this->setHashAlgorithm($integers['<algorithm>']);
+        $this->setFlags($integers['<flags>']);
+        $this->setIterations($integers['<iterations>']);
 
         $saltBin = substr($rdata, $offset, $saltLen);
-        $nsec3param->setSalt(bin2hex($saltBin));
+        $this->setSalt(bin2hex($saltBin));
         $offset += $saltLen;
-
-        return $nsec3param;
     }
 }

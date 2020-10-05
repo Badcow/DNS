@@ -63,7 +63,8 @@ class CaaTest extends TestCase
     {
         $text = '0 iodef "mailto:security@example.com"';
         /** @var CAA $caa */
-        $caa = CAA::fromText($text);
+        $caa = new CAA();
+        $caa->fromText($text);
 
         $this->assertEquals(0, $caa->getFlag());
         $this->assertEquals(CAA::TAG_IODEF, $caa->getTag());
@@ -78,8 +79,11 @@ class CaaTest extends TestCase
         $caa->setTag(CAA::TAG_IODEF);
         $caa->setValue('mailto:security@example.com');
 
+        $fromWire = new CAA();
+        $fromWire->fromWire($expectation);
+
         $this->assertEquals($expectation, $caa->toWire());
-        $this->assertEquals($caa, CAA::fromWire($expectation));
+        $this->assertEquals($caa, $fromWire);
     }
 
     public function testToWireThrowsExceptionIfNotAllParametersAreSet(): void

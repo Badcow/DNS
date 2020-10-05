@@ -76,7 +76,8 @@ class SoaTest extends TestCase
         $expire = 604800;
         $minimum = 3600;
 
-        $soa = SOA::fromText($text);
+        $soa = new SOA();
+        $soa->fromText($text);
 
         $this->assertEquals($mname, $soa->getMname());
         $this->assertEquals($rname, $soa->getRname());
@@ -116,7 +117,9 @@ class SoaTest extends TestCase
         $rdLength = strlen($wireFormat);
         $wireFormat = 'abcde'.$wireFormat;
         $offset = 5;
-        $this->assertEquals($soa, SOA::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new SOA();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $this->assertEquals($soa, $fromWire);
         $this->assertEquals(5 + $rdLength, $offset);
     }
 }

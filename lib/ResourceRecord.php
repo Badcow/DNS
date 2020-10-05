@@ -16,7 +16,6 @@ namespace Badcow\DNS;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\RdataInterface;
-use Badcow\DNS\Rdata\Types;
 use InvalidArgumentException;
 
 class ResourceRecord
@@ -229,7 +228,7 @@ class ResourceRecord
 
         $rdata = $this->rdata->toWire();
 
-        $encoded = A::encodeName($this->name);
+        $encoded = Message::encodeName($this->name);
         $encoded .= pack('nnNn',
             $this->rdata->getTypeCode(),
             $this->classId,
@@ -252,18 +251,14 @@ class ResourceRecord
     public static function fromWire(string $encoded, int &$offset = 0): ResourceRecord
     {
         $rr = new self();
-        $rr->setName(A::decodeName($encoded, $offset));
+        $rr->setName(Message::decodeName($encoded, $offset));
         $integers = unpack('ntype/nclass/Nttl/ndlength', $encoded, $offset);
         $offset += 10;
         $rr->setClassId($integers['class']);
         $rr->setTtl($integers['ttl']);
         $rdLength = $integers['dlength'];
-
-        /** @var callable $callable */
-        $callable = Factory::getRdataClassName(Types::getName($integers['type'])).'::fromWire';
-        /** @var RdataInterface $rdata */
-        $rdata = $callable($encoded, $offset, $rdLength);
-
+        $rdata = Factory::newRdataFromId($integers['type']);
+        $rdata->fromWire($encoded, $offset, $rdLength);
         $rr->setRdata($rdata);
 
         return $rr;

@@ -79,7 +79,8 @@ TXT;
         $text = 'SAMPLE-ALG.EXAMPLE. 853804800 300 '.$mac.' 54321 21 '.$otherData;
         $expectedTimeSigned = new \DateTime('Tue Jan 21 00:00:00 1997');
 
-        $tsig = TSIG::fromText($text);
+        $tsig = new TSIG();
+        $tsig->fromText($text);
 
         $this->assertEquals('SAMPLE-ALG.EXAMPLE.', $tsig->getAlgorithmName());
         $this->assertEquals($expectedTimeSigned, $tsig->getTimeSigned());
@@ -109,7 +110,9 @@ TXT;
         $wireFormat = 'abc'.$wireFormat;
         $offset = 3;
 
-        $this->assertEquals($tsig, TSIG::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new TSIG();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $this->assertEquals($tsig, $fromWire);
         $this->assertEquals(3 + $rdLength, $offset);
     }
 

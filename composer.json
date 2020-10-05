@@ -10,14 +10,14 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": "~7.2",
-        "rlanvin/php-ip": "~2.0",
+        "php": "^7.4",
+        "rlanvin/php-ip": "^2.0",
         "ademarre/binary-to-text-php": "~3.0.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~8.4",
-        "friendsofphp/php-cs-fixer": "~2.1",
-        "phpstan/phpstan": "^0.11"
+        "phpunit/phpunit": "^9.0",
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "phpstan/phpstan": "^0.12"
     },
     "autoload": {
         "psr-4": {

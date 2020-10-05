@@ -65,7 +65,9 @@ class Nsec3paramTest extends TestCase
         $expectation->setIterations(55);
         $expectation->setFlags(0);
 
-        $this->assertEquals($expectation, NSEC3PARAM::fromText('1 0 55 d9143ec07c5977ae'));
+        $fromText = new NSEC3PARAM();
+        $fromText->fromText('1 0 55 d9143ec07c5977ae');
+        $this->assertEquals($expectation, $fromText);
     }
 
     public function testFromWire(): void
@@ -78,7 +80,9 @@ class Nsec3paramTest extends TestCase
 
         $wireFormat = chr(1).chr(0).pack('n', 55).chr(8).hex2bin('d9143ec07c5977ae');
 
-        $this->assertEquals($expectation, NSEC3PARAM::fromWire($wireFormat));
+        $fromWire = new NSEC3PARAM();
+        $fromWire->fromWire($wireFormat);
+        $this->assertEquals($expectation, $fromWire);
     }
 
     public function testFactory(): void

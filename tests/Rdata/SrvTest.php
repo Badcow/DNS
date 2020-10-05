@@ -40,7 +40,7 @@ class SrvTest extends TestCase
         $this->expectExceptionMessage('Port must be an unsigned integer on the range [0-65535]');
 
         $srv = new SRV();
-        $srv->setPort(SRV::HIGHEST_PORT + 1);
+        $srv->setPort(65536);
     }
 
     /**
@@ -52,7 +52,7 @@ class SrvTest extends TestCase
         $this->expectExceptionMessage('Priority must be an unsigned integer on the range [0-65535]');
 
         $srv = new SRV();
-        $srv->setPriority(SRV::MAX_PRIORITY + 1);
+        $srv->setPriority(65536);
     }
 
     /**
@@ -64,7 +64,7 @@ class SrvTest extends TestCase
         $this->expectExceptionMessage('Weight must be an unsigned integer on the range [0-65535]');
 
         $srv = new SRV();
-        $srv->setWeight(SRV::MAX_WEIGHT + 1);
+        $srv->setWeight(65536);
     }
 
     public function testFromText(): void
@@ -76,7 +76,9 @@ class SrvTest extends TestCase
         $srv->setPort(80);
         $srv->setTarget('www.example.com.');
 
-        $this->assertEquals($srv, SRV::fromText($text));
+        $fromText = new SRV();
+        $fromText->fromText($text);
+        $this->assertEquals($srv, $fromText);
     }
 
     public function testWire(): void
@@ -89,6 +91,8 @@ class SrvTest extends TestCase
         $srv->setTarget('www.example.com.');
 
         $this->assertEquals($expectation, $srv->toWire());
-        $this->assertEquals($srv, SRV::fromWire($expectation));
+        $fromWire = new SRV();
+        $fromWire->fromWire($expectation);
+        $this->assertEquals($srv, $fromWire);
     }
 }

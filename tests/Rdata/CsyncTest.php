@@ -71,9 +71,15 @@ class CsyncTest extends TestCase
         $csync->addType(NS::TYPE);
         $csync->addType(AAAA::TYPE);
 
-        $this->assertEquals($csync, CSYNC::fromText('66 3 A NS AAAA'));
+        $fromText = new CSYNC();
+        $fromText->fromText('66 3 A NS AAAA');
+        $this->assertEquals($csync, $fromText);
     }
 
+    /**
+     * @throws \Badcow\DNS\Rdata\DecodeException
+     * @throws \Badcow\DNS\Rdata\UnsupportedTypeException
+     */
     public function testFromWire(): void
     {
         $wireFormat = chr(0x00).chr(0x00).chr(0x00).chr(0x42).
@@ -87,7 +93,10 @@ class CsyncTest extends TestCase
         $expectation->addType(NS::TYPE);
         $expectation->addType(AAAA::TYPE);
 
-        $this->assertEquals($expectation, CSYNC::fromWire($wireFormat));
+        $fromWire = new CSYNC();
+        $fromWire->fromWire($wireFormat);
+
+        $this->assertEquals($expectation, $fromWire);
     }
 
     public function testFactory(): void

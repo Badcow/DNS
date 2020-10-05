@@ -72,20 +72,17 @@ class TXT implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $rdLength = $rdLength ?? strlen($rdata);
-        $txt = new static();
-        $txt->setText(substr($rdata, $offset, $rdLength));
+        $this->setText(substr($rdata, $offset, $rdLength));
         $offset += $rdLength;
-
-        return $txt;
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $string = new StringIterator($text);
         $txt = new StringIterator();
@@ -95,10 +92,7 @@ class TXT implements RdataInterface
             $string->next();
         }
 
-        $rdata = new static();
-        $rdata->setText((string) $txt);
-
-        return $rdata;
+        $this->setText((string) $txt);
     }
 
     /**

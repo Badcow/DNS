@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Validator;
 
@@ -25,14 +26,6 @@ class TKEY implements RdataInterface
 
     const TYPE = 'TKEY';
     const TYPE_CODE = 249;
-
-    const ERROR_NONE = 0;
-    const ERROR_BADSIG = 16;
-    const ERROR_BADKEY = 17;
-    const ERROR_BADTIME = 18;
-    const ERROR_BADMODE = 19;
-    const ERROR_BADNAME = 20;
-    const ERROR_BADALG = 21;
 
     /**
      * The algorithm name is in the form of a domain name with the same
@@ -245,7 +238,7 @@ class TKEY implements RdataInterface
      */
     public function toWire(): string
     {
-        $wire = self::encodeName($this->algorithm);
+        $wire = Message::encodeName($this->algorithm);
         $wire .= pack('NNnnn',
             $this->inception->format('U'),
             $this->expiration->format('U'),
@@ -262,40 +255,33 @@ class TKEY implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return TKEY
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $tkey = new self();
-        $tkey->setAlgorithm((string) array_shift($rdata));
+        $this->setAlgorithm((string) array_shift($rdata));
         if (false === $inception = \DateTime::createFromFormat('U', (string) array_shift($rdata))) {
             throw new \UnexpectedValueException('Unable to parse inception date of TKEY Rdata.');
         }
-        $tkey->setInception($inception);
+        $this->setInception($inception);
 
         if (false === $expiration = \DateTime::createFromFormat('U', (string) array_shift($rdata))) {
             throw new \UnexpectedValueException('Unable to parse expiration date of TKEY Rdata.');
         }
-        $tkey->setExpiration($expiration);
+        $this->setExpiration($expiration);
 
-        $tkey->setMode((int) array_shift($rdata));
-        $tkey->setError((int) array_shift($rdata));
-        $tkey->setKeyData((string) base64_decode((string) array_shift($rdata)));
-        $tkey->setOtherData((string) base64_decode((string) array_shift($rdata)));
-
-        return $tkey;
+        $this->setMode((int) array_shift($rdata));
+        $this->setError((int) array_shift($rdata));
+        $this->setKeyData((string) base64_decode((string) array_shift($rdata)));
+        $this->setOtherData((string) base64_decode((string) array_shift($rdata)));
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return TKEY
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $algorithm = self::decodeName($rdata, $offset);
+        $algorithm = Message::decodeName($rdata, $offset);
         $integers = unpack('N<inception>/N<expiration>/n<mode>/n<error>/n<keySize>', $rdata, $offset);
         $offset += 14;
         $keySize = (int) $integers['<keySize>'];
@@ -306,24 +292,21 @@ class TKEY implements RdataInterface
         $otherData = substr($rdata, $offset, $otherDataSize);
         $offset += $otherDataSize;
 
-        $tkey = new self();
-        $tkey->setAlgorithm($algorithm);
+        $this->setAlgorithm($algorithm);
 
         if (false === $inception = \DateTime::createFromFormat('U', (string) $integers['<inception>'])) {
             throw new \UnexpectedValueException('Unable to parse inception date of TKEY Rdata.');
         }
-        $tkey->setInception($inception);
+        $this->setInception($inception);
 
         if (false === $expiration = \DateTime::createFromFormat('U', (string) $integers['<expiration>'])) {
             throw new \UnexpectedValueException('Unable to parse expiration date of TKEY Rdata.');
         }
-        $tkey->setExpiration($expiration);
+        $this->setExpiration($expiration);
 
-        $tkey->setMode((int) $integers['<mode>']);
-        $tkey->setError((int) $integers['<error>']);
-        $tkey->setKeyData($keyData);
-        $tkey->setOtherData($otherData);
-
-        return $tkey;
+        $this->setMode((int) $integers['<mode>']);
+        $this->setError((int) $integers['<error>']);
+        $this->setKeyData($keyData);
+        $this->setOtherData($otherData);
     }
 }

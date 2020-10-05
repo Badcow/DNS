@@ -41,7 +41,8 @@ class CdsTest extends TestCase
         $expectation->setDigestType(CDS::DIGEST_SHA1);
         $expectation->setDigest(self::$digest);
 
-        $cds = CDS::fromText('60485 5 1 '.self::$digest);
+        $cds = new CDS();
+        $cds->fromText('60485 5 1 '.self::$digest);
         $this->assertInstanceOf(CDS::class, $cds);
         $this->assertEquals($expectation, $cds);
     }
@@ -54,7 +55,8 @@ class CdsTest extends TestCase
         $cds->setDigestType(CDS::DIGEST_SHA1);
         $cds->setDigest(self::$digest);
         $wireFormat = $cds->toWire();
-        $fromWire = CDS::fromWire($wireFormat);
+        $fromWire = new CDS();
+        $fromWire->fromWire($wireFormat);
 
         $this->assertInstanceOf(CDS::class, $fromWire);
         $this->assertEquals($cds, $fromWire);

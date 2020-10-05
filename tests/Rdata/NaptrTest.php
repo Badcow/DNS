@@ -91,7 +91,9 @@ class NaptrTest extends TestCase
         $wireFormat = 'abc'.$wireFormat;
         $offset = 3;
 
-        $this->assertEquals($naptr, NAPTR::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new NAPTR();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $this->assertEquals($naptr, $fromWire);
         $this->assertEquals(3 + $rdLength, $offset);
     }
 
@@ -108,7 +110,8 @@ class NaptrTest extends TestCase
      */
     public function testFromText(string $text, int $order, int $preference, string $flags, string $services, string $regexp, string $replacement): void
     {
-        $naptr = NAPTR::fromText($text);
+        $naptr = new NAPTR();
+        $naptr->fromText($text);
 
         $this->assertEquals($order, $naptr->getOrder());
         $this->assertEquals($preference, $naptr->getPreference());

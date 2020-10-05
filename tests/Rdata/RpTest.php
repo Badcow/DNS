@@ -29,7 +29,8 @@ class RpTest extends TestCase
 
     public function testFromText(): void
     {
-        $rp = RP::fromText('louie.trantor.umd.edu. lam1.people.umd.edu.');
+        $rp = new RP();
+        $rp->fromText('louie.trantor.umd.edu. lam1.people.umd.edu.');
 
         $this->assertEquals('louie.trantor.umd.edu.', $rp->getMailboxDomainName());
         $this->assertEquals('lam1.people.umd.edu.', $rp->getTxtDomainName());
@@ -55,6 +56,8 @@ class RpTest extends TestCase
         $rp->setTxtDomainName('lam1.people.umd.edu.');
 
         $this->assertEquals($expectation, $rp->toWire());
-        $this->assertEquals($rp, RP::fromWire($expectation));
+        $fromWire = new RP();
+        $fromWire->fromWire($expectation);
+        $this->assertEquals($rp, $fromWire);
     }
 }

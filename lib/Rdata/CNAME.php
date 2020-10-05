@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
+
 /**
  * @see https://tools.ietf.org/html/rfc1035#section-3.3.1
  */
@@ -61,28 +63,22 @@ class CNAME implements RdataInterface
             throw new \InvalidArgumentException('Target must be set.');
         }
 
-        return self::encodeName($this->target);
+        return Message::encodeName($this->target);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
-        $cname = new static();
-        $cname->setTarget($text);
-
-        return $cname;
+        $this->setTarget($text);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $cname = new static();
-        $cname->setTarget(self::decodeName($rdata, $offset));
-
-        return $cname;
+        $this->setTarget(Message::decodeName($rdata, $offset));
     }
 }

@@ -44,22 +44,22 @@ interface RdataInterface
     public function toWire(): string;
 
     /**
-     * Return an instance of Rdata from its textual representation.
+     * Populate Rdata from its textual representation.
      *
      * @param string $text
      *
-     * @return RdataInterface
+     * @return void
      */
-    public static function fromText(string $text): RdataInterface;
+    public function fromText(string $text): void;
 
     /**
-     * Return an instance of Rdata from its wire representation.
+     * Populate Rdata from its wire representation.
      *
      * @param string $rdata
      * @param int    $offset
      * @param int    $rdLength
      *
-     * @return RdataInterface
+     * @return void
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface;
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void;
 }

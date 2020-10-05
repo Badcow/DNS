@@ -129,32 +129,27 @@ class SSHFP implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return SSHFP
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
 
-        return Factory::SSHFP((int) array_shift($rdata), (int) array_shift($rdata), (string) array_shift($rdata));
+        $this->setAlgorithm((int) array_shift($rdata));
+        $this->setFingerprintType((int) array_shift($rdata));
+        $this->setFingerprint((string) array_shift($rdata));
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return SSHFP
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('C<algorithm>/C<fpType>', $rdata, $offset);
         $offset += 2;
-        $sshfp = new self();
-        $sshfp->setAlgorithm($integers['<algorithm>']);
-        $sshfp->setFingerprintType($integers['<fpType>']);
+        $this->setAlgorithm($integers['<algorithm>']);
+        $this->setFingerprintType($integers['<fpType>']);
         $fpLen = ($rdLength ?? strlen($rdata)) - 2;
-        $sshfp->setFingerprint(bin2hex(substr($rdata, $offset, $fpLen)));
+        $this->setFingerprint(bin2hex(substr($rdata, $offset, $fpLen)));
         $offset += $fpLen;
-
-        return $sshfp;
     }
 }

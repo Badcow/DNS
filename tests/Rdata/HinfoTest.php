@@ -57,14 +57,16 @@ class HinfoTest extends TestCase
 
     public function testFromWire(): void
     {
-        $hinfo = HINFO::fromWire('"2.7GHz" "Ubuntu 12.04"');
+        $hinfo = new HINFO();
+        $hinfo->fromWire('"2.7GHz" "Ubuntu 12.04"');
         $this->assertEquals('2.7GHz', $hinfo->getCpu());
         $this->assertEquals('Ubuntu 12.04', $hinfo->getOs());
     }
 
     public function testFromText(): void
     {
-        $hinfo = HINFO::fromText('"2.7GHz" "Ubuntu 12.04"');
+        $hinfo = new HINFO();
+        $hinfo->fromText('2.7GHz "Ubuntu 12.04"');
         $this->assertEquals('2.7GHz', $hinfo->getCpu());
         $this->assertEquals('Ubuntu 12.04', $hinfo->getOs());
     }

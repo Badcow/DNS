@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Validator;
 
 /**
@@ -186,7 +187,7 @@ class DHCID implements RdataInterface
             throw new \BadMethodCallException('Identifier and Fully Qualified Domain Name (FQDN) must both be set on DHCID object before calling calculateDigest().');
         }
 
-        $fqdn = self::encodeName($this->fqdn);
+        $fqdn = Message::encodeName($this->fqdn);
         $identifier = pack('H*', str_replace(':', '', strtolower($this->identifier)));
         if (0 === $this->identifierType) {
             $identifier = chr($this->htype).$identifier;
@@ -220,36 +221,28 @@ class DHCID implements RdataInterface
     /**
      * {@inheritdoc}
      *
-     * @return DHCID
-     *
      * @throws \Exception
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         if (false === $decoded = base64_decode($text, true)) {
             throw new \Exception(sprintf('Unable to base64 decode text "%s".', $text));
         }
 
         $rdata = unpack('nIdentifierType/CDigestType/H*Digest', $decoded);
-        $dhcid = new self();
-        $dhcid->setIdentifierType((int) $rdata['IdentifierType']);
-        $dhcid->setDigest((string) $rdata['Digest']);
-
-        return $dhcid;
+        $this->setIdentifierType((int) $rdata['IdentifierType']);
+        $this->setDigest((string) $rdata['Digest']);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $rdLength = $rdLength ?? strlen($rdata);
         $rdata = unpack('nIdentifierType/CDigestType/H*Digest', substr($rdata, $offset, $rdLength));
-        $dhcid = new self();
-        $dhcid->setIdentifierType((int) $rdata['IdentifierType']);
-        $dhcid->setDigest((string) $rdata['Digest']);
+        $this->setIdentifierType((int) $rdata['IdentifierType']);
+        $this->setDigest((string) $rdata['Digest']);
         $offset += $rdLength;
-
-        return $dhcid;
     }
 }

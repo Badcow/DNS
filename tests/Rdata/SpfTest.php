@@ -24,7 +24,8 @@ class SpfTest extends TestCase
         $text = '"v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all"';
 
         /** @var SPF $spf */
-        $spf = SPF::fromText($text);
+        $spf = new SPF();
+        $spf->fromText($text);
 
         $this->assertEquals('SPF', $spf->getType());
         $this->assertEquals('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all', $spf->getText());
@@ -48,7 +49,9 @@ class SpfTest extends TestCase
         $spf = new SPF();
         $spf->setText('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all');
 
-        $this->assertEquals($spf, SPF::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new SPF();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $this->assertEquals($spf, $fromWire);
     }
 
     public function testFactory(): void

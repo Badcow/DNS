@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 
 /**
@@ -288,7 +289,7 @@ class RRSIG implements RdataInterface
             $this->keyTag
         );
 
-        $wire .= self::encodeName($this->signersName);
+        $wire .= Message::encodeName($this->signersName);
         $wire .= $this->signature;
 
         return $wire;
@@ -296,61 +297,49 @@ class RRSIG implements RdataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return RRSIG
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $rrsig = new static();
-        $rrsig->setTypeCovered((string) array_shift($rdata));
-        $rrsig->setAlgorithm((int) array_shift($rdata));
-        $rrsig->setLabels((int) array_shift($rdata));
-        $rrsig->setOriginalTtl((int) array_shift($rdata));
-        $sigExpiration = (string) array_shift($rdata);
-        $sigInception = (string) array_shift($rdata);
-        $rrsig->setKeyTag((int) array_shift($rdata));
-        $rrsig->setSignersName((string) array_shift($rdata));
-        $rrsig->setSignature(implode('', $rdata));
 
-        $rrsig->setSignatureExpiration(self::makeDateTime($sigExpiration));
-        $rrsig->setSignatureInception(self::makeDateTime($sigInception));
-
-        return $rrsig;
+        $this->setTypeCovered((string) array_shift($rdata));
+        $this->setAlgorithm((int) array_shift($rdata));
+        $this->setLabels((int) array_shift($rdata));
+        $this->setOriginalTtl((int) array_shift($rdata));
+        $this->setSignatureExpiration(self::makeDateTime((string) array_shift($rdata)));
+        $this->setSignatureInception(self::makeDateTime((string) array_shift($rdata)));
+        $this->setKeyTag((int) array_shift($rdata));
+        $this->setSignersName((string) array_shift($rdata));
+        $this->setSignature(implode('', $rdata));
     }
 
     /**
      * {@inheritdoc}
      *
-     * @return RRSIG
-     *
      * @throws UnsupportedTypeException
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $rdLength = $rdLength ?? strlen($rdata);
         $end = $offset + $rdLength;
         $values = unpack('n<type>/C<algorithm>/C<labels>/N<originalTtl>/N<sigExpiration>/N<sigInception>/n<keyTag>', $rdata, $offset);
         $offset += 18;
-        $signersName = self::decodeName($rdata, $offset);
+        $signersName = Message::decodeName($rdata, $offset);
 
         $sigLen = $end - $offset;
         $signature = substr($rdata, $offset, $sigLen);
         $offset += $sigLen;
 
-        $rrsig = new static();
-        $rrsig->setTypeCovered(Types::getName($values['<type>']));
-        $rrsig->setAlgorithm($values['<algorithm>']);
-        $rrsig->setLabels($values['<labels>']);
-        $rrsig->setOriginalTtl($values['<originalTtl>']);
-        $rrsig->setKeyTag($values['<keyTag>']);
-        $rrsig->setSignersName($signersName);
-        $rrsig->setSignature($signature);
+        $this->setTypeCovered(Types::getName($values['<type>']));
+        $this->setAlgorithm($values['<algorithm>']);
+        $this->setLabels($values['<labels>']);
+        $this->setOriginalTtl($values['<originalTtl>']);
+        $this->setKeyTag($values['<keyTag>']);
+        $this->setSignersName($signersName);
+        $this->setSignature($signature);
 
-        $rrsig->setSignatureExpiration(self::makeDateTime((string) $values['<sigExpiration>']));
-        $rrsig->setSignatureInception(self::makeDateTime((string) $values['<sigInception>']));
-
-        return $rrsig;
+        $this->setSignatureExpiration(self::makeDateTime((string) $values['<sigExpiration>']));
+        $this->setSignatureInception(self::makeDateTime((string) $values['<sigInception>']));
     }
 
     /**

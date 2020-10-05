@@ -59,7 +59,9 @@ class KeyTest extends TestCase
         $key->setAlgorithm(Algorithms::RSASHA1);
         $key->setPublicKey(self::$publicKey);
 
-        $this->assertEquals($key, KEY::fromText($rdata));
+        $fromText = new KEY();
+        $fromText->fromText($rdata);
+        $this->assertEquals($key, $fromText);
     }
 
     public function testWire(): void
@@ -78,7 +80,9 @@ class KeyTest extends TestCase
         $wireFormat = 'abcde'.$wireFormat.'fghijk';
         $offset = 5;
 
-        $this->assertEquals($key, KEY::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new KEY();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $this->assertEquals($key, $fromWire);
         $this->assertEquals(5 + $rdLength, $offset);
     }
 }

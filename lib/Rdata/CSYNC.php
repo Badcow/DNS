@@ -117,33 +117,27 @@ class CSYNC implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $csync = new static();
-        $csync->setSoaSerial((int) array_shift($rdata));
-        $csync->setFlags((int) array_shift($rdata));
-        array_map([$csync, 'addType'], $rdata);
-
-        return $csync;
+        $this->setSoaSerial((int) array_shift($rdata));
+        $this->setFlags((int) array_shift($rdata));
+        array_map([$this, 'addType'], $rdata);
     }
 
     /**
      * {@inheritdoc}
      *
-     * @throws UnsupportedTypeException
+     * @throws UnsupportedTypeException|DecodeException
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('Nserial/nflags', $rdata, $offset);
         $offset += 6;
         $types = NSEC::parseBitmap($rdata, $offset);
 
-        $csync = new static();
-        $csync->setSoaSerial((int) $integers['serial']);
-        $csync->setFlags((int) $integers['flags']);
-        array_map([$csync, 'addType'], $types);
-
-        return $csync;
+        $this->setSoaSerial((int) $integers['serial']);
+        $this->setFlags((int) $integers['flags']);
+        array_map([$this, 'addType'], $types);
     }
 }

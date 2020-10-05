@@ -30,7 +30,8 @@ class UnknownTypeTest extends TestCase
 
     public function testFromText(): void
     {
-        $uk = UnknownType::fromText('\# 32 9aa065581e1a247d5e884a44adfa7cb4a849c7b90ade83c8fb9eae5984ea7fba');
+        $uk = new UnknownType();
+        $uk->fromText('\# 32 9aa065581e1a247d5e884a44adfa7cb4a849c7b90ade83c8fb9eae5984ea7fba');
         $this->assertEquals(hex2bin('9aa065581e1a247d5e884a44adfa7cb4a849c7b90ade83c8fb9eae5984ea7fba'), $uk->getData());
     }
 
@@ -38,7 +39,8 @@ class UnknownTypeTest extends TestCase
     {
         $expectation = '\# 32 9aa065581e1a247d5e884a44adfa7cb4a849c7b90ade83c8fb9eae5984ea7fba';
         $wireFormat = hex2bin('9aa065581e1a247d5e884a44adfa7cb4a849c7b90ade83c8fb9eae5984ea7fba');
-        $uk = UnknownType::fromWire($wireFormat);
+        $uk = new UnknownType();
+        $uk->fromWire($wireFormat);
 
         $this->assertEquals($expectation, $uk->toText());
         $this->assertEquals($wireFormat, $uk->toWire());

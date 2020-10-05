@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Validator;
 
@@ -221,49 +222,39 @@ class NAPTR implements RdataInterface
     {
         $encoded = pack('nn', $this->order, $this->preference);
         $encoded .= sprintf('"%s""%s""%s"', $this->flags ?? '', $this->services ?? '', $this->regexp);
-        $encoded .= self::encodeName($this->replacement);
+        $encoded .= Message::encodeName($this->replacement);
 
         return $encoded;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return NAPTR
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $naptr = new self();
-        $naptr->setOrder((int) array_shift($rdata));
-        $naptr->setPreference((int) array_shift($rdata));
-        $naptr->setFlags(trim((string) array_shift($rdata), Tokens::DOUBLE_QUOTES));
-        $naptr->setServices(trim((string) array_shift($rdata), Tokens::DOUBLE_QUOTES));
-        $naptr->setRegexp(trim((string) array_shift($rdata), Tokens::DOUBLE_QUOTES));
-        $naptr->setReplacement((string) array_shift($rdata));
-
-        return $naptr;
+        $this->setOrder((int) array_shift($rdata));
+        $this->setPreference((int) array_shift($rdata));
+        $this->setFlags(trim((string) array_shift($rdata), Tokens::DOUBLE_QUOTES));
+        $this->setServices(trim((string) array_shift($rdata), Tokens::DOUBLE_QUOTES));
+        $this->setRegexp(trim((string) array_shift($rdata), Tokens::DOUBLE_QUOTES));
+        $this->setReplacement((string) array_shift($rdata));
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return NAPTR
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $naptr = new self();
         $integers = unpack('nOrder/nPreference', $rdata, $offset);
         $offset += 4;
 
-        $naptr->setOrder($integers['Order']);
-        $naptr->setPreference($integers['Preference']);
-        $naptr->setFlags(self::extractText($rdata, $offset));
-        $naptr->setServices(self::extractText($rdata, $offset));
-        $naptr->setRegexp(self::extractText($rdata, $offset));
-        $naptr->setReplacement(self::decodeName($rdata, $offset));
-
-        return $naptr;
+        $this->setOrder($integers['Order']);
+        $this->setPreference($integers['Preference']);
+        $this->setFlags(self::extractText($rdata, $offset));
+        $this->setServices(self::extractText($rdata, $offset));
+        $this->setRegexp(self::extractText($rdata, $offset));
+        $this->setReplacement(Message::decodeName($rdata, $offset));
     }
 
     /**

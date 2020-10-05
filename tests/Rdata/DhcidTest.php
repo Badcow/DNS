@@ -41,6 +41,47 @@ class DhcidTest extends TestCase
         $this->assertEquals(49, $dhcid->getTypeCode());
     }
 
+    public function testSetGetHtype(): void
+    {
+        $dhcid = new DHCID();
+        $dhcid->setHtype(3);
+        $this->assertEquals(3, $dhcid->getHtype());
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('HType must be an 8-bit integer.');
+        $dhcid->setHtype(256);
+    }
+
+    public function testSetGetFqdn(): void
+    {
+        $dhcid = new DHCID();
+        $dhcid->setFqdn('abc.example.com.');
+        $this->assertEquals('abc.example.com.', $dhcid->getFqdn());
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('"abc.example.com" is not a fully qualified domain name.');
+        $dhcid->setFqdn('abc.example.com');
+    }
+
+    public function testSetIdentifierTypeThrowsExceptionIfTypeIsMoreThanSixteenBits(): void
+    {
+        $dhcid = new DHCID();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Identifier type must be a 16-bit integer.');
+        $dhcid->setIdentifierType(65536);
+    }
+
+    public function testCalculateDigestThrowsExceptionIfIdentifierIsNotSet(): void
+    {
+        $dhcid = new DHCID();
+        $dhcid->setFqdn('abc.example.com.');
+
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessage('Identifier and Fully Qualified Domain Name (FQDN) must both be set on DHCID object before calling calculateDigest().');
+        $dhcid->calculateDigest();
+    }
+
     /**
      * @dataProvider getDataProvider
      *
@@ -73,7 +114,8 @@ class DhcidTest extends TestCase
         $expectation->setIdentifier($identifierType, $identifier);
         $expectation->setFqdn($fqdn);
 
-        $dhcid = DHCID::fromWire($expectation->toWire());
+        $dhcid = new DHCID();
+        $dhcid->fromWire($expectation->toWire());
 
         $this->assertEquals($expectation->getIdentifierType(), $dhcid->getIdentifierType());
         $this->assertEquals($expectation->getDigestType(), $dhcid->getDigestType());
@@ -99,12 +141,18 @@ class DhcidTest extends TestCase
         $expectation->setFqdn($fqdn);
         $expectation->calculateDigest();
 
-        $dhcid = DHCID::fromText($text);
+        $dhcid = new DHCID();
+        $dhcid->fromText($text);
 
         $this->assertEquals($expectation->getIdentifierType(), $dhcid->getIdentifierType());
         $this->assertEquals($expectation->getDigestType(), $dhcid->getDigestType());
         $this->assertEquals($expectation->getDigest(), $dhcid->getDigest());
         $this->assertEquals($expectation->toText(), $dhcid->toText());
+
+        $dhcid = new DHCID();
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessageMatches('/Unable to base64 decode text ".*"\./');
+        $dhcid->fromText($text.'%');
     }
 
     /**
@@ -130,6 +178,6 @@ class DhcidTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Identifier and FQDN cannot be null if digest is null.');
-        $dhcid = Factory::DHCID(null, 2, null);
+        Factory::DHCID(null, 2, null);
     }
 }

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
+
 /**
  * @see https://tools.ietf.org/html/rfc1035#section-3.3.9
  */
@@ -96,32 +98,26 @@ class MX implements RdataInterface
             throw new \InvalidArgumentException('No exchange has been set on MX object.');
         }
 
-        return pack('n', $this->preference).self::encodeName($this->exchange);
+        return pack('n', $this->preference).Message::encodeName($this->exchange);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(' ', $text);
-        $mx = new self();
-        $mx->setPreference((int) $rdata[0]);
-        $mx->setExchange($rdata[1]);
-
-        return $mx;
+        $this->setPreference((int) $rdata[0]);
+        $this->setExchange($rdata[1]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $mx = new self();
-        $mx->setPreference(unpack('n', $rdata, $offset)[1]);
+        $this->setPreference(unpack('n', $rdata, $offset)[1]);
         $offset += 2;
-        $mx->setExchange(self::decodeName($rdata, $offset));
-
-        return $mx;
+        $this->setExchange(Message::decodeName($rdata, $offset));
     }
 }

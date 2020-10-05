@@ -62,7 +62,8 @@ class TlsaTest extends TestCase
     public function testFromWire(): void
     {
         $wireFormat = chr(0).chr(1).chr(2).hex2bin($this->cerAssociationData);
-        $tlsa = TLSA::fromWire($wireFormat);
+        $tlsa = new TLSA();
+        $tlsa->fromWire($wireFormat);
 
         $this->assertEquals(0, $tlsa->getCertificateUsage());
         $this->assertEquals(1, $tlsa->getSelector());
@@ -73,7 +74,9 @@ class TlsaTest extends TestCase
         $wireFormat = 'abc'.$wireFormat;
         $offset = 3;
 
-        $this->assertEquals($tlsa, TLSA::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new TLSA();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $this->assertEquals($tlsa, $fromWire);
         $this->assertEquals(3 + $rdLength, $offset);
     }
 
@@ -83,7 +86,8 @@ class TlsaTest extends TestCase
     public function testFromText(): void
     {
         $text = '0 1 2 '.$this->cerAssociationData;
-        $tlsa = TLSA::fromText($text);
+        $tlsa = new TLSA();
+        $tlsa->fromText($text);
 
         $this->assertEquals(0, $tlsa->getCertificateUsage());
         $this->assertEquals(1, $tlsa->getSelector());
@@ -121,6 +125,7 @@ class TlsaTest extends TestCase
     {
         $text = '0 1 2 92003ba34942dc74152e2f2c408d29eca5a520g';
         $this->expectException(ParseException::class);
-        TLSA::fromText($text);
+        $tlsa = new TLSA();
+        $tlsa->fromText($text);
     }
 }

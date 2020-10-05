@@ -46,7 +46,8 @@ class AaaaTest extends TestCase
     {
         $text = '2003:dead:beef:4dad:23:46:bb:101';
         /** @var AAAA $aaaa */
-        $aaaa = AAAA::fromText($text);
+        $aaaa = new AAAA();
+        $aaaa->fromText($text);
 
         $this->assertEquals($text, $aaaa->getAddress());
     }
@@ -59,7 +60,8 @@ class AaaaTest extends TestCase
         $address = '2003:dead:beef:4dad:23:46:bb:101';
         $expectation = inet_pton($address);
         /** @var AAAA $aaaa */
-        $aaaa = AAAA::fromWire($expectation);
+        $aaaa = new AAAA();
+        $aaaa->fromWire($expectation);
 
         $this->assertEquals($expectation, $aaaa->toWire());
         $this->assertEquals($address, $aaaa->getAddress());
@@ -98,14 +100,16 @@ class AaaaTest extends TestCase
     {
         $wire = chr(0x07).inet_pton('beef::1').chr(0x07);
         $offset = 1;
-        $aaaa = AAAA::fromWire($wire, $offset);
+        $aaaa = new AAAA();
+        $aaaa->fromWire($wire, $offset);
 
         $this->assertEquals('beef::1', $aaaa->getAddress());
         $this->assertEquals(17, $offset);
 
         $wire = pack('C3', 0x61, 0x62, 0x63);
+        $aaaa = new AAAA();
         $this->expectException(DecodeException::class);
-        $aaaa = AAAA::fromWire($wire);
+        $aaaa->fromWire($wire);
     }
 
     public function testFactory(): void

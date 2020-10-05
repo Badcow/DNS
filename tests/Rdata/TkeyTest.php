@@ -115,7 +115,9 @@ DATA;
         $rdLength = strlen($wireFormat);
         $wireFormat = 'abcdefg'.$wireFormat;
         $offset = 7;
-        $this->assertEquals($tkey, TKEY::fromWire($wireFormat, $offset, $rdLength));
+        $fromWire = new TKEY();
+        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $this->assertEquals($tkey, $fromWire);
         $this->assertEquals(7 + $rdLength, $offset);
     }
 
@@ -134,7 +136,9 @@ DATA;
         $text .= str_replace([Tokens::CARRIAGE_RETURN, Tokens::LINE_FEED], '', $this->dummyKeyData).' ';
         $text .= str_replace([Tokens::CARRIAGE_RETURN, Tokens::LINE_FEED], '', $this->dummyOtherData);
 
-        $this->assertEquals($expectation, TKEY::fromText($text));
+        $fromText = new TKEY();
+        $fromText->fromText($text);
+        $this->assertEquals($expectation, $fromText);
     }
 
     public function testFactory(): void

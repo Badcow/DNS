@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\Parser\Tokens;
+use Badcow\DNS\Validator;
 
 /**
  * {@link https://tools.ietf.org/html/rfc7553}.
@@ -24,8 +25,6 @@ class URI implements RdataInterface
 
     const TYPE = 'URI';
     const TYPE_CODE = 256;
-    const MAX_PRIORITY = 65535;
-    const MAX_WEIGHT = 65535;
 
     /**
      * This field holds the priority of the target URI in this RR.  Its
@@ -68,7 +67,7 @@ class URI implements RdataInterface
      */
     public function setPriority(int $priority): void
     {
-        if ($priority < 0 || $priority > static::MAX_PRIORITY) {
+        if (!Validator::isUnsignedInteger($priority, 16)) {
             throw new \InvalidArgumentException('Priority must be an unsigned integer on the range [0-65535]');
         }
 
@@ -90,7 +89,7 @@ class URI implements RdataInterface
      */
     public function setWeight(int $weight): void
     {
-        if ($weight < 0 || $weight > static::MAX_WEIGHT) {
+        if (!Validator::isUnsignedInteger($weight, 16)) {
             throw new \InvalidArgumentException('Weight must be an unsigned integer on the range [0-65535]');
         }
 
@@ -134,30 +133,26 @@ class URI implements RdataInterface
         return pack('nn', $this->priority, $this->weight).$this->target;
     }
 
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $uri = new self();
-        $uri->setPriority((int) array_shift($rdata));
-        $uri->setWeight((int) array_shift($rdata));
-        $target = implode(' ', $rdata);
-        $uri->setTarget(trim($target, '"'));
-
-        return $uri;
+        $this->setPriority((int) array_shift($rdata));
+        $this->setWeight((int) array_shift($rdata));
+        $this->setTarget(trim(implode(Tokens::SPACE, $rdata), Tokens::DOUBLE_QUOTES));
     }
 
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('npriority/nweight', $rdata, $offset);
         $offset += 4;
         $targetLen = ($rdLength ?? strlen($rdata)) - 4;
 
-        $uri = new self();
-        $uri->setTarget(substr($rdata, $offset, $targetLen));
-        $uri->setPriority($integers['priority']);
-        $uri->setWeight($integers['weight']);
+        $this->setTarget(substr($rdata, $offset, $targetLen));
+        $this->setPriority($integers['priority']);
+        $this->setWeight($integers['weight']);
         $offset += $targetLen;
-
-        return $uri;
     }
 }

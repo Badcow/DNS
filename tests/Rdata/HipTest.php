@@ -71,7 +71,10 @@ class HipTest extends TestCase
         array_map([$hip, 'addRendezvousServer'], $this->rvs);
         $wireFormat = $hip->toWire();
 
-        $this->assertEquals($hip, HIP::fromWire($wireFormat));
+        $fromWire = new HIP();
+        $fromWire->fromWire($wireFormat);
+
+        $this->assertEquals($hip, $fromWire);
     }
 
     public function testFromText(): void
@@ -83,7 +86,9 @@ class HipTest extends TestCase
         array_map([$expectation, 'addRendezvousServer'], $this->rvs);
         $text = '2 200100107b1a74df365639cc39f1d578 AwEAAbdxyhNuSutc5EMzxTs9LBPCIkOFH8cIvM4p9+LrV4e19WzK00+CI6zBCQTdtWsuxKbWIy87UOoJTwkUs7lBu+Upr1gsNrut79ryra+bSRGQb1slImA8YVJyuIDsj7kwzG7jnERNqnWxZ48AWkskmdHaVDP4BcelrTI3rMXdXF5D rvs0.example.com. rvs1.example.com. rvs2.example.com.';
 
-        $this->assertEquals($expectation, HIP::fromText($text));
+        $fromText = new HIP();
+        $fromText->fromText($text);
+        $this->assertEquals($expectation, $fromText);
     }
 
     public function testFactory(): void

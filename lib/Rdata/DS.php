@@ -136,34 +136,28 @@ class DS implements RdataInterface
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
-        $ds = new static();
-        $ds->setKeyTag((int) array_shift($rdata));
-        $ds->setAlgorithm((int) array_shift($rdata));
-        $ds->setDigestType((int) array_shift($rdata));
-        $ds->setDigest((string) array_shift($rdata));
-
-        return $ds;
+        $this->setKeyTag((int) array_shift($rdata));
+        $this->setAlgorithm((int) array_shift($rdata));
+        $this->setDigestType((int) array_shift($rdata));
+        $this->setDigest((string) array_shift($rdata));
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('ntag/Calgorithm/Cdtype', $rdata);
         $offset += 4;
-        $ds = new static();
-        $ds->setKeyTag($integers['tag']);
-        $ds->setAlgorithm($integers['algorithm']);
-        $ds->setDigestType($integers['dtype']);
+        $this->setKeyTag($integers['tag']);
+        $this->setAlgorithm($integers['algorithm']);
+        $this->setDigestType($integers['dtype']);
 
         $digestLen = ($rdLength ?? strlen($rdata)) - 4;
-        $ds->setDigest(substr($rdata, $offset, $digestLen));
+        $this->setDigest(substr($rdata, $offset, $digestLen));
         $offset += $digestLen;
-
-        return $ds;
     }
 }

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
+
 /**
  * {@link https://tools.ietf.org/html/rfc2230}.
  */
@@ -94,32 +96,26 @@ class KX implements RdataInterface
             throw new \InvalidArgumentException('No exchanger has been set on KX object.');
         }
 
-        return pack('n', $this->preference).self::encodeName($this->exchanger);
+        return pack('n', $this->preference).Message::encodeName($this->exchanger);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function fromText(string $text): RdataInterface
+    public function fromText(string $text): void
     {
         $rdata = explode(' ', $text);
-        $kx = new self();
-        $kx->setPreference((int) $rdata[0]);
-        $kx->setExchanger($rdata[1]);
-
-        return $kx;
+        $this->setPreference((int) $rdata[0]);
+        $this->setExchanger($rdata[1]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): RdataInterface
+    public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $kx = new self();
-        $kx->setPreference(unpack('n', $rdata, $offset)[1]);
+        $this->setPreference(unpack('n', $rdata, $offset)[1]);
         $offset += 2;
-        $kx->setExchanger(self::decodeName($rdata, $offset));
-
-        return $kx;
+        $this->setExchanger(Message::decodeName($rdata, $offset));
     }
 }
