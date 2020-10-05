@@ -77,6 +77,7 @@ class Parser
     public function makeZone(string $name, string $string, int $commentOptions = Comments::NONE): Zone
     {
         $this->zone = new Zone($name);
+        $this->lastStatedDomain = $name;
         $normalisedZone = Normaliser::normalise($string, $commentOptions);
 
         foreach (explode(Tokens::LINE_FEED, $normalisedZone) as $line) {
