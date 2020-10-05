@@ -4,5 +4,3 @@ parameters:
   checkGenericClassInNonGenericObjectType: false
   paths:
     - lib/
-  autoload_files:
-    - %currentWorkingDirectory%/vendor/autoload.php
