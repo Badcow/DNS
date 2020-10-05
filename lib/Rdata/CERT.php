@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
-use Badcow\DNS\Algorithms as _Algorithms;
+use Badcow\DNS\Algorithms;
 use Badcow\DNS\Parser\Tokens;
+use InvalidArgumentException;
 
 /*
  * {@link https://tools.ietf.org/html/rfc4398#section-2.1}.
@@ -78,7 +79,7 @@ class CERT implements RdataInterface
     /**
      * @param int|string $certificateType
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setCertificateType($certificateType): void
     {
@@ -109,7 +110,7 @@ class CERT implements RdataInterface
     /**
      * @param string|int $algorithm
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setAlgorithm($algorithm): void
     {
@@ -119,21 +120,17 @@ class CERT implements RdataInterface
             return;
         }
 
-        $this->algorithm = _Algorithms::getAlgorithmValue((string) $algorithm);
+        $this->algorithm = Algorithms::getAlgorithmValue((string) $algorithm);
     }
 
     /**
      * @param string $certificate Base64 encoded string
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setCertificate(string $certificate): void
     {
-        if (false === $decoded = base64_decode($certificate, true)) {
-            throw new \InvalidArgumentException('The certificate must be a valid Base64 encoded string.');
-        }
-
-        $this->certificate = $decoded;
+        $this->certificate = $certificate;
     }
 
     /**
@@ -141,7 +138,7 @@ class CERT implements RdataInterface
      */
     public function getCertificate(): string
     {
-        return base64_encode($this->certificate);
+        return $this->certificate;
     }
 
     /**
@@ -150,9 +147,9 @@ class CERT implements RdataInterface
     public function toText(): string
     {
         $type = (array_key_exists($this->certificateType, self::MNEMONICS)) ? self::MNEMONICS[$this->certificateType] : (string) $this->certificateType;
-        $algorithm = (array_key_exists($this->algorithm, _Algorithms::MNEMONICS)) ? _Algorithms::MNEMONICS[$this->algorithm] : (string) $this->algorithm;
+        $algorithm = (array_key_exists($this->algorithm, Algorithms::MNEMONICS)) ? Algorithms::MNEMONICS[$this->algorithm] : (string) $this->algorithm;
 
-        return sprintf('%s %s %s %s', $type, (string) $this->keyTag, $algorithm, $this->getCertificate());
+        return sprintf('%s %s %s %s', $type, (string) $this->keyTag, $algorithm, base64_encode($this->certificate));
     }
 
     /**
@@ -172,7 +169,7 @@ class CERT implements RdataInterface
         $this->setCertificateType((string) array_shift($rdata));
         $this->setKeyTag((int) array_shift($rdata));
         $this->setAlgorithm((string) array_shift($rdata));
-        $this->setCertificate(implode('', $rdata));
+        $this->setCertificate(base64_decode(implode('', $rdata)));
     }
 
     /**
@@ -187,17 +184,17 @@ class CERT implements RdataInterface
         $this->setAlgorithm((int) $integers['algorithm']);
 
         $certLen = ($rdLength ?? strlen($rdata)) - 5;
-        $this->setCertificate(base64_encode(substr($rdata, $offset, $certLen)));
+        $this->setCertificate(substr($rdata, $offset, $certLen));
         $offset += $certLen;
     }
 
     /**
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function getKeyTypeValue(string $keyTypeMnemonic): int
     {
         if (false === $keyTypeValue = array_search($keyTypeMnemonic, self::MNEMONICS, true)) {
-            throw new \InvalidArgumentException(sprintf('"%s" is not a valid key type mnemonic.', $keyTypeMnemonic));
+            throw new InvalidArgumentException(sprintf('"%s" is not a valid key type mnemonic.', $keyTypeMnemonic));
         }
 
         return (int) $keyTypeValue;
@@ -206,12 +203,12 @@ class CERT implements RdataInterface
     /**
      * Get the associated mnemonic of a key type.
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function getKeyTypeMnemonic(int $keyTypeValue): string
     {
         if (!array_key_exists($keyTypeValue, self::MNEMONICS)) {
-            throw new \InvalidArgumentException(sprintf('"%d" is not a valid key type.', $keyTypeValue));
+            throw new InvalidArgumentException(sprintf('"%d" is not a valid key type.', $keyTypeValue));
         }
 
         return self::MNEMONICS[$keyTypeValue];

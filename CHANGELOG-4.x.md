@@ -14,4 +14,8 @@ must instantiate the object first, and then call `fromText` method. All paramete
   * `DS::setDigest($digest)` now expects the raw binary form of the digest. Similarly `DS::getDigest` returns a raw binary
   digest. `hex2bin()` and `bin2hex()` should be used on the setter and getter, respectively, if you want to handle
   hexadecimal encoded strings. These changes apply to all child classes as well (`CDS`, `DLV` and `TA`).
+  * `CERT::setCertificate($cert)` now expects the raw binary form of the certificate. Similarly `CERT::getCertificate()`
+  returns a raw binary certificate. `base64_decode()` and `base64_encode()` should be used on the setter and getter, respectively,
+  if you want to handle Base64 encoded string.
+  
 * New method `DS::calculateDigest(string $owner, DNSKEY $dnskey)` will calculate and set the digest using the DNSKEY rdata object. 
