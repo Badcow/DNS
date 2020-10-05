@@ -6,3 +6,4 @@ must instantiate the object first, and then call `fromWire` method. All paramete
 * `Badcow\DNS\Rdata\RdataInterface::fromText` is no longer static and does not return an instance of the class. You now
 must instantiate the object first, and then call `fromText` method. All parameters are the same.
 * Deleted `Bacow\DNS\Rdata\Algorithms`, use `Bacow\DNS\Algorithms` instead. 
+* [PR #73](https://github.com/Badcow/DNS/pull/73) Resolves issue where records with integers are not parsed correctly. (Thank you, [Hossein Taleghani](https://github.com/a3dho3yn))
