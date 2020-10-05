@@ -185,7 +185,7 @@ class Normaliser
         $lines = [];
 
         foreach (explode(Tokens::LINE_FEED, $string) as $line) {
-            if ('' !== $line = trim($line)) {
+            if ('' !== $line = rtrim($line)) {
                 $lines[] = $line;
             }
         }

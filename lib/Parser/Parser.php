@@ -102,7 +102,6 @@ class Parser
         list($entry, $comment) = $this->extractComment($line);
 
         $this->currentResourceRecord = new ResourceRecord();
-        $this->currentResourceRecord->setTtl($this->zone->getDefaultTtl());
         $this->currentResourceRecord->setComment($comment);
 
         if ('' === $entry) {
@@ -169,14 +168,14 @@ class Parser
      */
     private function populateWithLastStated(): void
     {
-        if (null === $this->currentResourceRecord->getName()) {
+        if (empty($this->currentResourceRecord->getName())) {
             $this->currentResourceRecord->setName($this->lastStatedDomain);
         } else {
             $this->lastStatedDomain = $this->currentResourceRecord->getName();
         }
 
         if (null === $this->currentResourceRecord->getTtl()) {
-            $this->currentResourceRecord->setTtl($this->lastStatedTtl);
+            $this->currentResourceRecord->setTtl($this->lastStatedTtl ?? $this->zone->getDefaultTTl());
         } else {
             $this->lastStatedTtl = $this->currentResourceRecord->getTtl();
         }
@@ -271,7 +270,7 @@ class Parser
     }
 
     /**
-     * Determine if the iterant is a TTL (i.e. it is an integer).
+     * Determine if the iterant is a TTL (i.e. it is an integer after domain-name).
      *
      * @param string $origin the previously assumed resource record parameter, either 'CLASS' or NULL
      */
@@ -281,6 +280,10 @@ class Parser
             return false;
         }
 
+        if ($iterator->key() < 1) {
+            return false;
+        }
+        
         $iterator->next();
         if ('CLASS' === $origin) {
             $isTtl = $this->isType($iterator);
