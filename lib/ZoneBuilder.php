@@ -31,7 +31,7 @@ class ZoneBuilder
      *
      * @var callable[]
      */
-    private static array $rdataFillers = [
+    private static $rdataFillers = [
         SOA::TYPE => __CLASS__.'::fillOutSoa',
         CNAME::TYPE => __CLASS__.'::fillOutCname',
         DNAME::TYPE => __CLASS__.'::fillOutCname',
