@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit colors="true"
-         bootstrap="vendor/autoload.php"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/8.4/phpunit.xsd"
-        >
-    <php>
-        <ini name="error_reporting" value="-1" />
-        <ini name="date.timezone" value="UTC" />
-    </php>
-    <testsuites>
-        <testsuite name="Badcow DNS Zone Test Suite">
-            <directory>./tests</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist>
-            <directory>./lib</directory>
-            <exclude>
-                <directory>./tests</directory>
-                <directory>./vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="true" bootstrap="vendor/autoload.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory>./lib</directory>
+    </include>
+    <exclude>
+      <directory>./tests</directory>
+      <directory>./vendor</directory>
+    </exclude>
+  </coverage>
+  <php>
+    <ini name="error_reporting" value="-1"/>
+    <ini name="date.timezone" value="UTC"/>
+  </php>
+  <testsuites>
+    <testsuite name="Badcow DNS Zone Test Suite">
+      <directory>./tests</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>
