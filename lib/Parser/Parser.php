@@ -15,19 +15,14 @@ namespace Badcow\DNS\Parser;
 
 use Badcow\DNS\Classes;
 use Badcow\DNS\Rdata\Factory;
-use Badcow\DNS\Rdata\PTR;
 use Badcow\DNS\Rdata\RdataInterface;
 use Badcow\DNS\Rdata\Types;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
+use Exception;
 
 class Parser
 {
-    /**
-     * @var string
-     */
-    private $string;
-
     /**
      * @var Zone
      */
@@ -65,10 +60,7 @@ class Parser
      */
     public function __construct(array $rdataHandlers = [])
     {
-        $this->rdataHandlers = array_merge(
-            [PTR::TYPE => [$this, 'ptrHandler']],
-            $rdataHandlers
-        );
+        $this->rdataHandlers = $rdataHandlers;
     }
 
     /**
@@ -85,9 +77,9 @@ class Parser
     public function makeZone(string $name, string $string, int $commentOptions = Comments::NONE): Zone
     {
         $this->zone = new Zone($name);
-        $this->string = Normaliser::normalise($string, $commentOptions);
+        $normalisedZone = Normaliser::normalise($string, $commentOptions);
 
-        foreach (explode(Tokens::LINE_FEED, $this->string) as $line) {
+        foreach (explode(Tokens::LINE_FEED, $normalisedZone) as $line) {
             $this->processLine($line);
         }
 
@@ -283,7 +275,7 @@ class Parser
         if ($iterator->key() < 1) {
             return false;
         }
-        
+
         $iterator->next();
         if ('CLASS' === $origin) {
             $isTtl = $this->isType($iterator);
@@ -363,29 +355,8 @@ class Parser
 
         try {
             return Factory::textToRdataType($type, $iterator->getRemainingAsString());
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new ParseException(sprintf('Could not extract Rdata from resource record "%s".', (string) $iterator), null, $exception);
         }
-    }
-
-    /**
-     * This handler addresses the special case where an integer resource name could be confused for a TTL, for instance:
-     * 50 IN PTR mx1.acme.com.
-     *
-     * In the above, if the integer is below 256 then it is assumed to represent an octet of an IPv4 address.
-     */
-    private function ptrHandler(ResourceRecordIterator $iterator): PTR
-    {
-        if (null === $this->currentResourceRecord->getName() && null !== $this->currentResourceRecord->getTtl()) {
-            if ($this->currentResourceRecord->getTtl() < 256) {
-                $this->currentResourceRecord->setName((string) $this->currentResourceRecord->getTtl());
-                $this->currentResourceRecord->setTtl(null);
-            }
-        }
-
-        $ptr = new PTR();
-        $ptr->fromText($iterator->getRemainingAsString());
-
-        return $ptr;
     }
 }
