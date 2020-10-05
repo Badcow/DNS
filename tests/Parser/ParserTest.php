@@ -409,7 +409,7 @@ badcow.co.     1h5m IN SOA   ns.badcow.co. hostmaster.badcow.co. (
                              4w1d       ; expire
                              1h         ; minimum
                              )
-overflow      3551w IN A     4.3.2.1
+overflow      615000000w IN A     4.3.2.1
 numeric       12345 IN A     9.9.9.9
 DNS;
         $zone = Parser::parse('badcow.co.', $record);
