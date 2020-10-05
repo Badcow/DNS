@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Algorithms;
+use Badcow\DNS\Parser\Parser;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\RRSIG;
@@ -118,5 +119,35 @@ class RrsigTest extends TestCase
         $fromWire->fromWire($wireFormat, $offset, $rdLength);
         $this->assertEquals($rrsig, $fromWire);
         $this->assertEquals(4 + $rdLength, $offset);
+    }
+
+    public function testIssue75(): void
+    {
+        $string = <<<'DNS'
+$ORIGIN example.com.
+ RRSIG	A 5 3 86400 20050322173103 20030220173103 2642 example.com. (
+		sLGSfcmcvXQ4EGMXrUFFE1JO17AxhspZY8xXiCLEDN95
+		S90KgnDUKzzIUTjjGao0G7XpzhoCgsXyAyJeTgTwa4v5
+		ICV8xCF1dpUMb7aHRw2l0MA2dDZ30w33QTqU7TEbETpy
+		NqTbK9qaabsTTXSIGg2ChKV8MwiGm/TyjnARjVo= )
+DNS;
+
+        $zone = Parser::parse('example.com.', $string);
+        $this->assertCount(1, $zone);
+        $rr = $zone[0];
+        $rrsig = $rr->getRdata();
+
+        $this->assertEquals('example.com.', $rr->getName());
+        $this->assertEquals(RRSIG::TYPE, $rrsig->getType());
+
+        $this->assertEquals(A::TYPE, $rrsig->getTypeCovered());
+        $this->assertEquals(Algorithms::RSASHA1, $rrsig->getAlgorithm());
+        $this->assertEquals(3, $rrsig->getLabels());
+        $this->assertEquals(86400, $rrsig->getOriginalTtl());
+        $this->assertEquals(\DateTime::createFromFormat('YmdHis', '20050322173103'), $rrsig->getSignatureExpiration());
+        $this->assertEquals(\DateTime::createFromFormat('YmdHis', '20030220173103'), $rrsig->getSignatureInception());
+        $this->assertEquals(2642, $rrsig->getKeyTag());
+        $this->assertEquals('example.com.', $rrsig->getSignersName());
+        $this->assertEquals('sLGSfcmcvXQ4EGMXrUFFE1JO17AxhspZY8xXiCLEDN95S90KgnDUKzzIUTjjGao0G7XpzhoCgsXyAyJeTgTwa4v5ICV8xCF1dpUMb7aHRw2l0MA2dDZ30w33QTqU7TEbETpyNqTbK9qaabsTTXSIGg2ChKV8MwiGm/TyjnARjVo=', $rrsig->getSignature());
     }
 }
