@@ -62,8 +62,6 @@ class Parser
 
     /**
      * Parser constructor.
-     *
-     * @param array $rdataHandlers
      */
     public function __construct(array $rdataHandlers = [])
     {
@@ -74,12 +72,6 @@ class Parser
     }
 
     /**
-     * @param string $name
-     * @param string $zone
-     * @param int    $commentOptions
-     *
-     * @return Zone
-     *
      * @throws ParseException
      */
     public static function parse(string $name, string $zone, int $commentOptions = Comments::NONE): Zone
@@ -88,12 +80,6 @@ class Parser
     }
 
     /**
-     * @param string $name
-     * @param string $string
-     * @param int    $commentOptions
-     *
-     * @return Zone
-     *
      * @throws ParseException
      */
     public function makeZone(string $name, string $string, int $commentOptions = Comments::NONE): Zone
@@ -109,8 +95,6 @@ class Parser
     }
 
     /**
-     * @param string $line
-     *
      * @throws ParseException
      */
     private function processLine(string $line): void
@@ -140,8 +124,6 @@ class Parser
     }
 
     /**
-     * @param ResourceRecordIterator $iterator
-     *
      * @throws ParseException
      */
     private function processEntry(ResourceRecordIterator $iterator): void
@@ -208,8 +190,6 @@ class Parser
 
     /**
      * Processes control entries at the top of a BIND record, i.e. $ORIGIN, $TTL, $INCLUDE, etc.
-     *
-     * @param ResourceRecordIterator $iterator
      */
     private function processControlEntry(ResourceRecordIterator $iterator): void
     {
@@ -226,10 +206,6 @@ class Parser
 
     /**
      * Determine if iterant is a resource name.
-     *
-     * @param ResourceRecordIterator $iterator
-     *
-     * @return bool
      */
     private function isResourceName(ResourceRecordIterator $iterator): bool
     {
@@ -259,10 +235,7 @@ class Parser
     /**
      * Determine if iterant is a class.
      *
-     * @param ResourceRecordIterator $iterator
-     * @param string|null            $origin   the previously assumed resource record parameter, either 'TTL' or NULL
-     *
-     * @return bool
+     * @param string|null $origin the previously assumed resource record parameter, either 'TTL' or NULL
      */
     private function isClass(ResourceRecordIterator $iterator, $origin = null): bool
     {
@@ -283,10 +256,6 @@ class Parser
 
     /**
      * Determine if current iterant is an Rdata type string.
-     *
-     * @param ResourceRecordIterator $iterator
-     *
-     * @return bool
      */
     private function isType(ResourceRecordIterator $iterator): bool
     {
@@ -295,10 +264,6 @@ class Parser
 
     /**
      * Determine if iterant is a control entry such as $TTL, $ORIGIN, $INCLUDE, etcetera.
-     *
-     * @param ResourceRecordIterator $iterator
-     *
-     * @return bool
      */
     private function isControlEntry(ResourceRecordIterator $iterator): bool
     {
@@ -308,10 +273,7 @@ class Parser
     /**
      * Determine if the iterant is a TTL (i.e. it is an integer).
      *
-     * @param ResourceRecordIterator $iterator
-     * @param string                 $origin   the previously assumed resource record parameter, either 'CLASS' or NULL
-     *
-     * @return bool
+     * @param string $origin the previously assumed resource record parameter, either 'CLASS' or NULL
      */
     private function isTTL(ResourceRecordIterator $iterator, $origin = null): bool
     {
@@ -332,8 +294,6 @@ class Parser
 
     /**
      * Split a DNS zone line into a resource record and a comment.
-     *
-     * @param string $rr
      *
      * @return array [$entry, $comment]
      */
@@ -363,10 +323,6 @@ class Parser
 
     /**
      * Extract text within double quotation context.
-     *
-     * @param StringIterator $string
-     *
-     * @return string
      */
     private function extractDoubleQuotedText(StringIterator $string): string
     {
@@ -391,10 +347,6 @@ class Parser
     }
 
     /**
-     * @param ResourceRecordIterator $iterator
-     *
-     * @return RdataInterface
-     *
      * @throws ParseException
      */
     private function extractRdata(ResourceRecordIterator $iterator): RdataInterface
@@ -418,10 +370,6 @@ class Parser
      * 50 IN PTR mx1.acme.com.
      *
      * In the above, if the integer is below 256 then it is assumed to represent an octet of an IPv4 address.
-     *
-     * @param ResourceRecordIterator $iterator
-     *
-     * @return PTR
      */
     private function ptrHandler(ResourceRecordIterator $iterator): PTR
     {

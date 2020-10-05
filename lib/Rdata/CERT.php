@@ -70,9 +70,6 @@ class CERT implements RdataInterface
      */
     private $certificate;
 
-    /**
-     * @return int
-     */
     public function getCertificateType(): int
     {
         return $this->certificateType;
@@ -94,25 +91,16 @@ class CERT implements RdataInterface
         $this->certificateType = self::getKeyTypeValue((string) $certificateType);
     }
 
-    /**
-     * @return int
-     */
     public function getKeyTag(): int
     {
         return $this->keyTag;
     }
 
-    /**
-     * @param int $keyTag
-     */
     public function setKeyTag(int $keyTag): void
     {
         $this->keyTag = $keyTag;
     }
 
-    /**
-     * @return int
-     */
     public function getAlgorithm(): int
     {
         return $this->algorithm;
@@ -204,10 +192,6 @@ class CERT implements RdataInterface
     }
 
     /**
-     * @param string $keyTypeMnemonic
-     *
-     * @return int
-     *
      * @throws \InvalidArgumentException
      */
     public static function getKeyTypeValue(string $keyTypeMnemonic): int
@@ -221,10 +205,6 @@ class CERT implements RdataInterface
 
     /**
      * Get the associated mnemonic of a key type.
-     *
-     * @param int $keyTypeValue
-     *
-     * @return string
      *
      * @throws \InvalidArgumentException
      */

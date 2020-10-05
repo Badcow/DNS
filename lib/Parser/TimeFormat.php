@@ -29,8 +29,6 @@ class TimeFormat
      * Check if given token looks like time format.
      *
      * @param string $value
-     *
-     * @return bool
      */
     public static function isTimeFormat($value): bool
     {
@@ -41,8 +39,6 @@ class TimeFormat
      * Convert human readable time format to seconds.
      *
      * @param string $value
-     *
-     * @return int
      */
     public static function toSeconds($value): int
     {
@@ -62,10 +58,6 @@ class TimeFormat
 
     /**
      * Convert number of seconds to human readable format.
-     *
-     * @param int $seconds
-     *
-     * @return string
      */
     public static function toHumanReadable(int $seconds): string
     {

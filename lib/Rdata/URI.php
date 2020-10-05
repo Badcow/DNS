@@ -61,8 +61,6 @@ class URI implements RdataInterface
     }
 
     /**
-     * @param int $priority
-     *
      * @throws \InvalidArgumentException
      */
     public function setPriority(int $priority): void
@@ -83,8 +81,6 @@ class URI implements RdataInterface
     }
 
     /**
-     * @param int $weight
-     *
      * @throws \InvalidArgumentException
      */
     public function setWeight(int $weight): void
@@ -104,9 +100,6 @@ class URI implements RdataInterface
         return $this->target;
     }
 
-    /**
-     * @param string $target
-     */
     public function setTarget(string $target): void
     {
         if (false === filter_var($target, FILTER_VALIDATE_URL)) {

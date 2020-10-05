@@ -49,10 +49,6 @@ class Classes
 
     /**
      * Determine if a class is valid.
-     *
-     * @param string $class
-     *
-     * @return bool
      */
     public static function isValid(string $class): bool
     {
@@ -64,10 +60,6 @@ class Classes
     }
 
     /**
-     * @param string $className
-     *
-     * @return int
-     *
      * @throws \InvalidArgumentException
      */
     public static function getClassId(string $className): int
@@ -83,11 +75,6 @@ class Classes
         return self::CLASS_IDS[$className];
     }
 
-    /**
-     * @param int $classId
-     *
-     * @return string
-     */
     public static function getClassName(int $classId): string
     {
         if (array_key_exists($classId, self::IDS_CLASSES)) {

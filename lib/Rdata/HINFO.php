@@ -36,9 +36,6 @@ class HINFO implements RdataInterface
      */
     private $os;
 
-    /**
-     * @param string|null $cpu
-     */
     public function setCpu(?string $cpu): void
     {
         $this->cpu = $cpu;
@@ -52,9 +49,6 @@ class HINFO implements RdataInterface
         return $this->cpu;
     }
 
-    /**
-     * @param string|null $os
-     */
     public function setOs(?string $os): void
     {
         $this->os = $os;
@@ -103,11 +97,6 @@ class HINFO implements RdataInterface
         $this->setOs(self::extractText($string));
     }
 
-    /**
-     * @param StringIterator $string
-     *
-     * @return string
-     */
     private static function extractText(StringIterator $string): string
     {
         $txt = new StringIterator();

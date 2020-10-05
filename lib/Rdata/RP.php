@@ -36,33 +36,21 @@ class RP implements RdataInterface
      */
     private $txtDomainName;
 
-    /**
-     * @return string
-     */
     public function getMailboxDomainName(): string
     {
         return $this->mailboxDomainName;
     }
 
-    /**
-     * @param string $mailboxDomainName
-     */
     public function setMailboxDomainName(string $mailboxDomainName): void
     {
         $this->mailboxDomainName = $mailboxDomainName;
     }
 
-    /**
-     * @return string
-     */
     public function getTxtDomainName(): string
     {
         return $this->txtDomainName;
     }
 
-    /**
-     * @param string $txtDomainName
-     */
     public function setTxtDomainName(string $txtDomainName): void
     {
         $this->txtDomainName = $txtDomainName;

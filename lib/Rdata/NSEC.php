@@ -38,25 +38,16 @@ class NSEC implements RdataInterface
      */
     private $types = [];
 
-    /**
-     * @return string
-     */
     public function getNextDomainName(): string
     {
         return $this->nextDomainName;
     }
 
-    /**
-     * @param string $nextDomainName
-     */
     public function setNextDomainName(string $nextDomainName): void
     {
         $this->nextDomainName = $nextDomainName;
     }
 
-    /**
-     * @param string $type
-     */
     public function addType(string $type): void
     {
         $this->types[] = $type;
@@ -70,9 +61,6 @@ class NSEC implements RdataInterface
         $this->types = [];
     }
 
-    /**
-     * @return array
-     */
     public function getTypes(): array
     {
         return $this->types;
@@ -127,9 +115,6 @@ class NSEC implements RdataInterface
     }
 
     /**
-     * @param string $rdata
-     * @param int    $offset
-     *
      * @return string[]
      *
      * @throws UnsupportedTypeException
@@ -164,8 +149,6 @@ class NSEC implements RdataInterface
 
     /**
      * @param string[] $types
-     *
-     * @return string
      *
      * @throws UnsupportedTypeException
      */

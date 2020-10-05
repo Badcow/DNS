@@ -64,17 +64,12 @@ class LOC implements RdataInterface
      */
     private $verticalPrecision = 10.0;
 
-    /**
-     * @param float $latitude
-     */
     public function setLatitude(float $latitude): void
     {
         $this->latitude = (float) $latitude;
     }
 
     /**
-     * @param string $format
-     *
      * @return float|string|null
      */
     public function getLatitude(string $format = self::FORMAT_DECIMAL)
@@ -86,17 +81,12 @@ class LOC implements RdataInterface
         return $this->latitude;
     }
 
-    /**
-     * @param float $longitude
-     */
     public function setLongitude(float $longitude): void
     {
         $this->longitude = (float) $longitude;
     }
 
     /**
-     * @param string $format
-     *
      * @return float|string|null
      */
     public function getLongitude(string $format = self::FORMAT_DECIMAL)
@@ -109,8 +99,6 @@ class LOC implements RdataInterface
     }
 
     /**
-     * @param float $altitude
-     *
      * @throws \OutOfRangeException
      */
     public function setAltitude(float $altitude): void
@@ -122,17 +110,12 @@ class LOC implements RdataInterface
         $this->altitude = (float) $altitude;
     }
 
-    /**
-     * @return float
-     */
     public function getAltitude(): float
     {
         return $this->altitude;
     }
 
     /**
-     * @param float $horizontalPrecision
-     *
      * @throws \OutOfRangeException
      */
     public function setHorizontalPrecision(float $horizontalPrecision): void
@@ -144,17 +127,12 @@ class LOC implements RdataInterface
         $this->horizontalPrecision = (float) $horizontalPrecision;
     }
 
-    /**
-     * @return float
-     */
     public function getHorizontalPrecision(): float
     {
         return $this->horizontalPrecision;
     }
 
     /**
-     * @param float $size
-     *
      * @throws \OutOfRangeException
      */
     public function setSize(float $size): void
@@ -166,17 +144,12 @@ class LOC implements RdataInterface
         $this->size = (float) $size;
     }
 
-    /**
-     * @return float
-     */
     public function getSize(): float
     {
         return $this->size;
     }
 
     /**
-     * @param float $verticalPrecision
-     *
      * @throws \OutOfRangeException
      */
     public function setVerticalPrecision(float $verticalPrecision): void
@@ -188,9 +161,6 @@ class LOC implements RdataInterface
         $this->verticalPrecision = $verticalPrecision;
     }
 
-    /**
-     * @return float
-     */
     public function getVerticalPrecision(): float
     {
         return $this->verticalPrecision;
@@ -214,11 +184,6 @@ class LOC implements RdataInterface
 
     /**
      * Determine the degree minute seconds value from decimal.
-     *
-     * @param float  $decimal
-     * @param string $axis
-     *
-     * @return string
      */
     private function toDms(float $decimal, string $axis = self::LATITUDE): string
     {
@@ -273,8 +238,6 @@ class LOC implements RdataInterface
      * @param int    $min        Minutes
      * @param float  $sec        Seconds
      * @param string $hemisphere Either 'N', 'S', 'E', or 'W'
-     *
-     * @return float
      */
     public static function dmsToDecimal(int $deg, int $min, float $sec, string $hemisphere): float
     {

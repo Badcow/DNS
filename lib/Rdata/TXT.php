@@ -31,9 +31,6 @@ class TXT implements RdataInterface
      */
     private $text;
 
-    /**
-     * @param string|null $text
-     */
     public function setText(?string $text): void
     {
         if (null === $text) {
@@ -45,9 +42,6 @@ class TXT implements RdataInterface
         $this->text = stripslashes($text);
     }
 
-    /**
-     * @return string|null
-     */
     public function getText(): ?string
     {
         return (string) $this->text ?? '';
@@ -95,10 +89,6 @@ class TXT implements RdataInterface
         $this->setText((string) $txt);
     }
 
-    /**
-     * @param StringIterator $string
-     * @param StringIterator $txt
-     */
     public static function handleTxt(StringIterator $string, StringIterator $txt): void
     {
         if ($string->isNot(Tokens::DOUBLE_QUOTES)) {

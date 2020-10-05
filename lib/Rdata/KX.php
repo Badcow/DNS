@@ -35,33 +35,21 @@ class KX implements RdataInterface
      */
     private $exchanger;
 
-    /**
-     * @param string $exchanger
-     */
     public function setExchanger(string $exchanger): void
     {
         $this->exchanger = $exchanger;
     }
 
-    /**
-     * @return string
-     */
     public function getExchanger(): string
     {
         return $this->exchanger;
     }
 
-    /**
-     * @param int $preference
-     */
     public function setPreference(int $preference): void
     {
         $this->preference = $preference;
     }
 
-    /**
-     * @return int
-     */
     public function getPreference(): int
     {
         return $this->preference;

@@ -109,145 +109,91 @@ class RRSIG implements RdataInterface
      */
     private $signature;
 
-    /**
-     * @return string
-     */
     public function getTypeCovered(): string
     {
         return $this->typeCovered;
     }
 
-    /**
-     * @param string $typeCovered
-     */
     public function setTypeCovered(string $typeCovered): void
     {
         $this->typeCovered = $typeCovered;
     }
 
-    /**
-     * @return int
-     */
     public function getAlgorithm(): int
     {
         return $this->algorithm;
     }
 
-    /**
-     * @param int $algorithm
-     */
     public function setAlgorithm(int $algorithm): void
     {
         $this->algorithm = $algorithm;
     }
 
-    /**
-     * @return int
-     */
     public function getLabels(): int
     {
         return $this->labels;
     }
 
-    /**
-     * @param int $labels
-     */
     public function setLabels(int $labels): void
     {
         $this->labels = $labels;
     }
 
-    /**
-     * @return int
-     */
     public function getOriginalTtl(): int
     {
         return $this->originalTtl;
     }
 
-    /**
-     * @param int $originalTtl
-     */
     public function setOriginalTtl(int $originalTtl): void
     {
         $this->originalTtl = $originalTtl;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getSignatureExpiration(): \DateTime
     {
         return $this->signatureExpiration;
     }
 
-    /**
-     * @param \DateTime $signatureExpiration
-     */
     public function setSignatureExpiration(\DateTime $signatureExpiration): void
     {
         $this->signatureExpiration = $signatureExpiration;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getSignatureInception(): \DateTime
     {
         return $this->signatureInception;
     }
 
-    /**
-     * @param \DateTime $signatureInception
-     */
     public function setSignatureInception(\DateTime $signatureInception): void
     {
         $this->signatureInception = $signatureInception;
     }
 
-    /**
-     * @return int
-     */
     public function getKeyTag(): int
     {
         return $this->keyTag;
     }
 
-    /**
-     * @param int $keyTag
-     */
     public function setKeyTag(int $keyTag): void
     {
         $this->keyTag = $keyTag;
     }
 
-    /**
-     * @return string
-     */
     public function getSignersName(): string
     {
         return $this->signersName;
     }
 
-    /**
-     * @param string $signersName
-     */
     public function setSignersName(string $signersName): void
     {
         $this->signersName = $signersName;
     }
 
-    /**
-     * @return string
-     */
     public function getSignature(): string
     {
         return $this->signature;
     }
 
-    /**
-     * @param string $signature
-     */
     public function setSignature(string $signature): void
     {
         $this->signature = $signature;
@@ -273,8 +219,6 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * @return string
-     *
      * @throws UnsupportedTypeException
      */
     public function toWire(): string
@@ -342,11 +286,6 @@ class RRSIG implements RdataInterface
         $this->setSignatureInception(self::makeDateTime((string) $values['<sigInception>']));
     }
 
-    /**
-     * @param string $timeString
-     *
-     * @return \DateTime
-     */
     private static function makeDateTime(string $timeString): \DateTime
     {
         $timeFormat = (14 === strlen($timeString)) ? self::TIME_FORMAT : 'U';

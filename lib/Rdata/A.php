@@ -30,9 +30,6 @@ class A implements RdataInterface
      */
     protected $address;
 
-    /**
-     * @param string $address
-     */
     public function setAddress(string $address): void
     {
         if (!Validator::ipv4($address)) {

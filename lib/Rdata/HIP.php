@@ -48,57 +48,36 @@ class HIP implements RdataInterface
      */
     private $rendezvousServers = [];
 
-    /**
-     * @return int
-     */
     public function getPublicKeyAlgorithm(): int
     {
         return $this->publicKeyAlgorithm;
     }
 
-    /**
-     * @param int $publicKeyAlgorithm
-     */
     public function setPublicKeyAlgorithm(int $publicKeyAlgorithm): void
     {
         $this->publicKeyAlgorithm = $publicKeyAlgorithm;
     }
 
-    /**
-     * @return string
-     */
     public function getHostIdentityTag(): string
     {
         return $this->hostIdentityTag;
     }
 
-    /**
-     * @param string $hostIdentityTag
-     */
     public function setHostIdentityTag(string $hostIdentityTag): void
     {
         $this->hostIdentityTag = $hostIdentityTag;
     }
 
-    /**
-     * @return string
-     */
     public function getPublicKey(): string
     {
         return $this->publicKey;
     }
 
-    /**
-     * @param string $publicKey
-     */
     public function setPublicKey(string $publicKey): void
     {
         $this->publicKey = $publicKey;
     }
 
-    /**
-     * @param string $server
-     */
     public function addRendezvousServer(string $server): void
     {
         if (!Validator::fullyQualifiedDomainName($server)) {

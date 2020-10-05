@@ -47,13 +47,6 @@ class IpseckeyTest extends TestCase
 
     /**
      * @dataProvider getDataProvider
-     *
-     * @param string      $text
-     * @param int         $precedence
-     * @param int         $gatewayType
-     * @param int         $algorithm
-     * @param string|null $gateway
-     * @param string|null $publicKey
      */
     public function testToText(string $text, int $precedence, int $gatewayType, int $algorithm, ?string $gateway, ?string $publicKey): void
     {
@@ -67,13 +60,6 @@ class IpseckeyTest extends TestCase
 
     /**
      * @dataProvider getDataProvider
-     *
-     * @param string      $text
-     * @param int         $precedence
-     * @param int         $gatewayType
-     * @param int         $algorithm
-     * @param string|null $gateway
-     * @param string|null $publicKey
      *
      * @throws DecodeException
      */
@@ -98,13 +84,6 @@ class IpseckeyTest extends TestCase
 
     /**
      * @dataProvider getDataProvider
-     *
-     * @param string      $text
-     * @param int         $precedence
-     * @param int         $gatewayType
-     * @param int         $algorithm
-     * @param string|null $gateway
-     * @param string|null $publicKey
      */
     public function testFromText(string $text, int $precedence, int $gatewayType, int $algorithm, ?string $gateway, ?string $publicKey): void
     {
@@ -120,13 +99,6 @@ class IpseckeyTest extends TestCase
 
     /**
      * @dataProvider getDataProvider
-     *
-     * @param string      $text
-     * @param int         $precedence
-     * @param int         $gatewayType
-     * @param int         $algorithm
-     * @param string|null $gateway
-     * @param string|null $publicKey
      */
     public function testFactory(string $text, int $precedence, int $gatewayType, int $algorithm, ?string $gateway, ?string $publicKey): void
     {

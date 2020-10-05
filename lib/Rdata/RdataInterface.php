@@ -17,49 +17,33 @@ interface RdataInterface
 {
     /**
      * Get the string representation of the Rdata type.
-     *
-     * @return string
      */
     public function getType(): string;
 
     /**
      * Get the integer index of the Rdata type.
-     *
-     * @return int
      */
     public function getTypeCode(): int;
 
     /**
      * Return the string representation of the Rdata.
-     *
-     * @return string
      */
     public function toText(): string;
 
     /**
      * Return a DNS Server response formatted representation of the Rdata.
-     *
-     * @return string
      */
     public function toWire(): string;
 
     /**
      * Populate Rdata from its textual representation.
-     *
-     * @param string $text
-     *
-     * @return void
      */
     public function fromText(string $text): void;
 
     /**
      * Populate Rdata from its wire representation.
      *
-     * @param string $rdata
-     * @param int    $offset
-     * @param int    $rdLength
-     *
-     * @return void
+     * @param int $rdLength
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void;
 }

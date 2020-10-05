@@ -50,17 +50,12 @@ class SSHFP implements RdataInterface
      */
     private $fingerprint;
 
-    /**
-     * @return int
-     */
     public function getAlgorithm(): int
     {
         return $this->algorithm;
     }
 
     /**
-     * @param int $algorithm
-     *
      * @throws \InvalidArgumentException
      */
     public function setAlgorithm(int $algorithm): void
@@ -71,17 +66,12 @@ class SSHFP implements RdataInterface
         $this->algorithm = $algorithm;
     }
 
-    /**
-     * @return int
-     */
     public function getFingerprintType(): int
     {
         return $this->fingerprintType;
     }
 
     /**
-     * @param int $fingerprintType
-     *
      * @throws \InvalidArgumentException
      */
     public function setFingerprintType(int $fingerprintType): void
@@ -92,17 +82,11 @@ class SSHFP implements RdataInterface
         $this->fingerprintType = $fingerprintType;
     }
 
-    /**
-     * @return string
-     */
     public function getFingerprint(): string
     {
         return bin2hex($this->fingerprint);
     }
 
-    /**
-     * @param string $fingerprint
-     */
     public function setFingerprint(string $fingerprint): void
     {
         if (!Validator::isBase16Encoded($fingerprint) || false === $fp = @hex2bin($fingerprint)) {

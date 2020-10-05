@@ -65,17 +65,11 @@ class TLSA implements RdataInterface
      */
     private $certificateAssociationData;
 
-    /**
-     * @return int
-     */
     public function getCertificateUsage(): int
     {
         return $this->certificateUsage;
     }
 
-    /**
-     * @param int $certificateUsage
-     */
     public function setCertificateUsage(int $certificateUsage): void
     {
         if (!Validator::isUnsignedInteger($certificateUsage, 8)) {
@@ -84,17 +78,11 @@ class TLSA implements RdataInterface
         $this->certificateUsage = $certificateUsage;
     }
 
-    /**
-     * @return int
-     */
     public function getSelector(): int
     {
         return $this->selector;
     }
 
-    /**
-     * @param int $selector
-     */
     public function setSelector(int $selector): void
     {
         if (!Validator::isUnsignedInteger($selector, 8)) {
@@ -103,17 +91,11 @@ class TLSA implements RdataInterface
         $this->selector = $selector;
     }
 
-    /**
-     * @return int
-     */
     public function getMatchingType(): int
     {
         return $this->matchingType;
     }
 
-    /**
-     * @param int $matchingType
-     */
     public function setMatchingType(int $matchingType): void
     {
         if (!Validator::isUnsignedInteger($matchingType, 8)) {
@@ -122,17 +104,11 @@ class TLSA implements RdataInterface
         $this->matchingType = $matchingType;
     }
 
-    /**
-     * @return string
-     */
     public function getCertificateAssociationData(): string
     {
         return $this->certificateAssociationData;
     }
 
-    /**
-     * @param string $certificateAssociationData
-     */
     public function setCertificateAssociationData(string $certificateAssociationData): void
     {
         $this->certificateAssociationData = $certificateAssociationData;

@@ -171,8 +171,6 @@ class Algorithms
     /**
      * Get the associated mnemonic of an algorithm.
      *
-     * @param int $algorithmId
-     *
      * @return string
      *
      * @throws \InvalidArgumentException
@@ -187,10 +185,6 @@ class Algorithms
     }
 
     /**
-     * @param string $algorithmMnemonic
-     *
-     * @return int
-     *
      * @throws \InvalidArgumentException
      */
     public static function getAlgorithmValue(string $algorithmMnemonic): int

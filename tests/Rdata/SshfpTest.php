@@ -44,12 +44,6 @@ class SshfpTest extends TestCase
 
     /**
      * @dataProvider dataProvider_testExceptions
-     *
-     * @param int    $algorithm
-     * @param int    $fpType
-     * @param string $fingerprint
-     * @param string $expectedException
-     * @param string $expectedExceptionMessage
      */
     public function testExceptions(int $algorithm, int $fpType, string $fingerprint, string $expectedException, string $expectedExceptionMessage): void
     {

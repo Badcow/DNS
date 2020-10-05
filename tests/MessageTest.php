@@ -29,10 +29,6 @@ use PHPUnit\Framework\TestCase;
 class MessageTest extends TestCase
 {
     /**
-     * @param int $n
-     *
-     * @return string
-     *
      * @throws \Exception
      */
     private function getWireTestData(int $n): string

@@ -44,9 +44,6 @@ class Normaliser
 
     /**
      * Normaliser constructor.
-     *
-     * @param string $zone
-     * @param int    $commentOptions
      */
     public function __construct(string $zone, int $commentOptions = Comments::NONE)
     {
@@ -58,11 +55,6 @@ class Normaliser
     }
 
     /**
-     * @param string $zone
-     * @param int    $includeComments
-     *
-     * @return string
-     *
      * @throws ParseException
      */
     public static function normalise(string $zone, int $includeComments = Comments::NONE): string
@@ -71,8 +63,6 @@ class Normaliser
     }
 
     /**
-     * @return string
-     *
      * @throws ParseException
      */
     public function process(): string

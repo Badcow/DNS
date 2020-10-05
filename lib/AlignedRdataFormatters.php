@@ -41,12 +41,6 @@ class AlignedRdataFormatters
         return self::$rdataFormatters;
     }
 
-    /**
-     * @param SOA $rdata
-     * @param int $padding
-     *
-     * @return string
-     */
     public static function SOA(SOA $rdata, int $padding): string
     {
         $vars = [
@@ -72,16 +66,10 @@ class AlignedRdataFormatters
             str_repeat(' ', $padding).Tokens::CLOSE_BRACKET;
     }
 
-    /**
-     * @param APL $rdata
-     * @param int $padding
-     *
-     * @return string
-     */
     public static function APL(APL $rdata, int $padding): string
     {
         $blocks = explode(' ', $rdata->toText());
-        $longestVarLength = max(array_map('strlen', $blocks));
+        $longestVarLength = (int) max(array_map('strlen', $blocks));
         $string = Tokens::OPEN_BRACKET.Tokens::LINE_FEED;
 
         foreach ($blocks as $block) {
@@ -93,11 +81,6 @@ class AlignedRdataFormatters
 
     /**
      * Split the TXT string into 40 character lines if the string is larger than 50 characters.
-     *
-     * @param TXT $txt
-     * @param int $padding
-     *
-     * @return string
      */
     public static function TXT(TXT $txt, int $padding): string
     {
@@ -120,11 +103,6 @@ class AlignedRdataFormatters
 
     /**
      * Splits the RRSIG Signature into 32 character chunks.
-     *
-     * @param RRSIG $rrsig
-     * @param int   $padding
-     *
-     * @return string
      */
     public static function RRSIG(RRSIG $rrsig, int $padding): string
     {
@@ -150,12 +128,6 @@ class AlignedRdataFormatters
         return $rdata;
     }
 
-    /**
-     * @param LOC $loc
-     * @param int $padding
-     *
-     * @return string
-     */
     public static function LOC(LOC $loc, int $padding): string
     {
         $parts = [
@@ -181,12 +153,7 @@ class AlignedRdataFormatters
     /**
      * Returns a padded line with comment.
      *
-     * @param string $text
      * @param string $comment
-     * @param int    $longestVarLength
-     * @param int    $padding
-     *
-     * @return string
      */
     public static function makeLine(string $text, ?string $comment, int $longestVarLength, int $padding): string
     {

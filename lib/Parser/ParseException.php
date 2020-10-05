@@ -22,10 +22,6 @@ class ParseException extends \Exception
 
     /**
      * ParseException constructor.
-     *
-     * @param string              $message
-     * @param StringIterator|null $stringIterator
-     * @param \Throwable|null     $previous
      */
     public function __construct(string $message = '', StringIterator $stringIterator = null, \Throwable $previous = null)
     {
@@ -39,8 +35,6 @@ class ParseException extends \Exception
 
     /**
      * Get line number of current entry on the StringIterator.
-     *
-     * @return int
      */
     private function getLineNumber(): int
     {

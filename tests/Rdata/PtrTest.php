@@ -41,9 +41,6 @@ class PtrTest extends TestCase
     }
 
     /**
-     * @param string $expectation
-     * @param string $ip
-     *
      * @dataProvider provider_expandIPv6
      */
     public function testExpandIpv6(string $expectation, string $ip): void
@@ -52,9 +49,6 @@ class PtrTest extends TestCase
     }
 
     /**
-     * @param string $ip
-     * @param string $expectation
-     *
      * @dataProvider provider_contractIPv6
      */
     public function testContractIpv6(string $ip, string $expectation): void

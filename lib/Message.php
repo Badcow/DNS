@@ -120,10 +120,6 @@ class Message
 
     /**
      * Encode a domain name as a sequence of labels.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     public static function encodeName(string $name): string
     {
@@ -141,12 +137,6 @@ class Message
         return $res;
     }
 
-    /**
-     * @param string $string
-     * @param int    $offset
-     *
-     * @return string
-     */
     public static function decodeName(string $string, int &$offset = 0): string
     {
         $len = ord($string[$offset]);
@@ -186,193 +176,121 @@ class Message
         return $name;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
     public function setId(int $id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * @return bool
-     */
     public function isResponse(): bool
     {
         return $this->isResponse;
     }
 
-    /**
-     * @param bool $isResponse
-     */
     public function setResponse(bool $isResponse): void
     {
         $this->isResponse = $isResponse;
     }
 
-    /**
-     * @return bool
-     */
     public function isQuery(): bool
     {
         return !$this->isResponse;
     }
 
-    /**
-     * @param bool $query
-     */
     public function setQuery(bool $query): void
     {
         $this->setResponse(!$query);
     }
 
-    /**
-     * @return int
-     */
     public function getOpcode(): int
     {
         return $this->opcode;
     }
 
-    /**
-     * @param int $opcode
-     */
     public function setOpcode(int $opcode): void
     {
         $this->opcode = $opcode;
     }
 
-    /**
-     * @return bool
-     */
     public function isAuthoritative(): bool
     {
         return $this->isAuthoritative;
     }
 
-    /**
-     * @param bool $isAuthoritative
-     */
     public function setAuthoritative(bool $isAuthoritative): void
     {
         $this->isAuthoritative = $isAuthoritative;
     }
 
-    /**
-     * @return bool
-     */
     public function isTruncated(): bool
     {
         return $this->isTruncated;
     }
 
-    /**
-     * @param bool $isTruncated
-     */
     public function setTruncated(bool $isTruncated): void
     {
         $this->isTruncated = $isTruncated;
     }
 
-    /**
-     * @return bool
-     */
     public function isRecursionDesired(): bool
     {
         return $this->isRecursionDesired;
     }
 
-    /**
-     * @param bool $isRecursionDesired
-     */
     public function setRecursionDesired(bool $isRecursionDesired): void
     {
         $this->isRecursionDesired = $isRecursionDesired;
     }
 
-    /**
-     * @return bool
-     */
     public function isRecursionAvailable(): bool
     {
         return $this->isRecursionAvailable;
     }
 
-    /**
-     * @param bool $isRecursionAvailable
-     */
     public function setRecursionAvailable(bool $isRecursionAvailable): void
     {
         $this->isRecursionAvailable = $isRecursionAvailable;
     }
 
-    /**
-     * @return int
-     */
     public function getBit9(): int
     {
         return $this->bit9;
     }
 
-    /**
-     * @param int $bit9
-     */
     public function setBit9(int $bit9): void
     {
         $this->bit9 = $bit9;
     }
 
-    /**
-     * @return bool
-     */
     public function isAuthenticData(): bool
     {
         return $this->isAuthenticData;
     }
 
-    /**
-     * @param bool $isAuthenticData
-     */
     public function setAuthenticData(bool $isAuthenticData): void
     {
         $this->isAuthenticData = $isAuthenticData;
     }
 
-    /**
-     * @return bool
-     */
     public function isCheckingDisabled(): bool
     {
         return $this->isCheckingDisabled;
     }
 
-    /**
-     * @param bool $isCheckingDisabled
-     */
     public function setCheckingDisabled(bool $isCheckingDisabled): void
     {
         $this->isCheckingDisabled = $isCheckingDisabled;
     }
 
-    /**
-     * @return int
-     */
     public function getRcode(): int
     {
         return $this->rcode;
     }
 
-    /**
-     * @param int $rcode
-     */
     public function setRcode(int $rcode): void
     {
         $this->rcode = $rcode;
@@ -386,9 +304,6 @@ class Message
         return $this->questions;
     }
 
-    /**
-     * @param Question $question
-     */
     public function addQuestion(Question $question): void
     {
         $this->questions[] = $question;
@@ -413,9 +328,6 @@ class Message
         return $this->answers;
     }
 
-    /**
-     * @param ResourceRecord $answer
-     */
     public function addAnswer(ResourceRecord $answer): void
     {
         $this->answers[] = $answer;
@@ -440,9 +352,6 @@ class Message
         return $this->authoritatives;
     }
 
-    /**
-     * @param ResourceRecord $authoritative
-     */
     public function addAuthoritative(ResourceRecord $authoritative): void
     {
         $this->authoritatives[] = $authoritative;
@@ -467,9 +376,6 @@ class Message
         return $this->additionals;
     }
 
-    /**
-     * @param ResourceRecord $additional
-     */
     public function addAdditional(ResourceRecord $additional): void
     {
         $this->additionals[] = $additional;
@@ -507,8 +413,6 @@ class Message
     }
 
     /**
-     * @return string
-     *
      * @throws UnsetValueException
      */
     public function toWire(): string
@@ -544,10 +448,6 @@ class Message
     }
 
     /**
-     * @param string $encoded
-     *
-     * @return Message
-     *
      * @throws UnsupportedTypeException
      */
     public static function fromWire(string $encoded): Message

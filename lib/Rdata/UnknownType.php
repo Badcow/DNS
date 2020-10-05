@@ -31,9 +31,6 @@ class UnknownType implements RdataInterface
      */
     private $data;
 
-    /**
-     * @param int $typeCode
-     */
     public function setTypeCode(int $typeCode): void
     {
         $this->typeCode = $typeCode;

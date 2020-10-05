@@ -110,17 +110,12 @@ class IPSECKEY implements RdataInterface
      */
     private $publicKey = null;
 
-    /**
-     * @return int
-     */
     public function getPrecedence(): int
     {
         return $this->precedence;
     }
 
     /**
-     * @param int $precedence
-     *
      * @throws \InvalidArgumentException
      */
     public function setPrecedence(int $precedence): void
@@ -131,25 +126,17 @@ class IPSECKEY implements RdataInterface
         $this->precedence = $precedence;
     }
 
-    /**
-     * @return int
-     */
     public function getGatewayType(): int
     {
         return $this->gatewayType;
     }
 
-    /**
-     * @return int
-     */
     public function getAlgorithm(): int
     {
         return $this->algorithm;
     }
 
     /**
-     * @param int $algorithm
-     *
      * @throws \InvalidArgumentException
      */
     private function setAlgorithm(int $algorithm): void
@@ -160,9 +147,6 @@ class IPSECKEY implements RdataInterface
         $this->algorithm = $algorithm;
     }
 
-    /**
-     * @return string|null
-     */
     public function getGateway(): ?string
     {
         return $this->gateway;
@@ -302,12 +286,6 @@ class IPSECKEY implements RdataInterface
     }
 
     /**
-     * @param int    $gatewayType
-     * @param string $rdata
-     * @param int    $offset
-     *
-     * @return string
-     *
      * @throws DecodeException
      */
     private static function extractGateway(int $gatewayType, string $rdata, int &$offset): string

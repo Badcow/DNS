@@ -45,8 +45,6 @@ class ResourceRecordIterator extends \ArrayIterator
 
     /**
      * Get all the remaining values of an iterator as an array. This will move the pointer to the end of the array.
-     *
-     * @return string
      */
     public function getRemainingAsString(): string
     {
@@ -59,9 +57,6 @@ class ResourceRecordIterator extends \ArrayIterator
         return implode(Tokens::SPACE, $values);
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return implode(Tokens::SPACE, $this->getArrayCopy());

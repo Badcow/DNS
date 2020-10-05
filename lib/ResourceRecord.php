@@ -46,13 +46,8 @@ class ResourceRecord
     private $comment;
 
     /**
-     * @param string         $name
-     * @param RdataInterface $rdata
-     * @param int            $ttl
-     * @param string         $class
-     * @param string         $comment
-     *
-     * @return ResourceRecord
+     * @param int    $ttl
+     * @param string $comment
      */
     public static function create(string $name, RdataInterface $rdata, int $ttl = null, string $class = Classes::INTERNET, string $comment = null): ResourceRecord
     {
@@ -92,8 +87,6 @@ class ResourceRecord
     /**
      * Set the name for the resource record.
      * Eg. "subdomain.example.com.".
-     *
-     * @param string $name
      */
     public function setName(string $name): void
     {
@@ -125,9 +118,6 @@ class ResourceRecord
         $this->classId = $classId;
     }
 
-    /**
-     * @return int|null
-     */
     public function getClassId(): ?int
     {
         return $this->classId;
@@ -200,8 +190,6 @@ class ResourceRecord
     }
 
     /**
-     * @return string
-     *
      * @throws UnsetValueException|InvalidArgumentException
      */
     public function toWire(): string
@@ -241,11 +229,6 @@ class ResourceRecord
     }
 
     /**
-     * @param string $encoded
-     * @param int    $offset
-     *
-     * @return ResourceRecord
-     *
      * @throws Rdata\UnsupportedTypeException
      */
     public static function fromWire(string $encoded, int &$offset = 0): ResourceRecord

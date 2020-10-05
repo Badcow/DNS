@@ -40,9 +40,6 @@ class CSYNC implements RdataInterface
      */
     private $types = [];
 
-    /**
-     * @param string $type
-     */
     public function addType(string $type): void
     {
         $this->types[] = $type;
@@ -56,41 +53,26 @@ class CSYNC implements RdataInterface
         $this->types = [];
     }
 
-    /**
-     * @return array
-     */
     public function getTypes(): array
     {
         return $this->types;
     }
 
-    /**
-     * @return int
-     */
     public function getSoaSerial(): int
     {
         return $this->soaSerial;
     }
 
-    /**
-     * @param int $soaSerial
-     */
     public function setSoaSerial(int $soaSerial): void
     {
         $this->soaSerial = $soaSerial;
     }
 
-    /**
-     * @return int
-     */
     public function getFlags(): int
     {
         return $this->flags;
     }
 
-    /**
-     * @param int $flags
-     */
     public function setFlags(int $flags): void
     {
         $this->flags = $flags;

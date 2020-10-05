@@ -48,9 +48,6 @@ class ValidatorTest extends TestCase
 
     /**
      * @dataProvider dp_testValidateResourceRecordName
-     *
-     * @param bool   $isValid
-     * @param string $resourceName
      */
     public function testValidateResourceRecordName(bool $isValid, string $resourceName): void
     {

@@ -75,9 +75,6 @@ class DHCID implements RdataInterface
      */
     private $digest;
 
-    /**
-     * @param int $identifierType
-     */
     public function setIdentifierType(int $identifierType): void
     {
         if (!Validator::isUnsignedInteger($identifierType, 16)) {
@@ -86,33 +83,21 @@ class DHCID implements RdataInterface
         $this->identifierType = $identifierType;
     }
 
-    /**
-     * @return int
-     */
     public function getIdentifierType(): int
     {
         return $this->identifierType;
     }
 
-    /**
-     * @return string
-     */
     public function getIdentifier(): string
     {
         return $this->identifier;
     }
 
-    /**
-     * @return int
-     */
     public function getHtype(): int
     {
         return $this->htype;
     }
 
-    /**
-     * @param int $htype
-     */
     public function setHtype(int $htype): void
     {
         if (!Validator::isUnsignedInteger($htype, 8)) {
@@ -122,9 +107,6 @@ class DHCID implements RdataInterface
     }
 
     /**
-     * @param int    $identifierType
-     * @param string $identifier
-     *
      * @throws \InvalidArgumentException
      */
     public function setIdentifier(int $identifierType, string $identifier): void
@@ -133,17 +115,11 @@ class DHCID implements RdataInterface
         $this->identifier = $identifier;
     }
 
-    /**
-     * @return string
-     */
     public function getFqdn(): string
     {
         return $this->fqdn;
     }
 
-    /**
-     * @param string $fqdn
-     */
     public function setFqdn(string $fqdn): void
     {
         if (!Validator::fullyQualifiedDomainName($fqdn)) {
@@ -152,9 +128,6 @@ class DHCID implements RdataInterface
         $this->fqdn = $fqdn;
     }
 
-    /**
-     * @return int
-     */
     public function getDigestType(): int
     {
         return $this->digestType;

@@ -33,10 +33,6 @@ class FactoryTest extends TestCase
     /**
      * @dataProvider getTestData
      *
-     * @param string $type
-     * @param int    $typeCode
-     * @param string $classname
-     *
      * @throws UnsupportedTypeException
      */
     public function testNewRdataFromNameAndId(string $type, int $typeCode, string $classname): void

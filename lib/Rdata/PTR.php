@@ -31,8 +31,6 @@ class PTR extends CNAME
      * @param string $ip IPv6 address
      *
      * @throws \InvalidArgumentException
-     *
-     * @return string
      */
     public static function expandIpv6(string $ip): string
     {

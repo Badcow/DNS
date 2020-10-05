@@ -36,8 +36,6 @@ class ParserTest extends TestCase
 {
     /**
      * Build a test zone.
-     *
-     * @return Zone
      */
     private function getTestZone(): Zone
     {
@@ -498,10 +496,6 @@ DNS;
 
     /**
      * Find all records in a Zone named $name.
-     *
-     * @param string|null $name
-     * @param Zone        $zone
-     * @param string|null $type
      *
      * @return ResourceRecord[]
      */

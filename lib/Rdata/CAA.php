@@ -69,8 +69,6 @@ class CAA implements RdataInterface
     }
 
     /**
-     * @param int $flag
-     *
      * @throws \InvalidArgumentException
      */
     public function setFlag(int $flag): void
@@ -91,8 +89,6 @@ class CAA implements RdataInterface
     }
 
     /**
-     * @param string $tag
-     *
      * @throws \InvalidArgumentException
      */
     public function setTag(string $tag): void
@@ -105,17 +101,11 @@ class CAA implements RdataInterface
         $this->tag = $tag;
     }
 
-    /**
-     * @return string|null
-     */
     public function getValue(): ?string
     {
         return $this->value;
     }
 
-    /**
-     * @param string $value
-     */
     public function setValue(string $value): void
     {
         $this->value = $value;
@@ -137,9 +127,6 @@ class CAA implements RdataInterface
         );
     }
 
-    /**
-     * @return string
-     */
     public function toWire(): string
     {
         if (!isset($this->tag) || !isset($this->flag) || !isset($this->value)) {

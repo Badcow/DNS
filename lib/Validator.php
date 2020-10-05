@@ -34,10 +34,6 @@ class Validator
     /**
      * Validate the string as a valid hostname in accordance with RFC 952 {@link https://tools.ietf.org/html/rfc952}
      * and RFC 1123 {@link https://tools.ietf.org/html/rfc1123}.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public static function hostName(string $name): bool
     {
@@ -46,10 +42,6 @@ class Validator
 
     /**
      * Validate the string is a Fully Qualified Domain Name.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public static function fullyQualifiedDomainName(string $name): bool
     {
@@ -64,10 +56,6 @@ class Validator
     /**
      * Validate the name for a Resource Record. This is distinct from validating a hostname in that this function
      * will permit '@' and wildcards as well as underscores used in SRV records.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public static function resourceRecordName(string $name): bool
     {
@@ -79,10 +67,6 @@ class Validator
      * Validates an IPv4 Address.
      *
      * @static
-     *
-     * @param string $address
-     *
-     * @return bool
      */
     public static function ipv4(string $address): bool
     {
@@ -95,10 +79,6 @@ class Validator
      * Validates an IPv6 Address.
      *
      * @static
-     *
-     * @param string $address
-     *
-     * @return bool
      */
     public static function ipv6(string $address): bool
     {
@@ -111,10 +91,6 @@ class Validator
      * Validates an IPv4 or IPv6 address.
      *
      * @static
-     *
-     * @param string $address
-     *
-     * @return bool
      */
     public static function ipAddress(string $address): bool
     {
@@ -138,10 +114,6 @@ class Validator
      *
      * You SHOULD compare these return values to the defined constants of this
      * class rather than against integers directly.
-     *
-     * @param Zone $zone
-     *
-     * @return int
      */
     public static function zone(Zone $zone): int
     {
@@ -167,7 +139,6 @@ class Validator
     /**
      * Counts the number of Resource Records of a particular type ($type) in a Zone.
      *
-     * @param Zone   $zone
      * @param string $type The ResourceRecord type to be counted. If NULL, then the method will return
      *                     the number of records without RData.
      *
@@ -185,10 +156,6 @@ class Validator
 
     /**
      * Validates a reverse IPv4 address. Ensures that all octets are in the range [0-255].
-     *
-     * @param string $address
-     *
-     * @return bool
      */
     public static function reverseIpv4(string $address): bool
     {
@@ -212,10 +179,6 @@ class Validator
 
     /**
      * Validates a reverse IPv6 address.
-     *
-     * @param string $address
-     *
-     * @return bool
      */
     public static function reverseIpv6(string $address): bool
     {
@@ -226,10 +189,6 @@ class Validator
 
     /**
      * Determine the number of unique non-null classes in a Zone. In a valid zone this MUST be 1.
-     *
-     * @param Zone $zone
-     *
-     * @return int
      */
     private static function countClasses(Zone $zone): int
     {
@@ -252,11 +211,6 @@ class Validator
      *      www IN TXT "This is a violation of DNS specifications."
      *
      * @see https://tools.ietf.org/html/rfc1034#section-3.6.2
-     *
-     * @param Zone           $zone
-     * @param ResourceRecord $newRecord
-     *
-     * @return bool
      */
     public static function noAliasInZone(Zone $zone, ResourceRecord $newRecord): bool
     {
@@ -274,8 +228,6 @@ class Validator
      * Determine if string is a base64 encoded string.
      *
      * @param string $string A base64 encoded string
-     *
-     * @return bool
      */
     public static function isBase64Encoded(string $string): bool
     {
@@ -296,10 +248,6 @@ class Validator
 
     /**
      * Determine if string is a base32 encoded string.
-     *
-     * @param string $string
-     *
-     * @return bool
      */
     public static function isBase32Encoded(string $string): bool
     {
@@ -308,10 +256,6 @@ class Validator
 
     /**
      * Determine if string is a base32hex (extended hex) encoded string.
-     *
-     * @param string $string
-     *
-     * @return bool
      */
     public static function isBase32HexEncoded(string $string): bool
     {
@@ -320,10 +264,6 @@ class Validator
 
     /**
      * Determine if string is a base16 encoded string.
-     *
-     * @param string $string
-     *
-     * @return bool
      */
     public static function isBase16Encoded(string $string): bool
     {
@@ -335,8 +275,6 @@ class Validator
      *
      * @param int $integer      The integer to test
      * @param int $numberOfBits The upper limit that the integer can be expressed as an exponent of 2
-     *
-     * @return bool
      */
     public static function isUnsignedInteger(int $integer, int $numberOfBits): bool
     {

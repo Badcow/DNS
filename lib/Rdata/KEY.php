@@ -55,33 +55,22 @@ class KEY implements RdataInterface
      */
     protected $publicKey;
 
-    /**
-     * @param int $flags
-     */
     public function setFlags(int $flags): void
     {
         $this->flags = $flags;
     }
 
-    /**
-     * @param int $protocol
-     */
     public function setProtocol(int $protocol): void
     {
         $this->protocol = $protocol;
     }
 
-    /**
-     * @param int $algorithm
-     */
     public function setAlgorithm(int $algorithm): void
     {
         $this->algorithm = $algorithm;
     }
 
     /**
-     * @param string $publicKey
-     *
      * @throws \InvalidArgumentException
      */
     public function setPublicKey(string $publicKey): void
@@ -93,33 +82,21 @@ class KEY implements RdataInterface
         $this->publicKey = $key;
     }
 
-    /**
-     * @return int
-     */
     public function getFlags(): int
     {
         return $this->flags;
     }
 
-    /**
-     * @return int
-     */
     public function getProtocol(): int
     {
         return $this->protocol;
     }
 
-    /**
-     * @return int
-     */
     public function getAlgorithm(): int
     {
         return $this->algorithm;
     }
 
-    /**
-     * @return string
-     */
     public function getPublicKey(): string
     {
         return base64_encode($this->publicKey);

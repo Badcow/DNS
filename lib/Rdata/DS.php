@@ -47,65 +47,41 @@ class DS implements RdataInterface
      */
     private $digest;
 
-    /**
-     * @return int
-     */
     public function getKeyTag(): int
     {
         return $this->keyTag;
     }
 
-    /**
-     * @param int $keyTag
-     */
     public function setKeyTag(int $keyTag): void
     {
         $this->keyTag = $keyTag;
     }
 
-    /**
-     * @return int
-     */
     public function getAlgorithm(): int
     {
         return $this->algorithm;
     }
 
-    /**
-     * @param int $algorithm
-     */
     public function setAlgorithm(int $algorithm): void
     {
         $this->algorithm = $algorithm;
     }
 
-    /**
-     * @return int
-     */
     public function getDigestType(): int
     {
         return $this->digestType;
     }
 
-    /**
-     * @param int $digestType
-     */
     public function setDigestType(int $digestType): void
     {
         $this->digestType = $digestType;
     }
 
-    /**
-     * @return string
-     */
     public function getDigest(): string
     {
         return $this->digest;
     }
 
-    /**
-     * @param string $digest
-     */
     public function setDigest(string $digest): void
     {
         $this->digest = $digest;

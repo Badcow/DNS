@@ -124,10 +124,6 @@ class ResourceRecordTest extends TestCase
     /**
      * @dataProvider dataProviderForTestToWireThrowsExceptionsIfValuesAreNotSet
      *
-     * @param ResourceRecord $rr
-     * @param string         $exception
-     * @param string         $exceptionMessage
-     *
      * @throws UnsetValueException
      */
     public function testToWireThrowsExceptionsIfValuesAreNotSet(ResourceRecord $rr, string $exception, string $exceptionMessage): void

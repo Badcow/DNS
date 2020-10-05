@@ -35,33 +35,21 @@ class MX implements RdataInterface
      */
     private $exchange;
 
-    /**
-     * @param string $exchange
-     */
     public function setExchange(string $exchange): void
     {
         $this->exchange = $exchange;
     }
 
-    /**
-     * @return string|null
-     */
     public function getExchange(): ?string
     {
         return $this->exchange;
     }
 
-    /**
-     * @param int $preference
-     */
     public function setPreference(int $preference): void
     {
         $this->preference = $preference;
     }
 
-    /**
-     * @return int|null
-     */
     public function getPreference(): ?int
     {
         return $this->preference;

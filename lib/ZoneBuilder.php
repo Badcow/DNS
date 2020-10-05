@@ -42,11 +42,6 @@ class ZoneBuilder
         AAAA::TYPE => __CLASS__.'::fillOutAaaa',
     ];
 
-    /**
-     * @param Zone $zone
-     *
-     * @return string
-     */
     public static function build(Zone $zone): string
     {
         $master = '$ORIGIN '.$zone->getName().Tokens::LINE_FEED;
@@ -78,8 +73,6 @@ class ZoneBuilder
     /**
      * Fills out all of the data of each resource record. The function will add the parent domain to all non-qualified
      * sub-domains, replace '@' with the zone name, ensure the class and TTL are on each record.
-     *
-     * @param Zone $zone
      */
     public static function fillOutZone(Zone $zone): void
     {
@@ -95,11 +88,6 @@ class ZoneBuilder
 
     /**
      * Add the parent domain to the sub-domain if the sub-domain if it is not fully qualified.
-     *
-     * @param string|null $subDomain
-     * @param string      $parent
-     *
-     * @return string
      */
     protected static function fullyQualify(?string $subDomain, string $parent): string
     {
@@ -114,10 +102,6 @@ class ZoneBuilder
         return $subDomain;
     }
 
-    /**
-     * @param RdataInterface $rdata
-     * @param Zone           $zone
-     */
     protected static function fillOutRdata(RdataInterface $rdata, Zone $zone): void
     {
         if (array_key_exists($rdata->getType(), self::$rdataFillers)) {
@@ -125,46 +109,27 @@ class ZoneBuilder
         }
     }
 
-    /**
-     * @param SOA  $rdata
-     * @param Zone $zone
-     */
     protected static function fillOutSoa(SOA $rdata, Zone $zone): void
     {
         $rdata->setMname(self::fullyQualify($rdata->getMname(), $zone->getName()));
         $rdata->setRname(self::fullyQualify($rdata->getRname(), $zone->getName()));
     }
 
-    /**
-     * @param CNAME $rdata
-     * @param Zone  $zone
-     */
     protected static function fillOutCname(Cname $rdata, Zone $zone): void
     {
         $rdata->setTarget(self::fullyQualify($rdata->getTarget(), $zone->getName()));
     }
 
-    /**
-     * @param SRV  $rdata
-     * @param Zone $zone
-     */
     protected static function fillOutSrv(SRV $rdata, Zone $zone): void
     {
         $rdata->setTarget(self::fullyQualify($rdata->getTarget(), $zone->getName()));
     }
 
-    /**
-     * @param MX   $rdata
-     * @param Zone $zone
-     */
     protected static function fillOutMx(MX $rdata, Zone $zone): void
     {
         $rdata->setExchange(self::fullyQualify($rdata->getExchange(), $zone->getName()));
     }
 
-    /**
-     * @param AAAA $rdata
-     */
     protected static function fillOutAaaa(AAAA $rdata): void
     {
         $rdata->setAddress(PTR::expandIpv6($rdata->getAddress() ?? ''));

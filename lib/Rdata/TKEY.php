@@ -96,17 +96,11 @@ class TKEY implements RdataInterface
      */
     private $otherData;
 
-    /**
-     * @return string
-     */
     public function getAlgorithm(): string
     {
         return $this->algorithm;
     }
 
-    /**
-     * @param string $algorithm
-     */
     public function setAlgorithm(string $algorithm): void
     {
         if (!Validator::fullyQualifiedDomainName($algorithm)) {
@@ -115,49 +109,31 @@ class TKEY implements RdataInterface
         $this->algorithm = $algorithm;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getInception(): \DateTime
     {
         return $this->inception;
     }
 
-    /**
-     * @param \DateTime $inception
-     */
     public function setInception(\DateTime $inception): void
     {
         $this->inception = $inception;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getExpiration(): \DateTime
     {
         return $this->expiration;
     }
 
-    /**
-     * @param \DateTime $expiration
-     */
     public function setExpiration(\DateTime $expiration): void
     {
         $this->expiration = $expiration;
     }
 
-    /**
-     * @return int
-     */
     public function getMode(): int
     {
         return $this->mode;
     }
 
-    /**
-     * @param int $mode
-     */
     public function setMode(int $mode): void
     {
         if (!Validator::isUnsignedInteger($mode, 16)) {
@@ -166,17 +142,11 @@ class TKEY implements RdataInterface
         $this->mode = $mode;
     }
 
-    /**
-     * @return int
-     */
     public function getError(): int
     {
         return $this->error;
     }
 
-    /**
-     * @param int $error
-     */
     public function setError(int $error): void
     {
         if (!Validator::isUnsignedInteger($error, 16)) {
@@ -185,9 +155,6 @@ class TKEY implements RdataInterface
         $this->error = $error;
     }
 
-    /**
-     * @return string
-     */
     public function getKeyData(): string
     {
         return $this->keyData;
@@ -201,9 +168,6 @@ class TKEY implements RdataInterface
         $this->keyData = $keyData;
     }
 
-    /**
-     * @return string
-     */
     public function getOtherData(): string
     {
         return $this->otherData;

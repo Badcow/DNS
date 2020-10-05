@@ -35,9 +35,6 @@ class Question
      */
     private $classId;
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -57,17 +54,12 @@ class Question
         $this->name = $name;
     }
 
-    /**
-     * @return int
-     */
     public function getTypeCode(): int
     {
         return $this->typeCode;
     }
 
     /**
-     * @return string
-     *
      * @throws UnsupportedTypeException
      */
     public function getType(): string
@@ -76,8 +68,6 @@ class Question
     }
 
     /**
-     * @param int $typeCode
-     *
      * @throws \DomainException
      */
     public function setTypeCode(int $typeCode): void
@@ -89,8 +79,6 @@ class Question
     }
 
     /**
-     * @param string $type
-     *
      * @throws UnsupportedTypeException
      */
     public function setType(string $type): void
@@ -98,25 +86,17 @@ class Question
         $this->setTypeCode(Types::getTypeCode($type));
     }
 
-    /**
-     * @return int
-     */
     public function getClassId(): int
     {
         return $this->classId;
     }
 
-    /**
-     * @return string
-     */
     public function getClass(): string
     {
         return Classes::getClassName($this->classId);
     }
 
     /**
-     * @param int $classId
-     *
      * @throws \InvalidArgumentException
      */
     public function setClassId(int $classId): void
@@ -128,28 +108,17 @@ class Question
         $this->classId = $classId;
     }
 
-    /**
-     * @param string $class
-     */
     public function setClass(string $class): void
     {
         $this->setClassId(Classes::getClassId($class));
     }
 
-    /**
-     * @return string
-     */
     public function toWire(): string
     {
         return Message::encodeName($this->name).pack('nn', $this->typeCode, $this->classId);
     }
 
     /**
-     * @param string $encoded
-     * @param int    $offset
-     *
-     * @return Question
-     *
      * @throws UnexpectedValueException
      * @throws UnsupportedTypeException
      */

@@ -84,11 +84,6 @@ class DhcidTest extends TestCase
 
     /**
      * @dataProvider getDataProvider
-     *
-     * @param string $text
-     * @param int    $identifierType
-     * @param string $identifier
-     * @param string $fqdn
      */
     public function testToText(string $text, int $identifierType, string $identifier, string $fqdn): void
     {
@@ -102,11 +97,6 @@ class DhcidTest extends TestCase
 
     /**
      * @dataProvider getDataProvider
-     *
-     * @param string $text
-     * @param int    $identifierType
-     * @param string $identifier
-     * @param string $fqdn
      */
     public function testToFromWire(string $text, int $identifierType, string $identifier, string $fqdn): void
     {
@@ -126,11 +116,6 @@ class DhcidTest extends TestCase
 
     /**
      * @dataProvider getDataProvider
-     *
-     * @param string $text
-     * @param int    $identifierType
-     * @param string $identifier
-     * @param string $fqdn
      *
      * @throws \Exception
      */
@@ -157,11 +142,6 @@ class DhcidTest extends TestCase
 
     /**
      * @dataProvider getDataProvider
-     *
-     * @param string $text
-     * @param int    $identifierType
-     * @param string $identifier
-     * @param string $fqdn
      */
     public function testFactory(string $text, int $identifierType, string $identifier, string $fqdn): void
     {

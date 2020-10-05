@@ -518,8 +518,6 @@ class Types
 
     /**
      * @param int|string $type
-     *
-     * @return bool
      */
     public static function isValid($type): bool
     {
@@ -534,8 +532,6 @@ class Types
      * Get the name of an RDATA type. E.g. RecordTypeEnum::getName(6) return 'SOA'.
      *
      * @param int $type The index of the type
-     *
-     * @return string
      *
      * @throws UnsupportedTypeException
      */
@@ -552,8 +548,6 @@ class Types
      * Return the integer value of an RDATA type. E.g. getTypeFromName('MX') returns 15.
      *
      * @param string $name The name of the record type, e.g. = 'A' or 'MX' or 'SOA'
-     *
-     * @return int
      *
      * @throws UnsupportedTypeException
      */

@@ -85,8 +85,6 @@ class SRV implements RdataInterface
     }
 
     /**
-     * @param int $priority
-     *
      * @throws \InvalidArgumentException
      */
     public function setPriority(int $priority): void
@@ -107,8 +105,6 @@ class SRV implements RdataInterface
     }
 
     /**
-     * @param int $weight
-     *
      * @throws \InvalidArgumentException
      */
     public function setWeight(int $weight): void
@@ -129,8 +125,6 @@ class SRV implements RdataInterface
     }
 
     /**
-     * @param int $port
-     *
      * @throws \InvalidArgumentException
      */
     public function setPort(int $port): void
@@ -142,17 +136,11 @@ class SRV implements RdataInterface
         $this->port = $port;
     }
 
-    /**
-     * @return string
-     */
     public function getTarget(): string
     {
         return $this->target;
     }
 
-    /**
-     * @param string $target
-     */
     public function setTarget(string $target): void
     {
         $this->target = $target;

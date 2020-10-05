@@ -58,10 +58,6 @@ class AlignedBuilder
 
     /**
      * Build an aligned BIND zone file.
-     *
-     * @param Zone $zone
-     *
-     * @return string
      */
     public static function build(Zone $zone): string
     {
@@ -100,10 +96,6 @@ class AlignedBuilder
 
     /**
      * Returns the control entries as strings.
-     *
-     * @param Zone $zone
-     *
-     * @return string
      */
     private static function generateControlEntries(Zone $zone): string
     {
@@ -117,10 +109,6 @@ class AlignedBuilder
 
     /**
      * Returns a comment string if the comments are not null, returns empty string otherwise.
-     *
-     * @param ResourceRecord $resourceRecord
-     *
-     * @return string
      */
     private static function generateComment(ResourceRecord $resourceRecord): string
     {
@@ -133,11 +121,6 @@ class AlignedBuilder
 
     /**
      * Compares two ResourceRecords to determine which is the higher order. Used with the usort() function.
-     *
-     * @param ResourceRecord $a
-     * @param ResourceRecord $b
-     *
-     * @return int
      */
     public static function compareResourceRecords(ResourceRecord $a, ResourceRecord $b): int
     {
@@ -174,11 +157,6 @@ class AlignedBuilder
 
     /**
      * Composes the RDATA of the Resource Record.
-     *
-     * @param RdataInterface $rdata
-     * @param int            $padding
-     *
-     * @return string
      */
     private static function generateRdataOutput(RdataInterface $rdata, int $padding): string
     {
@@ -192,8 +170,6 @@ class AlignedBuilder
 
     /**
      * Get the padding required for a zone.
-     *
-     * @param Zone $zone
      *
      * @return int[] Array order: [name, ttl, type, class, rdata]
      */

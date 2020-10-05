@@ -205,10 +205,6 @@ TXT;
     }
 
     /**
-     * @param string $filename
-     *
-     * @return string
-     *
      * @throws \Exception
      */
     public static function readFile(string $filename): string

@@ -46,17 +46,12 @@ class NSEC3PARAM implements RdataInterface
      */
     private $salt;
 
-    /**
-     * @return int
-     */
     public function getHashAlgorithm(): int
     {
         return $this->hashAlgorithm;
     }
 
     /**
-     * @param int $hashAlgorithm
-     *
      * @throws \InvalidArgumentException
      */
     public function setHashAlgorithm(int $hashAlgorithm): void
@@ -67,17 +62,12 @@ class NSEC3PARAM implements RdataInterface
         $this->hashAlgorithm = $hashAlgorithm;
     }
 
-    /**
-     * @return int
-     */
     public function getFlags(): int
     {
         return $this->flags;
     }
 
     /**
-     * @param int $flags
-     *
      * @throws \InvalidArgumentException
      */
     public function setFlags(int $flags): void
@@ -88,17 +78,11 @@ class NSEC3PARAM implements RdataInterface
         $this->flags = $flags;
     }
 
-    /**
-     * @return int
-     */
     public function getIterations(): int
     {
         return $this->iterations;
     }
 
-    /**
-     * @param int $iterations
-     */
     public function setIterations(int $iterations): void
     {
         if (!Validator::isUnsignedInteger($iterations, 16)) {

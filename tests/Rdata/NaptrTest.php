@@ -44,14 +44,6 @@ class NaptrTest extends TestCase
 
     /**
      * @dataProvider getDataProvider
-     *
-     * @param string $text
-     * @param int    $order
-     * @param int    $preference
-     * @param string $flags
-     * @param string $services
-     * @param string $regexp
-     * @param string $replacement
      */
     public function testToText(string $text, int $order, int $preference, string $flags, string $services, string $regexp, string $replacement): void
     {
@@ -68,14 +60,6 @@ class NaptrTest extends TestCase
 
     /**
      * @dataProvider getDataProvider
-     *
-     * @param string $text
-     * @param int    $order
-     * @param int    $preference
-     * @param string $flags
-     * @param string $services
-     * @param string $regexp
-     * @param string $replacement
      */
     public function testToAndFromWire(string $text, int $order, int $preference, string $flags, string $services, string $regexp, string $replacement): void
     {
@@ -99,14 +83,6 @@ class NaptrTest extends TestCase
 
     /**
      * @dataProvider getDataProvider
-     *
-     * @param string $text
-     * @param int    $order
-     * @param int    $preference
-     * @param string $flags
-     * @param string $services
-     * @param string $regexp
-     * @param string $replacement
      */
     public function testFromText(string $text, int $order, int $preference, string $flags, string $services, string $regexp, string $replacement): void
     {
@@ -123,14 +99,6 @@ class NaptrTest extends TestCase
 
     /**
      * @dataProvider getDataProvider
-     *
-     * @param string $text
-     * @param int    $order
-     * @param int    $preference
-     * @param string $flags
-     * @param string $services
-     * @param string $regexp
-     * @param string $replacement
      */
     public function testFactory(string $text, int $order, int $preference, string $flags, string $services, string $regexp, string $replacement): void
     {

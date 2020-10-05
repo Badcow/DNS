@@ -44,12 +44,6 @@ class UriTest extends TestCase
 
     /**
      * @dataProvider dataProvider_testExceptions
-     *
-     * @param int    $priority
-     * @param int    $weight
-     * @param string $target
-     * @param string $expectedException
-     * @param string $expectedExceptionMessage
      */
     public function testExceptions(int $priority, int $weight, string $target, string $expectedException, string $expectedExceptionMessage): void
     {

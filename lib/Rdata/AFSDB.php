@@ -32,33 +32,21 @@ class AFSDB implements RdataInterface
      */
     private $hostname;
 
-    /**
-     * @return int
-     */
     public function getSubType(): int
     {
         return $this->subType;
     }
 
-    /**
-     * @param int $subType
-     */
     public function setSubType(int $subType): void
     {
         $this->subType = $subType;
     }
 
-    /**
-     * @return string
-     */
     public function getHostname(): string
     {
         return $this->hostname;
     }
 
-    /**
-     * @param string $hostname
-     */
     public function setHostname(string $hostname): void
     {
         $this->hostname = $hostname;

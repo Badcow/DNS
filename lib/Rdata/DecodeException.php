@@ -23,10 +23,6 @@ class DecodeException extends \Exception
 
     /**
      * Convert a binary string into hexadecimal values.
-     *
-     * @param string $rdata
-     *
-     * @return string
      */
     public function binaryToHex(string $rdata): string
     {

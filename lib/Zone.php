@@ -32,10 +32,6 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * Zone constructor.
-     *
-     * @param string|null $name
-     * @param int|null    $defaultTtl
-     * @param array       $resourceRecords
      */
     public function __construct(?string $name = null, ?int $defaultTtl = null, array $resourceRecords = [])
     {
@@ -51,8 +47,6 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * @param string $name
-     *
      * @throws \InvalidArgumentException
      */
     public function setName(string $name): void
@@ -64,9 +58,6 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -80,9 +71,6 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
         return $this->defaultTtl;
     }
 
-    /**
-     * @param int $defaultTtl
-     */
     public function setDefaultTtl(int $defaultTtl): void
     {
         $this->defaultTtl = $defaultTtl;
@@ -114,43 +102,26 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
         $this->fromArray($resourceRecords);
     }
 
-    /**
-     * @param ResourceRecord $resourceRecord
-     */
     public function addResourceRecord(ResourceRecord $resourceRecord): void
     {
         $this->resourceRecords[] = $resourceRecord;
     }
 
-    /**
-     * @return \ArrayIterator
-     */
     public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->resourceRecords);
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return \count($this->resourceRecords);
     }
 
-    /**
-     * @return bool
-     */
     public function isEmpty(): bool
     {
         return empty($this->resourceRecords);
     }
 
-    /**
-     * @param ResourceRecord $resourceRecord
-     *
-     * @return bool
-     */
     public function contains(ResourceRecord $resourceRecord): bool
     {
         foreach ($this->resourceRecords as $_item) {
@@ -162,11 +133,6 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
         return false;
     }
 
-    /**
-     * @param ResourceRecord $resourceRecord
-     *
-     * @return bool
-     */
     public function remove(ResourceRecord $resourceRecord): bool
     {
         foreach ($this->resourceRecords as $key => $_item) {
@@ -182,8 +148,6 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * Return the class of the zone, defaults to 'IN'.
-     *
-     * @return string
      */
     public function getClass(): string
     {
@@ -198,8 +162,6 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * @param mixed $offset
-     *
-     * @return bool
      */
     public function offsetExists($offset): bool
     {
@@ -208,8 +170,6 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * @param mixed $offset
-     *
-     * @return ResourceRecord
      */
     public function offsetGet($offset): ResourceRecord
     {

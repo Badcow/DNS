@@ -97,8 +97,6 @@ class NAPTR implements RdataInterface
     }
 
     /**
-     * @param int $order
-     *
      * @throws \InvalidArgumentException
      */
     public function setOrder(int $order): void
@@ -119,8 +117,6 @@ class NAPTR implements RdataInterface
     }
 
     /**
-     * @param int $preference
-     *
      * @throws \InvalidArgumentException
      */
     public function setPreference(int $preference): void
@@ -188,9 +184,6 @@ class NAPTR implements RdataInterface
         return $this->replacement;
     }
 
-    /**
-     * @param string $replacement
-     */
     public function setReplacement(string $replacement): void
     {
         if (!Validator::resourceRecordName($replacement) && !Validator::fullyQualifiedDomainName($replacement)) {
@@ -259,11 +252,6 @@ class NAPTR implements RdataInterface
 
     /**
      * Extract text from within quotation marks and advance the offset.
-     *
-     * @param string $string
-     * @param int    $offset
-     *
-     * @return string
      */
     private static function extractText(string $string, int &$offset): string
     {

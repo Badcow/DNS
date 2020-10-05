@@ -22,11 +22,7 @@ class Factory
     /**
      * Creates a new RData object from a name.
      *
-     * @param string $name
-     *
      * @throws UnsupportedTypeException
-     *
-     * @return RdataInterface
      */
     public static function newRdataFromName(string $name): RdataInterface
     {
@@ -40,10 +36,6 @@ class Factory
     }
 
     /**
-     * @param int $id
-     *
-     * @return RdataInterface
-     *
      * @throws UnsupportedTypeException
      */
     public static function newRdataFromId(int $id): RdataInterface
@@ -51,21 +43,11 @@ class Factory
         return self::newRdataFromName(Types::getName($id));
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     public static function isTypeImplemented(string $name): bool
     {
         return class_exists(self::getRdataClassName($name));
     }
 
-    /**
-     * @param int $typeCode
-     *
-     * @return bool
-     */
     public static function isTypeCodeImplemented(int $typeCode): bool
     {
         try {
@@ -76,11 +58,6 @@ class Factory
     }
 
     /**
-     * @param string $type
-     * @param string $text
-     *
-     * @return RdataInterface
-     *
      * @throws ParseException|UnsupportedTypeException
      */
     public static function textToRdataType(string $type, string $text): RdataInterface
@@ -126,10 +103,6 @@ class Factory
 
     /**
      * Get the fully qualified class name of the RData class for $type.
-     *
-     * @param string $type
-     *
-     * @return string
      */
     public static function getRdataClassName(string $type): string
     {
@@ -138,10 +111,6 @@ class Factory
 
     /**
      * Create a new AAAA R-Data object.
-     *
-     * @param string $address
-     *
-     * @return AAAA
      */
     public static function AAAA(string $address): AAAA
     {
@@ -153,10 +122,6 @@ class Factory
 
     /**
      * Create a new A R-Data object.
-     *
-     * @param string $address
-     *
-     * @return A
      */
     public static function A(string $address): A
     {
@@ -168,10 +133,6 @@ class Factory
 
     /**
      * Create a new CNAME object.
-     *
-     * @param string $cname
-     *
-     * @return CNAME
      */
     public static function CNAME(string $cname): CNAME
     {
@@ -181,12 +142,6 @@ class Factory
         return $rdata;
     }
 
-    /**
-     * @param string $cpu
-     * @param string $os
-     *
-     * @return HINFO
-     */
     public static function HINFO(string $cpu, string $os): HINFO
     {
         $rdata = new HINFO();
@@ -196,12 +151,6 @@ class Factory
         return $rdata;
     }
 
-    /**
-     * @param int    $preference
-     * @param string $exchange
-     *
-     * @return MX
-     */
     public static function MX(int $preference, string $exchange): MX
     {
         $rdata = new MX();
@@ -211,17 +160,6 @@ class Factory
         return $rdata;
     }
 
-    /**
-     * @param string $mname
-     * @param string $rname
-     * @param int    $serial
-     * @param int    $refresh
-     * @param int    $retry
-     * @param int    $expire
-     * @param int    $minimum
-     *
-     * @return SOA
-     */
     public static function SOA(string $mname, string $rname, int $serial, int $refresh, int $retry, int $expire, int $minimum): SOA
     {
         $rdata = new SOA();
@@ -236,11 +174,6 @@ class Factory
         return $rdata;
     }
 
-    /**
-     * @param string $nsdname
-     *
-     * @return NS
-     */
     public static function NS(string $nsdname): NS
     {
         $rdata = new NS();
@@ -249,11 +182,6 @@ class Factory
         return $rdata;
     }
 
-    /**
-     * @param string $text
-     *
-     * @return TXT
-     */
     public static function TXT(string $text): TXT
     {
         $txt = new TXT();
@@ -262,11 +190,6 @@ class Factory
         return $txt;
     }
 
-    /**
-     * @param string $text
-     *
-     * @return SPF
-     */
     public static function SPF(string $text): SPF
     {
         $spf = new SPF();
@@ -275,11 +198,6 @@ class Factory
         return $spf;
     }
 
-    /**
-     * @param string $target
-     *
-     * @return DNAME
-     */
     public static function DNAME(string $target): DNAME
     {
         $rdata = new DNAME();
@@ -289,14 +207,10 @@ class Factory
     }
 
     /**
-     * @param float $lat
-     * @param float $lon
      * @param float $alt
      * @param float $size
      * @param float $hp
      * @param float $vp
-     *
-     * @return LOC
      */
     public static function LOC(float $lat, float $lon, $alt = 0.0, $size = 1.0, $hp = 10000.0, $vp = 10.0): LOC
     {
@@ -311,11 +225,6 @@ class Factory
         return $loc;
     }
 
-    /**
-     * @param string $target
-     *
-     * @return PTR
-     */
     public static function PTR(string $target): PTR
     {
         $ptr = new PTR();
@@ -324,13 +233,6 @@ class Factory
         return $ptr;
     }
 
-    /**
-     * @param int    $flags
-     * @param int    $algorithm
-     * @param string $publicKey
-     *
-     * @return DNSKEY
-     */
     public static function DNSKEY(int $flags, int $algorithm, string $publicKey): DNSKEY
     {
         $rdata = new DNSKEY();
@@ -341,14 +243,6 @@ class Factory
         return $rdata;
     }
 
-    /**
-     * @param int    $keyTag
-     * @param int    $algorithm
-     * @param string $digest
-     * @param int    $digestType
-     *
-     * @return DS
-     */
     public static function DS(int $keyTag, int $algorithm, string $digest, int $digestType = DS::DIGEST_SHA1): DS
     {
         $rdata = new DS();
@@ -360,12 +254,6 @@ class Factory
         return $rdata;
     }
 
-    /**
-     * @param string $nextDomainName
-     * @param array  $types
-     *
-     * @return NSEC
-     */
     public static function NSEC(string $nextDomainName, array $types): NSEC
     {
         $rdata = new NSEC();
@@ -375,19 +263,6 @@ class Factory
         return $rdata;
     }
 
-    /**
-     * @param string    $typeCovered
-     * @param int       $algorithm
-     * @param int       $labels
-     * @param int       $originalTtl
-     * @param \DateTime $signatureExpiration
-     * @param \DateTime $signatureInception
-     * @param int       $keyTag
-     * @param string    $signersName
-     * @param string    $signature
-     *
-     * @return RRSIG
-     */
     public static function RRSIG(string $typeCovered, int $algorithm, int $labels, int $originalTtl,
                                     \DateTime $signatureExpiration, \DateTime $signatureInception, int $keyTag,
                                     string $signersName, string $signature): RRSIG
@@ -406,14 +281,6 @@ class Factory
         return $rrsig;
     }
 
-    /**
-     * @param int    $priority
-     * @param int    $weight
-     * @param int    $port
-     * @param string $target
-     *
-     * @return SRV
-     */
     public static function SRV(int $priority, int $weight, int $port, string $target): SRV
     {
         $rdata = new SRV();
@@ -428,8 +295,6 @@ class Factory
     /**
      * @param IPBlock[] $includedRanges
      * @param IPBlock[] $excludedRanges
-     *
-     * @return APL
      */
     public static function APL(array $includedRanges = [], array $excludedRanges = []): APL
     {
@@ -446,13 +311,6 @@ class Factory
         return $rdata;
     }
 
-    /**
-     * @param int    $flag
-     * @param string $tag
-     * @param string $value
-     *
-     * @return CAA
-     */
     public static function CAA(int $flag, string $tag, string $value): CAA
     {
         $rdata = new CAA();
@@ -463,12 +321,6 @@ class Factory
         return $rdata;
     }
 
-    /**
-     * @param int    $subType
-     * @param string $hostname
-     *
-     * @return AFSDB
-     */
     public static function AFSDB(int $subType, string $hostname): AFSDB
     {
         $afsdb = new AFSDB();
@@ -478,13 +330,6 @@ class Factory
         return $afsdb;
     }
 
-    /**
-     * @param int    $flags
-     * @param int    $algorithm
-     * @param string $publicKey
-     *
-     * @return CDNSKEY
-     */
     public static function CDNSKEY(int $flags, int $algorithm, string $publicKey): CDNSKEY
     {
         $cdnskey = new CDNSKEY();
@@ -495,14 +340,6 @@ class Factory
         return $cdnskey;
     }
 
-    /**
-     * @param int    $keyTag
-     * @param int    $algorithm
-     * @param string $digest
-     * @param int    $digestType
-     *
-     * @return CDS
-     */
     public static function CDS(int $keyTag, int $algorithm, string $digest, int $digestType = DS::DIGEST_SHA1): CDS
     {
         $cds = new CDS();
@@ -516,11 +353,6 @@ class Factory
 
     /**
      * @param int|string $certificateType
-     * @param int        $keyTag
-     * @param int        $algorithm
-     * @param string     $certificate
-     *
-     * @return CERT
      */
     public static function CERT($certificateType, int $keyTag, int $algorithm, string $certificate): CERT
     {
@@ -548,8 +380,6 @@ class Factory
      * @param int         $identifierType 16-bit integer
      * @param string|null $identifier     This is ignored if $digest is not &null
      * @param string|null $fqdn           This is ignored if $digest is not &null
-     *
-     * @return DHCID
      */
     public static function DHCID(?string $digest, int $identifierType, ?string $identifier = null, ?string $fqdn = null): DHCID
     {
@@ -571,14 +401,6 @@ class Factory
         return $dhcid;
     }
 
-    /**
-     * @param int    $keyTag
-     * @param int    $algorithm
-     * @param string $digest
-     * @param int    $digestType
-     *
-     * @return DLV
-     */
     public static function DLV(int $keyTag, int $algorithm, string $digest, int $digestType = DS::DIGEST_SHA1): DLV
     {
         $rdata = new DLV();
@@ -591,12 +413,7 @@ class Factory
     }
 
     /**
-     * @param int      $publicKeyAlgorithm
-     * @param string   $hostIdentityTag
-     * @param string   $publicKey
      * @param string[] $rendezvousServers
-     *
-     * @return HIP
      */
     public static function HIP(int $publicKeyAlgorithm, string $hostIdentityTag, string $publicKey, array $rendezvousServers): HIP
     {
@@ -614,8 +431,6 @@ class Factory
      * @param string|null $gateway    either &null for no gateway, a fully qualified domain name, or an IPv4 or IPv6 address
      * @param int         $algorithm  either IPSECKEY::ALGORITHM_NONE, IPSECKEY::ALGORITHM_DSA, IPSECKEY::ALGORITHM_RSA, or IPSECKEY::ALGORITHM_ECDSA
      * @param string|null $publicKey  base64 encoded public key
-     *
-     * @return IPSECKEY
      */
     public static function IPSECKEY(int $precedence, ?string $gateway, int $algorithm = 0, ?string $publicKey = null): IPSECKEY
     {
@@ -627,14 +442,6 @@ class Factory
         return $ipseckey;
     }
 
-    /**
-     * @param int    $flags
-     * @param int    $protocol
-     * @param int    $algorithm
-     * @param string $publicKey
-     *
-     * @return KEY
-     */
     public static function KEY(int $flags, int $protocol, int $algorithm, string $publicKey): KEY
     {
         $key = new KEY();
@@ -646,12 +453,6 @@ class Factory
         return $key;
     }
 
-    /**
-     * @param int    $preference
-     * @param string $exchanger
-     *
-     * @return KX
-     */
     public static function KX(int $preference, string $exchanger): KX
     {
         $kx = new KX();
@@ -661,16 +462,6 @@ class Factory
         return $kx;
     }
 
-    /**
-     * @param int    $order
-     * @param int    $preference
-     * @param string $flags
-     * @param string $services
-     * @param string $regexp
-     * @param string $replacement
-     *
-     * @return NAPTR
-     */
     public static function NAPTR(int $order, int $preference, string $flags, string $services, string $regexp, string $replacement): NAPTR
     {
         $naptr = new NAPTR();
@@ -684,16 +475,6 @@ class Factory
         return $naptr;
     }
 
-    /**
-     * @param int    $hashAlgorithm
-     * @param bool   $unsignedDelegationsCovered
-     * @param int    $iterations
-     * @param string $salt
-     * @param string $nextHashedOwnerName
-     * @param array  $types
-     *
-     * @return NSEC3
-     */
     public static function NSEC3(int $hashAlgorithm, bool $unsignedDelegationsCovered, int $iterations, string $salt, string $nextHashedOwnerName, array $types): NSEC3
     {
         $nsec3 = new NSEC3();
@@ -707,14 +488,6 @@ class Factory
         return $nsec3;
     }
 
-    /**
-     * @param int    $hashAlgorithm
-     * @param int    $flags
-     * @param int    $iterations
-     * @param string $salt
-     *
-     * @return NSEC3PARAM
-     */
     public static function NSEC3PARAM(int $hashAlgorithm, int $flags, int $iterations, string $salt): NSEC3PARAM
     {
         $nsec3param = new NSEC3PARAM();
@@ -735,19 +508,6 @@ class Factory
         return $rp;
     }
 
-    /**
-     * @param string    $typeCovered
-     * @param int       $algorithm
-     * @param int       $labels
-     * @param int       $originalTtl
-     * @param \DateTime $signatureExpiration
-     * @param \DateTime $signatureInception
-     * @param int       $keyTag
-     * @param string    $signersName
-     * @param string    $signature
-     *
-     * @return SIG
-     */
     public static function SIG(string $typeCovered, int $algorithm, int $labels, int $originalTtl,
                                  \DateTime $signatureExpiration, \DateTime $signatureInception, int $keyTag,
                                  string $signersName, string $signature): SIG
@@ -766,13 +526,6 @@ class Factory
         return $sig;
     }
 
-    /**
-     * @param int    $algorithm
-     * @param int    $fpType
-     * @param string $fingerprint
-     *
-     * @return SSHFP
-     */
     public static function SSHFP(int $algorithm, int $fpType, string $fingerprint): SSHFP
     {
         $sshfp = new SSHFP();
@@ -783,14 +536,6 @@ class Factory
         return $sshfp;
     }
 
-    /**
-     * @param int    $keyTag
-     * @param int    $algorithm
-     * @param string $digest
-     * @param int    $digestType
-     *
-     * @return TA
-     */
     public static function TA(int $keyTag, int $algorithm, string $digest, int $digestType = DS::DIGEST_SHA1): TA
     {
         $ta = new TA();
@@ -803,15 +548,8 @@ class Factory
     }
 
     /**
-     * @param string    $algorithm
-     * @param \DateTime $inception
-     * @param \DateTime $expiration
-     * @param int       $mode
-     * @param int       $error
-     * @param string    $keyData    binary string
-     * @param string    $otherData  binary string
-     *
-     * @return TKEY
+     * @param string $keyData   binary string
+     * @param string $otherData binary string
      */
     public static function TKEY(string $algorithm, \DateTime $inception, \DateTime $expiration, int $mode, int $error, string $keyData, string $otherData = ''): TKEY
     {
@@ -827,14 +565,6 @@ class Factory
         return $tkey;
     }
 
-    /**
-     * @param int    $certificateUsage
-     * @param int    $selector
-     * @param int    $matchingType
-     * @param string $certificateAssociationData
-     *
-     * @return TLSA
-     */
     public static function TLSA(int $certificateUsage, int $selector, int $matchingType, string $certificateAssociationData): TLSA
     {
         $tlsa = new TLSA();
@@ -846,17 +576,6 @@ class Factory
         return $tlsa;
     }
 
-    /**
-     * @param string    $algorithmName
-     * @param \DateTime $timeSigned
-     * @param int       $fudge
-     * @param string    $mac
-     * @param int       $originalId
-     * @param int       $error
-     * @param string    $otherData
-     *
-     * @return TSIG
-     */
     public static function TSIG(string $algorithmName, \DateTime $timeSigned, int $fudge, string $mac, int $originalId, int $error, string $otherData): TSIG
     {
         $tsig = new TSIG();
@@ -871,13 +590,6 @@ class Factory
         return $tsig;
     }
 
-    /**
-     * @param int    $priority
-     * @param int    $weight
-     * @param string $target
-     *
-     * @return URI
-     */
     public static function URI(int $priority, int $weight, string $target): URI
     {
         $uri = new URI();

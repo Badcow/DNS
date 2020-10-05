@@ -70,17 +70,11 @@ class TSIG implements RdataInterface
      */
     private $otherData;
 
-    /**
-     * @return string
-     */
     public function getAlgorithmName(): string
     {
         return $this->algorithmName;
     }
 
-    /**
-     * @param string $algorithmName
-     */
     public function setAlgorithmName(string $algorithmName): void
     {
         if (!Validator::fullyQualifiedDomainName($algorithmName)) {
@@ -90,33 +84,21 @@ class TSIG implements RdataInterface
         $this->algorithmName = $algorithmName;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getTimeSigned(): \DateTime
     {
         return $this->timeSigned;
     }
 
-    /**
-     * @param \DateTime $timeSigned
-     */
     public function setTimeSigned(\DateTime $timeSigned): void
     {
         $this->timeSigned = $timeSigned;
     }
 
-    /**
-     * @return int
-     */
     public function getFudge(): int
     {
         return $this->fudge;
     }
 
-    /**
-     * @param int $fudge
-     */
     public function setFudge(int $fudge): void
     {
         if (!Validator::isUnsignedInteger($fudge, 16)) {
@@ -125,33 +107,21 @@ class TSIG implements RdataInterface
         $this->fudge = $fudge;
     }
 
-    /**
-     * @return string
-     */
     public function getMac(): string
     {
         return $this->mac;
     }
 
-    /**
-     * @param string $mac
-     */
     public function setMac(string $mac): void
     {
         $this->mac = $mac;
     }
 
-    /**
-     * @return int
-     */
     public function getOriginalId(): int
     {
         return $this->originalId;
     }
 
-    /**
-     * @param int $originalId
-     */
     public function setOriginalId(int $originalId): void
     {
         if (!Validator::isUnsignedInteger($originalId, 16)) {
@@ -160,17 +130,11 @@ class TSIG implements RdataInterface
         $this->originalId = $originalId;
     }
 
-    /**
-     * @return int
-     */
     public function getError(): int
     {
         return $this->error;
     }
 
-    /**
-     * @param int $error
-     */
     public function setError(int $error): void
     {
         if (!Validator::isUnsignedInteger($error, 16)) {
@@ -179,17 +143,11 @@ class TSIG implements RdataInterface
         $this->error = $error;
     }
 
-    /**
-     * @return string
-     */
     public function getOtherData(): string
     {
         return $this->otherData;
     }
 
-    /**
-     * @param string $otherData
-     */
     public function setOtherData(string $otherData): void
     {
         $this->otherData = $otherData;

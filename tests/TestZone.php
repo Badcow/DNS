@@ -56,9 +56,6 @@ DNS;
         return str_replace("\r", '', self::$expected);
     }
 
-    /**
-     * @return Zone
-     */
     public static function buildTestZone(): Zone
     {
         $soa = new ResourceRecord();

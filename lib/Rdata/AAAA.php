@@ -23,9 +23,6 @@ class AAAA extends A
     const TYPE = 'AAAA';
     const TYPE_CODE = 28;
 
-    /**
-     * @param string $address
-     */
     public function setAddress(string $address): void
     {
         if (!Validator::ipv6($address)) {
