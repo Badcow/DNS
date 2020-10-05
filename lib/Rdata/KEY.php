@@ -71,15 +71,11 @@ class KEY implements RdataInterface
     }
 
     /**
-     * @throws \InvalidArgumentException
+     * @param string $publicKey the public key in its raw (binary) representation
      */
     public function setPublicKey(string $publicKey): void
     {
-        if (false === $key = base64_decode($publicKey, true)) {
-            throw new \InvalidArgumentException('The public key must be a valid base64 encoded string.');
-        }
-
-        $this->publicKey = $key;
+        $this->publicKey = $publicKey;
     }
 
     public function getFlags(): int
@@ -99,7 +95,7 @@ class KEY implements RdataInterface
 
     public function getPublicKey(): string
     {
-        return base64_encode($this->publicKey);
+        return $this->publicKey;
     }
 
     /**
@@ -127,7 +123,7 @@ class KEY implements RdataInterface
         $this->setFlags((int) array_shift($rdata));
         $this->setProtocol((int) array_shift($rdata));
         $this->setAlgorithm((int) array_shift($rdata));
-        $this->setPublicKey(implode('', $rdata));
+        $this->setPublicKey(base64_decode(implode('', $rdata)));
     }
 
     /**
@@ -141,7 +137,7 @@ class KEY implements RdataInterface
         $this->setFlags((int) $integers['flags']);
         $this->setProtocol((int) $integers['protocol']);
         $this->setAlgorithm((int) $integers['algorithm']);
-        $this->publicKey = substr($rdata, $offset, $rdLength - 4);
+        $this->setPublicKey(substr($rdata, $offset, $rdLength - 4));
         $offset += $rdLength - 4;
     }
 }

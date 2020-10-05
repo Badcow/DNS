@@ -33,19 +33,19 @@ class KeyTest extends TestCase
         $key->setFlags(256);
         $key->setProtocol(3);
         $key->setAlgorithm(Algorithms::RSASHA1);
-        $key->setPublicKey(self::$publicKey);
+        $key->setPublicKey(base64_decode(self::$publicKey));
 
         $this->assertEquals($expectation, $key->toText());
     }
 
     public function testFactory(): void
     {
-        $key = Factory::KEY(256, 3, Algorithms::RSASHA1, self::$publicKey);
+        $key = Factory::KEY(256, 3, Algorithms::RSASHA1, base64_decode(self::$publicKey));
         $output = '256 3 5 '.self::$publicKey;
 
         $this->assertEquals(256, $key->getFlags());
         $this->assertEquals(5, $key->getAlgorithm());
-        $this->assertEquals(self::$publicKey, $key->getPublicKey());
+        $this->assertEquals(base64_decode(self::$publicKey), $key->getPublicKey());
         $this->assertEquals(3, $key->getProtocol());
         $this->assertEquals($output, $key->toText());
     }
@@ -57,7 +57,7 @@ class KeyTest extends TestCase
         $key->setFlags(256);
         $key->setProtocol(3);
         $key->setAlgorithm(Algorithms::RSASHA1);
-        $key->setPublicKey(self::$publicKey);
+        $key->setPublicKey(base64_decode(self::$publicKey));
 
         $fromText = new KEY();
         $fromText->fromText($rdata);
@@ -72,7 +72,7 @@ class KeyTest extends TestCase
         $key->setFlags(256);
         $key->setProtocol(3);
         $key->setAlgorithm(Algorithms::RSASHA1);
-        $key->setPublicKey("AQPSKmynfzW4kyBv015MUG2DeIQ3Cbl+BBZH4b/\r\n0PY1kxkmvHjcZc8nokfzj31GajIQKY+5CptLr3buXA10hWqTkF7H6RfoRqXQe   ogmMHfpftf6zMv1LyBUgia7za6ZEzOJBOztyvhjL742iU\n/TpPSEDhm2SNKLijfUppn1UaNvv4w==");
+        $key->setPublicKey(base64_decode("AQPSKmynfzW4kyBv015MUG2DeIQ3Cbl+BBZH4b/\r\n0PY1kxkmvHjcZc8nokfzj31GajIQKY+5CptLr3buXA10hWqTkF7H6RfoRqXQe   ogmMHfpftf6zMv1LyBUgia7za6ZEzOJBOztyvhjL742iU\n/TpPSEDhm2SNKLijfUppn1UaNvv4w=="));
 
         $this->assertEquals($wireFormat, $key->toWire());
 

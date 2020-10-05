@@ -27,13 +27,13 @@ class CdnskeyTest extends TestCase
 
     public function testFactory(): void
     {
-        $cdnskey = Factory::CDNSKEY(256, Algorithms::RSASHA1, self::$publicKey);
+        $cdnskey = Factory::CDNSKEY(256, Algorithms::RSASHA1, base64_decode(self::$publicKey));
         $output = '256 3 5 '.self::$publicKey;
 
         $this->assertInstanceOf(CDNSKEY::class, $cdnskey);
         $this->assertEquals(256, $cdnskey->getFlags());
         $this->assertEquals(5, $cdnskey->getAlgorithm());
-        $this->assertEquals(self::$publicKey, $cdnskey->getPublicKey());
+        $this->assertEquals(base64_decode(self::$publicKey), $cdnskey->getPublicKey());
         $this->assertEquals(3, $cdnskey->getProtocol());
         $this->assertEquals($output, $cdnskey->toText());
     }

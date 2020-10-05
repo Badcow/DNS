@@ -32,7 +32,7 @@ class DnskeyTest extends TestCase
         $dnskey = new DNSKEY();
         $dnskey->setFlags(256);
         $dnskey->setAlgorithm(Algorithms::RSASHA1);
-        $dnskey->setPublicKey(self::$publicKey);
+        $dnskey->setPublicKey(base64_decode(self::$publicKey));
 
         $this->assertEquals($expectation, $dnskey->toText());
     }
@@ -46,12 +46,12 @@ class DnskeyTest extends TestCase
 
     public function testFactory(): void
     {
-        $dnskey = Factory::DNSKEY(256, Algorithms::RSASHA1, self::$publicKey);
+        $dnskey = Factory::DNSKEY(256, Algorithms::RSASHA1, base64_decode(self::$publicKey));
         $output = '256 3 5 '.self::$publicKey;
 
         $this->assertEquals(256, $dnskey->getFlags());
         $this->assertEquals(5, $dnskey->getAlgorithm());
-        $this->assertEquals(self::$publicKey, $dnskey->getPublicKey());
+        $this->assertEquals(base64_decode(self::$publicKey), $dnskey->getPublicKey());
         $this->assertEquals(3, $dnskey->getProtocol());
         $this->assertEquals($output, $dnskey->toText());
     }
@@ -63,7 +63,7 @@ class DnskeyTest extends TestCase
         $dnskey->setFlags(256);
         $dnskey->setProtocol(3);
         $dnskey->setAlgorithm(Algorithms::RSASHA1);
-        $dnskey->setPublicKey(self::$publicKey);
+        $dnskey->setPublicKey(base64_decode(self::$publicKey));
 
         $fromText = new DNSKEY();
         $fromText->fromText($rdata);
@@ -77,7 +77,7 @@ class DnskeyTest extends TestCase
         $dnskey = new DNSKEY();
         $dnskey->setFlags(256);
         $dnskey->setAlgorithm(Algorithms::RSASHA1);
-        $dnskey->setPublicKey("AQPSKmynfzW4kyBv015MUG2DeIQ3Cbl+BBZH4b/\r\n0PY1kxkmvHjcZc8nokfzj31GajIQKY+5CptLr3buXA10hWqTkF7H6RfoRqXQe   ogmMHfpftf6zMv1LyBUgia7za6ZEzOJBOztyvhjL742iU\n/TpPSEDhm2SNKLijfUppn1UaNvv4w==");
+        $dnskey->setPublicKey(base64_decode("AQPSKmynfzW4kyBv015MUG2DeIQ3Cbl+BBZH4b/\r\n0PY1kxkmvHjcZc8nokfzj31GajIQKY+5CptLr3buXA10hWqTkF7H6RfoRqXQe   ogmMHfpftf6zMv1LyBUgia7za6ZEzOJBOztyvhjL742iU\n/TpPSEDhm2SNKLijfUppn1UaNvv4w=="));
 
         $this->assertEquals($wireFormat, $dnskey->toWire());
 
