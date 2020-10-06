@@ -15,7 +15,14 @@ namespace Badcow\DNS\Parser;
 
 class TimeFormat
 {
-    public const TIME_FORMAT_REGEX = '/^(?:(\d+)w)?(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/i';
+    public const TIME_FORMAT_REGEX = '/^(?:(?<w>\d+)w)?(?:(?<d>\d+)d)?(?:(?<h>\d+)h)?(?:(?<m>\d+)m)?(?:(?<s>\d+)s)?$/i';
+
+    /**
+     * Maximum time is the the lesser of 0xffffffff or the PHP maximum integer.
+     *
+     * @var int
+     */
+    public static $maxTime;
 
     public const TIME_MULTIPLIERS = [
         'w' => 604800,
@@ -28,49 +35,58 @@ class TimeFormat
     /**
      * Check if given token looks like time format.
      *
-     * @param string $value
+     * @param string $value the time value to be evaluated
+     *
+     * @return bool true if $value is a valid time format
      */
     public static function isTimeFormat($value): bool
     {
-        return \is_numeric($value) || 1 === \preg_match(self::TIME_FORMAT_REGEX, $value);
+        return is_numeric($value) || 1 === \preg_match(self::TIME_FORMAT_REGEX, $value);
     }
 
     /**
      * Convert human readable time format to seconds.
      *
-     * @param string $value
+     * @param string|int $value time value to be converted to seconds
+     *
+     * @return int the time value in seconds
      */
     public static function toSeconds($value): int
     {
-        $seconds = 0;
-
-        if (\is_numeric($value)) {
-            $seconds = (int) $value;
-        } elseif (1 === \preg_match(self::TIME_FORMAT_REGEX, $value, $matches)) {
-            \array_shift($matches);
-            $seconds = (int) \array_sum(\array_map(function ($fragment, $multiplier) {
-                return (int) $fragment * $multiplier;
-            }, $matches, self::TIME_MULTIPLIERS));
+        if (!isset(static::$maxTime)) {
+            static::$maxTime = min(0xffffffff, PHP_INT_MAX);
         }
 
-        return $seconds < 2 ** 31 ? $seconds : 0;
+        if (is_numeric($value)) {
+            return (int) $value;
+        }
+
+        if (1 === preg_match(self::TIME_FORMAT_REGEX, $value, $matches, PREG_UNMATCHED_AS_NULL)) {
+            $sec = (int) $matches['w'] * 604800 +
+                   (int) $matches['d'] * 86400 +
+                   (int) $matches['h'] * 3600 +
+                   (int) $matches['m'] * 60 +
+                   (int) $matches['s'];
+
+            return $sec < static::$maxTime ? $sec : 0;
+        }
+
+        return 0;
     }
 
     /**
      * Convert number of seconds to human readable format.
+     *
+     * @param int $seconds the time in seconds to be converted to human-readable string
+     *
+     * @return string a human-readable representation of the $seconds parameter
      */
     public static function toHumanReadable(int $seconds): string
     {
         $humanReadable = '';
         foreach (self::TIME_MULTIPLIERS as $suffix => $multiplier) {
-            if ($seconds < $multiplier) {
-                continue;
-            }
-            $current = \floor($seconds / $multiplier);
-            if ($current > 0) {
-                $humanReadable .= \sprintf('%d%s', $current, $suffix);
-                $seconds -= ($current * $multiplier);
-            }
+            $humanReadable .= ($t = floor($seconds / $multiplier)) > 0 ? $t.$suffix : '';
+            $seconds -= $t * $multiplier;
         }
 
         return $humanReadable;

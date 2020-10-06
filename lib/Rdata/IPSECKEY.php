@@ -191,19 +191,8 @@ class IPSECKEY implements RdataInterface
      */
     public function setPublicKey(int $algorithm, ?string $publicKey): void
     {
-        if (null === $publicKey) {
-            $this->publicKey = null;
-            $this->setAlgorithm(0);
-
-            return;
-        }
-
-        if (!Validator::isBase64Encoded($publicKey)) {
-            throw new \InvalidArgumentException('The public key must be a valid base64 encoded string.');
-        }
-
-        $this->publicKey = (string) preg_replace('/[^a-zA-Z0-9\/+=]/', '', $publicKey);
-        $this->setAlgorithm($algorithm);
+        $this->publicKey = $publicKey;
+        $this->setAlgorithm((null === $publicKey) ? 0 : $algorithm);
     }
 
     /**
@@ -211,17 +200,13 @@ class IPSECKEY implements RdataInterface
      */
     public function toText(): string
     {
-        $vars = [$this->precedence, $this->gatewayType, $this->algorithm, $this->gateway, $this->publicKey];
-
-        if (0 === $this->gatewayType) {
-            $vars[3] = '.';
-        }
-
-        if (0 === $this->algorithm) {
-            unset($vars[4]);
-        }
-
-        return implode(Tokens::SPACE, $vars);
+        return rtrim(sprintf('%d %d %d %s %s',
+            $this->precedence,
+            $this->gatewayType,
+            $this->algorithm,
+            (0 === $this->gatewayType) ? '.' : $this->gateway,
+            (0 === $this->algorithm) ? '' : base64_encode($this->publicKey ?? '')
+        ));
     }
 
     /**
@@ -240,7 +225,7 @@ class IPSECKEY implements RdataInterface
         }
 
         if (self::ALGORITHM_NONE !== $this->algorithm && null !== $this->publicKey) {
-            $wire .= base64_decode($this->publicKey);
+            $wire .= $this->publicKey;
         }
 
         return $wire;
@@ -256,7 +241,7 @@ class IPSECKEY implements RdataInterface
         array_shift($rdata); //Gateway type is inferred from setGateway.
         $algorithm = (int) array_shift($rdata);
         $this->setGateway((string) array_shift($rdata));
-        $publicKey = (0 === $algorithm) ? null : implode('', $rdata);
+        $publicKey = (0 === $algorithm) ? null : base64_decode(implode('', $rdata));
         $this->setPublicKey($algorithm, $publicKey);
     }
 
@@ -278,8 +263,7 @@ class IPSECKEY implements RdataInterface
         $this->setGateway(self::extractGateway($gatewayType, $rdata, $offset));
 
         if (self::ALGORITHM_NONE !== $algorithm) {
-            $publicKey = base64_encode(substr($rdata, $offset, $end - $offset));
-            $this->setPublicKey($algorithm, $publicKey);
+            $this->setPublicKey($algorithm, substr($rdata, $offset, $end - $offset));
         }
 
         $offset = $end;

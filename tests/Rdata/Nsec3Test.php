@@ -13,16 +13,20 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Algorithms;
-use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\NSEC3;
-use Badcow\DNS\Rdata\RRSIG;
-use Badcow\DNS\Rdata\UnsupportedTypeException;
 use PHPUnit\Framework\TestCase;
 
 class Nsec3Test extends TestCase
 {
+    public function getDataProvider(): array
+    {
+        return [
+            ['1 1 10 12345678 589r358vspjufvaju949jpvf74d9ptgh A RRSIG', true, 10, '12345678', 'ns.sub.delzsk.example.', ['A', 'RRSIG'], '589r358vspjufvaju949jpvf74d9ptgh'],
+            ['1 0 10 - jgu2l7c3lklhakc5rhuoorti2dckk3kl TXT RRSIG', false, 10, '', 'a.test.', ['TXT', 'RRSIG'], 'jgu2l7c3lklhakc5rhuoorti2dckk3kl'],
+        ];
+    }
+
     public function testGetType(): void
     {
         $nsec3 = new NSEC3();
@@ -35,33 +39,33 @@ class Nsec3Test extends TestCase
         $this->assertEquals(50, $nsec3->getTypeCode());
     }
 
-    public function testToText(): void
+    /**
+     * @dataProvider getDataProvider
+     */
+    public function testToText(string $text, bool $unsignedDelegationsCovered, int $iterations, string $salt, string $nextOwnerName, array $types, string $nextHashedOwnerName): void
     {
         $nsec3 = new NSEC3();
-        $nsec3->setHashAlgorithm(Algorithms::RSAMD5);
-        $nsec3->setUnsignedDelegationsCovered(true);
-        $nsec3->setIterations(12);
-        $nsec3->setSalt('aabbccdd');
-        $nsec3->setNextHashedOwnerName('2vptu5timamqttgl4luu9kg21e0aor3s');
-        $nsec3->addType(A::TYPE);
-        $nsec3->addType(RRSIG::TYPE);
+        $nsec3->setUnsignedDelegationsCovered($unsignedDelegationsCovered);
+        $nsec3->setIterations($iterations);
+        $nsec3->setSalt($salt);
+        $nsec3->setNextOwnerName($nextOwnerName);
+        $nsec3->setTypes($types);
+        $nsec3->calculateNextOwnerHash();
 
-        $this->assertEquals('1 1 12 aabbccdd 2vptu5timamqttgl4luu9kg21e0aor3s A RRSIG', $nsec3->toText());
+        $this->assertEquals($text, $nsec3->toText());
     }
 
     /**
-     * @throws UnsupportedTypeException
+     * @dataProvider getDataProvider
      */
-    public function testWire(): void
+    public function testWire(string $text, bool $unsignedDelegationsCovered, int $iterations, string $salt, string $nextOwnerName, array $types, string $nextHashedOwnerName): void
     {
         $nsec3 = new NSEC3();
-        $nsec3->setHashAlgorithm(Algorithms::RSAMD5);
-        $nsec3->setUnsignedDelegationsCovered(true);
-        $nsec3->setIterations(12);
-        $nsec3->setSalt('aabbccdd');
-        $nsec3->setNextHashedOwnerName('2vptu5timamqttgl4luu9kg21e0aor3s');
-        $nsec3->addType(A::TYPE);
-        $nsec3->addType(RRSIG::TYPE);
+        $nsec3->setUnsignedDelegationsCovered($unsignedDelegationsCovered);
+        $nsec3->setIterations($iterations);
+        $nsec3->setSalt($salt);
+        $nsec3->setNextHashedOwnerName(NSEC3::base32decode($nextHashedOwnerName));
+        $nsec3->setTypes($types);
 
         $wireFormat = $nsec3->toWire();
 
@@ -70,25 +74,28 @@ class Nsec3Test extends TestCase
         $this->assertEquals($nsec3, $fromWire);
     }
 
-    public function testFromText(): void
+    /**
+     * @dataProvider getDataProvider
+     */
+    public function testFromText(string $text, bool $unsignedDelegationsCovered, int $iterations, string $salt, string $nextOwnerName, array $types, string $nextHashedOwnerName): void
     {
-        $expectation = new NSEC3();
-        $expectation->setHashAlgorithm(Algorithms::RSAMD5);
-        $expectation->setUnsignedDelegationsCovered(true);
-        $expectation->setIterations(12);
-        $expectation->setSalt('aabbccdd');
-        $expectation->setNextHashedOwnerName('2vptu5timamqttgl4luu9kg21e0aor3s');
-        $expectation->addType(A::TYPE);
-        $expectation->addType(RRSIG::TYPE);
-
         $fromText = new NSEC3();
-        $fromText->fromText('1 1 12 aabbccdd 2vptu5timamqttgl4luu9kg21e0aor3s A RRSIG');
-        $this->assertEquals($expectation, $fromText);
+        $fromText->fromText($text);
+
+        $this->assertEquals($fromText->isUnsignedDelegationsCovered(), $unsignedDelegationsCovered);
+        $this->assertEquals($fromText->getIterations(), $iterations);
+        $this->assertEquals($fromText->getSalt(), $salt);
+        $this->assertEquals($fromText->getTypes(), $types);
+        $this->assertEquals($fromText->getNextHashedOwnerName(), NSEC3::base32decode($nextHashedOwnerName));
     }
 
-    public function testFactory(): void
+    /**
+     * @dataProvider getDataProvider
+     */
+    public function testFactory(string $text, bool $unsignedDelegationsCovered, int $iterations, string $salt, string $nextOwnerName, array $types, string $nextHashedOwnerName): void
     {
-        $nsec3 = Factory::NSEC3(Algorithms::RSAMD5, true, 12, 'aabbccdd', '2vptu5timamqttgl4luu9kg21e0aor3s', ['A', 'RRSIG']);
-        $this->assertEquals('1 1 12 aabbccdd 2vptu5timamqttgl4luu9kg21e0aor3s A RRSIG', $nsec3->toText());
+        $nsec3 = Factory::NSEC3($unsignedDelegationsCovered, $iterations, $salt, $nextOwnerName, $types);
+        $this->assertEquals($nextHashedOwnerName, NSEC3::base32encode($nsec3->getNextHashedOwnerName()));
+        $this->assertEquals($text, $nsec3->toText());
     }
 }

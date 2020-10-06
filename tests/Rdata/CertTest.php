@@ -28,7 +28,7 @@ class CertTest extends TestCase
     public function setUp(): void
     {
         $certificate = file_get_contents(__DIR__.'/../Resources/google.com.cer');
-        $this->certificate = str_replace(['-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\r", "\n"], '', $certificate);
+        $this->certificate = base64_decode(str_replace(['-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\r", "\n"], '', $certificate));
     }
 
     public function testGetType(): void
@@ -51,7 +51,7 @@ class CertTest extends TestCase
         $cert->setAlgorithm(Algorithms::ECC);
         $cert->setCertificate($this->certificate);
 
-        $expectation = 'PGP 65 ECC '.$this->certificate;
+        $expectation = 'PGP 65 ECC '.base64_encode($this->certificate);
 
         $this->assertEquals($expectation, $cert->toText());
     }
@@ -83,7 +83,7 @@ class CertTest extends TestCase
         $cert->setAlgorithm(Algorithms::ECC);
         $cert->setCertificate($this->certificate);
 
-        $text = 'PGP 65 ECC '.$this->certificate;
+        $text = 'PGP 65 ECC '.base64_encode($this->certificate);
 
         $fromText = new CERT();
         $fromText->fromText($text);
@@ -99,16 +99,6 @@ class CertTest extends TestCase
         $cert->setCertificate($this->certificate);
 
         $this->assertEquals($cert, Factory::CERT('PGP', 65, Algorithms::ECC, $this->certificate));
-    }
-
-    public function testSetCertificateThrowsErrorWithMalformedBase64EncodedString(): void
-    {
-        $cert = new CERT();
-        $certificate = $this->certificate.'%';
-
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The certificate must be a valid Base64 encoded string.');
-        $cert->setCertificate($certificate);
     }
 
     public function testGetKeyTypeMnemonic(): void

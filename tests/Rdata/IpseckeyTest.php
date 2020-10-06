@@ -24,12 +24,12 @@ class IpseckeyTest extends TestCase
     {
         return [
             // Text, Precedence, GatewayType, Algorithm, Gateway, PublicKey
-            ['10 1 2 192.0.2.38 AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==', 10, 1, 2, '192.0.2.38', 'AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ=='],
-            ['10 0 2 . AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==', 10, 0, 2, null, 'AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ=='],
-            ['10 1 2 192.0.2.3 AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==', 10, 1, 2, '192.0.2.3', 'AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ=='],
-            ['10 3 2 mygateway.example.com. AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==', 10, 3, 2, 'mygateway.example.com.', 'AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ=='],
+            ['10 1 2 192.0.2.38 AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==', 10, 1, 2, '192.0.2.38', base64_decode('AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==')],
+            ['10 0 2 . AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==', 10, 0, 2, null, base64_decode('AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==')],
+            ['10 1 2 192.0.2.3 AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==', 10, 1, 2, '192.0.2.3', base64_decode('AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==')],
+            ['10 3 2 mygateway.example.com. AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==', 10, 3, 2, 'mygateway.example.com.', base64_decode('AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==')],
             ['10 3 0 mygateway.example.com.', 10, 3, 0, 'mygateway.example.com.', null],
-            ['10 2 2 2001:db8:0:8002::2000:1 AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==', 10, 2, 2, '2001:db8:0:8002::2000:1', 'AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ=='],
+            ['10 2 2 2001:db8:0:8002::2000:1 AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==', 10, 2, 2, '2001:db8:0:8002::2000:1', base64_decode('AQNRU3mG7TVTO2BkR47usntb102uFJtugbo6BSGvgqt4AQ==')],
         ];
     }
 

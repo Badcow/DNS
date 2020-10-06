@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Algorithms;
+use Badcow\DNS\Rdata\DNSKEY;
 use Badcow\DNS\Rdata\DS;
 use Badcow\DNS\Rdata\Factory;
 use PHPUnit\Framework\TestCase;
@@ -72,5 +73,21 @@ class DsTest extends TestCase
         $fromWire->fromWire($wireFormat);
 
         $this->assertEquals($ds, $fromWire);
+    }
+
+    public function testCalculateDigest(): void
+    {
+        $algorithm = Algorithms::RSASHA1;
+        $dnskey = new DNSKEY();
+        $dnskey->setPublicKey(base64_decode('AQOeiiR0GOMYkDshWoSKz9XzfwJr1AYtsmx3TGkJaNXVbfi/2pHm822aJ5iI9BMzNXxeYCmZDRD99WYwYqUSdjMmmAphXdvxegXd/M5+X7OrzKBaMbCVdFLUUh6DhweJBjEVv5f2wwjM9XzcnOf+EPbtG9DMBmADjFDc2w/rljwvFw=='));
+        $dnskey->setAlgorithm($algorithm);
+        $dnskey->setFlags(256);
+
+        $ds = new DS();
+        $ds->setAlgorithm($algorithm);
+        $ds->setKeyTag(60485);
+        $ds->calculateDigest('DSKEY.example.com.', $dnskey);
+
+        $this->assertEquals('60485 5 1 2BB183AF5F22588179A53B0A98631FAD1A292118', $ds->toText());
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 use InvalidArgumentException;
 
@@ -92,6 +93,22 @@ class DS implements RdataInterface
     public function setDigest(string $digest): void
     {
         $this->digest = $digest;
+    }
+
+    /**
+     * Calculates the digest by concatenating the canonical form of the fully qualified owner name of the DNSKEY RR with
+     * the DNSKEY RDATA, and then applying the digest algorithm.
+     *
+     * @param string $owner  canonical form of the fully qualified owner name of the DNSKEY RR
+     * @param DNSKEY $dnskey Owner's DNSKEY
+     */
+    public function calculateDigest(string $owner, DNSKEY $dnskey): void
+    {
+        if (static::DIGEST_SHA1 !== $this->digestType) {
+            throw new InvalidArgumentException('Can only calculate SHA-1 digests.');
+        }
+
+        $this->digest = sha1(Message::encodeName(strtolower($owner)).$dnskey->toWire(), true);
     }
 
     /**

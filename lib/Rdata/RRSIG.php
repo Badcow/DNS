@@ -214,7 +214,7 @@ class RRSIG implements RdataInterface
             $this->signatureInception->format(self::TIME_FORMAT),
             $this->keyTag,
             $this->signersName,
-            $this->signature
+            base64_encode($this->signature)
         );
     }
 
@@ -254,7 +254,7 @@ class RRSIG implements RdataInterface
         $this->setSignatureInception(self::makeDateTime((string) array_shift($rdata)));
         $this->setKeyTag((int) array_shift($rdata));
         $this->setSignersName((string) array_shift($rdata));
-        $this->setSignature(implode('', $rdata));
+        $this->setSignature(base64_decode(implode('', $rdata)));
     }
 
     /**

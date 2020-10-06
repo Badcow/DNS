@@ -71,6 +71,8 @@ class DHCID implements RdataInterface
     private $digestType = 1;
 
     /**
+     * The digest. This is calculated from the other parameters. Stored in raw binary.
+     *
      * @var string
      */
     private $digest;
@@ -133,8 +135,13 @@ class DHCID implements RdataInterface
         return $this->digestType;
     }
 
+    public function setDigestType(int $digestType): void
+    {
+        $this->digestType = $digestType;
+    }
+
     /**
-     * @return string Digest as hexadecimal string
+     * @return string Digest in raw binary
      */
     public function getDigest(): string
     {
@@ -142,7 +149,7 @@ class DHCID implements RdataInterface
     }
 
     /**
-     * @param string $digest Digest as hexadecimal string
+     * @param string $digest Digest as raw binary
      */
     public function setDigest(string $digest): void
     {
@@ -166,7 +173,7 @@ class DHCID implements RdataInterface
             $identifier = chr($this->htype).$identifier;
         }
 
-        $this->digest = hash('sha256', $identifier.$fqdn);
+        $this->digest = hash('sha256', $identifier.$fqdn, true);
     }
 
     /**
@@ -188,7 +195,7 @@ class DHCID implements RdataInterface
             $this->calculateDigest();
         }
 
-        return pack('nCH*', $this->identifierType, $this->digestType, $this->digest);
+        return pack('nC', $this->identifierType, $this->digestType).$this->digest;
     }
 
     /**
@@ -202,9 +209,7 @@ class DHCID implements RdataInterface
             throw new \Exception(sprintf('Unable to base64 decode text "%s".', $text));
         }
 
-        $rdata = unpack('nIdentifierType/CDigestType/H*Digest', $decoded);
-        $this->setIdentifierType((int) $rdata['IdentifierType']);
-        $this->setDigest((string) $rdata['Digest']);
+        $this->fromWire($decoded);
     }
 
     /**
@@ -213,9 +218,12 @@ class DHCID implements RdataInterface
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $rdLength = $rdLength ?? strlen($rdata);
-        $rdata = unpack('nIdentifierType/CDigestType/H*Digest', substr($rdata, $offset, $rdLength));
-        $this->setIdentifierType((int) $rdata['IdentifierType']);
-        $this->setDigest((string) $rdata['Digest']);
+        $integers = unpack('nIdentifierType/CDigestType', $rdata, $offset);
+
+        $this->setIdentifierType((int) $integers['IdentifierType']);
+        $this->setDigestType((int) $integers['DigestType']);
+        $this->setDigest(substr($rdata, $offset + 3, $rdLength - 3));
+
         $offset += $rdLength;
     }
 }

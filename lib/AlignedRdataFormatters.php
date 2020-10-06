@@ -107,7 +107,7 @@ class AlignedRdataFormatters
     public static function RRSIG(RRSIG $rrsig, int $padding): string
     {
         $strPadding = str_repeat(Tokens::SPACE, $padding);
-        $signatureParts = str_split($rrsig->getSignature(), 32);
+        $signatureParts = str_split(base64_encode($rrsig->getSignature()), 32);
 
         $rdata = $rrsig->getTypeCovered().Tokens::SPACE.
             $rrsig->getAlgorithm().Tokens::SPACE.

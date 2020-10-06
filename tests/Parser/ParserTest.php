@@ -249,7 +249,7 @@ TXT;
 
         $this->assertEquals(2, $sshfp->getAlgorithm());
         $this->assertEquals(1, $sshfp->getFingerprintType());
-        $this->assertEquals('123456789abcdef67890123456789abcdef67890', $sshfp->getFingerprint());
+        $this->assertEquals(hex2bin('123456789abcdef67890123456789abcdef67890'), $sshfp->getFingerprint());
     }
 
     /**
@@ -409,7 +409,7 @@ badcow.co.     1h5m IN SOA   ns.badcow.co. hostmaster.badcow.co. (
                              4w1d       ; expire
                              1h         ; minimum
                              )
-overflow      3551w IN A     4.3.2.1
+overflow      615000000w IN A     4.3.2.1
 numeric       12345 IN A     9.9.9.9
 DNS;
         $zone = Parser::parse('badcow.co.', $record);
@@ -454,8 +454,8 @@ dns.badcow.co. 3600 IN SOA   ns.badcow.co. hostmaster.badcow.co. (
                              eDQfsS3Ap3o= )
 DNS;
 
-        $expectedSignature = 'oJB1W6WNGv+ldvQ3WDG0MQkg5IEhjRip8WTrPYGv07h108dUKGMeDPKijVCHX3DDKdfb+v6oB9wfuh3DTJXUAfI/'.
-            'M0zmO/zz8bW0Rznl8O3tGNazPwQKkRN20XPXV6nwwfoXmJQbsLNrLfkGJ5D6fwFm8nN+6pBzeDQfsS3Ap3o=';
+        $expectedSignature = base64_decode('oJB1W6WNGv+ldvQ3WDG0MQkg5IEhjRip8WTrPYGv07h108dUKGMeDPKijVCHX3DDKdfb+v6oB9wfuh3DTJXUAfI/'.
+            'M0zmO/zz8bW0Rznl8O3tGNazPwQKkRN20XPXV6nwwfoXmJQbsLNrLfkGJ5D6fwFm8nN+6pBzeDQfsS3Ap3o=');
         $expectedExpiration = \DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20050322173103');
         $expectedInception = \DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20030220173103');
 
