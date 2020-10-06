@@ -17,6 +17,12 @@ must instantiate the object first, and then call `fromText` method. All paramete
   * `CERT::setCertificate($cert)` now expects the raw binary form of the certificate. Similarly `CERT::getCertificate()`
   returns a raw binary certificate. `base64_decode()` and `base64_encode()` should be used on the setter and getter, respectively,
   if you want to handle Base64 encoded string.
+  * `DHCID::setDigest($digest)` now expects the raw binary form of the digest. Similarly `DHCID::getDigest` returns a raw
+  binary digest. `hex2bin()` and `bin2hex()` should be used on the setter and getter, respectively, if you want to handle
+  hexadecimal encoded strings.
+  * `IPSECKEY::setPublicKey($key)` now expects the raw binary form of the public key. Similarly `IPSECKEY::getPublicKey()`
+  returns a raw binary public key. `base64_decode()` and `base64_encode()` should be used on the setter and getter, respectively,
+  if you want to handle Base64 encoded string.
 * New method `DS::calculateDigest(string $owner, DNSKEY $dnskey)` will calculate and set the digest using the DNSKEY rdata object. 
 * [Issue #75](https://github.com/Badcow/DNS/issues/75) - Resolves issue where RRSIG records are not process correctly. (Thank you, [emkookmer](https://github.com/emkookmer))
 
