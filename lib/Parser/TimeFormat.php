@@ -61,12 +61,12 @@ class TimeFormat
             return (int) $value;
         }
 
-        if (1 === preg_match(self::TIME_FORMAT_REGEX, $value, $matches, PREG_UNMATCHED_AS_NULL)) {
-            $sec = (int) $matches['w'] * 604800 +
-                   (int) $matches['d'] * 86400 +
-                   (int) $matches['h'] * 3600 +
-                   (int) $matches['m'] * 60 +
-                   (int) $matches['s'];
+        if (1 === preg_match_all(self::TIME_FORMAT_REGEX, $value, $matches)) {
+            $sec = (int) $matches['w'][0] * 604800 +
+                   (int) $matches['d'][0] * 86400 +
+                   (int) $matches['h'][0] * 3600 +
+                   (int) $matches['m'][0] * 60 +
+                   (int) $matches['s'][0];
 
             return $sec < static::$maxTime ? $sec : 0;
         }
