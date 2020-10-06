@@ -249,7 +249,7 @@ TXT;
 
         $this->assertEquals(2, $sshfp->getAlgorithm());
         $this->assertEquals(1, $sshfp->getFingerprintType());
-        $this->assertEquals('123456789abcdef67890123456789abcdef67890', $sshfp->getFingerprint());
+        $this->assertEquals(hex2bin('123456789abcdef67890123456789abcdef67890'), $sshfp->getFingerprint());
     }
 
     /**

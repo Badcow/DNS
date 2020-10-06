@@ -30,6 +30,9 @@ must instantiate the object first, and then call `fromText` method. All paramete
   * `RRSIG::setSignature($signature)` now expects the raw binary form of the signature. Similarly `RRSIG::getSignature()` returns
   a raw binary signature. `base64_decode()` and `base64_encode()` should be used on the setter and getter, respectively,
   if you want to handle Base64 encoded string. These changes apply to the child class `SIG` as well.
+  * `SSHFP::setFingerprint($fingerprint)` now expects the raw binary form of the fingerprint. Similarly `SSHFP::getFingerprint`
+  returns a raw binary fingerprint. `hex2bin()` and `bin2hex()` should be used on the setter and getter, respectively,
+  if you want to handle hexadecimal encoded strings.
 * New method `DS::calculateDigest(string $owner, DNSKEY $dnskey)` will calculate and set the digest using the DNSKEY rdata object. 
 * [Issue #75](https://github.com/Badcow/DNS/issues/75) - Resolves issue where RRSIG records are not process correctly.
 (Thank you, [emkookmer](https://github.com/emkookmer))

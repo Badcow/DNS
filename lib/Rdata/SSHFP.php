@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Validator;
 
@@ -84,15 +85,12 @@ class SSHFP implements RdataInterface
 
     public function getFingerprint(): string
     {
-        return bin2hex($this->fingerprint);
+        return $this->fingerprint;
     }
 
     public function setFingerprint(string $fingerprint): void
     {
-        if (!Validator::isBase16Encoded($fingerprint) || false === $fp = @hex2bin($fingerprint)) {
-            throw new \InvalidArgumentException('The fingerprint MUST be a hexadecimal value.');
-        }
-        $this->fingerprint = $fp;
+        $this->fingerprint = $fingerprint;
     }
 
     /**
@@ -113,6 +111,8 @@ class SSHFP implements RdataInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws ParseException
      */
     public function fromText(string $text): void
     {
@@ -120,7 +120,10 @@ class SSHFP implements RdataInterface
 
         $this->setAlgorithm((int) array_shift($rdata));
         $this->setFingerprintType((int) array_shift($rdata));
-        $this->setFingerprint((string) array_shift($rdata));
+        if (false === $fingerprint = hex2bin((string) array_shift($rdata))) {
+            throw new ParseException('Fingerprint could no be parsed. Invalid hexadecimal.');
+        }
+        $this->setFingerprint($fingerprint);
     }
 
     /**
@@ -133,7 +136,7 @@ class SSHFP implements RdataInterface
         $this->setAlgorithm($integers['<algorithm>']);
         $this->setFingerprintType($integers['<fpType>']);
         $fpLen = ($rdLength ?? strlen($rdata)) - 2;
-        $this->setFingerprint(bin2hex(substr($rdata, $offset, $fpLen)));
+        $this->setFingerprint(substr($rdata, $offset, $fpLen));
         $offset += $fpLen;
     }
 }

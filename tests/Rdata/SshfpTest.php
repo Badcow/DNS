@@ -27,7 +27,6 @@ class SshfpTest extends TestCase
             [256, 255, '123456789abcdef67890123456789abcdef67890', \InvalidArgumentException::class, 'Algorithm must be an 8-bit integer between 0 and 255.'],
             [0, -1, '123456789abcdef67890123456789abcdef67890', \InvalidArgumentException::class, 'Fingerprint type must be an 8-bit integer between 0 and 255.'],
             [0, 256, '123456789abcdef67890123456789abcdef67890', \InvalidArgumentException::class, 'Fingerprint type must be an 8-bit integer between 0 and 255.'],
-            [1, 1, '0x123456789abcdef67890023456789abcdef67890', \InvalidArgumentException::class, 'The fingerprint MUST be a hexadecimal value.'],
         ];
     }
 
@@ -36,7 +35,7 @@ class SshfpTest extends TestCase
         $sshfp = new SSHFP();
         $sshfp->setAlgorithm(SSHFP::ALGORITHM_DSA);
         $sshfp->setFingerprintType(SSHFP::FP_TYPE_SHA1);
-        $sshfp->setFingerprint('123456789abcdef67890123456789abcdef67890');
+        $sshfp->setFingerprint(hex2bin('123456789abcdef67890123456789abcdef67890'));
 
         $expectation = '2 1 123456789abcdef67890123456789abcdef67890';
         $this->assertEquals($expectation, $sshfp->toText());
@@ -71,7 +70,7 @@ class SshfpTest extends TestCase
         $sshfp = new SSHFP();
         $sshfp->setAlgorithm(2);
         $sshfp->setFingerprintType(1);
-        $sshfp->setFingerprint('123456789abcdef67890123456789abcdef67890');
+        $sshfp->setFingerprint(hex2bin('123456789abcdef67890123456789abcdef67890'));
 
         $this->assertEquals($expectation, $sshfp->toText());
     }
@@ -82,7 +81,7 @@ class SshfpTest extends TestCase
         $sshfp = new SSHFP();
         $sshfp->setAlgorithm(2);
         $sshfp->setFingerprintType(1);
-        $sshfp->setFingerprint('123456789abcdef67890123456789abcdef67890');
+        $sshfp->setFingerprint(hex2bin('123456789abcdef67890123456789abcdef67890'));
 
         $this->assertEquals($wireFormat, $sshfp->toWire());
 
@@ -98,7 +97,7 @@ class SshfpTest extends TestCase
         $expectation = new SSHFP();
         $expectation->setAlgorithm(2);
         $expectation->setFingerprintType(1);
-        $expectation->setFingerprint('123456789abcdef67890123456789abcdef67890');
+        $expectation->setFingerprint(hex2bin('123456789abcdef67890123456789abcdef67890'));
 
         $fromText = new SSHFP();
         $fromText->fromText('2 1 123456789abcdef67890123456789abcdef67890');
