@@ -44,7 +44,7 @@ class RrsigTest extends TestCase
         $rrsig->setSignatureInception(\DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20030220173103'));
         $rrsig->setKeyTag(2642);
         $rrsig->setSignersName('example.com.');
-        $rrsig->setSignature(self::$signature);
+        $rrsig->setSignature(base64_decode(self::$signature));
 
         $this->assertEquals($expectation, $rrsig->toText());
     }
@@ -87,7 +87,7 @@ class RrsigTest extends TestCase
         $rrsig->setSignatureInception(\DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20030220173103'));
         $rrsig->setKeyTag(2642);
         $rrsig->setSignersName('example.com.');
-        $rrsig->setSignature(self::$signature);
+        $rrsig->setSignature(base64_decode(self::$signature));
 
         $fromText = new RRSIG();
         $fromText->fromText($text);
@@ -131,6 +131,10 @@ $ORIGIN example.com.
 		ICV8xCF1dpUMb7aHRw2l0MA2dDZ30w33QTqU7TEbETpy
 		NqTbK9qaabsTTXSIGg2ChKV8MwiGm/TyjnARjVo= )
 DNS;
+        $binarySignature = base64_decode('sLGSfcmcvXQ4EGMXrUFFE1JO17AxhspZY8xXiCLEDN95
+		S90KgnDUKzzIUTjjGao0G7XpzhoCgsXyAyJeTgTwa4v5
+		ICV8xCF1dpUMb7aHRw2l0MA2dDZ30w33QTqU7TEbETpy
+		NqTbK9qaabsTTXSIGg2ChKV8MwiGm/TyjnARjVo=');
 
         $zone = Parser::parse('example.com.', $string);
         $this->assertCount(1, $zone);
@@ -148,6 +152,6 @@ DNS;
         $this->assertEquals(\DateTime::createFromFormat('YmdHis', '20030220173103'), $rrsig->getSignatureInception());
         $this->assertEquals(2642, $rrsig->getKeyTag());
         $this->assertEquals('example.com.', $rrsig->getSignersName());
-        $this->assertEquals('sLGSfcmcvXQ4EGMXrUFFE1JO17AxhspZY8xXiCLEDN95S90KgnDUKzzIUTjjGao0G7XpzhoCgsXyAyJeTgTwa4v5ICV8xCF1dpUMb7aHRw2l0MA2dDZ30w33QTqU7TEbETpyNqTbK9qaabsTTXSIGg2ChKV8MwiGm/TyjnARjVo=', $rrsig->getSignature());
+        $this->assertEquals($binarySignature, $rrsig->getSignature());
     }
 }

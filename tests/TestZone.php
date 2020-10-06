@@ -156,7 +156,7 @@ DNS;
             \DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20191229133101'),
             12345,
             'example.com.',
-            'bDts/7a5qbal6s3ZYzS5puPSjEfys5yI6R/kprBBRDEfVcT6YwPaDT3VkVjKXdvpKX2/DwpijNAWkjpfsewCLmeImx3RgkzfuxfipRKtBUguiPTBhkj/ft2halJziVXl'
+            base64_decode('bDts/7a5qbal6s3ZYzS5puPSjEfys5yI6R/kprBBRDEfVcT6YwPaDT3VkVjKXdvpKX2/DwpijNAWkjpfsewCLmeImx3RgkzfuxfipRKtBUguiPTBhkj/ft2halJziVXl')
         ));
 
         return new Zone('example.com.', 3600, [

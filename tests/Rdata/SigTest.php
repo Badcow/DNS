@@ -20,11 +20,11 @@ use PHPUnit\Framework\TestCase;
 
 class SigTest extends TestCase
 {
-    private static $signature = 'oJB1W6WNGv+ldvQ3WDG0MQkg5IEhjRip8WTrPYGv07h108dUKGMeDPKijVCHX3DDKdfb+v6oB9wfuh3DTJXUA'.
-        'fI/M0zmO/zz8bW0Rznl8O3tGNazPwQKkRN20XPXV6nwwfoXmJQbsLNrLfkGJ5D6fwFm8nN+6pBzeDQfsS3Ap3o=';
-
     public function testFactory(): void
     {
+        $signature = base64_decode('oJB1W6WNGv+ldvQ3WDG0MQkg5IEhjRip8WTrPYGv07h108dUKGMeDPKijVCHX3DDKdfb+v6oB9wfuh3DTJXUA'.
+            'fI/M0zmO/zz8bW0Rznl8O3tGNazPwQKkRN20XPXV6nwwfoXmJQbsLNrLfkGJ5D6fwFm8nN+6pBzeDQfsS3Ap3o=');
+
         $sig = Factory::SIG(
             A::TYPE,
             Algorithms::RSASHA1,
@@ -34,7 +34,7 @@ class SigTest extends TestCase
             \DateTime::createFromFormat('Ymd', '20180101'),
             2642,
             'example.com.',
-            self::$signature
+            $signature
         );
 
         $this->assertEquals(A::TYPE, $sig->getTypeCovered());
@@ -45,6 +45,6 @@ class SigTest extends TestCase
         $this->assertEquals(\DateTime::createFromFormat('Ymd', '20180101'), $sig->getSignatureInception());
         $this->assertEquals(2642, $sig->getKeyTag());
         $this->assertEquals('example.com.', $sig->getSignersName());
-        $this->assertEquals(self::$signature, $sig->getSignature());
+        $this->assertEquals($signature, $sig->getSignature());
     }
 }

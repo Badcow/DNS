@@ -454,8 +454,8 @@ dns.badcow.co. 3600 IN SOA   ns.badcow.co. hostmaster.badcow.co. (
                              eDQfsS3Ap3o= )
 DNS;
 
-        $expectedSignature = 'oJB1W6WNGv+ldvQ3WDG0MQkg5IEhjRip8WTrPYGv07h108dUKGMeDPKijVCHX3DDKdfb+v6oB9wfuh3DTJXUAfI/'.
-            'M0zmO/zz8bW0Rznl8O3tGNazPwQKkRN20XPXV6nwwfoXmJQbsLNrLfkGJ5D6fwFm8nN+6pBzeDQfsS3Ap3o=';
+        $expectedSignature = base64_decode('oJB1W6WNGv+ldvQ3WDG0MQkg5IEhjRip8WTrPYGv07h108dUKGMeDPKijVCHX3DDKdfb+v6oB9wfuh3DTJXUAfI/'.
+            'M0zmO/zz8bW0Rznl8O3tGNazPwQKkRN20XPXV6nwwfoXmJQbsLNrLfkGJ5D6fwFm8nN+6pBzeDQfsS3Ap3o=');
         $expectedExpiration = \DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20050322173103');
         $expectedInception = \DateTime::createFromFormat(RRSIG::TIME_FORMAT, '20030220173103');
 
