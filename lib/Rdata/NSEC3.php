@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Rdata;
 
+use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Validator;
+use Base2n;
+use DomainException;
+use InvalidArgumentException;
 
 /**
  * {@link https://tools.ietf.org/html/rfc5155}.
@@ -27,9 +31,11 @@ class NSEC3 implements RdataInterface
     const TYPE_CODE = 50;
 
     /**
-     * @var int
+     * {@link https://www.iana.org/assignments/dnssec-nsec3-parameters/dnssec-nsec3-parameters.xhtml}.
+     *
+     * @var int the Hash Algorithm field identifies the cryptographic hash algorithm used to construct the hash-value
      */
-    private $hashAlgorithm;
+    private $hashAlgorithm = 1;
 
     /**
      * @var bool
@@ -57,17 +63,17 @@ class NSEC3 implements RdataInterface
     private $types = [];
 
     /**
-     * @var \Base2n
+     * @var Base2n
      */
     private static $base32;
 
     /**
      * Singleton to instantiate and return \Base2n instance for extended hex.
      */
-    private static function base32(): \Base2n
+    private static function base32(): Base2n
     {
         if (!isset(self::$base32)) {
-            self::$base32 = new \Base2n(5, '0123456789abcdefghijklmnopqrstuv', false, true, true);
+            self::$base32 = new Base2n(5, '0123456789abcdefghijklmnopqrstuv', false, true, true);
         }
 
         return self::$base32;
@@ -79,12 +85,12 @@ class NSEC3 implements RdataInterface
     }
 
     /**
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setHashAlgorithm(int $hashAlgorithm): void
     {
         if (!Validator::isUnsignedInteger($hashAlgorithm, 8)) {
-            throw new \InvalidArgumentException('Hash algorithm must be 8-bit integer.');
+            throw new InvalidArgumentException('Hash algorithm must be 8-bit integer.');
         }
         $this->hashAlgorithm = $hashAlgorithm;
     }
@@ -105,12 +111,12 @@ class NSEC3 implements RdataInterface
     }
 
     /**
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setIterations(int $iterations): void
     {
         if (!Validator::isUnsignedInteger($iterations, 16)) {
-            throw new \InvalidArgumentException('Hash algorithm must be 16-bit integer.');
+            throw new InvalidArgumentException('Hash algorithm must be 16-bit integer.');
         }
         $this->iterations = $iterations;
     }
@@ -129,31 +135,29 @@ class NSEC3 implements RdataInterface
     public function setSalt(string $salt): void
     {
         if (false === $bin = @hex2bin($salt)) {
-            throw new \InvalidArgumentException('Salt must be a hexadecimal string.');
+            throw new InvalidArgumentException('Salt must be a hexadecimal string.');
         }
         $this->salt = $bin;
     }
 
-    /**
-     * @return string Base32 hashed string
-     */
     public function getNextHashedOwnerName(): string
     {
-        return self::base32encode($this->nextHashedOwnerName);
+        return $this->nextHashedOwnerName;
     }
 
     public function setNextHashedOwnerName(string $nextHashedOwnerName): void
     {
-        if (!Validator::isBase32HexEncoded($nextHashedOwnerName)) {
-            throw new \InvalidArgumentException('Next hashed owner name must be a base32 encoded string.');
-        }
-
-        $this->nextHashedOwnerName = self::base32decode($nextHashedOwnerName);
+        $this->nextHashedOwnerName = $nextHashedOwnerName;
     }
 
     public function addType(string $type): void
     {
         $this->types[] = $type;
+    }
+
+    public function setTypes(array $types): void
+    {
+        $this->types = $types;
     }
 
     /**
@@ -179,7 +183,7 @@ class NSEC3 implements RdataInterface
             (int) $this->unsignedDelegationsCovered,
             $this->iterations,
             $this->getSalt(),
-            $this->getNextHashedOwnerName(),
+            self::base32encode($this->getNextHashedOwnerName()),
             implode(Tokens::SPACE, $this->types)
         );
     }
@@ -215,7 +219,7 @@ class NSEC3 implements RdataInterface
         $this->setUnsignedDelegationsCovered((bool) array_shift($rdata));
         $this->setIterations((int) array_shift($rdata));
         $this->setSalt((string) array_shift($rdata));
-        $this->setNextHashedOwnerName((string) array_shift($rdata));
+        $this->setNextHashedOwnerName(self::base32decode(array_shift($rdata) ?? ''));
         array_map([$this, 'addType'], $rdata);
     }
 
@@ -241,7 +245,7 @@ class NSEC3 implements RdataInterface
         ++$offset;
         $hash = substr($rdata, $offset, $hashLen);
         $offset += $hashLen;
-        $this->setNextHashedOwnerName(self::base32encode($hash));
+        $this->setNextHashedOwnerName($hash);
 
         $types = NSEC::parseBitmap($rdata, $offset);
         array_map([$this, 'addType'], $types);

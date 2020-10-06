@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Tests\Rdata;
 
-use Badcow\DNS\Algorithms;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\NSEC3;
@@ -38,11 +37,11 @@ class Nsec3Test extends TestCase
     public function testToText(): void
     {
         $nsec3 = new NSEC3();
-        $nsec3->setHashAlgorithm(Algorithms::RSAMD5);
+        $nsec3->setHashAlgorithm(1);
         $nsec3->setUnsignedDelegationsCovered(true);
         $nsec3->setIterations(12);
         $nsec3->setSalt('aabbccdd');
-        $nsec3->setNextHashedOwnerName('2vptu5timamqttgl4luu9kg21e0aor3s');
+        $nsec3->setNextHashedOwnerName(NSEC3::base32decode('2vptu5timamqttgl4luu9kg21e0aor3s'));
         $nsec3->addType(A::TYPE);
         $nsec3->addType(RRSIG::TYPE);
 
@@ -55,7 +54,7 @@ class Nsec3Test extends TestCase
     public function testWire(): void
     {
         $nsec3 = new NSEC3();
-        $nsec3->setHashAlgorithm(Algorithms::RSAMD5);
+        $nsec3->setHashAlgorithm(1);
         $nsec3->setUnsignedDelegationsCovered(true);
         $nsec3->setIterations(12);
         $nsec3->setSalt('aabbccdd');
@@ -73,11 +72,11 @@ class Nsec3Test extends TestCase
     public function testFromText(): void
     {
         $expectation = new NSEC3();
-        $expectation->setHashAlgorithm(Algorithms::RSAMD5);
+        $expectation->setHashAlgorithm(1);
         $expectation->setUnsignedDelegationsCovered(true);
         $expectation->setIterations(12);
         $expectation->setSalt('aabbccdd');
-        $expectation->setNextHashedOwnerName('2vptu5timamqttgl4luu9kg21e0aor3s');
+        $expectation->setNextHashedOwnerName(NSEC3::base32decode('2vptu5timamqttgl4luu9kg21e0aor3s'));
         $expectation->addType(A::TYPE);
         $expectation->addType(RRSIG::TYPE);
 
@@ -88,7 +87,7 @@ class Nsec3Test extends TestCase
 
     public function testFactory(): void
     {
-        $nsec3 = Factory::NSEC3(Algorithms::RSAMD5, true, 12, 'aabbccdd', '2vptu5timamqttgl4luu9kg21e0aor3s', ['A', 'RRSIG']);
+        $nsec3 = Factory::NSEC3(1, true, 12, 'aabbccdd', NSEC3::base32decode('2vptu5timamqttgl4luu9kg21e0aor3s'), ['A', 'RRSIG']);
         $this->assertEquals('1 1 12 aabbccdd 2vptu5timamqttgl4luu9kg21e0aor3s A RRSIG', $nsec3->toText());
     }
 }
