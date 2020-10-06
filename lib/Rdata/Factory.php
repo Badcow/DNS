@@ -475,15 +475,15 @@ class Factory
         return $naptr;
     }
 
-    public static function NSEC3(int $hashAlgorithm, bool $unsignedDelegationsCovered, int $iterations, string $salt, string $nextHashedOwnerName, array $types): NSEC3
+    public static function NSEC3(bool $unsignedDelegationsCovered, int $iterations, string $salt, string $nextOwnerName, array $types): NSEC3
     {
         $nsec3 = new NSEC3();
-        $nsec3->setHashAlgorithm($hashAlgorithm);
         $nsec3->setUnsignedDelegationsCovered($unsignedDelegationsCovered);
         $nsec3->setIterations($iterations);
         $nsec3->setSalt($salt);
-        $nsec3->setNextHashedOwnerName($nextHashedOwnerName);
-        array_map([$nsec3, 'addType'], $types);
+        $nsec3->setNextOwnerName($nextOwnerName);
+        $nsec3->setTypes($types);
+        $nsec3->calculateNextOwnerHash();
 
         return $nsec3;
     }

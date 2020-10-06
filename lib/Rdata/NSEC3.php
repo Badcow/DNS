@@ -16,6 +16,7 @@ namespace Badcow\DNS\Rdata;
 use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Validator;
+use BadMethodCallException;
 use Base2n;
 use DomainException;
 use InvalidArgumentException;
@@ -51,6 +52,11 @@ class NSEC3 implements RdataInterface
      * @var string Binary encoded string
      */
     private $salt;
+
+    /**
+     * @var string fully qualified next owner name
+     */
+    private $nextOwnerName;
 
     /**
      * @var string Binary encoded hash
@@ -140,6 +146,26 @@ class NSEC3 implements RdataInterface
         $this->salt = $bin;
     }
 
+    public function getNextOwnerName(): string
+    {
+        return $this->nextOwnerName;
+    }
+
+    /**
+     * Set the next owner name.
+     *
+     * @param string $nextOwnerName the fully qualified next owner name
+     *
+     * @throws InvalidArgumentException
+     */
+    public function setNextOwnerName(string $nextOwnerName): void
+    {
+        if (!Validator::fullyQualifiedDomainName($nextOwnerName)) {
+            throw new InvalidArgumentException(sprintf('NSEC3: Next owner "%s" is not a fully qualified domain name.', $nextOwnerName));
+        }
+        $this->nextOwnerName = $nextOwnerName;
+    }
+
     public function getNextHashedOwnerName(): string
     {
         return $this->nextHashedOwnerName;
@@ -182,7 +208,7 @@ class NSEC3 implements RdataInterface
             $this->hashAlgorithm,
             (int) $this->unsignedDelegationsCovered,
             $this->iterations,
-            $this->getSalt(),
+            empty($this->salt) ? '-' : $this->getSalt(),
             self::base32encode($this->getNextHashedOwnerName()),
             implode(Tokens::SPACE, $this->types)
         );
@@ -218,7 +244,11 @@ class NSEC3 implements RdataInterface
         $this->setHashAlgorithm((int) array_shift($rdata));
         $this->setUnsignedDelegationsCovered((bool) array_shift($rdata));
         $this->setIterations((int) array_shift($rdata));
-        $this->setSalt((string) array_shift($rdata));
+        $salt = (string) array_shift($rdata);
+        if ('-' === $salt) {
+            $salt = '';
+        }
+        $this->setSalt($salt);
         $this->setNextHashedOwnerName(self::base32decode(array_shift($rdata) ?? ''));
         array_map([$this, 'addType'], $rdata);
     }
@@ -272,14 +302,16 @@ class NSEC3 implements RdataInterface
     }
 
     /**
-     * @param string $nextOwner the fully qualified domain name of the next owner
+     * Calculate and set NSEC3::nextOwnerHash. Requires NSEC3::salt, NSEC3::nextOwnerName, and NSEC3::iterations to be set.
+     *
+     * @throws InvalidArgumentException
      */
-    public function calculateNextOwnerHash(string $nextOwner): void
+    public function calculateNextOwnerHash(): void
     {
-        if (!Validator::fullyQualifiedDomainName($nextOwner)) {
-            throw new InvalidArgumentException(sprintf('NSEC3: Next owner "%s" is not a fully qualified domain name.', $nextOwner));
+        if (!isset($this->nextOwnerName) || !isset($this->salt) || !isset($this->iterations)) {
+            throw new BadMethodCallException('NSEC3::salt, NSEC3::nextOwnerName, and NSEC3::iterations must be set.');
         }
-        $nextOwner = Message::encodeName(strtolower($nextOwner));
+        $nextOwner = Message::encodeName(strtolower($this->nextOwnerName));
         $this->nextHashedOwnerName = self::hash($this->salt, $nextOwner, $this->iterations);
     }
 

@@ -6,7 +6,8 @@ must instantiate the object first, and then call `fromWire` method. All paramete
 * `Badcow\DNS\Rdata\RdataInterface::fromText` is no longer static and does not return an instance of the class. You now
 must instantiate the object first, and then call `fromText` method. All parameters are the same.
 * Deleted `Bacow\DNS\Rdata\Algorithms`, use `Bacow\DNS\Algorithms` instead. 
-* [PR #73](https://github.com/Badcow/DNS/pull/73) Resolves issue where records with integers are not parsed correctly. (Thank you, [Hossein Taleghani](https://github.com/a3dho3yn))
+* [PR #73](https://github.com/Badcow/DNS/pull/73) Resolves issue where records with integers are not parsed correctly.
+(Thank you, [Hossein Taleghani](https://github.com/a3dho3yn))
 * [Issue #63](https://github.com/Badcow/DNS/issues/63) - Consistent handling ok keys, signatures and digests.
   * `KEY::setPublicKey($key)` now expects the raw binary form of the public key. Similarly `KEY::getPublicKey()` returns
   a raw binary public key. `base64_decode()` and `base64_encode()` should be used on the setter and getter, respectively,
@@ -16,13 +17,29 @@ must instantiate the object first, and then call `fromText` method. All paramete
   hexadecimal encoded strings. These changes apply to all child classes as well (`CDS`, `DLV` and `TA`).
   * `CERT::setCertificate($cert)` now expects the raw binary form of the certificate. Similarly `CERT::getCertificate()`
   returns a raw binary certificate. `base64_decode()` and `base64_encode()` should be used on the setter and getter, respectively,
-  if you want to handle Base64 encoded string.
+  if you want to handle Base64 encoded strings.
   * `DHCID::setDigest($digest)` now expects the raw binary form of the digest. Similarly `DHCID::getDigest` returns a raw
   binary digest. `hex2bin()` and `bin2hex()` should be used on the setter and getter, respectively, if you want to handle
   hexadecimal encoded strings.
   * `IPSECKEY::setPublicKey($key)` now expects the raw binary form of the public key. Similarly `IPSECKEY::getPublicKey()`
   returns a raw binary public key. `base64_decode()` and `base64_encode()` should be used on the setter and getter, respectively,
-  if you want to handle Base64 encoded string.
+  if you want to handle Base64 encoded strings.
+  * `NSEC3::setNextHashedOwner($key)` now expects the raw binary form of the hash. Similarly `NSEC3::getNextHashedOwner()`
+  returns a raw binary hash. `NSEC3::base32decode()` and `NSEC3::base32encode()` should be used on the setter and getter,
+  respectively, if you want to handle Base32 encoded strings.
 * New method `DS::calculateDigest(string $owner, DNSKEY $dnskey)` will calculate and set the digest using the DNSKEY rdata object. 
-* [Issue #75](https://github.com/Badcow/DNS/issues/75) - Resolves issue where RRSIG records are not process correctly. (Thank you, [emkookmer](https://github.com/emkookmer))
+* [Issue #75](https://github.com/Badcow/DNS/issues/75) - Resolves issue where RRSIG records are not process correctly.
+(Thank you, [emkookmer](https://github.com/emkookmer))
+* NSEC3 has new parameter `$nextOwnerName` with respective setter and getters `NSEC3::setNextOwnerName($nextOwnerName)`
+  and `NSEC3::getNextOwnerName()`. This new parameter will not be rendered in the rdata text or wire formats, but can be
+  used to calculate the `nextOwnerHashedName`.
+* NSEC3 has new method `NSEC3::calculateNextOwnerHash()` to calculate and set `NSEC3::nextOwnerHash`. Requires
+  `NSEC3::salt`, `NSEC3::nextOwnerName`, and `NSEC3::iterations` to be set before calling method.
+* `Factory::NSEC3()` has been changed to take only the following parameters:
+  * `[bool]$unsignedDelegationsCovered`
+  * `[int]$iterations`
+  * `[string]$salt`
+  * `[string]$nextOwnerName`
+  * `[array] $types`
+
 
