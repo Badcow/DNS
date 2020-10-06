@@ -270,4 +270,39 @@ class NSEC3 implements RdataInterface
     {
         return self::base32()->decode($data);
     }
+
+    /**
+     * @param string $nextOwner the fully qualified domain name of the next owner
+     */
+    public function calculateNextOwnerHash(string $nextOwner): void
+    {
+        if (!Validator::fullyQualifiedDomainName($nextOwner)) {
+            throw new InvalidArgumentException(sprintf('NSEC3: Next owner "%s" is not a fully qualified domain name.', $nextOwner));
+        }
+        $nextOwner = Message::encodeName(strtolower($nextOwner));
+        $this->nextHashedOwnerName = self::hash($this->salt, $nextOwner, $this->iterations);
+    }
+
+    /**
+     * @param string $salt the salt
+     * @param string $x    the value to be hashed
+     * @param int    $k    the number of recursive iterations of the hash function
+     *
+     * @return string the hashed value
+     *
+     * @throws DomainException
+     */
+    private static function hash(string $salt, string $x, int $k = 0): string
+    {
+        if ($k < 0) {
+            throw new DomainException('Number of iterations, $k, must be a positive integer greater than, or equal to, 0.');
+        }
+        $x = sha1($x.$salt, true);
+        if (0 === $k) {
+            return $x;
+        }
+        --$k;
+
+        return self::hash($salt, $x, $k);
+    }
 }

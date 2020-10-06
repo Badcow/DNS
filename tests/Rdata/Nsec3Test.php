@@ -90,4 +90,14 @@ class Nsec3Test extends TestCase
         $nsec3 = Factory::NSEC3(1, true, 12, 'aabbccdd', NSEC3::base32decode('2vptu5timamqttgl4luu9kg21e0aor3s'), ['A', 'RRSIG']);
         $this->assertEquals('1 1 12 aabbccdd 2vptu5timamqttgl4luu9kg21e0aor3s A RRSIG', $nsec3->toText());
     }
+
+    public function testCalculateNextOwnerHash(): void
+    {
+        $nsec3 = new NSEC3();
+        $nsec3->setIterations(10);
+        $nsec3->setSalt('12345678');
+        $nsec3->calculateNextOwnerHash('ns.sub.delzsk.example.');
+
+        $this->assertEquals('589r358vspjufvaju949jpvf74d9ptgh', NSEC3::base32encode($nsec3->getNextHashedOwnerName()));
+    }
 }
