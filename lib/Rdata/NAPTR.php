@@ -186,7 +186,7 @@ class NAPTR implements RdataInterface
 
     public function setReplacement(string $replacement): void
     {
-        if (!Validator::resourceRecordName($replacement) && !Validator::fullyQualifiedDomainName($replacement)) {
+        if (!Validator::resourceRecordName($replacement) && !Validator::fullyQualifiedDomainName($replacement) && '.' !== $replacement) {
             throw new \InvalidArgumentException(sprintf('Replacement must be a valid resource name. "%s" given.', $replacement));
         }
 

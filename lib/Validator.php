@@ -37,7 +37,9 @@ class Validator
      */
     public static function hostName(string $name): bool
     {
-        return self::fullyQualifiedDomainName(rtrim($name, '.').'.');
+        return (bool) filter_var($name, FILTER_VALIDATE_DOMAIN, [
+            'flags' => FILTER_FLAG_HOSTNAME,
+        ]);
     }
 
     /**
@@ -45,12 +47,11 @@ class Validator
      */
     public static function fullyQualifiedDomainName(string $name): bool
     {
-        if ('.' === $name) {
-            return true;
+        if ('.' !== substr($name, -1, 1)) {
+            return false;
         }
 
-        return strlen($name) < 254 &&
-            (1 === preg_match('/^(?:(?!-)[a-z0-9\-]{1,63}(?<!-)\.){1,127}$/i', $name));
+        return self::hostName($name);
     }
 
     /**

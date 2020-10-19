@@ -19,6 +19,7 @@ use Badcow\DNS\Rdata\NS;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Validator;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class ValidatorTest extends TestCase
 {
@@ -54,81 +55,77 @@ class ValidatorTest extends TestCase
         $this->assertEquals($isValid, Validator::resourceRecordName($resourceName));
     }
 
-    public function testValidateIpv4Address(): void
+    public function getIPv4TestDataSet(): array
     {
-        $valid1 = '119.15.101.102';
-        $valid2 = '255.0.0.255';
-        $valid3 = '192.168.0.0';
-        $valid4 = '0.0.0.0';
+        return [
+            ['119.15.101.102', true],
+            ['255.0.0.255', true],
+            ['192.168.0.0', true],
+            ['0.0.0.0', true],
 
-        $invalid1 = '192.168.1.';
-        $invalid2 = '172.10.256.1';
-        $invalid3 = '255.244';
-        $invalid4 = '::1';
-        $invalid5 = '2001:db8::ff00:42:8329';
-
-        $this->assertTrue(Validator::ipv4($valid1));
-        $this->assertTrue(Validator::ipv4($valid2));
-        $this->assertTrue(Validator::ipv4($valid3));
-        $this->assertTrue(Validator::ipv4($valid4));
-
-        $this->assertFalse(Validator::ipv4($invalid1));
-        $this->assertFalse(Validator::ipv4($invalid2));
-        $this->assertFalse(Validator::ipv4($invalid3));
-        $this->assertFalse(Validator::ipv4($invalid4));
-        $this->assertFalse(Validator::ipv4($invalid5));
+            ['192.168.1.', false],
+            ['172.10.256.1', false],
+            ['255.244', false],
+            ['::1', false],
+            ['2001:db8::ff00:42:8329', false],
+        ];
     }
 
-    public function testValidateIpv6Address(): void
+    /**
+     * @dataProvider getIPv4TestDataSet
+     */
+    public function testValidateIpv4Address(string $address, bool $isValid): void
     {
-        $valid1 = '2001:0db8:0000:0000:0000:ff00:0042:8329';
-        $valid2 = '2001:db8:0:0:0:ff00:42:8329';
-        $valid3 = '2001:db8::ff00:42:8329';
-        $valid4 = '::1';
-
-        $invalid1 = 'fffff:0db8:0000:0000:0000:ff00:0042:8329';
-        $invalid2 = '172.10.255.1';
-        $invalid3 = '192.168.0.0';
-
-        $this->assertTrue(Validator::ipv6($valid1));
-        $this->assertTrue(Validator::ipv6($valid2));
-        $this->assertTrue(Validator::ipv6($valid3));
-        $this->assertTrue(Validator::ipv6($valid4));
-
-        $this->assertFalse(Validator::ipv6($invalid1));
-        $this->assertFalse(Validator::ipv6($invalid2));
-        $this->assertFalse(Validator::ipv6($invalid3));
+        $this->assertEquals($isValid, Validator::ipv4($address));
     }
 
-    public function testValidateIpAddress(): void
+    public function getIPv6TestDataSet(): array
     {
-        $valid1 = '2001:0db8:0000:0000:0000:ff00:0042:8329';
-        $valid2 = '2001:db8:0:0:0:ff00:42:8329';
-        $valid3 = '2001:db8::ff00:42:8329';
-        $valid4 = '::1';
-        $valid5 = '119.15.101.102';
-        $valid6 = '255.0.0.255';
-        $valid7 = '192.168.0.0';
-        $valid8 = '0.0.0.0';
+        return [
+            ['2001:0db8:0000:0000:0000:ff00:0042:8329', true],
+            ['2001:db8:0:0:0:ff00:42:8329', true],
+            ['2001:db8::ff00:42:8329', true],
+            ['::1', true],
 
-        $invalid1 = '192.168.1.';
-        $invalid2 = '172.10.256.1';
-        $invalid3 = '255.244';
-        $invalid4 = 'fffff:0db8:0000:0000:0000:ff00:0042:8329';
+            ['fffff:0db8:0000:0000:0000:ff00:0042:8329', false],
+            ['172.10.255.1', false],
+            ['192.168.0.0', false],
+        ];
+    }
 
-        $this->assertTrue(Validator::ipAddress($valid1));
-        $this->assertTrue(Validator::ipAddress($valid2));
-        $this->assertTrue(Validator::ipAddress($valid3));
-        $this->assertTrue(Validator::ipAddress($valid4));
-        $this->assertTrue(Validator::ipAddress($valid5));
-        $this->assertTrue(Validator::ipAddress($valid6));
-        $this->assertTrue(Validator::ipAddress($valid7));
-        $this->assertTrue(Validator::ipAddress($valid8));
+    /**
+     * @dataProvider getIPv6TestDataSet
+     */
+    public function testValidateIpv6Address(string $address, bool $isValid): void
+    {
+        $this->assertEquals($isValid, Validator::ipv6($address));
+    }
 
-        $this->assertFalse(Validator::ipAddress($invalid1));
-        $this->assertFalse(Validator::ipAddress($invalid2));
-        $this->assertFalse(Validator::ipAddress($invalid3));
-        $this->assertFalse(Validator::ipAddress($invalid4));
+    public function getIPvTestDataSet(): array
+    {
+        return [
+            ['2001:0db8:0000:0000:0000:ff00:0042:8329', true],
+            ['2001:db8:0:0:0:ff00:42:8329', true],
+            ['2001:db8::ff00:42:8329', true],
+            ['::1', true],
+            ['119.15.101.102', true],
+            ['255.0.0.255', true],
+            ['192.168.0.0', true],
+            ['0.0.0.0', true],
+
+            ['192.168.1.', false],
+            ['172.10.256.1', false],
+            ['255.244', false],
+            ['fffff:0db8:0000:0000:0000:ff00:0042:8329', false],
+        ];
+    }
+
+    /**
+     * @dataProvider getIPvTestDataSet
+     */
+    public function testValidateIpAddress(string $address, bool $isValid): void
+    {
+        $this->assertEquals($isValid, Validator::ipAddress($address));
     }
 
     public function testValidateNumberOfSoa(): void
@@ -208,80 +205,78 @@ class ValidatorTest extends TestCase
         $this->assertEquals(Validator::ZONE_OKAY, Validator::zone($zone));
     }
 
-    public function testWildcard(): void
+    public function getWildcardTestData(): array
     {
-        $valid_1 = '*.example.com.';
-        $valid_2 = '*';
-        $valid_3 = '*.sub';
-        $valid_4 = '*.sub.domain';
-        $valid_5 = '*.sub.example.com.';
+        return [
+            ['*.example.com.', true],
+            ['*', true],
+            ['*.sub', true],
+            ['*.sub.domain', true],
+            ['*.sub.example.com.', true],
 
-        $invalid_1 = '*abc.example.com.';
-        $invalid_2 = 'domain.*.example.com.';
-        $invalid_3 = 'example.com.*';
-        $invalid_4 = '*.';
-
-        $this->assertTrue(Validator::resourceRecordName($valid_1));
-        $this->assertTrue(Validator::resourceRecordName($valid_2));
-        $this->assertTrue(Validator::resourceRecordName($valid_3));
-        $this->assertTrue(Validator::resourceRecordName($valid_4));
-        $this->assertTrue(Validator::resourceRecordName($valid_5));
-
-        $this->assertFalse(Validator::resourceRecordName($invalid_1));
-        $this->assertFalse(Validator::resourceRecordName($invalid_2));
-        $this->assertFalse(Validator::resourceRecordName($invalid_3));
-        $this->assertFalse(Validator::resourceRecordName($invalid_4));
+            ['*abc.example.com.', false],
+            ['domain.*.example.com.', false],
+            ['example.com.*', false],
+            ['*.', false],
+        ];
     }
 
-    public function testReverseIpv4(): void
+    /**
+     * @param string $name    the wildcard domain to be validated
+     * @param bool   $isValid whether the domain is valid
+     *
+     * @dataProvider getWildcardTestData
+     */
+    public function testWildcard(string $name, bool $isValid): void
     {
-        $valid_01 = '10.IN-ADDR.ARPA.';
-        $valid_02 = '10.IN-ADDR.ARPA.';
-        $valid_03 = '18.IN-addr.ARPA.';
-        $valid_04 = '26.IN-ADdr.ArpA.';
-        $valid_05 = '22.0.2.10.IN-ADDR.ARPA.';
-        $valid_06 = '103.0.0.26.IN-ADDR.ARPA.';
-        $valid_07 = '77.0.0.10.IN-ADDR.ARPA.';
-        $valid_08 = '4.0.10.18.IN-ADDR.ARPA.';
-        $valid_09 = '103.0.3.26.IN-ADDR.ARPA.';
-        $valid_10 = '6.0.0.10.IN-ADDR.ARPA.';
-
-        $invalid_01 = '10.IN-ADDR.ARPA';
-        $invalid_02 = '10.20.ARPA.';
-        $invalid_03 = '10.123.0.1.INADDR.ARPA.';
-        $invalid_04 = '10.1.1.1.1.in-addr.arpa.';
-        $invalid_05 = '10.1.256.7.in-addr.arpa.';
-
-        $this->assertTrue(Validator::reverseIpv4($valid_01));
-        $this->assertTrue(Validator::reverseIpv4($valid_02));
-        $this->assertTrue(Validator::reverseIpv4($valid_03));
-        $this->assertTrue(Validator::reverseIpv4($valid_04));
-        $this->assertTrue(Validator::reverseIpv4($valid_05));
-        $this->assertTrue(Validator::reverseIpv4($valid_06));
-        $this->assertTrue(Validator::reverseIpv4($valid_07));
-        $this->assertTrue(Validator::reverseIpv4($valid_08));
-        $this->assertTrue(Validator::reverseIpv4($valid_09));
-        $this->assertTrue(Validator::reverseIpv4($valid_10));
-
-        $this->assertFalse(Validator::reverseIpv4($invalid_01));
-        $this->assertFalse(Validator::reverseIpv4($invalid_02));
-        $this->assertFalse(Validator::reverseIpv4($invalid_03));
-        $this->assertFalse(Validator::reverseIpv4($invalid_04));
-        $this->assertFalse(Validator::reverseIpv4($invalid_05));
+        $this->assertEquals($isValid, Validator::resourceRecordName($name));
     }
 
-    public function testReverseIpv6(): void
+    public function getTestReverseIpv4DataProvider(): array
     {
-        $valid_01 = 'b.a.9.8.7.6.5.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.';
-        $valid_02 = '1.0.0.0.6.8.7.0.6.5.a.0.4.0.5.1.2.0.0.3.8.f.0.1.0.0.2.ip6.arpa.';
-        $invalid_01 = 'b.a.9.8.7.6.5.0.0.g.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.';
+        return [
+            ['10.IN-ADDR.ARPA.', true],
+            ['10.IN-ADDR.ARPA.', true],
+            ['18.IN-addr.ARPA.', true],
+            ['26.IN-ADdr.ArpA.', true],
+            ['22.0.2.10.IN-ADDR.ARPA.', true],
+            ['103.0.0.26.IN-ADDR.ARPA.', true],
+            ['77.0.0.10.IN-ADDR.ARPA.', true],
+            ['4.0.10.18.IN-ADDR.ARPA.', true],
+            ['103.0.3.26.IN-ADDR.ARPA.', true],
+            ['6.0.0.10.IN-ADDR.ARPA.', true],
 
-        $this->assertTrue(Validator::reverseIpv6($valid_01));
-        $this->assertTrue(Validator::reverseIpv6($valid_02));
-        $this->assertFalse(Validator::reverseIpv6($invalid_01));
+            ['10.IN-ADDR.ARPA', false],
+            ['10.20.ARPA.', false],
+            ['10.123.0.1.INADDR.ARPA.', false],
+            ['10.1.1.1.1.in-addr.arpa.', false],
+            ['10.1.256.7.in-addr.arpa.', false],
+        ];
+    }
 
-        $this->assertTrue(Validator::fullyQualifiedDomainName($valid_01));
-        $this->assertTrue(Validator::fullyQualifiedDomainName($valid_02));
+    /**
+     * @dataProvider getTestReverseIpv4DataProvider
+     */
+    public function testReverseIpv4(string $ptr, bool $isValid): void
+    {
+        $this->assertEquals($isValid, Validator::reverseIpv4($ptr));
+    }
+
+    public function getTestReverseIpv6DataProvider(): array
+    {
+        return [
+            ['b.a.9.8.7.6.5.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.', true],
+            ['1.0.0.0.6.8.7.0.6.5.a.0.4.0.5.1.2.0.0.3.8.f.0.1.0.0.2.ip6.arpa.', true],
+            ['b.a.9.8.7.6.5.0.0.g.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.', false],
+        ];
+    }
+
+    /**
+     * @dataProvider getTestReverseIpv6DataProvider
+     */
+    public function testReverseIpv6(string $ptr, bool $isValid): void
+    {
+        $this->assertEquals($isValid, Validator::reverseIpv6($ptr));
     }
 
     public function testResourceRecordName(): void
@@ -295,35 +290,29 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::resourceRecordName($case_3));
     }
 
-    public function testFqdn(): void
+    public function getTestFqdnDataProvider(): array
     {
-        //Pass cases
-        $fqdn1 = 'example.com.';
-        $fqdn2 = 'www.example.com.';
-        $fqdn3 = 'ex-ample.com.';
-        $fqdn4 = 'ex-ampl3.com.au.';
-        $fqdn5 = 'alt2.aspmx.l.google.com.';
-        $fqdn6 = 'www.eXAMple.cOm.';
-        $fqdn7 = '3xample.com.';
+        return [
+            ['example.com.', true],
+            ['www.example.com.', true],
+            ['ex-ample.com.', true],
+            ['ex-ampl3.com.au.', true],
+            ['alt2.aspmx.l.google.com.', true],
+            ['www.eXAMple.cOm.', true],
+            ['3xample.com.', true],
+            ['_example.com.', false],
+            ['-example.com.', false],
+            ['example.com', false],
+            ['e&ample.com.', false],
+        ];
+    }
 
-        //Fail cases
-        $fqdn8 = '_example.com.';
-        $fqdn9 = '-example.com.';
-        $fqdn10 = 'example.com';
-        $fqdn11 = 'e&ample.com.';
-
-        $this->assertTrue(Validator::fullyQualifiedDomainName($fqdn1));
-        $this->assertTrue(Validator::fullyQualifiedDomainName($fqdn2));
-        $this->assertTrue(Validator::fullyQualifiedDomainName($fqdn3));
-        $this->assertTrue(Validator::fullyQualifiedDomainName($fqdn4));
-        $this->assertTrue(Validator::fullyQualifiedDomainName($fqdn5));
-        $this->assertTrue(Validator::fullyQualifiedDomainName($fqdn6));
-        $this->assertTrue(Validator::fullyQualifiedDomainName($fqdn7));
-
-        $this->assertFalse(Validator::fullyQualifiedDomainName($fqdn8));
-        $this->assertFalse(Validator::fullyQualifiedDomainName($fqdn9));
-        $this->assertFalse(Validator::fullyQualifiedDomainName($fqdn10));
-        $this->assertFalse(Validator::fullyQualifiedDomainName($fqdn11));
+    /**
+     * @dataProvider getTestFqdnDataProvider
+     */
+    public function testFqdn(string $domain, bool $isValid): void
+    {
+        $this->assertEquals($isValid, Validator::fullyQualifiedDomainName($domain));
     }
 
     public function testHostName(): void
@@ -359,7 +348,7 @@ class ValidatorTest extends TestCase
         $this->assertTrue(Validator::isUnsignedInteger(65535, 16));
         $this->assertTrue(Validator::isUnsignedInteger(0, 16));
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         Validator::isUnsignedInteger(10, 64);
     }
 
