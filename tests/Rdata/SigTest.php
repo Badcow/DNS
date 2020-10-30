@@ -30,8 +30,8 @@ class SigTest extends TestCase
             Algorithms::RSASHA1,
             3,
             86400,
-            \DateTime::createFromFormat('Ymd', '20220101'),
-            \DateTime::createFromFormat('Ymd', '20180101'),
+            \DateTime::createFromFormat('Ymd H:i:s', '20220101 00:00:00'),
+            \DateTime::createFromFormat('Ymd H:i:s', '20180101 00:00:00'),
             2642,
             'example.com.',
             $signature
@@ -41,8 +41,8 @@ class SigTest extends TestCase
         $this->assertEquals(Algorithms::RSASHA1, $sig->getAlgorithm());
         $this->assertEquals(3, $sig->getLabels());
         $this->assertEquals(86400, $sig->getOriginalTtl());
-        $this->assertEquals(\DateTime::createFromFormat('Ymd', '20220101'), $sig->getSignatureExpiration());
-        $this->assertEquals(\DateTime::createFromFormat('Ymd', '20180101'), $sig->getSignatureInception());
+        $this->assertEquals(\DateTime::createFromFormat('Ymd H:i:s', '20220101 00:00:00'), $sig->getSignatureExpiration());
+        $this->assertEquals(\DateTime::createFromFormat('Ymd H:i:s', '20180101 00:00:00'), $sig->getSignatureInception());
         $this->assertEquals(2642, $sig->getKeyTag());
         $this->assertEquals('example.com.', $sig->getSignersName());
         $this->assertEquals($signature, $sig->getSignature());
