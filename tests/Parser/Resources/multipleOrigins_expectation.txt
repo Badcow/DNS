@@ -1,0 +1,12 @@
+$ORIGIN mydomain.biz.
+$TTL 3600
+@ 3600 IN SOA mydomain.biz. post.mydomain.biz. 2014110501 3600 14400 604800 3600
+@ 3600 IN NS ns1.nameserver.com.
+@ 3600 IN NS ns2.nameserver.com.
+info 3600 IN TXT "This is some additional \"information\""
+sub.domain 3600 IN A 192.168.1.42
+ipv6.domain 3600 IN AAAA ::1
+_subdomain.mydomain.biz. 3600 IN MX 10 mail-gw1.example.net.
+_subdomain.mydomain.biz. 3600 IN MX 20 mail-gw2.example.net.
+_subdomain.mydomain.biz. 3600 IN MX 30 mail-gw3.example.net.
+mail._subdomain.mydomain.biz. 3600 IN TXT "THIS IS SOME TEXT; WITH A SEMICOLON"

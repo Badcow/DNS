@@ -56,6 +56,11 @@ class Parser
     private $lastStatedClass;
 
     /**
+     * @var string the current value, defaults to the Zone name
+     */
+    private $origin;
+
+    /**
      * Parser constructor.
      */
     public function __construct(array $rdataHandlers = [])
@@ -77,6 +82,7 @@ class Parser
     public function makeZone(string $name, string $string, int $commentOptions = Comments::NONE): Zone
     {
         $this->zone = new Zone($name);
+        $this->origin = $name;
         $this->lastStatedDomain = $name;
         $normalisedZone = Normaliser::normalise($string, $commentOptions);
 
@@ -137,7 +143,7 @@ class Parser
         }
 
         if ($this->isResourceName($iterator) && null === $this->currentResourceRecord->getName()) {
-            $this->currentResourceRecord->setName($iterator->current());
+            $this->currentResourceRecord->setName($this->appendOrigin($iterator->current()));
             $iterator->next();
             $this->processEntry($iterator);
 
@@ -181,6 +187,33 @@ class Parser
     }
 
     /**
+     * Append the $ORIGIN to a subdomain if:
+     *  1) the current $ORIGIN is different, and
+     *  2) the subdomain is not already fully qualified, or
+     *  3) the subdomain is '@'.
+     *
+     * @param string $subdomain the subdomain to which the $ORIGIN needs to be appended
+     *
+     * @return string The concatenated string of the subdomain.$ORIGIN
+     */
+    private function appendOrigin(string $subdomain): string
+    {
+        if ($this->origin === $this->zone->getName()) {
+            return $subdomain;
+        }
+
+        if ('.' === substr($subdomain, -1, 1)) {
+            return $subdomain;
+        }
+
+        if ('@' === $subdomain) {
+            return $this->origin;
+        }
+
+        return $subdomain.'.'.$this->origin;
+    }
+
+    /**
      * Processes control entries at the top of a BIND record, i.e. $ORIGIN, $TTL, $INCLUDE, etc.
      */
     private function processControlEntry(ResourceRecordIterator $iterator): void
@@ -192,7 +225,7 @@ class Parser
 
         if ('$ORIGIN' === strtoupper($iterator->current())) {
             $iterator->next();
-            $this->zone->setName((string) $iterator->current());
+            $this->origin = (string) $iterator->current();
         }
     }
 

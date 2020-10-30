@@ -30,6 +30,7 @@ use Badcow\DNS\Rdata\RRSIG;
 use Badcow\DNS\Rdata\TXT;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
+use Badcow\DNS\ZoneBuilder;
 use PHPUnit\Framework\TestCase;
 
 class ParserTest extends TestCase
@@ -486,12 +487,12 @@ DNS;
      *
      * @throws \Exception
      */
-    public function testParserOverwritesZoneNameIfOriginControlEntryIsPresent(): void
+    public function testParserDoesNotOverwritesZoneNameIfOriginControlEntryIsDifferent(): void
     {
         $file = NormaliserTest::readFile(__DIR__.'/Resources/testCollapseMultilines_sample.txt');
         $zone = Parser::parse('test.com.', $file);
 
-        $this->assertEquals('example.com.', $zone->getName());
+        $this->assertEquals('test.com.', $zone->getName());
     }
 
     /**
@@ -510,5 +511,22 @@ DNS;
         }
 
         return $records;
+    }
+
+    /**
+     * Parser ignores control entries other than TTL.
+     *
+     * @throws ParseException|\Exception
+     */
+    public function testParserHandlesMultipleOrigins(): void
+    {
+        $file = NormaliserTest::readFile(__DIR__.'/Resources/multipleOrigins.txt');
+        $expectation = NormaliserTest::readFile(__DIR__.'/Resources/multipleOrigins_expectation.txt');
+        $zone = Parser::parse('mydomain.biz.', $file);
+
+        $this->assertEquals('mydomain.biz.', $zone->getName());
+        $this->assertEquals(3600, $zone->getDefaultTtl());
+
+        $this->assertEquals($expectation, ZoneBuilder::build($zone));
     }
 }
