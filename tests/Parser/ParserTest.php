@@ -20,6 +20,7 @@ use Badcow\DNS\Parser\Comments;
 use Badcow\DNS\Parser\ParseException;
 use Badcow\DNS\Parser\Parser;
 use Badcow\DNS\Parser\TimeFormat;
+use Badcow\DNS\Parser\ZoneFileFetcherInterface;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\AAAA;
 use Badcow\DNS\Rdata\APL;
@@ -514,7 +515,7 @@ DNS;
     }
 
     /**
-     * Parser ignores control entries other than TTL.
+     * Parser handles multiple $ORIGINS.
      *
      * @throws ParseException|\Exception
      */
@@ -523,6 +524,30 @@ DNS;
         $file = NormaliserTest::readFile(__DIR__.'/Resources/multipleOrigins.txt');
         $expectation = NormaliserTest::readFile(__DIR__.'/Resources/multipleOrigins_expectation.txt');
         $zone = Parser::parse('mydomain.biz.', $file);
+
+        $this->assertEquals('mydomain.biz.', $zone->getName());
+        $this->assertEquals(3600, $zone->getDefaultTtl());
+
+        $this->assertEquals($expectation, ZoneBuilder::build($zone));
+    }
+
+    /**
+     * Parser ignores control entries other than TTL.
+     *
+     * @throws ParseException|\Exception
+     */
+    public function testParserHandlesIncludeDirective(): void
+    {
+        $zoneFetcher = new class() implements ZoneFileFetcherInterface {
+            public function fetch(string $path): string
+            {
+                return file_get_contents(__DIR__.'/Resources/'.$path);
+            }
+        };
+
+        $file = NormaliserTest::readFile(__DIR__.'/Resources/testIncludeDirective_parent.txt');
+        $expectation = NormaliserTest::readFile(__DIR__.'/Resources/testIncludeDirective_expectation.txt');
+        $zone = (new Parser([], $zoneFetcher))->makeZone('mydomain.biz.', $file);
 
         $this->assertEquals('mydomain.biz.', $zone->getName());
         $this->assertEquals(3600, $zone->getDefaultTtl());

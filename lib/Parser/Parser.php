@@ -61,11 +61,22 @@ class Parser
     private $origin;
 
     /**
+     * @var ZoneFileFetcherInterface|null Used to get the contents of files included through the directive
+     */
+    private $fetcher;
+
+    /**
+     * @var int
+     */
+    private $commentOptions;
+
+    /**
      * Parser constructor.
      */
-    public function __construct(array $rdataHandlers = [])
+    public function __construct(array $rdataHandlers = [], ?ZoneFileFetcherInterface $fetcher = null)
     {
         $this->rdataHandlers = $rdataHandlers;
+        $this->fetcher = $fetcher;
     }
 
     /**
@@ -84,13 +95,22 @@ class Parser
         $this->zone = new Zone($name);
         $this->origin = $name;
         $this->lastStatedDomain = $name;
-        $normalisedZone = Normaliser::normalise($string, $commentOptions);
+        $this->commentOptions = $commentOptions;
+        $this->processZone($string);
+
+        return $this->zone;
+    }
+
+    /**
+     * @throws ParseException
+     */
+    private function processZone(string $zone): void
+    {
+        $normalisedZone = Normaliser::normalise($zone, $this->commentOptions);
 
         foreach (explode(Tokens::LINE_FEED, $normalisedZone) as $line) {
             $this->processLine($line);
         }
-
-        return $this->zone;
     }
 
     /**
@@ -215,6 +235,8 @@ class Parser
 
     /**
      * Processes control entries at the top of a BIND record, i.e. $ORIGIN, $TTL, $INCLUDE, etc.
+     *
+     * @throws ParseException
      */
     private function processControlEntry(ResourceRecordIterator $iterator): void
     {
@@ -226,6 +248,29 @@ class Parser
         if ('$ORIGIN' === strtoupper($iterator->current())) {
             $iterator->next();
             $this->origin = (string) $iterator->current();
+        }
+
+        if ('$INCLUDE' === strtoupper($iterator->current())) {
+            $iterator->next();
+            if (null !== $this->fetcher) {
+                //Copy the state of the parser so as to revert back once included file has been parsed.
+                $_lastStatedDomain = $this->lastStatedDomain;
+                $_lastStatedClass = $this->lastStatedClass;
+                $_lastStatedTtl = $this->lastStatedTtl;
+                $_origin = $this->origin;
+                $_ttl = $this->zone->getDefaultTtl() ?? 0;
+
+                //Parse the included record.
+                $childRecord = $this->fetcher->fetch($iterator->getRemainingAsString());
+                $this->processZone($childRecord);
+
+                //Revert the parser.
+                $this->lastStatedDomain = $_lastStatedDomain;
+                $this->lastStatedClass = $_lastStatedClass;
+                $this->lastStatedTtl = $_lastStatedTtl;
+                $this->origin = $_origin;
+                $this->zone->setDefaultTtl($_ttl);
+            }
         }
     }
 
