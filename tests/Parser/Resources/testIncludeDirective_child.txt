@@ -1,0 +1,7 @@
+$ORIGIN _subdomain.mydomain.biz.
+$TTL 7200
+
+@ MX 10 mail-gw1.example.net.
+@ MX 20 mail-gw2.example.net.
+@ MX 30 mail-gw3.example.net.
+mail IN TXT "THIS IS SOME TEXT; WITH A SEMICOLON"
