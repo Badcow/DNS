@@ -252,26 +252,70 @@ class Parser
 
         if ('$INCLUDE' === strtoupper($iterator->current())) {
             $iterator->next();
-            if (null !== $this->fetcher) {
-                //Copy the state of the parser so as to revert back once included file has been parsed.
-                $_lastStatedDomain = $this->lastStatedDomain;
-                $_lastStatedClass = $this->lastStatedClass;
-                $_lastStatedTtl = $this->lastStatedTtl;
-                $_origin = $this->origin;
-                $_ttl = $this->zone->getDefaultTtl() ?? 0;
+            $this->includeFile($iterator);
+        }
+    }
 
-                //Parse the included record.
-                $childRecord = $this->fetcher->fetch($iterator->getRemainingAsString());
-                $this->processZone($childRecord);
+    /**
+     * @throws ParseException
+     */
+    private function includeFile(ResourceRecordIterator $iterator): void
+    {
+        if (null === $this->fetcher) {
+            return;
+        }
 
-                //Revert the parser.
-                $this->lastStatedDomain = $_lastStatedDomain;
-                $this->lastStatedClass = $_lastStatedClass;
-                $this->lastStatedTtl = $_lastStatedTtl;
-                $this->origin = $_origin;
-                $this->zone->setDefaultTtl($_ttl);
+        list($path, $domain) = $this->extractIncludeArguments($iterator->getRemainingAsString());
+
+        //Copy the state of the parser so as to revert back once included file has been parsed.
+        $_lastStatedDomain = $this->lastStatedDomain;
+        $_lastStatedClass = $this->lastStatedClass;
+        $_lastStatedTtl = $this->lastStatedTtl;
+        $_origin = $this->origin;
+        $_ttl = $this->zone->getDefaultTtl() ?? 0;
+
+        //Parse the included record.
+        $this->origin = $domain;
+        $childRecord = $this->fetcher->fetch($path);
+        //Prepend the comment.
+        $childRecord =
+            Tokens::SEMICOLON.
+            $this->currentResourceRecord->getComment().
+            Tokens::LINE_FEED.
+            $childRecord;
+
+        $this->processZone($childRecord);
+
+        //Revert the parser.
+        $this->lastStatedDomain = $_lastStatedDomain;
+        $this->lastStatedClass = $_lastStatedClass;
+        $this->lastStatedTtl = $_lastStatedTtl;
+        $this->origin = $_origin;
+        $this->zone->setDefaultTtl($_ttl);
+    }
+
+    /**
+     * @param string $string the string proceeding the $INCLUDE directive
+     *
+     * @return array an array containing [$path, $domain]
+     */
+    private function extractIncludeArguments(string $string): array
+    {
+        $s = new StringIterator($string);
+        $path = $domain = '';
+        while ($s->valid()) {
+            $path .= $s->current();
+            $s->next();
+            if ($s->is(Tokens::SPACE)) {
+                $s->next();
+                $domain = $s->getRemainingAsString();
+            }
+            if ($s->is(Tokens::BACKSLASH)) {
+                $s->next();
             }
         }
+
+        return [$path, $domain];
     }
 
     /**

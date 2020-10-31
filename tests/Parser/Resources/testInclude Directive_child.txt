@@ -1,0 +1,11 @@
+$TTL 7200
+
+@ MX (
+        10
+        mail-gw1.example.net.
+        ) ;The first mail gateway
+@ MX 20 mail-gw2.example.net.
+@ MX 30 mail-gw3.example.net.
+mail IN TXT "THIS IS SOME TEXT; WITH A SEMICOLON"
+
+$ORIGIN some_other_subdomain.mydomain.biz.

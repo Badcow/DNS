@@ -6,7 +6,8 @@ $TTL 3600
 info 3600 IN TXT "This is some additional \"information\""
 sub.domain 3600 IN A 192.168.1.42
 ipv6.domain 3600 IN AAAA ::1
-_subdomain.mydomain.biz. 7200 IN MX 10 mail-gw1.example.net.
+; include the subdomain _subdomain.mydomain.biz.
+_subdomain.mydomain.biz. 7200 IN MX 10 mail-gw1.example.net.; The first mail gateway
 _subdomain.mydomain.biz. 7200 IN MX 20 mail-gw2.example.net.
 _subdomain.mydomain.biz. 7200 IN MX 30 mail-gw3.example.net.
 mail._subdomain.mydomain.biz. 7200 IN TXT "THIS IS SOME TEXT; WITH A SEMICOLON"

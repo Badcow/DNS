@@ -10,8 +10,7 @@ info TXT "This is some additional \"information\""
 sub.domain A 192.168.1.42
 ipv6.domain AAAA ::1
 
-;include the subdomain _subdomain.mydomain.biz.
-$INCLUDE testIncludeDirective_child.txt
+$INCLUDE testInclude\ Directive_child.txt _subdomain.mydomain.biz. ;include the subdomain _subdomain.mydomain.biz.
 
 mail IN CNAME mx1.bizmail.
 @ IN MX 10 mail

@@ -532,7 +532,7 @@ DNS;
     }
 
     /**
-     * Parser ignores control entries other than TTL.
+     * Parser imports files specified by the $INCLUDE directive.
      *
      * @throws ParseException|\Exception
      */
@@ -547,7 +547,7 @@ DNS;
 
         $file = NormaliserTest::readFile(__DIR__.'/Resources/testIncludeDirective_parent.txt');
         $expectation = NormaliserTest::readFile(__DIR__.'/Resources/testIncludeDirective_expectation.txt');
-        $zone = (new Parser([], $zoneFetcher))->makeZone('mydomain.biz.', $file);
+        $zone = (new Parser([], $zoneFetcher))->makeZone('mydomain.biz.', $file, Comments::ALL);
 
         $this->assertEquals('mydomain.biz.', $zone->getName());
         $this->assertEquals(3600, $zone->getDefaultTtl());
