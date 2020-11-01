@@ -56,9 +56,14 @@ class Parser
     private $lastStatedClass;
 
     /**
-     * @var string the current value, defaults to the Zone name
+     * @var string the current $ORIGIN value, defaults to the Zone name
      */
     private $origin;
+
+    /**
+     * @var int the currently defined $TTL.
+     */
+    private $ttl;
 
     /**
      * @var ZoneFileFetcherInterface|null Used to get the contents of files included through the directive
@@ -172,20 +177,22 @@ class Parser
 
         if ($this->isType($iterator)) {
             $this->currentResourceRecord->setRdata($this->extractRdata($iterator));
-            $this->populateWithLastStated();
+            $this->populateNullValues();
 
             return;
         }
 
-        throw new ParseException(sprintf('Could not parse entry "%s".', implode(' ', $iterator->getArrayCopy())));
+        throw new ParseException(sprintf('Could not parse entry "%s".', (string) $iterator));
     }
 
     /**
-     * If no domain-name, TTL, or class is set on the record, populate object with last stated value.
+     * If no domain-name, TTL, or class is set on the record, populate object with last stated value (RFC-1035).
+     * If $TTL has been set, then that value will fill the resource records TTL (RFC-2308).
      *
      * @see https://www.ietf.org/rfc/rfc1035 Section 5.1
+     * @see https://tools.ietf.org/html/rfc2308 Section 4
      */
-    private function populateWithLastStated(): void
+    private function populateNullValues(): void
     {
         if (empty($this->currentResourceRecord->getName())) {
             $this->currentResourceRecord->setName($this->lastStatedDomain);
@@ -194,7 +201,7 @@ class Parser
         }
 
         if (null === $this->currentResourceRecord->getTtl()) {
-            $this->currentResourceRecord->setTtl($this->lastStatedTtl ?? $this->zone->getDefaultTTl());
+            $this->currentResourceRecord->setTtl($this->ttl ?? $this->lastStatedTtl);
         } else {
             $this->lastStatedTtl = $this->currentResourceRecord->getTtl();
         }
@@ -242,7 +249,10 @@ class Parser
     {
         if ('$TTL' === strtoupper($iterator->current())) {
             $iterator->next();
-            $this->zone->setDefaultTtl(TimeFormat::toSeconds($iterator->current()));
+            $this->ttl = TimeFormat::toSeconds($iterator->current());
+            if (null === $this->zone->getDefaultTtl()) {
+                $this->zone->setDefaultTtl($this->ttl);
+            }
         }
 
         if ('$ORIGIN' === strtoupper($iterator->current())) {
@@ -272,17 +282,15 @@ class Parser
         $_lastStatedClass = $this->lastStatedClass;
         $_lastStatedTtl = $this->lastStatedTtl;
         $_origin = $this->origin;
-        $_ttl = $this->zone->getDefaultTtl() ?? 0;
+        $_ttl = $this->ttl;
 
         //Parse the included record.
-        $this->origin = $domain;
+        $this->origin = $domain ?? $_origin;
         $childRecord = $this->fetcher->fetch($path);
-        //Prepend the comment.
-        $childRecord =
-            Tokens::SEMICOLON.
-            $this->currentResourceRecord->getComment().
-            Tokens::LINE_FEED.
-            $childRecord;
+
+        if (null !== $this->currentResourceRecord->getComment()) {
+            $childRecord = Tokens::SEMICOLON.$this->currentResourceRecord->getComment().Tokens::LINE_FEED.$childRecord;
+        }
 
         $this->processZone($childRecord);
 
@@ -291,7 +299,7 @@ class Parser
         $this->lastStatedClass = $_lastStatedClass;
         $this->lastStatedTtl = $_lastStatedTtl;
         $this->origin = $_origin;
-        $this->zone->setDefaultTtl($_ttl);
+        $this->ttl = $_ttl;
     }
 
     /**
@@ -302,7 +310,8 @@ class Parser
     private function extractIncludeArguments(string $string): array
     {
         $s = new StringIterator($string);
-        $path = $domain = '';
+        $path = '';
+        $domain = null;
         while ($s->valid()) {
             $path .= $s->current();
             $s->next();
