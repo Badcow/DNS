@@ -18,6 +18,8 @@ $TTL 3600
 1   IN  1080    PTR  gw01.core.acme.com.
 1   IN  1080    PTR  gw02.core.acme.com.
 
+$TTL 1080
+
 50  IN          PTR  mx1.acme.com.
 52  IN          PTR  mx2.acme.com.
 
