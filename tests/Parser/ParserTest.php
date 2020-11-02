@@ -534,8 +534,10 @@ DNS;
     public function dp_testParserHandlesIncludeDirective(): array
     {
         $baseDir = __DIR__.'/Resources/IncludeControlEntryTests/';
+
         return [
-            ['mydomain.biz.', $baseDir.'testIncludeDirective_parent.txt', $baseDir.'testIncludeDirective_expectation.txt'],
+            ['mydomain.biz.', 3600, $baseDir.'mydomain.biz.db', $baseDir.'mydomain.biz_expectation.db', Comments::ALL],
+            ['testdomain.geek.', 7200, $baseDir.'testdomain.geek.db', $baseDir.'testdomain.geek_expectation.db', Comments::NONE],
         ];
     }
 
@@ -544,13 +546,9 @@ DNS;
      *
      * @dataProvider dp_testParserHandlesIncludeDirective
      *
-     * @param string $zoneName
-     * @param string $zoneFilePath
-     * @param string $expectationPath
-     *
      * @throws ParseException|\Exception
      */
-    public function testParserHandlesIncludeDirective(string $zoneName, string $zoneFilePath, string $expectationPath): void
+    public function testParserHandlesIncludeDirective(string $zoneName, int $ttl, string $zoneFilePath, string $expectationPath, int $commentOptions): void
     {
         $zoneFetcher = new class() implements ZoneFileFetcherInterface {
             public function fetch(string $path): string
@@ -561,10 +559,10 @@ DNS;
 
         $file = NormaliserTest::readFile($zoneFilePath);
         $expectation = NormaliserTest::readFile($expectationPath);
-        $zone = (new Parser([], $zoneFetcher))->makeZone($zoneName, $file, Comments::ALL);
+        $zone = (new Parser([], $zoneFetcher))->makeZone($zoneName, $file, $commentOptions);
 
-        $this->assertEquals('mydomain.biz.', $zone->getName());
-        $this->assertEquals(3600, $zone->getDefaultTtl());
+        $this->assertEquals($zoneName, $zone->getName());
+        $this->assertEquals($ttl, $zone->getDefaultTtl());
 
         $this->assertEquals($expectation, ZoneBuilder::build($zone));
     }

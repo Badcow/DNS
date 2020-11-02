@@ -1,0 +1,13 @@
+$ORIGIN testdomain.geek.
+$TTL 7200
+@ 1337 IN SOA testdomain.geek. post.testdomain.geek. 2014110501 3600 14400 604800 3600
+@ 1337 IN NS ns1.nameserver.com.
+@ 1337 IN NS ns2.nameserver.com.
+info 7200 IN TXT "This is some additional \"information\""
+sub.domain 7200 IN A 192.168.1.42
+ipv6.domain 7200 IN AAAA ::1
+@ 7200 IN MX 10 mail-gw1.example.net.
+@ 7200 IN MX 20 mail-gw2.example.net.
+@ 7200 IN MX 30 mail-gw3.example.net.
+mail 7200 IN TXT "THIS IS SOME TEXT; WITH A SEMICOLON"
+multicast 7200 IN APL 1:192.168.0.0/23 2:2001:acad:1::/112 !1:192.168.1.64/28 !2:2001:acad:1::8/128

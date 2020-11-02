@@ -56,12 +56,12 @@ class Parser
     private $lastStatedClass;
 
     /**
-     * @var string the current $ORIGIN value, defaults to the Zone name
+     * @var string the current ORIGIN value, defaults to the Zone name
      */
     private $origin;
 
     /**
-     * @var int the currently defined $TTL.
+     * @var int the currently defined default TTL
      */
     private $ttl;
 

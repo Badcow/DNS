@@ -1,0 +1,15 @@
+$ORIGIN testdomain.geek.
+$TTL 1337
+@            IN SOA  (
+                     testdomain.geek.      ; MNAME
+                     post.testdomain.geek. ; RNAME
+                     2014110501            ; SERIAL
+                     3600                  ; REFRESH
+                     14400                 ; RETRY
+                     604800                ; EXPIRE
+                     3600                  ; MINIMUM
+                     ); This is my Start of Authority Record; AKA SOA.
+
+ ; NS RECORDS
+@               NS   ns1.nameserver.com.
+@               NS   ns2.nameserver.com.
