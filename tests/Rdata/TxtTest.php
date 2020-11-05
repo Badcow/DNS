@@ -29,12 +29,11 @@ class TxtTest extends TestCase
 
     public function testOutput(): void
     {
-        $text = 'This is some text. It\'s a nice piece of text.';
-        $expected = '"This is some text. It\\\'s a nice piece of text."';
+        $text = '"This is some quoted text". It\'s a nice piece of text.';
+        $expected = '"\"This is some quoted text\". It\'s a nice piece of text."';
         $txt = new TXT();
         $txt->setText($text);
 
-        $this->assertEquals($expected, $txt->toText());
         $this->assertEquals($expected, $txt->toText());
     }
 
