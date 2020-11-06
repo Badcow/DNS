@@ -52,7 +52,10 @@ class TXT implements RdataInterface
      */
     public function toText(): string
     {
-        return sprintf('"%s"', addslashes($this->text ?? ''));
+        return sprintf(
+            Tokens::DOUBLE_QUOTES . '%s' . Tokens::DOUBLE_QUOTES, 
+            addcslashes($this->text ?? '', Tokens::DOUBLE_QUOTES . '\\')
+        );
     }
 
     /**

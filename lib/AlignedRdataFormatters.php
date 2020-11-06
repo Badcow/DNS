@@ -93,8 +93,11 @@ class AlignedRdataFormatters
 
         $rdata = Tokens::OPEN_BRACKET.Tokens::SPACE;
         foreach ($lines as $line) {
-            $rdata .= Tokens::LINE_FEED.$padString.Tokens::SPACE.Tokens::SPACE.
-                Tokens::DOUBLE_QUOTES.$line.Tokens::DOUBLE_QUOTES;
+
+            $txtSplit = new TXT();
+            $txtSplit->setText($line);
+
+            $rdata .= Tokens::LINE_FEED.$padString.Tokens::SPACE.Tokens::SPACE.$txtSplit->toText();
         }
         $rdata .= Tokens::LINE_FEED.$padString.Tokens::CLOSE_BRACKET;
 
