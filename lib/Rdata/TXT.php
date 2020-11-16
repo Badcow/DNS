@@ -52,10 +52,11 @@ class TXT implements RdataInterface
      */
     public function toText(): string
     {
-        return sprintf(
-            Tokens::DOUBLE_QUOTES . '%s' . Tokens::DOUBLE_QUOTES, 
-            addcslashes($this->text ?? '', Tokens::DOUBLE_QUOTES . '\\')
-        );
+        $chunks = array_map(function (string $chunk) {
+            return sprintf('"%s"', addcslashes($chunk, Tokens::DOUBLE_QUOTES.Tokens::BACKSLASH));
+        }, str_split($this->text ?? '', 255));
+
+        return implode(' ', $chunks);
     }
 
     /**

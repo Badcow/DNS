@@ -35,13 +35,14 @@ class TxtTest extends TestCase
             [
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel lorem in massa elementum blandit nec sed massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu purus id arcu venenatis elementum in quis enim. Aenean at urna varius sapien dapibus.',
                 '"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel lorem in massa elementum blandit nec sed massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu purus id arcu venenatis elementum in quis enim. Aenean at urna varius sapie" "n dapibus."',
-            ]
+            ],
         ];
     }
 
     /**
      * @dataProvider dp_testToText
-     * @param string $text The input text value.
+     *
+     * @param string $text        the input text value
      * @param string $expectation The expected output of TXT::toText()
      */
     public function testToText(string $text, string $expectation): void

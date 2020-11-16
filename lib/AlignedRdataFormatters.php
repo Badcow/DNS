@@ -93,7 +93,6 @@ class AlignedRdataFormatters
 
         $rdata = Tokens::OPEN_BRACKET.Tokens::SPACE;
         foreach ($lines as $line) {
-
             $txtSplit = new TXT();
             $txtSplit->setText($line);
 
