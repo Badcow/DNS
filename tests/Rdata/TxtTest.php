@@ -27,14 +27,30 @@ class TxtTest extends TestCase
         $this->assertEquals($text, $txt->getText());
     }
 
-    public function testOutput(): void
+    public function dp_testToText(): array
     {
-        $text = '"This is some quoted text". It\'s a nice piece of text.';
-        $expected = '"\"This is some quoted text\". It\'s a nice piece of text."';
+        return [
+            //[$text, $expectation]
+            ['"This is some quoted text". It\'s a nice piece of text.', '"\"This is some quoted text\". It\'s a nice piece of text."'],
+            [
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel lorem in massa elementum blandit nec sed massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu purus id arcu venenatis elementum in quis enim. Aenean at urna varius sapien dapibus.',
+                '"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel lorem in massa elementum blandit nec sed massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu purus id arcu venenatis elementum in quis enim. Aenean at urna varius sapie" "n dapibus."',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dp_testToText
+     *
+     * @param string $text        the input text value
+     * @param string $expectation The expected output of TXT::toText()
+     */
+    public function testToText(string $text, string $expectation): void
+    {
         $txt = new TXT();
         $txt->setText($text);
 
-        $this->assertEquals($expected, $txt->toText());
+        $this->assertEquals($expectation, $txt->toText());
     }
 
     public function testFromTxt(): void
