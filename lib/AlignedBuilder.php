@@ -38,7 +38,7 @@ class AlignedBuilder
      *
      * @var array
      */
-    private static $order = [
+    private $order = [
         SOA::TYPE,
         NS::TYPE,
         A::TYPE,
@@ -57,9 +57,53 @@ class AlignedBuilder
     ];
 
     /**
+     * @var callable[] array of Rdata type indexed, callables that handle the output formatting of Rdata
+     */
+    private $rdataFormatters = [];
+
+    public function __construct()
+    {
+        $this->rdataFormatters = AlignedRdataFormatters::$rdataFormatters;
+    }
+
+    /**
+     * Adds or changes an Rdata output formatter.
+     *
+     * @param string   $type      the Rdata type to be handled by the $formatter
+     * @param callable $formatter callable that will handle the output formatting of the Rdata
+     */
+    public function addRdataFormatter(string $type, callable $formatter): void
+    {
+        $this->rdataFormatters[$type] = $formatter;
+    }
+
+    public function getRdataFormatters(): array
+    {
+        return $this->rdataFormatters;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getOrder(): array
+    {
+        return $this->order;
+    }
+
+    /**
+     * Set the order in which Resource Records should appear in a zone..
+     *
+     * @param string[] $order Simple string array of Rdata types
+     */
+    public function setOrder(array $order): void
+    {
+        $this->order = $order;
+    }
+
+    /**
      * Build an aligned BIND zone file.
      */
-    public static function build(Zone $zone): string
+    public function build(Zone $zone): string
     {
         $master = self::generateControlEntries($zone);
         $resourceRecords = $zone->getResourceRecords();
@@ -84,7 +128,7 @@ class AlignedBuilder
                 str_pad((string) $resourceRecord->getTtl(), $ttlPadding, Tokens::SPACE, STR_PAD_RIGHT),
                 str_pad((string) $resourceRecord->getClass(), $classPadding, Tokens::SPACE, STR_PAD_RIGHT),
                 str_pad($rdata->getType(), $typePadding, Tokens::SPACE, STR_PAD_RIGHT),
-                self::generateRdataOutput($rdata, $rdataPadding)
+                $this->generateRdataOutput($rdata, $rdataPadding)
             );
 
             $master .= self::generateComment($resourceRecord);
@@ -121,8 +165,15 @@ class AlignedBuilder
 
     /**
      * Compares two ResourceRecords to determine which is the higher order. Used with the usort() function.
+     *
+     * @param ResourceRecord $a The first ResourceRecord
+     * @param ResourceRecord $b The second ResourceRecord
+     *
+     * @return int $a is higher precedence than $b if return value is less than 0.
+     *             $b is higher precedence than $a if return value is greater than 0.
+     *             $a and $b have the same precedence if the return value is 0.
      */
-    public static function compareResourceRecords(ResourceRecord $a, ResourceRecord $b): int
+    public function compareResourceRecords(ResourceRecord $a, ResourceRecord $b): int
     {
         $a_rdata = (null === $a->getRdata()) ? '' : $a->getRdata()->toText();
         $b_rdata = (null === $b->getRdata()) ? '' : $b->getRdata()->toText();
@@ -133,8 +184,8 @@ class AlignedBuilder
         }
 
         //Find the precedence (if any) for the two types.
-        $_a = array_search($a->getType(), self::$order);
-        $_b = array_search($b->getType(), self::$order);
+        $_a = array_search($a->getType(), $this->order);
+        $_b = array_search($b->getType(), $this->order);
 
         //If neither types have defined precedence.
         if (!is_int($_a) && !is_int($_b)) {
@@ -157,12 +208,14 @@ class AlignedBuilder
 
     /**
      * Composes the RDATA of the Resource Record.
+     *
+     * @param RdataInterface $rdata   the Rdata to be formatted
+     * @param int            $padding the number of spaces before the Rdata column
      */
-    private static function generateRdataOutput(RdataInterface $rdata, int $padding): string
+    private function generateRdataOutput(RdataInterface $rdata, int $padding): string
     {
-        $rdataFormatters = AlignedRdataFormatters::getRdataFormatters();
-        if (array_key_exists($rdata->getType(), $rdataFormatters)) {
-            return call_user_func($rdataFormatters[$rdata->getType()], $rdata, $padding);
+        if (array_key_exists($rdata->getType(), $this->rdataFormatters)) {
+            return call_user_func($this->rdataFormatters[$rdata->getType()], $rdata, $padding);
         }
 
         return $rdata->toText();
@@ -170,6 +223,8 @@ class AlignedBuilder
 
     /**
      * Get the padding required for a zone.
+     *
+     * @param Zone $zone the DNS Zone being processed
      *
      * @return int[] Array order: [name, ttl, type, class, rdata]
      */
