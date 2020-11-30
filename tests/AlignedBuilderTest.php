@@ -187,20 +187,22 @@ DNS;
         $spf = new ResourceRecord();
         $spf->setRdata(Factory::SPF('skjdfskjasdfjh'));
 
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($soa, $ns1) < 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($aaaa, $cname) < 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $mx2) < 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $mx2) < 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $spf) < 0);
+        $alignedBuilder = new AlignedBuilder();
 
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($mx1, $a) > 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($ns2, $ns1) > 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($spf, $txt) > 0);
+        $this->assertTrue($alignedBuilder->compareResourceRecords($soa, $ns1) < 0);
+        $this->assertTrue($alignedBuilder->compareResourceRecords($aaaa, $cname) < 0);
+        $this->assertTrue($alignedBuilder->compareResourceRecords($mx1, $mx2) < 0);
+        $this->assertTrue($alignedBuilder->compareResourceRecords($mx1, $mx2) < 0);
+        $this->assertTrue($alignedBuilder->compareResourceRecords($mx1, $spf) < 0);
 
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($nsec3, $rrsig) < 0);
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($rrsig, $nsec3) > 0);
+        $this->assertTrue($alignedBuilder->compareResourceRecords($mx1, $a) > 0);
+        $this->assertTrue($alignedBuilder->compareResourceRecords($ns2, $ns1) > 0);
+        $this->assertTrue($alignedBuilder->compareResourceRecords($spf, $txt) > 0);
 
-        $this->assertTrue(AlignedBuilder::compareResourceRecords($rp, $spf) < 0);
+        $this->assertTrue($alignedBuilder->compareResourceRecords($nsec3, $rrsig) < 0);
+        $this->assertTrue($alignedBuilder->compareResourceRecords($rrsig, $nsec3) > 0);
+
+        $this->assertTrue($alignedBuilder->compareResourceRecords($rp, $spf) < 0);
     }
 
     public function testBuild(): void

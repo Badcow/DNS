@@ -90,7 +90,8 @@ $zone->addResourceRecord($a6);
 $zone->addResourceRecord($ns2);
 $zone->addResourceRecord($mx1);
 
-echo AlignedBuilder::build($zone);
+$builder = new AlignedBuilder();
+echo $builder->build($zone);
 ```
 
 ### Output

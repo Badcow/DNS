@@ -127,6 +127,7 @@ class ZoneTest extends TestCase
     public function testFillOut(): void
     {
         $zone = self::buildTestZone();
+        $alignedBuilder = new AlignedBuilder();
 
         ZoneBuilder::fillOutZone($zone);
         $expectation = file_get_contents(__DIR__.'/Resources/example.com_filled-out.txt');
@@ -134,7 +135,7 @@ class ZoneTest extends TestCase
         //This is a fix for Windows systems that may expect a carriage return char.
         $expectation = str_replace("\r", '', $expectation);
 
-        $this->assertEquals($expectation, AlignedBuilder::build($zone));
+        $this->assertEquals($expectation, $alignedBuilder->build($zone));
     }
 
     public function testOtherFunctions(): void
