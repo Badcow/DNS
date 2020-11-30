@@ -56,25 +56,16 @@ class RP implements RdataInterface
         $this->txtDomainName = $txtDomainName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf('%s %s', $this->mailboxDomainName, $this->txtDomainName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         return Message::encodeName($this->mailboxDomainName).Message::encodeName($this->txtDomainName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
@@ -82,9 +73,6 @@ class RP implements RdataInterface
         $this->setTxtDomainName($rdata[1]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $this->setMailboxDomainName(Message::decodeName($rdata, $offset));

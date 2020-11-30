@@ -47,17 +47,12 @@ class A implements RdataInterface
         return $this->address;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return $this->address ?? '';
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \InvalidArgumentException
      */
     public function toWire(): string
@@ -69,17 +64,12 @@ class A implements RdataInterface
         return $encoded;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $this->setAddress($text);
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws DecodeException
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void

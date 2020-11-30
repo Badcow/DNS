@@ -199,9 +199,6 @@ class NSEC3 implements RdataInterface
         return $this->types;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf('%d %d %d %s %s %s',
@@ -215,8 +212,6 @@ class NSEC3 implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws UnsupportedTypeException
      */
     public function toWire(): string
@@ -235,9 +230,6 @@ class NSEC3 implements RdataInterface
         return $wire;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
@@ -254,8 +246,6 @@ class NSEC3 implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws UnsupportedTypeException|DecodeException
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void

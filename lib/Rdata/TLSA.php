@@ -114,25 +114,17 @@ class TLSA implements RdataInterface
         $this->certificateAssociationData = $certificateAssociationData;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf('%d %d %d %s', $this->certificateUsage, $this->selector, $this->matchingType, bin2hex($this->certificateAssociationData));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         return pack('CCC', $this->certificateUsage, $this->selector, $this->matchingType).$this->certificateAssociationData;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws ParseException
      */
     public function fromText(string $text): void
@@ -147,9 +139,6 @@ class TLSA implements RdataInterface
         $this->setCertificateAssociationData($certificateAssociationData);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('C<certUsage>/C<selector>/C<matchingType>', $rdata, $offset);

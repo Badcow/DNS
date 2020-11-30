@@ -56,8 +56,6 @@ class KX implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \InvalidArgumentException throws exception if preference or exchanger have not been set
      */
     public function toText(): string
@@ -72,9 +70,6 @@ class KX implements RdataInterface
         return $this->preference.' '.$this->exchanger;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         if (null === $this->preference) {
@@ -87,9 +82,6 @@ class KX implements RdataInterface
         return pack('n', $this->preference).Message::encodeName($this->exchanger);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(' ', $text);
@@ -97,9 +89,6 @@ class KX implements RdataInterface
         $this->setExchanger($rdata[1]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $this->setPreference(unpack('n', $rdata, $offset)[1]);

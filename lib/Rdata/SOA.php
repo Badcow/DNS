@@ -176,9 +176,6 @@ class SOA implements RdataInterface
         return $this->serial;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         if (!isset($this->mname) ||
@@ -203,9 +200,6 @@ class SOA implements RdataInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         if (!isset($this->mname) ||
@@ -231,9 +225,6 @@ class SOA implements RdataInterface
             );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
@@ -247,9 +238,6 @@ class SOA implements RdataInterface
         $this->setMinimum(TimeFormat::toSeconds($rdata[6]));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $this->setMname(Message::decodeName($rdata, $offset));

@@ -62,34 +62,22 @@ class HINFO implements RdataInterface
         return $this->os;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf('"%s" "%s"', $this->cpu ?? '', $this->os ?? '');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         return $this->toText();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $this->fromText(substr($rdata, $offset, $rdLength ?? strlen($rdata)));
         $offset += $rdLength;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $string = new StringIterator($text);

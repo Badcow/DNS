@@ -111,9 +111,6 @@ class DS implements RdataInterface
         $this->digest = sha1(Message::encodeName(strtolower($owner)).$dnskey->toWire(), true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf(
@@ -125,17 +122,11 @@ class DS implements RdataInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         return pack('nCC', $this->keyTag, $this->algorithm, $this->digestType).$this->digest;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
@@ -148,9 +139,6 @@ class DS implements RdataInterface
         $this->setDigest($digest);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $digestLen = ($rdLength ?? strlen($rdata)) - 4;

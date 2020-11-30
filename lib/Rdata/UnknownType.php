@@ -77,8 +77,6 @@ class UnknownType implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws ParseException
      */
     public function fromText(string $text): void
@@ -99,9 +97,6 @@ class UnknownType implements RdataInterface
         $this->setData($data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $this->setData(substr($rdata, $offset, $rdLength ?? strlen($rdata)));

@@ -103,9 +103,6 @@ class HIP implements RdataInterface
         $this->rendezvousServers = [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf('%d %s %s %s',
@@ -116,9 +113,6 @@ class HIP implements RdataInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         $rdata = pack('CCn',
@@ -137,8 +131,6 @@ class HIP implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws ParseException
      */
     public function fromText(string $text): void
@@ -158,9 +150,6 @@ class HIP implements RdataInterface
         array_map([$this, 'addRendezvousServer'], $rdata);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $end = $offset + ($rdLength ?? strlen($rdata));

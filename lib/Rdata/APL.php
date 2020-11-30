@@ -66,9 +66,6 @@ class APL implements RdataInterface
         return $this->excludedAddressRanges;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         $string = '';
@@ -85,9 +82,6 @@ class APL implements RdataInterface
         return rtrim($string, ' ');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         $encoded = '';
@@ -112,8 +106,6 @@ class APL implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Exception
      */
     public function fromText(string $text): void
@@ -132,9 +124,6 @@ class APL implements RdataInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $end = $offset + ($rdLength ?? strlen($rdata));

@@ -111,9 +111,6 @@ class CAA implements RdataInterface
         $this->value = $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         if (!isset($this->tag) || !isset($this->flag) || !isset($this->value)) {
@@ -139,9 +136,6 @@ class CAA implements RdataInterface
             $this->value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $this->setFlag(ord($rdata[$offset]));
@@ -159,9 +153,6 @@ class CAA implements RdataInterface
         $offset = $offset += $valueLen;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);

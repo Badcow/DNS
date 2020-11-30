@@ -146,9 +146,6 @@ class SRV implements RdataInterface
         $this->target = $target;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf('%s %s %s %s',
@@ -159,9 +156,6 @@ class SRV implements RdataInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         return pack('nnn', $this->priority, $this->weight, $this->port).Message::encodeName($this->target);
@@ -176,9 +170,6 @@ class SRV implements RdataInterface
         $this->setTarget($rdata[3]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $integers = unpack('npriority/nweight/nport', $rdata, $offset);

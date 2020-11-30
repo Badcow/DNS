@@ -199,9 +199,6 @@ class RRSIG implements RdataInterface
         $this->signature = $signature;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf(
@@ -239,9 +236,6 @@ class RRSIG implements RdataInterface
         return $wire;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
@@ -258,8 +252,6 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws UnsupportedTypeException
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void

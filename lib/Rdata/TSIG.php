@@ -153,9 +153,6 @@ class TSIG implements RdataInterface
         $this->otherData = $otherData;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf('%s %d %d %s %d %d %s',
@@ -169,9 +166,6 @@ class TSIG implements RdataInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         $timeSigned = (int) $this->timeSigned->format('U');
@@ -189,8 +183,6 @@ class TSIG implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws ParseException
      */
     public function fromText(string $text): void
@@ -218,8 +210,6 @@ class TSIG implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws DecodeException
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void

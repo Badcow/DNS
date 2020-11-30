@@ -47,9 +47,6 @@ class TXT implements RdataInterface
         return (string) $this->text ?? '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         $chunks = array_map(function (string $chunk) {
@@ -59,17 +56,11 @@ class TXT implements RdataInterface
         return implode(' ', $chunks);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         return $this->text ?? '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $rdLength = $rdLength ?? strlen($rdata);
@@ -77,9 +68,6 @@ class TXT implements RdataInterface
         $offset += $rdLength;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $string = new StringIterator($text);
