@@ -53,3 +53,6 @@ must instantiate the object first, and then call `fromText` method. All paramete
 child or subdomain zone files.
 * [PR #82](https://github.com/Badcow/DNS/pull/82) - Fix character escaping in TXT records. (Thank you, [@fbett](https://github.com/fbett))
 * [Issue #84](https://github.com/Badcow/DNS/issues/84) - `TXT::toText()` now splits string into 255-byte chunks. (Thank you, [@fbett](https://github.com/fbett))
+* [Issue #85](https://github.com/Badcow/DNS/issues/85) - `Badow\DNS\AlignedBuilder` now has finer controls. You can now
+  define the order of rendering Resource Records and add or change Rdata output formatters (see `Docs/AlignedZoneBuilder`.
+* `Badow\DNS\AlignedBuilder` cannot be called statically anymore. It must be instantiated.
