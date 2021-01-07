@@ -1,0 +1,10 @@
+$ORIGIN otherdomain.biz.
+$TTL 3600
+otherdomain.biz. 3600 IN SOA otherdomain.biz. post.otherdomain.biz. 2014110501 3600 14400 604800 3600
+otherdomain.biz. 3600 IN NS ns1.nameserver.com.
+otherdomain.biz. 3600 IN NS ns2.nameserver.com.
+info.otherdomain.biz. 3600 IN TXT "This is some additional \"information\""
+sub.domain.otherdomain.biz. 3600 IN A 192.168.1.42
+ipv6.domain.otherdomain.biz. 3600 IN AAAA 0000:0000:0000:0000:0000:0000:0000:0001
+mail.otherdomain.biz. 3600 IN CNAME mx1.bizmail.
+otherdomain.biz. 3600 IN MX 10 mail.otherdomain.biz.

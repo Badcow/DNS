@@ -531,6 +531,23 @@ DNS;
         $this->assertEquals($expectation, ZoneBuilder::build($zone));
     }
 
+    /**
+     * Parser handles $ORIGIN . correctly.
+     *
+     * @throws ParseException|\Exception
+     */
+    public function testParserHandlesOriginDot(): void
+    {
+        $file = NormaliserTest::readFile(__DIR__.'/Resources/testOriginDot_sample.txt');
+        $expectation = NormaliserTest::readfile(__DIR__.'/Resources/testOriginDot_expectation.txt');
+
+        $zone = Parser::parse('otherdomain.biz.', $file);
+        $this->assertEquals('otherdomain.biz.', $zone->getName());
+
+        ZoneBuilder::fillOutZone($zone);
+        $this->assertEquals($expectation, ZoneBuilder::build($zone));
+    }
+
     public function dp_testParserHandlesIncludeDirective(): array
     {
         $baseDir = __DIR__.'/Resources/IncludeControlEntryTests/';
