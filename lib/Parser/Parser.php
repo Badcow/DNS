@@ -233,7 +233,7 @@ class Parser
             return $subdomain;
         }
 
-        if ($this->origin === '.') {
+        if ('.' === $this->origin) {
             return $subdomain.'.';
         }
 
