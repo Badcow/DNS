@@ -7,7 +7,8 @@ CHANGELOG for 4.x
 * [Issue #88](https://github.com/Badcow/DNS/issues/88) TXT Rdata now supports unquoted contiguous strings. (Thank you,
 [Lorenz Bausch](https://github.com/lorenzbausch) for bringing this to issue to light).
 * [Issue #89](https://github.com/Badcow/DNS/issues/89) Fixes issue where TXT record with number as value throws exception
-(Thank you, [Lorenz Bausch](https://github.com/lorenzbausch) for bringing this to issue to light). 
+(Thank you, [Lorenz Bausch](https://github.com/lorenzbausch) for bringing this to issue to light).
+* Explicit support for PHP 8. 
 ## 4.0
 * `Badcow\DNS\Rdata\RdataInterface::fromWire` is no longer static and does not return an instance of the class. You now
 must instantiate the object first, and then call `fromWire` method. All parameters are the same.
