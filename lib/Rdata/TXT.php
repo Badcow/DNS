@@ -26,6 +26,8 @@ class TXT implements RdataInterface
     const TYPE = 'TXT';
     const TYPE_CODE = 16;
 
+    const WHITESPACE = [Tokens::SPACE, Tokens::TAB, Tokens::LINE_FEED, Tokens::CARRIAGE_RETURN];
+
     /**
      * @var string|null
      */
@@ -72,15 +74,33 @@ class TXT implements RdataInterface
     {
         $string = new StringIterator($text);
         $txt = new StringIterator();
+        $whitespace = [Tokens::SPACE, Tokens::TAB];
 
         while ($string->valid()) {
-            self::handleTxt($string, $txt);
-            $string->next();
+            if ($string->is(static::WHITESPACE)) {
+                $string->next();
+                continue;
+            }
+
+            if ($string->is(Tokens::DOUBLE_QUOTES)) {
+                self::handleTxt($string, $txt);
+                $string->next();
+                continue;
+            }
+
+            self::handleContiguousString($string, $txt);
+            break;
         }
 
         $this->setText((string) $txt);
     }
 
+    /**
+     * This handles the case where character string is encapsulated inside quotation marks.
+     *
+     * @param StringIterator $string The string to parse
+     * @param StringIterator $txt    The output string
+     */
     public static function handleTxt(StringIterator $string, StringIterator $txt): void
     {
         if ($string->isNot(Tokens::DOUBLE_QUOTES)) {
@@ -94,6 +114,20 @@ class TXT implements RdataInterface
                 $string->next();
             }
 
+            $txt->append($string->current());
+            $string->next();
+        }
+    }
+
+    /**
+     * This handles the case where character string is not encapsulated inside quotation marks.
+     *
+     * @param StringIterator $string The string to parse
+     * @param StringIterator $txt    The output string
+     */
+    private static function handleContiguousString(StringIterator $string, StringIterator $txt): void
+    {
+        while ($string->valid() && $string->isNot(static::WHITESPACE)) {
             $txt->append($string->current());
             $string->next();
         }
