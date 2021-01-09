@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS;
 
 use Badcow\DNS\Rdata\A;
+use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\RdataInterface;
 use InvalidArgumentException;
@@ -235,7 +236,9 @@ class ResourceRecord
     {
         $rr = new self();
         $rr->setName(Message::decodeName($encoded, $offset));
-        $integers = unpack('ntype/nclass/Nttl/ndlength', $encoded, $offset);
+        if (false === $integers = unpack('ntype/nclass/Nttl/ndlength', $encoded, $offset)) {
+            throw new \UnexpectedValueException(sprintf('Malformed resource record encountered. "%s"', DecodeException::binaryToHex($encoded)));
+        }
         $offset += 10;
         $rr->setClassId($integers['class']);
         $rr->setTtl($integers['ttl']);

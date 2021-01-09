@@ -104,7 +104,9 @@ class CSYNC implements RdataInterface
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $integers = unpack('Nserial/nflags', $rdata, $offset);
+        if (false === $integers = unpack('Nserial/nflags', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 6;
         $types = NSEC::parseBitmap($rdata, $offset);
 

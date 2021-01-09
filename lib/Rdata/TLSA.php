@@ -141,7 +141,9 @@ class TLSA implements RdataInterface
 
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $integers = unpack('C<certUsage>/C<selector>/C<matchingType>', $rdata, $offset);
+        if (false === $integers = unpack('C<certUsage>/C<selector>/C<matchingType>', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 3;
         $this->setCertificateUsage($integers['<certUsage>']);
         $this->setSelector($integers['<selector>']);

@@ -208,7 +208,9 @@ class DHCID implements RdataInterface
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $rdLength = $rdLength ?? strlen($rdata);
-        $integers = unpack('nIdentifierType/CDigestType', $rdata, $offset);
+        if (false === $integers = unpack('nIdentifierType/CDigestType', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
 
         $this->setIdentifierType((int) $integers['IdentifierType']);
         $this->setDigestType((int) $integers['DigestType']);

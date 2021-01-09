@@ -234,15 +234,19 @@ class TKEY implements RdataInterface
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $algorithm = Message::decodeName($rdata, $offset);
-        $integers = unpack('N<inception>/N<expiration>/n<mode>/n<error>/n<keySize>', $rdata, $offset);
+        if (false === $integers = unpack('N<inception>/N<expiration>/n<mode>/n<error>/n<keySize>', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 14;
         $keySize = (int) $integers['<keySize>'];
         $keyData = substr($rdata, $offset, $keySize);
         $offset = (int) $offset + $keySize;
-        $otherDataSize = unpack('n', $rdata, $offset)[1];
+        if (false === $otherDataSize = unpack('n', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 2;
-        $otherData = substr($rdata, $offset, $otherDataSize);
-        $offset += $otherDataSize;
+        $otherData = substr($rdata, $offset, $otherDataSize[1]);
+        $offset += $otherDataSize[1];
 
         $this->setAlgorithm($algorithm);
 

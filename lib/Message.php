@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS;
 
+use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\UnsupportedTypeException;
 
 class Message
@@ -454,7 +455,9 @@ class Message
     {
         $message = new self();
         $offset = 0;
-        $header = unpack('nid/nflags/nqdcount/nancount/nnscount/narcount', $encoded, $offset);
+        if (false === $header = unpack('nid/nflags/nqdcount/nancount/nnscount/narcount', $encoded, $offset)) {
+            throw new \UnexpectedValueException(sprintf('Malformed header encountered. "%s"', DecodeException::binaryToHex($encoded)));
+        }
         $offset += 12;
         $flags = $header['flags'];
 

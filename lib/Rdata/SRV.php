@@ -172,7 +172,9 @@ class SRV implements RdataInterface
 
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $integers = unpack('npriority/nweight/nport', $rdata, $offset);
+        if (false === $integers = unpack('npriority/nweight/nport', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 6;
         $this->setTarget(Message::decodeName($rdata, $offset));
         $this->setPriority($integers['priority']);

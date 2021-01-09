@@ -153,7 +153,9 @@ class HIP implements RdataInterface
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $end = $offset + ($rdLength ?? strlen($rdata));
-        $integers = unpack('C<hitLen>/C<algorithm>/n<pkLen>', $rdata, $offset);
+        if (false === $integers = unpack('C<hitLen>/C<algorithm>/n<pkLen>', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 4;
         $hitLen = (int) $integers['<hitLen>'];
         $pkLen = (int) $integers['<pkLen>'];
