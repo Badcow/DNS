@@ -91,7 +91,10 @@ class KX implements RdataInterface
 
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $this->setPreference(unpack('n', $rdata, $offset)[1]);
+        if (false === $preference = unpack('n', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
+        $this->setPreference($preference[1]);
         $offset += 2;
         $this->setExchanger(Message::decodeName($rdata, $offset));
     }

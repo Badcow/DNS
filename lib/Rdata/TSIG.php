@@ -216,7 +216,9 @@ class TSIG implements RdataInterface
     {
         $this->setAlgorithmName(Message::decodeName($rdata, $offset));
 
-        $args = unpack('n<hex1>/n<hex2>/n<hex3>/n<fudge>/n<macLen>', $rdata, $offset);
+        if (false === $args = unpack('n<hex1>/n<hex2>/n<hex3>/n<fudge>/n<macLen>', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 10;
 
         $timeSigned = ($args['<hex1>'] << 32) + ($args['<hex2>'] << 16) + $args['<hex3>'];
@@ -230,7 +232,9 @@ class TSIG implements RdataInterface
         $this->setMac(substr($rdata, $offset, $macLen));
         $offset += $macLen;
 
-        $args = unpack('n<id>/n<error>/n<otherLen>', $rdata, (int) $offset);
+        if (false === $args = unpack('n<id>/n<error>/n<otherLen>', $rdata, (int) $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 6;
         $otherLen = (int) $args['<otherLen>'];
 

@@ -129,7 +129,10 @@ class APL implements RdataInterface
         $end = $offset + ($rdLength ?? strlen($rdata));
 
         while ($offset < $end) {
-            $apItem = unpack('nfamily/Cprefix/Clength', $rdata, $offset);
+            if (false === $apItem = unpack('nfamily/Cprefix/Clength', $rdata, $offset)) {
+                throw new DecodeException(static::TYPE, $rdata);
+            }
+
             $isExcluded = (bool) ($apItem['length'] & 0b10000000);
             $len = $apItem['length'] & 0b01111111;
             $version = (1 === $apItem['family']) ? 4 : 6;

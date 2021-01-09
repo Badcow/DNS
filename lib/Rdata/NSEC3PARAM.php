@@ -131,7 +131,9 @@ class NSEC3PARAM implements RdataInterface
 
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $integers = unpack('C<algorithm>/C<flags>/n<iterations>/C<saltLen>', $rdata, $offset);
+        if (false === $integers = unpack('C<algorithm>/C<flags>/n<iterations>/C<saltLen>', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $saltLen = (int) $integers['<saltLen>'];
         $offset += 5;
         $this->setHashAlgorithm($integers['<algorithm>']);

@@ -243,7 +243,9 @@ class IPSECKEY implements RdataInterface
     {
         $end = $offset + $rdLength ?? strlen($rdata);
 
-        $integers = unpack('CPrecedence/CGatewayType/CAlgorithm', $rdata, $offset);
+        if (false === $integers = unpack('CPrecedence/CGatewayType/CAlgorithm', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 3;
         $this->setPrecedence((int) $integers['Precedence']);
         $gatewayType = $integers['GatewayType'];

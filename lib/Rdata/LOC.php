@@ -254,9 +254,14 @@ class LOC implements RdataInterface
         $this->setVerticalPrecision((float) array_shift($rdata));
     }
 
+    /**
+     * @throws DecodeException
+     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $values = unpack('C<version>/C<size>/C<hp>/C<vp>/l<lat>/l<lon>/l<alt>', $rdata, $offset);
+        if (false === $values = unpack('C<version>/C<size>/C<hp>/C<vp>/l<lat>/l<lon>/l<alt>', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 16;
 
         $this->setSize(self::exponentValueToNumber($values['<size>']));

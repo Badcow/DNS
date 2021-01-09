@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Badcow\DNS;
 
+use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Types;
 use Badcow\DNS\Rdata\UnsupportedTypeException;
 use InvalidArgumentException;
@@ -126,7 +127,9 @@ class Question
     {
         $question = new self();
         $question->setName(Message::decodeName($encoded, $offset));
-        $integers = unpack('ntype/nclass', $encoded, $offset);
+        if (false === $integers = unpack('ntype/nclass', $encoded, $offset)) {
+            throw new \UnexpectedValueException(sprintf('Malformed DNS query encountered. "%s"', DecodeException::binaryToHex($encoded)));
+        }
         $question->setTypeCode($integers['type']);
         $question->setClassId($integers['class']);
         $offset += 4;

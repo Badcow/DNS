@@ -250,15 +250,19 @@ class NSEC3 implements RdataInterface
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $values = unpack('C<hashAlgo>/C<flags>/n<iterations>/C<saltLen>', $rdata, $offset);
+        if (false === $values = unpack('C<hashAlgo>/C<flags>/n<iterations>/C<saltLen>', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 5;
         $this->setHashAlgorithm((int) $values['<hashAlgo>']);
         $this->setUnsignedDelegationsCovered((bool) $values['<flags>']);
         $this->setIterations((int) $values['<iterations>']);
 
         $saltLen = (int) $values['<saltLen>'];
-        $salt = unpack('H*', substr($rdata, $offset, $saltLen))[1];
-        $this->setSalt($salt);
+        if (false === $salt = unpack('H*', substr($rdata, $offset, $saltLen))) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
+        $this->setSalt($salt[1]);
         $offset += $saltLen;
 
         $hashLen = ord(substr($rdata, $offset, 1));

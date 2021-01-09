@@ -143,7 +143,9 @@ class DS implements RdataInterface
     {
         $digestLen = ($rdLength ?? strlen($rdata)) - 4;
 
-        $integers = unpack('ntag/Calgorithm/Cdtype', $rdata, $offset);
+        if (false === $integers = unpack('ntag/Calgorithm/Cdtype', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 4;
 
         $this->setKeyTag($integers['tag']);

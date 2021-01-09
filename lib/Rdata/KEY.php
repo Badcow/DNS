@@ -120,7 +120,9 @@ class KEY implements RdataInterface
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $rdLength = $rdLength ?? strlen($rdata);
-        $integers = unpack('nflags/Cprotocol/Calgorithm', $rdata, $offset);
+        if (false === $integers = unpack('nflags/Cprotocol/Calgorithm', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 4;
         $this->setFlags((int) $integers['flags']);
         $this->setProtocol((int) $integers['protocol']);

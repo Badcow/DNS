@@ -227,7 +227,9 @@ class NAPTR implements RdataInterface
 
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $integers = unpack('nOrder/nPreference', $rdata, $offset);
+        if (false === $integers = unpack('nOrder/nPreference', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 4;
 
         $this->setOrder($integers['Order']);

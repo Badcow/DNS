@@ -120,7 +120,9 @@ class SSHFP implements RdataInterface
 
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $integers = unpack('C<algorithm>/C<fpType>', $rdata, $offset);
+        if (false === $integers = unpack('C<algorithm>/C<fpType>', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 2;
         $this->setAlgorithm($integers['<algorithm>']);
         $this->setFingerprintType($integers['<fpType>']);

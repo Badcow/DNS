@@ -242,7 +242,9 @@ class SOA implements RdataInterface
     {
         $this->setMname(Message::decodeName($rdata, $offset));
         $this->setRname(Message::decodeName($rdata, $offset));
-        $parameters = unpack('Nserial/Nrefresh/Nretry/Nexpire/Nminimum', $rdata, $offset);
+        if (false === $parameters = unpack('Nserial/Nrefresh/Nretry/Nexpire/Nminimum', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
 
         $this->setSerial((int) $parameters['serial']);
         $this->setRefresh(TimeFormat::toSeconds($parameters['refresh']));

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\Validator;
+use PhpIP\IPv6;
 
 /**
  * @see https://tools.ietf.org/html/rfc1035#section-3.3.12
@@ -34,6 +35,8 @@ class PTR extends CNAME
      */
     public static function expandIpv6(string $ip): string
     {
+        $_ip = new IPv6($ip);
+
         if (!Validator::ipv6($ip)) {
             throw new \InvalidArgumentException(sprintf('"%s" is not a valid IPv6 address.', $ip));
         }
@@ -42,7 +45,9 @@ class PTR extends CNAME
             throw new \InvalidArgumentException(sprintf('"%s" is not a valid IPv6 address.', $ip));
         }
 
-        $hex = unpack('H*hex', $packed);
+        if (false === $hex = unpack('H*hex', $packed)) {
+            throw new \InvalidArgumentException(sprintf('Could not unpack IP "%s"', $ip));
+        }
 
         return implode(':', str_split($hex['hex'], 4));
     }
