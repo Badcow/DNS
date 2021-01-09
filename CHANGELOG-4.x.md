@@ -4,6 +4,7 @@ CHANGELOG for 4.x
 * [PR #90](https://github.com/Badcow/DNS/pull/90) Do not add double dot when `$ORIGIN` is the root domain ("."). (Thank you,
 [Cedric Dubois](https://github.com/cedricdubois))
 * Throw exception if unpack() returns false. This fixes a litany of new PHPStan errors that are being seen in development.
+* [Issue #91](https://github.com/Badcow/DNS/issues/91) Use `christian-riesen/base32` instead of `ademarre/binary-to-text-php`.
 ## 4.0
 * `Badcow\DNS\Rdata\RdataInterface::fromWire` is no longer static and does not return an instance of the class. You now
 must instantiate the object first, and then call `fromWire` method. All parameters are the same.
