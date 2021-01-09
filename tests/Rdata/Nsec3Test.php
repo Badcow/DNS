@@ -15,6 +15,7 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\NSEC3;
+use Base32\Base32Hex;
 use PHPUnit\Framework\TestCase;
 
 class Nsec3Test extends TestCase
@@ -22,8 +23,8 @@ class Nsec3Test extends TestCase
     public function getDataProvider(): array
     {
         return [
-            ['1 1 10 12345678 589r358vspjufvaju949jpvf74d9ptgh A RRSIG', true, 10, '12345678', 'ns.sub.delzsk.example.', ['A', 'RRSIG'], '589r358vspjufvaju949jpvf74d9ptgh'],
-            ['1 0 10 - jgu2l7c3lklhakc5rhuoorti2dckk3kl TXT RRSIG', false, 10, '', 'a.test.', ['TXT', 'RRSIG'], 'jgu2l7c3lklhakc5rhuoorti2dckk3kl'],
+            ['1 1 10 12345678 589R358VSPJUFVAJU949JPVF74D9PTGH A RRSIG', true, 10, '12345678', 'ns.sub.delzsk.example.', ['A', 'RRSIG'], '589R358VSPJUFVAJU949JPVF74D9PTGH'],
+            ['1 0 10 - JGU2L7C3LKLHAKC5RHUOORTI2DCKK3KL TXT RRSIG', false, 10, '', 'a.test.', ['TXT', 'RRSIG'], 'JGU2L7C3LKLHAKC5RHUOORTI2DCKK3KL'],
         ];
     }
 
@@ -64,7 +65,7 @@ class Nsec3Test extends TestCase
         $nsec3->setUnsignedDelegationsCovered($unsignedDelegationsCovered);
         $nsec3->setIterations($iterations);
         $nsec3->setSalt($salt);
-        $nsec3->setNextHashedOwnerName(NSEC3::base32decode($nextHashedOwnerName));
+        $nsec3->setNextHashedOwnerName(Base32Hex::decode($nextHashedOwnerName));
         $nsec3->setTypes($types);
 
         $wireFormat = $nsec3->toWire();
@@ -86,7 +87,7 @@ class Nsec3Test extends TestCase
         $this->assertEquals($fromText->getIterations(), $iterations);
         $this->assertEquals($fromText->getSalt(), $salt);
         $this->assertEquals($fromText->getTypes(), $types);
-        $this->assertEquals($fromText->getNextHashedOwnerName(), NSEC3::base32decode($nextHashedOwnerName));
+        $this->assertEquals($fromText->getNextHashedOwnerName(), Base32Hex::decode($nextHashedOwnerName));
     }
 
     /**
@@ -95,7 +96,7 @@ class Nsec3Test extends TestCase
     public function testFactory(string $text, bool $unsignedDelegationsCovered, int $iterations, string $salt, string $nextOwnerName, array $types, string $nextHashedOwnerName): void
     {
         $nsec3 = Factory::NSEC3($unsignedDelegationsCovered, $iterations, $salt, $nextOwnerName, $types);
-        $this->assertEquals($nextHashedOwnerName, NSEC3::base32encode($nsec3->getNextHashedOwnerName()));
+        $this->assertEquals($nextHashedOwnerName, Base32Hex::encode($nsec3->getNextHashedOwnerName()));
         $this->assertEquals($text, $nsec3->toText());
     }
 }
