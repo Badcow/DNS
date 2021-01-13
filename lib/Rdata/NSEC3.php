@@ -17,7 +17,7 @@ use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Validator;
 use BadMethodCallException;
-use Base2n;
+use Base32\Base32Hex;
 use DomainException;
 use InvalidArgumentException;
 
@@ -67,23 +67,6 @@ class NSEC3 implements RdataInterface
      * @var array
      */
     private $types = [];
-
-    /**
-     * @var Base2n
-     */
-    private static $base32;
-
-    /**
-     * Singleton to instantiate and return \Base2n instance for extended hex.
-     */
-    private static function base32(): Base2n
-    {
-        if (!isset(self::$base32)) {
-            self::$base32 = new Base2n(5, '0123456789abcdefghijklmnopqrstuv', false, true, true);
-        }
-
-        return self::$base32;
-    }
 
     public function getHashAlgorithm(): int
     {
@@ -206,7 +189,7 @@ class NSEC3 implements RdataInterface
             (int) $this->unsignedDelegationsCovered,
             $this->iterations,
             empty($this->salt) ? '-' : $this->getSalt(),
-            self::base32encode($this->getNextHashedOwnerName()),
+            Base32Hex::encode($this->getNextHashedOwnerName()),
             implode(Tokens::SPACE, $this->types)
         );
     }
@@ -241,7 +224,7 @@ class NSEC3 implements RdataInterface
             $salt = '';
         }
         $this->setSalt($salt);
-        $this->setNextHashedOwnerName(self::base32decode(array_shift($rdata) ?? ''));
+        $this->setNextHashedOwnerName(Base32Hex::decode(array_shift($rdata) ?? ''));
         array_map([$this, 'addType'], $rdata);
     }
 
@@ -273,26 +256,6 @@ class NSEC3 implements RdataInterface
 
         $types = NSEC::parseBitmap($rdata, $offset);
         array_map([$this, 'addType'], $types);
-    }
-
-    /**
-     * Encode data as a base32 string.
-     *
-     * @return string base32 string
-     */
-    public static function base32encode(string $data): string
-    {
-        return self::base32()->encode($data);
-    }
-
-    /**
-     * Decode a base32 encoded string.
-     *
-     * @param string $data base32 string
-     */
-    public static function base32decode(string $data): string
-    {
-        return self::base32()->decode($data);
     }
 
     /**
