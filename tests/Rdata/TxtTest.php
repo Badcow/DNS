@@ -53,12 +53,23 @@ class TxtTest extends TestCase
         $this->assertEquals($expectation, $txt->toText());
     }
 
-    public function testFromTxt(): void
+    public function dp_testFromTxt(): array
     {
-        $text = '"Some text;" " another some text"';
-        $expectation = 'Some text; another some text';
+        return [
+            //[$text, $expectation]
+            ['"Some text;" " another some text"', 'Some text; another some text'],
+            ['foobar', 'foobar'],
+            ['foo bar', 'foo'],
+            ["\t\t\tfoobar", 'foobar'],
+            ['3600', '3600'],
+        ];
+    }
 
-        /** @var TXT $txt */
+    /**
+     * @dataProvider dp_testFromTxt
+     */
+    public function testFromTxt(string $text, string $expectation): void
+    {
         $txt = new TXT();
         $txt->fromText($text);
         $this->assertEquals($expectation, $txt->getText());

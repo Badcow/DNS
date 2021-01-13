@@ -76,6 +76,26 @@ class Parser
     private $commentOptions;
 
     /**
+     * @var bool tracks if the class has already been set on a particular line
+     */
+    private $classHasBeenSet = false;
+
+    /**
+     * @var bool tracks if the TTL has already been set on a particular line
+     */
+    private $ttlHasBeenSet = false;
+
+    /**
+     * @var bool tracks if the resource name has already been set on a particular line
+     */
+    private $nameHasBeenSet = false;
+
+    /**
+     * @var bool tracks if the type has already been set on a particular line
+     */
+    private $typeHasBeenSet = false;
+
+    /**
      * Parser constructor.
      */
     public function __construct(array $rdataHandlers = [], ?ZoneFileFetcherInterface $fetcher = null)
@@ -144,6 +164,10 @@ class Parser
 
         $this->processEntry($iterator);
         $this->zone->addResourceRecord($this->currentResourceRecord);
+        $this->ttlHasBeenSet = false;
+        $this->classHasBeenSet = false;
+        $this->nameHasBeenSet = false;
+        $this->typeHasBeenSet = false;
     }
 
     /**
@@ -153,6 +177,7 @@ class Parser
     {
         if ($this->isTTL($iterator)) {
             $this->currentResourceRecord->setTtl(TimeFormat::toSeconds($iterator->current()));
+            $this->ttlHasBeenSet = true;
             $iterator->next();
             $this->processEntry($iterator);
 
@@ -161,6 +186,7 @@ class Parser
 
         if ($this->isClass($iterator)) {
             $this->currentResourceRecord->setClass(strtoupper($iterator->current()));
+            $this->classHasBeenSet = true;
             $iterator->next();
             $this->processEntry($iterator);
 
@@ -169,6 +195,7 @@ class Parser
 
         if ($this->isResourceName($iterator) && null === $this->currentResourceRecord->getName()) {
             $this->currentResourceRecord->setName($this->appendOrigin($iterator->current()));
+            $this->nameHasBeenSet = true;
             $iterator->next();
             $this->processEntry($iterator);
 
@@ -177,6 +204,7 @@ class Parser
 
         if ($this->isType($iterator)) {
             $this->currentResourceRecord->setRdata($this->extractRdata($iterator));
+            $this->typeHasBeenSet = true;
             $this->populateNullValues();
 
             return;
@@ -233,7 +261,7 @@ class Parser
             return $subdomain;
         }
 
-        if ($this->origin === '.') {
+        if ('.' === $this->origin) {
             return $subdomain.'.';
         }
 
@@ -336,6 +364,10 @@ class Parser
      */
     private function isResourceName(ResourceRecordIterator $iterator): bool
     {
+        if ($this->nameHasBeenSet) {
+            return false;
+        }
+
         // Look ahead and determine if the next token is a TTL, Class, or valid Type.
         $iterator->next();
 
@@ -366,6 +398,10 @@ class Parser
      */
     private function isClass(ResourceRecordIterator $iterator, $origin = null): bool
     {
+        if ($this->classHasBeenSet) {
+            return false;
+        }
+
         if (!Classes::isValid($iterator->current())) {
             return false;
         }
@@ -386,6 +422,10 @@ class Parser
      */
     private function isType(ResourceRecordIterator $iterator): bool
     {
+        if ($this->typeHasBeenSet) {
+            return false;
+        }
+
         return Types::isValid(strtoupper($iterator->current())) || array_key_exists($iterator->current(), $this->rdataHandlers);
     }
 
@@ -404,6 +444,10 @@ class Parser
      */
     private function isTTL(ResourceRecordIterator $iterator, $origin = null): bool
     {
+        if ($this->ttlHasBeenSet) {
+            return false;
+        }
+
         if (!TimeFormat::isTimeFormat($iterator->current())) {
             return false;
         }

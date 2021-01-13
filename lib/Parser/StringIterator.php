@@ -23,14 +23,32 @@ class StringIterator extends \ArrayIterator
         parent::__construct(str_split($string));
     }
 
-    public function is(string $value): bool
+    /**
+     * Test if current character is equal to a value, or (if $value is an array) is one of the values in the array.
+     *
+     * @param string|array $value test if current character is equal to, or is in, $value
+     *
+     * @return bool true if current character is, or is one of, the values
+     */
+    public function is($value): bool
     {
-        return $value === $this->current();
+        if (is_array($value)) {
+            return in_array($this->current(), $value);
+        }
+
+        return (string) $value === $this->current();
     }
 
-    public function isNot(string $value): bool
+    /**
+     * Test if current character is not equal to a value, or (if $value is an array) is not any of the values in the array.
+     *
+     * @param string|array $value test if current character is not equal to, or is not any of, $value
+     *
+     * @return bool true if current character is not, or is not one of, the values
+     */
+    public function isNot($value): bool
     {
-        return $value !== $this->current();
+        return !$this->is($value);
     }
 
     public function getRemainingAsString(): string

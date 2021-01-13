@@ -583,4 +583,17 @@ DNS;
 
         $this->assertEquals($expectation, ZoneBuilder::build($zone));
     }
+
+    public function testIssue89(): void
+    {
+        $zone = Parser::parse('tld.', "\$ORIGIN tld.\nzone.tld. 900 IN TXT 3600");
+
+        $this->assertCount(1, $zone);
+        $rr = $zone[0];
+
+        $this->assertEquals('zone.tld.', $rr->getName());
+        $this->assertEquals(900, $rr->getTtl());
+        $this->assertEquals(Classes::INTERNET, $rr->getClass());
+        $this->assertEquals('3600', $rr->getRdata()->getText());
+    }
 }
