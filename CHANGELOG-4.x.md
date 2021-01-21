@@ -1,5 +1,9 @@
 CHANGELOG for 4.x
 =================
+## 4.1.1
+* [Issue #96](https://github.com/Badcow/DNS/issues/96) - Use the correct version of [rlanvin/php-ip](https://github.com/rlanvin/php-ip)
+for PHP 8.0. (Thank you, [AdnanHussainTurki](https://github.com/AdnanHussainTurki))
+* Switch to Github Workflows from Travis and Scrutinizer.
 ## 4.1
 * [Issue #88](https://github.com/Badcow/DNS/issues/88) - TXT Rdata now supports unquoted contiguous strings. (Thank you,
 [Lorenz Bausch](https://github.com/lorenzbausch) - for bringing this to issue to light).
