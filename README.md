@@ -1,10 +1,5 @@
 Badcow DNS Library
 ==================
-[![Latest Stable Version](https://poser.pugx.org/badcow/dns/v/stable)](https://packagist.org/packages/badcow/dns)
-[![Total Downloads](https://poser.pugx.org/badcow/dns/downloads)](https://packagist.org/packages/badcow/dns)
-[![License](https://poser.pugx.org/badcow/dns/license)](https://packagist.org/packages/badcow/dns)
-[![Monthly Downloads](https://poser.pugx.org/badcow/dns/d/monthly)](https://packagist.org/packages/badcow/dns)
-
 The aim of this project is to create abstract object representations of DNS records in PHP. The project consists of various
 classes representing DNS objects (such as `Zone`, `ResourceRecord`, and various `RData` types), a parser to convert BIND
 style text files to the PHP objects, and builders to create aesthetically pleasing BIND records.
@@ -12,9 +7,7 @@ style text files to the PHP objects, and builders to create aesthetically pleasi
 The library can parse and encode DNS messages enabling developers to create DNS client/server platforms in pure PHP.
 
 ## Build Status
-[![Build Status](https://travis-ci.org/Badcow/DNS.png)](https://travis-ci.org/Badcow/DNS)
-[![Code Coverage](https://scrutinizer-ci.com/g/Badcow/DNS/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Badcow/DNS/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Badcow/DNS/?branch=master)
+[![Build Status](https://github.com/Badcow/DNS/workflows/Tests/badge.svg)](https://github.com/Badcow/DNS/actions)
 
 ## Contents
 1. [Example usage](#example-usage)
