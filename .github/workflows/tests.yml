@@ -24,18 +24,14 @@ jobs:
           php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
           php -i
 
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v2
-        with:
-          path: vendor
-          key: ${{ matrix.php }}-composer
-
       - name: Composer install
-        if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install -n
 
-      - run: vendor/bin/phpunit --coverage-text
+      - name: PHPUnit
+        run: vendor/bin/phpunit
+
+      - name: Test Coverage
+        run: vendor/bin/phpunit --coverage-text
 
       - name: PHPStan
         run: vendor/bin/phpstan analyze
