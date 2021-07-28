@@ -15,6 +15,7 @@ namespace Badcow\DNS;
 
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Rdata\AAAA;
+use Badcow\DNS\Rdata\ALIAS;
 use Badcow\DNS\Rdata\CNAME;
 use Badcow\DNS\Rdata\DNAME;
 use Badcow\DNS\Rdata\MX;
@@ -33,6 +34,7 @@ class ZoneBuilder
      */
     private static $rdataFillers = [
         SOA::TYPE => __CLASS__.'::fillOutSoa',
+        ALIAS::TYPE => __CLASS__.'::fillOutCname',
         CNAME::TYPE => __CLASS__.'::fillOutCname',
         DNAME::TYPE => __CLASS__.'::fillOutCname',
         SRV::TYPE => __CLASS__.'::fillOutSrv',

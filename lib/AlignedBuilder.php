@@ -16,6 +16,7 @@ namespace Badcow\DNS;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\AAAA;
+use Badcow\DNS\Rdata\ALIAS;
 use Badcow\DNS\Rdata\CNAME;
 use Badcow\DNS\Rdata\DNAME;
 use Badcow\DNS\Rdata\HINFO;
@@ -43,6 +44,7 @@ class AlignedBuilder
         NS::TYPE,
         A::TYPE,
         AAAA::TYPE,
+        ALIAS::TYPE,
         CNAME::TYPE,
         DNAME::TYPE,
         MX::TYPE,

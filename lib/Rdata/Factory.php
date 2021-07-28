@@ -142,6 +142,17 @@ class Factory
         return $rdata;
     }
 
+    /**
+     * Create a new ALIAS object.
+     */
+    public static function ALIAS(string $alias): ALIAS
+    {
+        $rdata = new ALIAS();
+        $rdata->setTarget($alias);
+
+        return $rdata;
+    }
+
     public static function HINFO(string $cpu, string $os): HINFO
     {
         $rdata = new HINFO();
