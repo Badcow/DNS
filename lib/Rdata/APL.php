@@ -89,7 +89,7 @@ class APL implements RdataInterface
         foreach ($this->includedAddressRanges as $ipBlock) {
             $encoded .= pack('nCC',
                 (4 === $ipBlock->getVersion()) ? 1 : 2,
-                $ipBlock->getPrefixLength(),
+                $ipBlock->getPrefix(),
                 $ipBlock->getGivenIp()::NB_BYTES
             ).inet_pton((string) $ipBlock->getGivenIp());
         }
@@ -97,7 +97,7 @@ class APL implements RdataInterface
         foreach ($this->excludedAddressRanges as $ipBlock) {
             $encoded .= pack('nCCC*',
                 (4 === $ipBlock->getVersion()) ? 1 : 2,
-                $ipBlock->getPrefixLength(),
+                $ipBlock->getPrefix(),
                 $ipBlock->getGivenIp()::NB_BYTES | 0b10000000
             ).inet_pton((string) $ipBlock->getGivenIp());
         }
