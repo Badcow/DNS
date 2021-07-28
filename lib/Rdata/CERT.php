@@ -141,9 +141,6 @@ class CERT implements RdataInterface
         return $this->certificate;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         $type = (array_key_exists($this->certificateType, self::MNEMONICS)) ? self::MNEMONICS[$this->certificateType] : (string) $this->certificateType;
@@ -152,17 +149,11 @@ class CERT implements RdataInterface
         return sprintf('%s %s %s %s', $type, (string) $this->keyTag, $algorithm, base64_encode($this->certificate));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         return pack('nnC', $this->certificateType, $this->keyTag, $this->algorithm).$this->certificate;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
@@ -172,12 +163,11 @@ class CERT implements RdataInterface
         $this->setCertificate(base64_decode(implode('', $rdata)));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $integers = unpack('ntype/nkeyTag/Calgorithm', $rdata, $offset);
+        if (false === $integers = unpack('ntype/nkeyTag/Calgorithm', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 5;
         $this->setCertificateType((int) $integers['type']);
         $this->setKeyTag((int) $integers['keyTag']);

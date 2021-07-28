@@ -33,8 +33,6 @@ class AAAA extends A
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws DecodeException
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void

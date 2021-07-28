@@ -531,6 +531,23 @@ DNS;
         $this->assertEquals($expectation, ZoneBuilder::build($zone));
     }
 
+    /**
+     * Parser handles $ORIGIN . correctly.
+     *
+     * @throws ParseException|\Exception
+     */
+    public function testParserHandlesOriginDot(): void
+    {
+        $file = NormaliserTest::readFile(__DIR__.'/Resources/testOriginDot_sample.txt');
+        $expectation = NormaliserTest::readfile(__DIR__.'/Resources/testOriginDot_expectation.txt');
+
+        $zone = Parser::parse('otherdomain.biz.', $file);
+        $this->assertEquals('otherdomain.biz.', $zone->getName());
+
+        ZoneBuilder::fillOutZone($zone);
+        $this->assertEquals($expectation, ZoneBuilder::build($zone));
+    }
+
     public function dp_testParserHandlesIncludeDirective(): array
     {
         $baseDir = __DIR__.'/Resources/IncludeControlEntryTests/';
@@ -565,5 +582,18 @@ DNS;
         $this->assertEquals($ttl, $zone->getDefaultTtl());
 
         $this->assertEquals($expectation, ZoneBuilder::build($zone));
+    }
+
+    public function testIssue89(): void
+    {
+        $zone = Parser::parse('tld.', "\$ORIGIN tld.\nzone.tld. 900 IN TXT 3600");
+
+        $this->assertCount(1, $zone);
+        $rr = $zone[0];
+
+        $this->assertEquals('zone.tld.', $rr->getName());
+        $this->assertEquals(900, $rr->getTtl());
+        $this->assertEquals(Classes::INTERNET, $rr->getClass());
+        $this->assertEquals('3600', $rr->getRdata()->getText());
     }
 }

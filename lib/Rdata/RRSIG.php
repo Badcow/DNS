@@ -199,9 +199,6 @@ class RRSIG implements RdataInterface
         $this->signature = $signature;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf(
@@ -239,9 +236,6 @@ class RRSIG implements RdataInterface
         return $wire;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
@@ -258,15 +252,15 @@ class RRSIG implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws UnsupportedTypeException
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $rdLength = $rdLength ?? strlen($rdata);
         $end = $offset + $rdLength;
-        $values = unpack('n<type>/C<algorithm>/C<labels>/N<originalTtl>/N<sigExpiration>/N<sigInception>/n<keyTag>', $rdata, $offset);
+        if (false === $values = unpack('n<type>/C<algorithm>/C<labels>/N<originalTtl>/N<sigExpiration>/N<sigInception>/n<keyTag>', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 18;
         $signersName = Message::decodeName($rdata, $offset);
 

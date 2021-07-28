@@ -21,9 +21,9 @@ interface ZoneFileFetcherInterface
     /**
      * Fetches the contents of a zone file with a given path.
      *
-     * @param string $path The path, relative or otherwise, to a zone file.
+     * @param string $path the path, relative or otherwise, to a zone file
      *
-     * @return string The text contents of the zone file.
+     * @return string the text contents of the zone file
      */
     public function fetch(string $path): string;
 }

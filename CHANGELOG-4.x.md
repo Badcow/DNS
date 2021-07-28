@@ -1,5 +1,19 @@
 CHANGELOG for 4.x
 =================
+## 4.1.1
+* [Issue #96](https://github.com/Badcow/DNS/issues/96) - Use the correct version of [rlanvin/php-ip](https://github.com/rlanvin/php-ip)
+for PHP 8.0. (Thank you, [AdnanHussainTurki](https://github.com/AdnanHussainTurki))
+* Switch to Github Workflows from Travis and Scrutinizer.
+## 4.1
+* [Issue #88](https://github.com/Badcow/DNS/issues/88) - TXT Rdata now supports unquoted contiguous strings. (Thank you,
+[Lorenz Bausch](https://github.com/lorenzbausch) - for bringing this to issue to light).
+* [Issue #89](https://github.com/Badcow/DNS/issues/89) - Fixes issue where TXT record with number as value throws exception
+(Thank you, [Lorenz Bausch](https://github.com/lorenzbausch) for bringing this to issue to light).
+* [PR #90](https://github.com/Badcow/DNS/pull/90) - Do not add double dot when `$ORIGIN` is the root domain ("."). (Thank you,
+[Cedric Dubois](https://github.com/cedricdubois))
+* [Issue #91](https://github.com/Badcow/DNS/issues/91) - Use `christian-riesen/base32` instead of `ademarre/binary-to-text-php`.
+* Explicit support for PHP 8.
+* Throw exception if unpack() returns false. This fixes a litany of new PHPStan errors that are being seen in development.
 ## 4.0
 * `Badcow\DNS\Rdata\RdataInterface::fromWire` is no longer static and does not return an instance of the class. You now
 must instantiate the object first, and then call `fromWire` method. All parameters are the same.
@@ -54,5 +68,5 @@ child or subdomain zone files.
 * [PR #82](https://github.com/Badcow/DNS/pull/82) - Fix character escaping in TXT records. (Thank you, [@fbett](https://github.com/fbett))
 * [Issue #84](https://github.com/Badcow/DNS/issues/84) - `TXT::toText()` now splits string into 255-byte chunks. (Thank you, [@fbett](https://github.com/fbett))
 * [Issue #85](https://github.com/Badcow/DNS/issues/85) - `Badow\DNS\AlignedBuilder` now has finer controls. You can now
-  define the order of rendering Resource Records and add or change Rdata output formatters (see `Docs/AlignedZoneBuilder`.
+  define the order of rendering Resource Records and add or change Rdata output formatters (see `Docs/AlignedZoneBuilder`).
 * `Badow\DNS\AlignedBuilder` cannot be called statically anymore. It must be instantiated.

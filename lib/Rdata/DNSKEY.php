@@ -33,9 +33,6 @@ class DNSKEY extends KEY
      */
     protected $protocol = 3;
 
-    /**
-     * {@inheritdoc}
-     */
     public function setProtocol(int $protocol): void
     {
         if (3 !== $protocol) {

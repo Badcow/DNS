@@ -56,8 +56,6 @@ class MX implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \InvalidArgumentException throws exception if preference or exchange have not been set
      */
     public function toText(): string
@@ -73,9 +71,6 @@ class MX implements RdataInterface
         return $this->preference.' '.$this->exchange;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         if (null === $this->preference) {
@@ -89,9 +84,6 @@ class MX implements RdataInterface
         return pack('n', $this->preference).Message::encodeName($this->exchange);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(' ', $text);
@@ -99,12 +91,12 @@ class MX implements RdataInterface
         $this->setExchange($rdata[1]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $this->setPreference(unpack('n', $rdata, $offset)[1]);
+        if (false === $preference = unpack('n', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
+        $this->setPreference($preference[1]);
         $offset += 2;
         $this->setExchange(Message::decodeName($rdata, $offset));
     }

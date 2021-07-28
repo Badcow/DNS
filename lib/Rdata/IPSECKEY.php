@@ -195,9 +195,6 @@ class IPSECKEY implements RdataInterface
         $this->setAlgorithm((null === $publicKey) ? 0 : $algorithm);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return rtrim(sprintf('%d %d %d %s %s',
@@ -209,9 +206,6 @@ class IPSECKEY implements RdataInterface
         ));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         $wire = pack('CCC', $this->precedence, $this->gatewayType, $this->algorithm);
@@ -231,9 +225,6 @@ class IPSECKEY implements RdataInterface
         return $wire;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
@@ -246,15 +237,15 @@ class IPSECKEY implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws DecodeException
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $end = $offset + $rdLength ?? strlen($rdata);
 
-        $integers = unpack('CPrecedence/CGatewayType/CAlgorithm', $rdata, $offset);
+        if (false === $integers = unpack('CPrecedence/CGatewayType/CAlgorithm', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 3;
         $this->setPrecedence((int) $integers['Precedence']);
         $gatewayType = $integers['GatewayType'];

@@ -59,9 +59,6 @@ class PolymorphicRdata implements RdataInterface
         $this->type = $type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType(): string
     {
         return $this->type;
@@ -72,9 +69,6 @@ class PolymorphicRdata implements RdataInterface
         $this->typeCode = $typeCode;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTypeCode(): int
     {
         return $this->typeCode;
@@ -90,33 +84,21 @@ class PolymorphicRdata implements RdataInterface
         return $this->data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return $this->getData() ?? '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         return $this->data ?? '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $this->setData($text);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $this->setData(substr($rdata, $offset, $rdLength ?? strlen($rdata)));

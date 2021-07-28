@@ -78,17 +78,12 @@ class CSYNC implements RdataInterface
         $this->flags = $flags;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf('%d %d %s', $this->soaSerial, $this->flags, implode(Tokens::SPACE, $this->types));
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws UnsupportedTypeException
      */
     public function toWire(): string
@@ -96,9 +91,6 @@ class CSYNC implements RdataInterface
         return pack('Nn', $this->soaSerial, $this->flags).NSEC::renderBitmap($this->types);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
@@ -108,13 +100,13 @@ class CSYNC implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws UnsupportedTypeException|DecodeException
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $integers = unpack('Nserial/nflags', $rdata, $offset);
+        if (false === $integers = unpack('Nserial/nflags', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 6;
         $types = NSEC::parseBitmap($rdata, $offset);
 

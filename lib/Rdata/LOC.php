@@ -166,9 +166,6 @@ class LOC implements RdataInterface
         return $this->verticalPrecision;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf(
@@ -199,9 +196,6 @@ class LOC implements RdataInterface
         return sprintf('%d %d %.3f %s', $d, $m, $s, $h);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         return pack('CCCClll',
@@ -246,9 +240,6 @@ class LOC implements RdataInterface
         return $multiplier * ($deg + ($min / 60) + ($sec / 3600));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
@@ -264,11 +255,13 @@ class LOC implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @throws DecodeException
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $values = unpack('C<version>/C<size>/C<hp>/C<vp>/l<lat>/l<lon>/l<alt>', $rdata, $offset);
+        if (false === $values = unpack('C<version>/C<size>/C<hp>/C<vp>/l<lat>/l<lon>/l<alt>', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 16;
 
         $this->setSize(self::exponentValueToNumber($values['<size>']));

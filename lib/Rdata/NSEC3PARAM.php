@@ -110,25 +110,16 @@ class NSEC3PARAM implements RdataInterface
         $this->salt = $bin;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf('%d %d %d %s', $this->hashAlgorithm, $this->flags, $this->iterations, bin2hex($this->salt));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         return pack('CCnC', $this->hashAlgorithm, $this->flags, $this->iterations, strlen($this->salt)).$this->salt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
@@ -138,12 +129,11 @@ class NSEC3PARAM implements RdataInterface
         $this->setSalt((string) array_shift($rdata));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $integers = unpack('C<algorithm>/C<flags>/n<iterations>/C<saltLen>', $rdata, $offset);
+        if (false === $integers = unpack('C<algorithm>/C<flags>/n<iterations>/C<saltLen>', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $saltLen = (int) $integers['<saltLen>'];
         $offset += 5;
         $this->setHashAlgorithm($integers['<algorithm>']);

@@ -16,7 +16,9 @@ namespace Badcow\DNS\Rdata;
 trait RdataTrait
 {
     /**
-     * {@inheritdoc}
+     * Get the string representation of the Rdata type.
+     *
+     * @return string Rdata type, e.g. "A", "MX", "NS", etc.
      */
     public function getType(): string
     {
@@ -25,7 +27,9 @@ trait RdataTrait
     }
 
     /**
-     * {@inheritdoc}
+     * Get the integer type code of the Rdata type as defined by IANA.
+     *
+     * @return int IANA Rdata type code
      */
     public function getTypeCode(): int
     {

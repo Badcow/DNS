@@ -53,8 +53,6 @@ class AFSDB implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \InvalidArgumentException
      */
     public function toText(): string
@@ -70,17 +68,11 @@ class AFSDB implements RdataInterface
         return sprintf('%d %s', $this->subType, $this->hostname);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         return pack('n', $this->subType).Message::encodeName($this->hostname);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(' ', $text);
@@ -89,12 +81,12 @@ class AFSDB implements RdataInterface
         $this->setHostname($rdata[1]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $this->setSubType(unpack('n', $rdata, $offset)[1]);
+        if (false === $subType = unpack('n', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
+        $this->setSubType($subType[1]);
         $offset += 2;
         $this->setHostname(Message::decodeName($rdata, $offset));
     }

@@ -109,9 +109,6 @@ class URI implements RdataInterface
         $this->target = $target;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf('%d %d "%s"',
@@ -134,12 +131,11 @@ class URI implements RdataInterface
         $this->setTarget(trim(implode(Tokens::SPACE, $rdata), Tokens::DOUBLE_QUOTES));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $integers = unpack('npriority/nweight', $rdata, $offset);
+        if (false === $integers = unpack('npriority/nweight', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 4;
         $targetLen = ($rdLength ?? strlen($rdata)) - 4;
 

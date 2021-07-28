@@ -1,0 +1,38 @@
+name: PHP 8
+
+on: push
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.0']
+    name: PHP ${{ matrix.php }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: gmp
+
+      - name: Display versions
+        run: |
+          php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
+          php -i
+
+      - name: Composer install
+        run: composer install -n
+
+      - name: PHPUnit
+        run: vendor/bin/phpunit
+
+      - name: Test Coverage
+        run: vendor/bin/phpunit --coverage-text
+
+      - name: PHPStan
+        run: vendor/bin/phpstan analyze

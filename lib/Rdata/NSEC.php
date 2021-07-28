@@ -66,9 +66,6 @@ class NSEC implements RdataInterface
         return $this->types;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf(
@@ -79,8 +76,6 @@ class NSEC implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws UnsupportedTypeException
      */
     public function toWire(): string
@@ -88,9 +83,6 @@ class NSEC implements RdataInterface
         return Message::encodeName($this->nextDomainName).self::renderBitmap($this->types);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $iterator = new \ArrayIterator(explode(Tokens::SPACE, $text));
@@ -103,8 +95,6 @@ class NSEC implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws UnsupportedTypeException|DecodeException
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void

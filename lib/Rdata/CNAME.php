@@ -43,17 +43,11 @@ class CNAME implements RdataInterface
         return $this->target;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return $this->target ?? '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         if (null === $this->target) {
@@ -63,17 +57,11 @@ class CNAME implements RdataInterface
         return Message::encodeName($this->target);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $this->setTarget($text);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $this->setTarget(Message::decodeName($rdata, $offset));

@@ -153,9 +153,6 @@ class TSIG implements RdataInterface
         $this->otherData = $otherData;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf('%s %d %d %s %d %d %s',
@@ -169,9 +166,6 @@ class TSIG implements RdataInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         $timeSigned = (int) $this->timeSigned->format('U');
@@ -189,8 +183,6 @@ class TSIG implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws ParseException
      */
     public function fromText(string $text): void
@@ -218,15 +210,15 @@ class TSIG implements RdataInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws DecodeException
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $this->setAlgorithmName(Message::decodeName($rdata, $offset));
 
-        $args = unpack('n<hex1>/n<hex2>/n<hex3>/n<fudge>/n<macLen>', $rdata, $offset);
+        if (false === $args = unpack('n<hex1>/n<hex2>/n<hex3>/n<fudge>/n<macLen>', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 10;
 
         $timeSigned = ($args['<hex1>'] << 32) + ($args['<hex2>'] << 16) + $args['<hex3>'];
@@ -240,7 +232,9 @@ class TSIG implements RdataInterface
         $this->setMac(substr($rdata, $offset, $macLen));
         $offset += $macLen;
 
-        $args = unpack('n<id>/n<error>/n<otherLen>', $rdata, (int) $offset);
+        if (false === $args = unpack('n<id>/n<error>/n<otherLen>', $rdata, (int) $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 6;
         $otherLen = (int) $args['<otherLen>'];
 

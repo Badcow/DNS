@@ -98,25 +98,16 @@ class KEY implements RdataInterface
         return $this->publicKey;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf('%d %d %d %s', $this->flags, $this->protocol, $this->algorithm, base64_encode($this->publicKey));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         return pack('nCC', $this->flags, $this->protocol, $this->algorithm).$this->publicKey;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
@@ -126,13 +117,12 @@ class KEY implements RdataInterface
         $this->setPublicKey(base64_decode(implode('', $rdata)));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $rdLength = $rdLength ?? strlen($rdata);
-        $integers = unpack('nflags/Cprotocol/Calgorithm', $rdata, $offset);
+        if (false === $integers = unpack('nflags/Cprotocol/Calgorithm', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 4;
         $this->setFlags((int) $integers['flags']);
         $this->setProtocol((int) $integers['protocol']);

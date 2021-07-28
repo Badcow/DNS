@@ -93,25 +93,17 @@ class SSHFP implements RdataInterface
         $this->fingerprint = $fingerprint;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf('%d %d %s', $this->algorithm, $this->fingerprintType, bin2hex($this->fingerprint));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         return pack('CC', $this->algorithm, $this->fingerprintType).$this->fingerprint;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws ParseException
      */
     public function fromText(string $text): void
@@ -126,12 +118,11 @@ class SSHFP implements RdataInterface
         $this->setFingerprint($fingerprint);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $integers = unpack('C<algorithm>/C<fpType>', $rdata, $offset);
+        if (false === $integers = unpack('C<algorithm>/C<fpType>', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 2;
         $this->setAlgorithm($integers['<algorithm>']);
         $this->setFingerprintType($integers['<fpType>']);

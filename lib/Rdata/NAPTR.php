@@ -193,9 +193,6 @@ class NAPTR implements RdataInterface
         $this->replacement = $replacement;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toText(): string
     {
         return sprintf('%d %d "%s" "%s" "%s" %s',
@@ -208,9 +205,6 @@ class NAPTR implements RdataInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toWire(): string
     {
         $encoded = pack('nn', $this->order, $this->preference);
@@ -220,9 +214,6 @@ class NAPTR implements RdataInterface
         return $encoded;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromText(string $text): void
     {
         $rdata = explode(Tokens::SPACE, $text);
@@ -234,12 +225,11 @@ class NAPTR implements RdataInterface
         $this->setReplacement((string) array_shift($rdata));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $integers = unpack('nOrder/nPreference', $rdata, $offset);
+        if (false === $integers = unpack('nOrder/nPreference', $rdata, $offset)) {
+            throw new DecodeException(static::TYPE, $rdata);
+        }
         $offset += 4;
 
         $this->setOrder($integers['Order']);
