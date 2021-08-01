@@ -55,7 +55,7 @@ class A implements RdataInterface
     /**
      * @throws \InvalidArgumentException
      */
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         if (false === $encoded = @inet_pton($this->address)) {
             throw new \InvalidArgumentException(sprintf('The IP address "%s" cannot be encoded. Check that it is a valid IP address.', $this->address));

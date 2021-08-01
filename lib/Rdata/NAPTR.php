@@ -205,11 +205,11 @@ class NAPTR implements RdataInterface
         );
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         $encoded = pack('nn', $this->order, $this->preference);
         $encoded .= sprintf('"%s""%s""%s"', $this->flags ?? '', $this->services ?? '', $this->regexp);
-        $encoded .= Message::encodeName($this->replacement);
+        $encoded .= Message::encodeName($this->replacement, $origin, $canonicalize);
 
         return $encoded;
     }

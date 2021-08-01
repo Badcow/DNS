@@ -17,6 +17,7 @@ use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\RdataInterface;
+use Badcow\DNS\Validator;
 use InvalidArgumentException;
 
 class ResourceRecord
@@ -191,9 +192,14 @@ class ResourceRecord
     }
 
     /**
+     * @param  string  $origin      This value will be forwarded to RDATA wire generator.
+     * @param  bool  $canonicalize  Represent owner name ($this->name) in canonicalized format,
+     *                              that is all characters lowercase, fully qualified and no compression.
+     *                              This value will be also forwarded to RDATA wire generator.
+     *
      * @throws UnsetValueException|InvalidArgumentException
      */
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         if (null === $this->name) {
             throw new UnsetValueException('ResourceRecord name has not been set.');
@@ -215,9 +221,9 @@ class ResourceRecord
             throw new InvalidArgumentException(sprintf('"%s" is not a fully qualified domain name.', $this->name));
         }
 
-        $rdata = $this->rdata->toWire();
+        $rdata = $this->rdata->toWire($origin, $canonicalize);
 
-        $encoded = Message::encodeName($this->name);
+        $encoded = Message::encodeName($this->name, null, $canonicalize);
         $encoded .= pack('nnNn',
             $this->rdata->getTypeCode(),
             $this->classId,
@@ -227,6 +233,15 @@ class ResourceRecord
         $encoded .= $rdata;
 
         return $encoded;
+    }
+
+    /**
+     * Return RR wire format which is also suitable for hashing.
+     * @see ResourceRecord::toWire()
+     */
+    public function toDigestable(string $origin): string
+    {
+        return $this->toWire($origin, true);
     }
 
     /**

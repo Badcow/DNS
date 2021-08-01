@@ -18,6 +18,8 @@ namespace Badcow\DNS\Rdata;
  */
 class PolymorphicRdata implements RdataInterface
 {
+    use RdataToDigestableTrait;
+
     /**
      * The RData type.
      *
@@ -89,7 +91,7 @@ class PolymorphicRdata implements RdataInterface
         return $this->getData() ?? '';
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         return $this->data ?? '';
     }

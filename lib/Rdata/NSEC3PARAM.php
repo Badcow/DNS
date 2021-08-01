@@ -115,7 +115,7 @@ class NSEC3PARAM implements RdataInterface
         return sprintf('%d %d %d %s', $this->hashAlgorithm, $this->flags, $this->iterations, bin2hex($this->salt));
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         return pack('CCnC', $this->hashAlgorithm, $this->flags, $this->iterations, strlen($this->salt)).$this->salt;
     }

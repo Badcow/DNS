@@ -196,7 +196,7 @@ class LOC implements RdataInterface
         return sprintf('%d %d %.3f %s', $d, $m, $s, $h);
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         return pack('CCCClll',
             0,

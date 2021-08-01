@@ -86,7 +86,7 @@ class CSYNC implements RdataInterface
     /**
      * @throws UnsupportedTypeException
      */
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         return pack('Nn', $this->soaSerial, $this->flags).NSEC::renderBitmap($this->types);
     }

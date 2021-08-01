@@ -122,7 +122,7 @@ class DS implements RdataInterface
         );
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         return pack('nCC', $this->keyTag, $this->algorithm, $this->digestType).$this->digest;
     }

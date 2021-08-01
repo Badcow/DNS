@@ -58,7 +58,7 @@ class TXT implements RdataInterface
         return implode(' ', $chunks);
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         return $this->text ?? '';
     }

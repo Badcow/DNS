@@ -67,7 +67,7 @@ class HINFO implements RdataInterface
         return sprintf('"%s" "%s"', $this->cpu ?? '', $this->os ?? '');
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         return $this->toText();
     }

@@ -21,6 +21,8 @@ use Badcow\DNS\Parser\Tokens;
  */
 class UnknownType implements RdataInterface
 {
+    use RdataToDigestableTrait;
+
     /**
      * @var int
      */
@@ -71,7 +73,7 @@ class UnknownType implements RdataInterface
         return sprintf('\# %d %s', strlen($this->data), bin2hex($this->data));
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         return $this->data ?? '';
     }

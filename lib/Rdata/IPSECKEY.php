@@ -206,7 +206,7 @@ class IPSECKEY implements RdataInterface
         ));
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         $wire = pack('CCC', $this->precedence, $this->gatewayType, $this->algorithm);
         if (1 === $this->gatewayType || 2 === $this->gatewayType) {
@@ -215,7 +215,7 @@ class IPSECKEY implements RdataInterface
             }
             $wire .= inet_pton($this->gateway);
         } else {
-            $wire .= Message::encodeName($this->gateway ?? '.');
+            $wire .= Message::encodeName($this->gateway ?? '.', $origin, $canonicalize);
         }
 
         if (self::ALGORITHM_NONE !== $this->algorithm && null !== $this->publicKey) {

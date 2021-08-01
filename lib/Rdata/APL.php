@@ -82,7 +82,7 @@ class APL implements RdataInterface
         return rtrim($string, ' ');
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         $encoded = '';
 

@@ -200,7 +200,7 @@ class SOA implements RdataInterface
         );
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         if (!isset($this->mname) ||
             !isset($this->rname) ||
@@ -213,8 +213,8 @@ class SOA implements RdataInterface
         }
 
         return
-            Message::encodeName($this->mname).
-            Message::encodeName($this->rname).
+            Message::encodeName($this->mname, $origin, $canonicalize).
+            Message::encodeName($this->rname, $origin, $canonicalize).
             pack(
                 'NNNNN',
                 $this->serial,

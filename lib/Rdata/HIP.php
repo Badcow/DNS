@@ -113,7 +113,7 @@ class HIP implements RdataInterface
         );
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         $rdata = pack('CCn',
             strlen($this->hostIdentityTag),
@@ -124,7 +124,7 @@ class HIP implements RdataInterface
         $rdata .= $this->hostIdentityTag;
         $rdata .= $this->publicKey;
         foreach ($this->rendezvousServers as $server) {
-            $rdata .= Message::encodeName($server);
+            $rdata .= Message::encodeName($server, $origin, $canonicalize);
         }
 
         return $rdata;

@@ -166,14 +166,14 @@ class TSIG implements RdataInterface
         );
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         $timeSigned = (int) $this->timeSigned->format('U');
         $hex1 = (0xffff00000000 & $timeSigned) >> 32;
         $hex2 = (0x0000ffff0000 & $timeSigned) >> 16;
         $hex3 = 0x00000000ffff & $timeSigned;
 
-        $wire = Message::encodeName($this->algorithmName);
+        $wire = Message::encodeName($this->algorithmName, $origin, $canonicalize);
         $wire .= pack('nnnnn', $hex1, $hex2, $hex3, $this->fudge, strlen($this->mac));
         $wire .= $this->mac;
         $wire .= pack('nnn', $this->originalId, $this->error, strlen($this->otherData));

@@ -121,11 +121,28 @@ class Message
 
     /**
      * Encode a domain name as a sequence of labels.
+     *
+     * @param string $name  Name to encode
+     * @param string $origin If specified and $name is relative, then append to $name
+     * @param bool $canonicalize  Convert $name to canonicalized format,
+     *                              that is all characters lowercase, fully qualified and no compression.
      */
-    public static function encodeName(string $name): string
+    public static function encodeName(string $name, string $origin = null, bool $canonicalize = false): string
     {
         if ('.' === $name) {
             return chr(0);
+        }
+
+        if (null !== $origin && '.' !== $name[-1]) {
+            $name .= $origin;
+        }
+
+        if ($canonicalize) {
+            if (!Validator::fullyQualifiedDomainName($name)) {
+                throw new \InvalidArgumentException(sprintf('Name "%s" is not a fully qualified domain name but canonicalized name was requested.', $name));
+            }
+
+            $name = strtolower($name);
         }
 
         $name = rtrim($name, '.').'.';

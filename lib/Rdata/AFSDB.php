@@ -68,9 +68,9 @@ class AFSDB implements RdataInterface
         return sprintf('%d %s', $this->subType, $this->hostname);
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
-        return pack('n', $this->subType).Message::encodeName($this->hostname);
+        return pack('n', $this->subType).Message::encodeName($this->hostname, $origin, $canonicalize);
     }
 
     public function fromText(string $text): void

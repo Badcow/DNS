@@ -218,7 +218,7 @@ class RRSIG implements RdataInterface
     /**
      * @throws UnsupportedTypeException
      */
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         $wire = pack('nCCNNNn',
             Types::getTypeCode($this->typeCovered),
@@ -230,7 +230,7 @@ class RRSIG implements RdataInterface
             $this->keyTag
         );
 
-        $wire .= Message::encodeName($this->signersName);
+        $wire .= Message::encodeName($this->signersName, $origin, $canonicalize);
         $wire .= $this->signature;
 
         return $wire;

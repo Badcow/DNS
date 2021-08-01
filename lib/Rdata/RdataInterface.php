@@ -39,9 +39,20 @@ interface RdataInterface
     /**
      * Return a DNS Server response formatted representation of the Rdata.
      *
-     * @return string packed binary form of Rdata
+     * @param  string  $origin    If non-null and some domain name in Rdata is in relative form,
+     *                            then $origin must be appended to make it FQDN
+     * @param bool $canonicalize  Represent all domain names in Rdata in canonicalized format,
+     *                            that is all characters lowercase, fully qualified and no compression.
+     *
+     * @return packed binary form of Rdata
      */
-    public function toWire(): string;
+    public function toWire(string $origin = null, bool $canonicalize = false);
+
+    /**
+     * Return Rdata wire format which is also suitable for hashing.
+     * @see RdataInterface::toWire()
+     */
+    public function toDigestable(string $origin): string;
 
     /**
      * Populate Rdata object from its textual representation.

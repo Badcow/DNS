@@ -156,9 +156,9 @@ class SRV implements RdataInterface
         );
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
-        return pack('nnn', $this->priority, $this->weight, $this->port).Message::encodeName($this->target);
+        return pack('nnn', $this->priority, $this->weight, $this->port).Message::encodeName($this->target, $origin, $canonicalize);
     }
 
     public function fromText(string $text): void

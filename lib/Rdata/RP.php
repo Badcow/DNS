@@ -61,9 +61,9 @@ class RP implements RdataInterface
         return sprintf('%s %s', $this->mailboxDomainName, $this->txtDomainName);
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
-        return Message::encodeName($this->mailboxDomainName).Message::encodeName($this->txtDomainName);
+        return Message::encodeName($this->mailboxDomainName, $origin, $canonicalize).Message::encodeName($this->txtDomainName, $origin, $canonicalize);
     }
 
     public function fromText(string $text): void

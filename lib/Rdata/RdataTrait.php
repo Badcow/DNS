@@ -15,6 +15,8 @@ namespace Badcow\DNS\Rdata;
 
 trait RdataTrait
 {
+    use RdataToDigestableTrait;
+
     /**
      * Get the string representation of the Rdata type.
      *

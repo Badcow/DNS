@@ -184,7 +184,7 @@ class DHCID implements RdataInterface
         return base64_encode($this->toWire());
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         if (null === $this->digest) {
             $this->calculateDigest();

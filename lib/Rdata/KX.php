@@ -70,7 +70,7 @@ class KX implements RdataInterface
         return $this->preference.' '.$this->exchanger;
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         if (null === $this->preference) {
             throw new \InvalidArgumentException('No preference has been set on KX object.');
@@ -79,7 +79,7 @@ class KX implements RdataInterface
             throw new \InvalidArgumentException('No exchanger has been set on KX object.');
         }
 
-        return pack('n', $this->preference).Message::encodeName($this->exchanger);
+        return pack('n', $this->preference).Message::encodeName($this->exchanger, $origin, $canonicalize);
     }
 
     public function fromText(string $text): void

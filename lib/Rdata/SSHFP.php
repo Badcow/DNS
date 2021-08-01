@@ -98,7 +98,7 @@ class SSHFP implements RdataInterface
         return sprintf('%d %d %s', $this->algorithm, $this->fingerprintType, bin2hex($this->fingerprint));
     }
 
-    public function toWire(): string
+    public function toWire(string $origin = null, bool $canonicalize = false)
     {
         return pack('CC', $this->algorithm, $this->fingerprintType).$this->fingerprint;
     }
