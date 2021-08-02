@@ -133,13 +133,17 @@ class Message
             return chr(0);
         }
 
-        if (null !== $origin && '.' !== $name[-1]) {
-            $name .= $origin;
+        if (null !== $origin) {
+            if ('@' === $name) {
+                $name = $origin;
+            } elseif ('.' !== $name[-1]) {
+                $name .= '.' . $origin;
+            }
         }
 
         if ($canonicalize) {
-            if (!Validator::fullyQualifiedDomainName($name)) {
-                throw new \InvalidArgumentException(sprintf('Name "%s" is not a fully qualified domain name but canonicalized name was requested.', $name));
+            if ('.' !== $name[-1]) {
+                throw new \InvalidArgumentException(sprintf('Name "%s" is not a absolute domain name while canonicalized name format was requested.', $name));
             }
 
             $name = strtolower($name);
