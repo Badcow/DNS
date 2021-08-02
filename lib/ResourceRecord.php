@@ -217,13 +217,13 @@ class ResourceRecord
             throw new UnsetValueException('ResourceRecord TTL has not been set.');
         }
 
-        if (!Validator::fullyQualifiedDomainName($this->name)) {
+/*        if (!Validator::fullyQualifiedDomainName($this->name)) {
             throw new InvalidArgumentException(sprintf('"%s" is not a fully qualified domain name.', $this->name));
-        }
+        }*/
 
         $rdata = $this->rdata->toWire($origin, $canonicalize);
 
-        $encoded = Message::encodeName($this->name, null, $canonicalize);
+        $encoded = Message::encodeName($this->name, $origin, $canonicalize);
         $encoded .= pack('nnNn',
             $this->rdata->getTypeCode(),
             $this->classId,
