@@ -218,6 +218,22 @@ class ResourceRecord
             throw new UnsetValueException('ResourceRecord TTL has not been set.');
         }
 
+        /*
+         * The FQDN check here should be reworked.
+         * Currently it doesn't work when:
+         *  - relative name was parsed from Zone file OR
+         *  - @ was parsed as the hostname from Zone file OR
+         *  - wildcard hostname was parsed from Zone file
+         *
+         * Currently we bypass the check if $canonicalize is enabled, thus leaving the
+         * checking up to Message::encodeName()
+         */
+        if (!$canonicalize) {
+            if (!Validator::fullyQualifiedDomainName($this->name)) {
+                throw new InvalidArgumentException(sprintf('"%s" is not a fully qualified domain name.', $this->name));
+            }
+        }
+
         $rdata = $this->rdata->toWire($origin, $canonicalize);
 
         $encoded = Message::encodeName($this->name, $origin, $canonicalize);
