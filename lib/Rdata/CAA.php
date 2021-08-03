@@ -124,7 +124,7 @@ class CAA implements RdataInterface
         );
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         if (!isset($this->tag) || !isset($this->flag) || !isset($this->value)) {
             throw new \InvalidArgumentException('All CAA parameters must be set.');

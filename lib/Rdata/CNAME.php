@@ -48,7 +48,7 @@ class CNAME implements RdataInterface
         return $this->target ?? '';
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         if (null === $this->target) {
             throw new \InvalidArgumentException('Target must be set.');

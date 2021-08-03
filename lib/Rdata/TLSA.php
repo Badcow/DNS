@@ -119,7 +119,7 @@ class TLSA implements RdataInterface
         return sprintf('%d %d %d %s', $this->certificateUsage, $this->selector, $this->matchingType, bin2hex($this->certificateAssociationData));
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         return pack('CCC', $this->certificateUsage, $this->selector, $this->matchingType).$this->certificateAssociationData;
     }

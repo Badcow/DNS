@@ -44,9 +44,9 @@ interface RdataInterface
      * @param bool $canonicalize  Represent all domain names in Rdata in canonicalized format,
      *                            that is all characters lowercase, fully qualified and no compression.
      *
-     * @return packed binary form of Rdata
+     * @return string binary form of Rdata
      */
-    public function toWire(string $origin = null, bool $canonicalize = false);
+    public function toWire(string $origin = null, bool $canonicalize = false): string;
 
     /**
      * Return Rdata wire format which is also suitable for hashing.

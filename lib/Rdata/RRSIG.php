@@ -218,7 +218,7 @@ class RRSIG implements RdataInterface
     /**
      * @throws UnsupportedTypeException
      */
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         $wire = pack('nCCNNNn',
             Types::getTypeCode($this->typeCovered),

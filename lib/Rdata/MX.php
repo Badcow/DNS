@@ -71,7 +71,7 @@ class MX implements RdataInterface
         return $this->preference.' '.$this->exchange;
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         if (null === $this->preference) {
             throw new \InvalidArgumentException('No preference has been set on MX object.');

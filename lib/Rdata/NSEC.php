@@ -78,7 +78,7 @@ class NSEC implements RdataInterface
     /**
      * @throws UnsupportedTypeException
      */
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         return Message::encodeName($this->nextDomainName, $origin, $canonicalize).self::renderBitmap($this->types);
     }

@@ -73,7 +73,7 @@ class UnknownType implements RdataInterface
         return sprintf('\# %d %s', strlen($this->data), bin2hex($this->data));
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         return $this->data ?? '';
     }

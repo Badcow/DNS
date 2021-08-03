@@ -113,7 +113,7 @@ class HIP implements RdataInterface
         );
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         $rdata = pack('CCn',
             strlen($this->hostIdentityTag),

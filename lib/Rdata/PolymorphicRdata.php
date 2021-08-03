@@ -91,7 +91,7 @@ class PolymorphicRdata implements RdataInterface
         return $this->getData() ?? '';
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         return $this->data ?? '';
     }

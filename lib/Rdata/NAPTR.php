@@ -205,7 +205,7 @@ class NAPTR implements RdataInterface
         );
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         $encoded = pack('nn', $this->order, $this->preference);
         $encoded .= sprintf('"%s""%s""%s"', $this->flags ?? '', $this->services ?? '', $this->regexp);

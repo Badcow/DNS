@@ -194,7 +194,7 @@ class TKEY implements RdataInterface
         );
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         $wire = Message::encodeName($this->algorithm, $origin, $canonicalize);
         $wire .= pack('NNnnn',

@@ -206,7 +206,7 @@ class IPSECKEY implements RdataInterface
         ));
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         $wire = pack('CCC', $this->precedence, $this->gatewayType, $this->algorithm);
         if (1 === $this->gatewayType || 2 === $this->gatewayType) {

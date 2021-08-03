@@ -103,7 +103,7 @@ class KEY implements RdataInterface
         return sprintf('%d %d %d %s', $this->flags, $this->protocol, $this->algorithm, base64_encode($this->publicKey));
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         return pack('nCC', $this->flags, $this->protocol, $this->algorithm).$this->publicKey;
     }

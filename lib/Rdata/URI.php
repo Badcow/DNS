@@ -118,7 +118,7 @@ class URI implements RdataInterface
         );
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         return pack('nn', $this->priority, $this->weight).$this->target;
     }

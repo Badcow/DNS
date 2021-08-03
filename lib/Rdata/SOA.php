@@ -200,7 +200,7 @@ class SOA implements RdataInterface
         );
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         if (!isset($this->mname) ||
             !isset($this->rname) ||

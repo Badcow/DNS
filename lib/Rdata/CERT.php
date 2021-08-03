@@ -149,7 +149,7 @@ class CERT implements RdataInterface
         return sprintf('%s %s %s %s', $type, (string) $this->keyTag, $algorithm, base64_encode($this->certificate));
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         return pack('nnC', $this->certificateType, $this->keyTag, $this->algorithm).$this->certificate;
     }

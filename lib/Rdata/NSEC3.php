@@ -197,7 +197,7 @@ class NSEC3 implements RdataInterface
     /**
      * @throws UnsupportedTypeException
      */
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         $wire = pack('CCnC',
             $this->hashAlgorithm,

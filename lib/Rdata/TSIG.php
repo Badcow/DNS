@@ -166,7 +166,7 @@ class TSIG implements RdataInterface
         );
     }
 
-    public function toWire(string $origin = null, bool $canonicalize = false)
+    public function toWire(string $origin = null, bool $canonicalize = false): string
     {
         $timeSigned = (int) $this->timeSigned->format('U');
         $hex1 = (0xffff00000000 & $timeSigned) >> 32;
