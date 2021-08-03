@@ -17,7 +17,6 @@ use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\RdataInterface;
-use Badcow\DNS\Validator;
 use InvalidArgumentException;
 
 class ResourceRecord
