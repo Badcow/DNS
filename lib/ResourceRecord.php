@@ -192,7 +192,9 @@ class ResourceRecord
     }
 
     /**
-     * @param  string  $origin      This value will be forwarded to RDATA wire generator.
+     * @param  string  $origin    If non-null and $this->name is in relative form,
+     *                            then $origin will be appended to make it FQDN.
+     *                            This value will be also forwarded to RDATA wire generator.
      * @param  bool  $canonicalize  Represent owner name ($this->name) in canonicalized format,
      *                              that is all characters lowercase, fully qualified and no compression.
      *                              This value will be also forwarded to RDATA wire generator.
@@ -216,10 +218,6 @@ class ResourceRecord
         if (null === $this->ttl) {
             throw new UnsetValueException('ResourceRecord TTL has not been set.');
         }
-
-/*        if (!Validator::fullyQualifiedDomainName($this->name)) {
-            throw new InvalidArgumentException(sprintf('"%s" is not a fully qualified domain name.', $this->name));
-        }*/
 
         $rdata = $this->rdata->toWire($origin, $canonicalize);
 

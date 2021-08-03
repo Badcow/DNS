@@ -40,7 +40,7 @@ interface RdataInterface
      * Return a DNS Server response formatted representation of the Rdata.
      *
      * @param  string  $origin    If non-null and some domain name in Rdata is in relative form,
-     *                            then $origin must be appended to make it FQDN
+     *                            then $origin will be appended to make it FQDN
      * @param bool $canonicalize  Represent all domain names in Rdata in canonicalized format,
      *                            that is all characters lowercase, fully qualified and no compression.
      *
