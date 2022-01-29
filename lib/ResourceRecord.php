@@ -16,6 +16,7 @@ namespace Badcow\DNS;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Factory;
+use Badcow\DNS\Rdata\UnknownType;
 use Badcow\DNS\Rdata\RdataInterface;
 use InvalidArgumentException;
 
@@ -229,9 +230,6 @@ class ResourceRecord
         return $encoded;
     }
 
-    /**
-     * @throws Rdata\UnsupportedTypeException
-     */
     public static function fromWire(string $encoded, int &$offset = 0): ResourceRecord
     {
         $rr = new self();
@@ -243,7 +241,12 @@ class ResourceRecord
         $rr->setClassId($integers['class']);
         $rr->setTtl($integers['ttl']);
         $rdLength = $integers['dlength'];
-        $rdata = Factory::newRdataFromId($integers['type']);
+        try {
+            $rdata = Factory::newRdataFromId($integers['type']);
+
+        } catch (Rdata\UnsupportedTypeException $e) {
+            $rdata = new UnknownType();
+        }
         $rdata->fromWire($encoded, $offset, $rdLength);
         $rr->setRdata($rdata);
 
