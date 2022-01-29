@@ -99,6 +99,8 @@ class UnknownType implements RdataInterface
 
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $this->setData(substr($rdata, $offset, $rdLength ?? strlen($rdata)));
+        $rdLength = $rdLength ?? strlen($rdata);
+        $this->setData(substr($rdata, $offset, $rdLength));
+        $offset += $rdLength;
     }
 }
