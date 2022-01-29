@@ -20,11 +20,11 @@ class CLIENT_SUBNET implements OptionInterface
 {
     use OptionTrait;
 
-    const NAME = 'CLIENT_SUBNET';
-    const NAME_CODE = 8;
+    public const NAME = 'CLIENT_SUBNET';
+    public const NAME_CODE = 8;
 
-    const FAMILIY_IPV4 = 1;
-    const FAMILIY_IPV6 = 2;
+    public const FAMILIY_IPV4 = 1;
+    public const FAMILIY_IPV6 = 2;
 
     /**
      * @var int|null

@@ -15,22 +15,22 @@ namespace Badcow\DNS\Edns\Option;
 
 class Codes
 {
-    const LLQ = 1;
-    const UL = 2;
-    const NSID = 3;
-    const DAU = 5;
-    const DHU = 6;
-    const N3U = 7;
-    const CLIENT_SUBNET = 8;
-    const EXPIRE = 9;
-    const COOKIE = 10;
-    const TCP_KEEPALIVE = 11;
-    const PADDING = 12;
-    const CHAIN = 13;
-    const KEY_CHAIN = 14;
-    const DNS_ERROR = 15;
-    const CLIENT_TAG = 16;
-    const SERVER_TAG = 17;
+    public const LLQ = 1;
+    public const UL = 2;
+    public const NSID = 3;
+    public const DAU = 5;
+    public const DHU = 6;
+    public const N3U = 7;
+    public const CLIENT_SUBNET = 8;
+    public const EXPIRE = 9;
+    public const COOKIE = 10;
+    public const TCP_KEEPALIVE = 11;
+    public const PADDING = 12;
+    public const CHAIN = 13;
+    public const KEY_CHAIN = 14;
+    public const DNS_ERROR = 15;
+    public const CLIENT_TAG = 16;
+    public const SERVER_TAG = 17;
 
     /**
      * @var array

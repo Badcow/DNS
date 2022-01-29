@@ -17,8 +17,8 @@ class COOKIE implements OptionInterface
 {
     use OptionTrait;
 
-    const NAME = 'COOKIE';
-    const NAME_CODE = 10;
+    public const NAME = 'COOKIE';
+    public const NAME_CODE = 10;
 
     /**
      * @var string|null

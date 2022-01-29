@@ -24,8 +24,8 @@ class OPT implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'OPT';
-    const TYPE_CODE = 41;
+    public const TYPE = 'OPT';
+    public const TYPE_CODE = 41;
 
     /**
      * @var EdnsOption[]|null
