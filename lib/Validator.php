@@ -47,6 +47,9 @@ class Validator
      */
     public static function fullyQualifiedDomainName(string $name): bool
     {
+        if ('.' === $name) {
+            return true;
+        }
         if ('.' !== substr($name, -1, 1)) {
             return false;
         }
