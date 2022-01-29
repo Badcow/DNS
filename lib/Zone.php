@@ -161,7 +161,7 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * @param mixed $offset
+     * @param int|string $offset
      */
     public function offsetExists($offset): bool
     {
@@ -169,7 +169,7 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * @param mixed $offset
+     * @param int|string $offset
      */
     public function offsetGet($offset): ResourceRecord
     {
@@ -177,8 +177,8 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * @param mixed $offset
-     * @param mixed $value
+     * @param int|string $offset
+     * @param ResourceRecord $value
      */
     public function offsetSet($offset, $value): void
     {
@@ -186,7 +186,7 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * @param mixed $offset
+     * @param int|string $offset
      */
     public function offsetUnset($offset): void
     {

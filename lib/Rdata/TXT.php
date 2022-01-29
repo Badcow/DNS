@@ -44,9 +44,9 @@ class TXT implements RdataInterface
         $this->text = stripslashes($text);
     }
 
-    public function getText(): ?string
+    public function getText(): string
     {
-        return (string) $this->text ?? '';
+        return $this->text ?? '';
     }
 
     public function toText(): string

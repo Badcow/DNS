@@ -215,11 +215,20 @@ class AlignedBuilder
      */
     private function generateRdataOutput(RdataInterface $rdata, int $padding): string
     {
-        if (array_key_exists($rdata->getType(), $this->rdataFormatters)) {
-            return call_user_func($this->rdataFormatters[$rdata->getType()], $rdata, $padding);
+        if (!array_key_exists($rdata->getType(), $this->rdataFormatters)) {
+            return $rdata->toText();
         }
 
-        return $rdata->toText();
+        $formatted = call_user_func($this->rdataFormatters[$rdata->getType()], $rdata, $padding);
+        if (!is_string($formatted)) {
+            throw new \UnexpectedValueException(sprintf(
+                'Formatter for RType "%s" returned object type "%s", string expected.',
+                $rdata->getType(),
+                gettype($formatted)
+            ));
+        }
+
+        return $formatted;
     }
 
     /**

@@ -242,7 +242,7 @@ class IPSECKEY implements RdataInterface
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $end = $offset + $rdLength ?? strlen($rdata);
+        $end = $offset + ($rdLength ?? strlen($rdata));
 
         if (false === $integers = unpack('CPrecedence/CGatewayType/CAlgorithm', $rdata, $offset)) {
             throw new DecodeException(static::TYPE, $rdata);
