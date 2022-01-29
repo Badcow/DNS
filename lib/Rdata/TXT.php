@@ -23,10 +23,10 @@ class TXT implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'TXT';
-    const TYPE_CODE = 16;
+    public const TYPE = 'TXT';
+    public const TYPE_CODE = 16;
 
-    const WHITESPACE = [Tokens::SPACE, Tokens::TAB, Tokens::LINE_FEED, Tokens::CARRIAGE_RETURN];
+    public const WHITESPACE = [Tokens::SPACE, Tokens::TAB, Tokens::LINE_FEED, Tokens::CARRIAGE_RETURN];
 
     /**
      * @var string|null

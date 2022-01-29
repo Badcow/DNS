@@ -21,8 +21,8 @@ use PhpIP\IPv6;
  */
 class PTR extends CNAME
 {
-    const TYPE = 'PTR';
-    const TYPE_CODE = 12;
+    public const TYPE = 'PTR';
+    public const TYPE_CODE = 12;
 
     /**
      * Expands an IPv6 address to its full, non-shorthand representation.

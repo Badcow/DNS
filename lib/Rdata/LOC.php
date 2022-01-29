@@ -27,12 +27,12 @@ class LOC implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'LOC';
-    const TYPE_CODE = 29;
-    const LATITUDE = 'LATITUDE';
-    const LONGITUDE = 'LONGITUDE';
-    const FORMAT_DECIMAL = 'DECIMAL';
-    const FORMAT_DMS = 'DMS';
+    public const TYPE = 'LOC';
+    public const TYPE_CODE = 29;
+    public const LATITUDE = 'LATITUDE';
+    public const LONGITUDE = 'LONGITUDE';
+    public const FORMAT_DECIMAL = 'DECIMAL';
+    public const FORMAT_DMS = 'DMS';
 
     /**
      * @var float|null
@@ -169,13 +169,13 @@ class LOC implements RdataInterface
     public function toText(): string
     {
         return sprintf(
-                '%s %s %.2fm %.2fm %.2fm %.2fm',
-                $this->getLatitude(self::FORMAT_DMS),
-                $this->getLongitude(self::FORMAT_DMS),
-                $this->altitude,
-                $this->size,
-                $this->horizontalPrecision,
-                $this->verticalPrecision
+            '%s %s %.2fm %.2fm %.2fm %.2fm',
+            $this->getLatitude(self::FORMAT_DMS),
+            $this->getLongitude(self::FORMAT_DMS),
+            $this->altitude,
+            $this->size,
+            $this->horizontalPrecision,
+            $this->verticalPrecision
         );
     }
 
@@ -198,7 +198,8 @@ class LOC implements RdataInterface
 
     public function toWire(): string
     {
-        return pack('CCCClll',
+        return pack(
+            'CCCClll',
             0,
             self::numberToExponentValue($this->size),
             self::numberToExponentValue($this->horizontalPrecision),

@@ -19,8 +19,8 @@ class AFSDB implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'AFSDB';
-    const TYPE_CODE = 18;
+    public const TYPE = 'AFSDB';
+    public const TYPE_CODE = 18;
 
     /**
      * @var int

@@ -20,8 +20,8 @@ use Badcow\DNS\Validator;
  */
 class AAAA extends A
 {
-    const TYPE = 'AAAA';
-    const TYPE_CODE = 28;
+    public const TYPE = 'AAAA';
+    public const TYPE_CODE = 28;
 
     public function setAddress(string $address): void
     {

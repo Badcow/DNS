@@ -24,11 +24,11 @@ class SSHFP implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'SSHFP';
-    const TYPE_CODE = 44;
-    const ALGORITHM_RSA = 1;
-    const ALGORITHM_DSA = 2;
-    const FP_TYPE_SHA1 = 1;
+    public const TYPE = 'SSHFP';
+    public const TYPE_CODE = 44;
+    public const ALGORITHM_RSA = 1;
+    public const ALGORITHM_DSA = 2;
+    public const FP_TYPE_SHA1 = 1;
 
     /**
      * 8-bit algorithm designate.

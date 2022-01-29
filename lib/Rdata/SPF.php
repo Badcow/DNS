@@ -18,6 +18,6 @@ namespace Badcow\DNS\Rdata;
  */
 class SPF extends TXT
 {
-    const TYPE = 'SPF';
-    const TYPE_CODE = 99;
+    public const TYPE = 'SPF';
+    public const TYPE_CODE = 99;
 }

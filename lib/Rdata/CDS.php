@@ -18,6 +18,6 @@ namespace Badcow\DNS\Rdata;
  */
 class CDS extends DS
 {
-    const TYPE = 'CDS';
-    const TYPE_CODE = 59;
+    public const TYPE = 'CDS';
+    public const TYPE_CODE = 59;
 }

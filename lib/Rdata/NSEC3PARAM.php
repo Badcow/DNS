@@ -23,8 +23,8 @@ class NSEC3PARAM implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'NSEC3PARAM';
-    const TYPE_CODE = 51;
+    public const TYPE = 'NSEC3PARAM';
+    public const TYPE_CODE = 51;
 
     /**
      * @var int

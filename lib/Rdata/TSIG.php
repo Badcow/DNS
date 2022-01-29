@@ -26,8 +26,8 @@ class TSIG implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'TSIG';
-    const TYPE_CODE = 250;
+    public const TYPE = 'TSIG';
+    public const TYPE_CODE = 250;
 
     /**
      * Name of the algorithm in domain name syntax.
@@ -155,7 +155,8 @@ class TSIG implements RdataInterface
 
     public function toText(): string
     {
-        return sprintf('%s %d %d %s %d %d %s',
+        return sprintf(
+            '%s %d %d %s %d %d %s',
             $this->algorithmName,
             $this->timeSigned->format('U'),
             $this->fudge,

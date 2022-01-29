@@ -219,7 +219,8 @@ class ResourceRecord
         $rdata = $this->rdata->toWire();
 
         $encoded = Message::encodeName($this->name);
-        $encoded .= pack('nnNn',
+        $encoded .= pack(
+            'nnNn',
             $this->rdata->getTypeCode(),
             $this->classId,
             $this->ttl,
@@ -243,7 +244,6 @@ class ResourceRecord
         $rdLength = $integers['dlength'];
         try {
             $rdata = Factory::newRdataFromId($integers['type']);
-
         } catch (Rdata\UnsupportedTypeException $e) {
             $rdata = new UnknownType();
         }

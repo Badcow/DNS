@@ -123,7 +123,8 @@ class AlignedBuilder
                 $current = $rdata->getType();
             }
 
-            $master .= sprintf('%s %s %s %s %s',
+            $master .= sprintf(
+                '%s %s %s %s %s',
                 str_pad((string) $resourceRecord->getName(), $namePadding, Tokens::SPACE, STR_PAD_RIGHT),
                 str_pad((string) $resourceRecord->getTtl(), $ttlPadding, Tokens::SPACE, STR_PAD_RIGHT),
                 str_pad((string) $resourceRecord->getClass(), $classPadding, Tokens::SPACE, STR_PAD_RIGHT),

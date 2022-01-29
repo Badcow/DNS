@@ -20,6 +20,6 @@ class DLV extends DS
 {
     use RdataTrait;
 
-    const TYPE = 'DLV';
-    const TYPE_CODE = 32769;
+    public const TYPE = 'DLV';
+    public const TYPE_CODE = 32769;
 }

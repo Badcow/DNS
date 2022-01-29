@@ -25,8 +25,8 @@ class SOA implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'SOA';
-    const TYPE_CODE = 6;
+    public const TYPE = 'SOA';
+    public const TYPE_CODE = 6;
 
     /**
      * The <domain-name> of the name server that was the

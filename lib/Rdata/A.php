@@ -22,8 +22,8 @@ class A implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'A';
-    const TYPE_CODE = 1;
+    public const TYPE = 'A';
+    public const TYPE_CODE = 1;
 
     /**
      * @var string

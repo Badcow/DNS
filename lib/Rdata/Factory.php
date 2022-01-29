@@ -263,9 +263,17 @@ class Factory
         return $rdata;
     }
 
-    public static function RRSIG(string $typeCovered, int $algorithm, int $labels, int $originalTtl,
-                                    \DateTime $signatureExpiration, \DateTime $signatureInception, int $keyTag,
-                                    string $signersName, string $signature): RRSIG
+    public static function RRSIG(
+        string $typeCovered,
+        int $algorithm,
+        int $labels,
+        int $originalTtl,
+        \DateTime $signatureExpiration,
+        \DateTime $signatureInception,
+        int $keyTag,
+        string $signersName,
+        string $signature
+    ): RRSIG
     {
         $rrsig = new RRSIG();
         $rrsig->setTypeCovered($typeCovered);
@@ -508,9 +516,17 @@ class Factory
         return $rp;
     }
 
-    public static function SIG(string $typeCovered, int $algorithm, int $labels, int $originalTtl,
-                                 \DateTime $signatureExpiration, \DateTime $signatureInception, int $keyTag,
-                                 string $signersName, string $signature): SIG
+    public static function SIG(
+        string $typeCovered,
+        int $algorithm,
+        int $labels,
+        int $originalTtl,
+        \DateTime $signatureExpiration,
+        \DateTime $signatureInception,
+        int $keyTag,
+        string $signersName,
+        string $signature
+    ): SIG
     {
         $sig = new SIG();
         $sig->setTypeCovered($typeCovered);

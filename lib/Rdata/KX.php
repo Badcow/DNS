@@ -22,8 +22,8 @@ class KX implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'KX';
-    const TYPE_CODE = 36;
+    public const TYPE = 'KX';
+    public const TYPE_CODE = 36;
 
     /**
      * @var int

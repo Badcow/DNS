@@ -24,8 +24,8 @@ class NAPTR implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'NAPTR';
-    const TYPE_CODE = 35;
+    public const TYPE = 'NAPTR';
+    public const TYPE_CODE = 35;
 
     /**
      * A 16-bit unsigned integer specifying the order in which the NAPTR
@@ -195,7 +195,8 @@ class NAPTR implements RdataInterface
 
     public function toText(): string
     {
-        return sprintf('%d %d "%s" "%s" "%s" %s',
+        return sprintf(
+            '%d %d "%s" "%s" "%s" %s',
             $this->order,
             $this->preference,
             $this->flags ?? '',
