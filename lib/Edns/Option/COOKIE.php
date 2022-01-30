@@ -18,7 +18,7 @@ class COOKIE implements OptionInterface
     use OptionTrait;
 
     public const NAME = 'COOKIE';
-    public const NAME_CODE = 10;
+    public const CODE = 10;
 
     /**
      * @var string|null
@@ -68,7 +68,7 @@ class COOKIE implements OptionInterface
     {
         $optionLength = $optionLength ?? strlen($optionValue);
         if ($optionLength < 8 or (8 != $optionLength and ($optionLength < 16 or $optionLength > 40))) {
-            throw new DecodeException(static::TYPE, $optionValue);
+            throw new DecodeException(static::NAME, $optionValue);
         }
         $this->clientCookie = substr($optionValue, $offset, 8);
         $offset += 8;

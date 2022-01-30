@@ -21,7 +21,7 @@ class TCP_KEEPALIVE implements OptionInterface
     use OptionTrait;
 
     public const NAME = 'TCP_KEEPALIVE';
-    public const NAME_CODE = 11;
+    public const CODE = 11;
 
     /**
      * @var int|null

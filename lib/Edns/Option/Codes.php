@@ -40,7 +40,6 @@ class Codes
         self::UL => 'UL',
         self::NSID => 'NSID',
         self::DAU => 'DAU',
-        self::DAU => 'DAU',
         self::DHU => 'DHU',
         self::N3U => 'N3U',
         self::CLIENT_SUBNET => 'CLIENT_SUBNET',
@@ -56,15 +55,15 @@ class Codes
     ];
 
     /**
-     * @param int|string $type
+     * @param int|string $option Either the option name (string) or the option code (integer).
      */
-    public static function isValid($code): bool
+    public static function isValid($option): bool
     {
-        if (is_int($code)) {
-            return array_key_exists($code, self::$names);
+        if (is_int($option)) {
+            return array_key_exists($option, self::$names);
         }
 
-        return in_array($code, self::$names);
+        return in_array($option, self::$names);
     }
 
     /**

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\Edns\Option\Factory;
+use Badcow\DNS\Edns\Option\OptionInterface;
 use Badcow\DNS\Edns\Option\UnknownOption;
 use Badcow\DNS\Edns\Option\UnsupportedOptionException;
 
@@ -28,9 +29,9 @@ class OPT implements RdataInterface
     public const TYPE_CODE = 41;
 
     /**
-     * @var EdnsOption[]|null
+     * @var OptionInterface[]
      */
-    protected $options;
+    protected $options = [];
 
     public function toText(): string
     {
@@ -39,21 +40,37 @@ class OPT implements RdataInterface
 
     public function fromText(string $text): void
     {
-        throw new \Exception();
+        throw new \Exception('Badcow\DNS\Rdata\OPT::fromText() cannot be used to hydrate this object.');
     }
 
     /**
-     * @var EdnsOption[]|null
+     * @param OptionInterface[]|null $options
      */
     public function setOptions(?array $options): void
     {
-        $this->options = $options;
+        $this->options = [];
+
+        if (null === $options) {
+            return;
+        }
+
+        foreach ($options as $option) {
+            $this->addOption($option);
+        }
     }
 
     /**
-     * @return EdnsOption[]
+     * @param OptionInterface $option
      */
-    public function getOptions(): ?array
+    public function addOption(OptionInterface $option): void
+    {
+        $this->options[] = $option;
+    }
+
+    /**
+     * @return OptionInterface[]
+     */
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -69,22 +86,27 @@ class OPT implements RdataInterface
         }
         foreach ($this->options as $option) {
             $optionValue = $option->toWire();
-            $encoded .= pack('nn', $option->getNameCode(), strlen($optionValue));
+            $encoded .= pack('nn', $option->getCode(), strlen($optionValue));
             $encoded .= $optionValue;
         }
 
         return $encoded;
     }
 
+    /**
+     * @param string $rdata
+     * @param int $offset
+     * @param int|null $rdLength
+     * @throws DecodeException
+     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        if (null === $rdLength) {
-            $rdLength = strlen($rdata);
-        }
+        $rdLength = $rdLength ?? strlen($rdata);
+
         $endOffset = $offset + $rdLength;
         do {
             if (false === $integers = unpack('ncode/nlength', $rdata, $offset)) {
-                throw new \UnexpectedValueException(sprintf('Malformed resource record encountered. "%s"', DecodeException::binaryToHex($encoded)));
+                throw new DecodeException(static::TYPE, $rdata);
             }
             $offset += 4;
             try {

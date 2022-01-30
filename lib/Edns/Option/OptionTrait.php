@@ -21,9 +21,9 @@ trait OptionTrait
         return static::NAME;
     }
 
-    public function getNameCode(): int
+    public function getCode(): int
     {
         /* @const TYPE_CODE */
-        return static::NAME_CODE;
+        return static::CODE;
     }
 }
