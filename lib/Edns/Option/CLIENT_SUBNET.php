@@ -88,6 +88,10 @@ class CLIENT_SUBNET implements OptionInterface
 
     public function toWire(): string
     {
+        if (is_null($this->family) or is_null($this->sourceNetmask) or is_null($this->address)) {
+            throw new \Exception();
+        }
+
         return pack('ncc', $this->family, $this->sourceNetmask, $this->scopeNetmask ?? 0).inet_pton($this->address);
     }
 
@@ -95,19 +99,19 @@ class CLIENT_SUBNET implements OptionInterface
     {
         $integers = unpack('nfamily/csourceNetmask/cscopeNetmask', $optionValue, $offset);
         if (false === $integers) {
-            throw new DecodeException(static::NAME, $optionValue);
+            throw new DecodeException(self::NAME, $optionValue);
         }
         $offset += 4;
         if (!in_array($integers['family'], [self::FAMILIY_IPV4, self::FAMILIY_IPV6])) {
-            throw new DecodeException(static::NAME, $optionValue);
+            throw new DecodeException(self::NAME, $optionValue);
         }
         if (self::FAMILIY_IPV4 === $integers['family'] and ($integers['sourceNetmask'] > 32 or $integers['scopeNetmask'] > 32)) {
-            throw new DecodeException(static::NAME, $optionValue);
+            throw new DecodeException(self::NAME, $optionValue);
         }
         $addressLength = self::FAMILIY_IPV4 === $integers['family'] ? 4 : 16;
         $address = @inet_ntop(substr($optionValue, $offset, $addressLength));
         if (false === $address) {
-            throw new DecodeException(static::NAME, $optionValue);
+            throw new DecodeException(self::NAME, $optionValue);
         }
         $offset += $addressLength;
         $this->family = $integers['family'];
