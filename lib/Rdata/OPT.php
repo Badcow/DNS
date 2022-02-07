@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\Edns\Option\Factory;
+use Badcow\DNS\Edns\Option\OptionInterface;
 use Badcow\DNS\Edns\Option\UnknownOption;
 use Badcow\DNS\Edns\Option\UnsupportedOptionException;
 
@@ -28,7 +29,7 @@ class OPT implements RdataInterface
     const TYPE_CODE = 41;
 
     /**
-     * @var EdnsOption[]|null
+     * @var OptionInterface[]|null
      */
     protected $options;
 
@@ -43,7 +44,7 @@ class OPT implements RdataInterface
     }
 
     /**
-     * @var EdnsOption[]|null
+     * @param OptionInterface[]|null $options
      */
     public function setOptions(?array $options): void
     {
@@ -51,7 +52,7 @@ class OPT implements RdataInterface
     }
 
     /**
-     * @return EdnsOption[]
+     * @return OptionInterface[]
      */
     public function getOptions(): ?array
     {
@@ -83,8 +84,9 @@ class OPT implements RdataInterface
         }
         $endOffset = $offset + $rdLength;
         do {
-            if (false === $integers = unpack('ncode/nlength', $rdata, $offset)) {
-                throw new \UnexpectedValueException(sprintf('Malformed resource record encountered. "%s"', DecodeException::binaryToHex($encoded)));
+            $integers = @unpack('ncode/nlength', $rdata, $offset);
+            if (false === $integers) {
+                throw new \UnexpectedValueException(sprintf('Malformed resource record encountered. "%s"', DecodeException::binaryToHex($rdata)));
             }
             $offset += 4;
             try {
