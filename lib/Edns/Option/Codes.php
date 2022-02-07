@@ -40,7 +40,6 @@ class Codes
         self::UL => 'UL',
         self::NSID => 'NSID',
         self::DAU => 'DAU',
-        self::DAU => 'DAU',
         self::DHU => 'DHU',
         self::N3U => 'N3U',
         self::CLIENT_SUBNET => 'CLIENT_SUBNET',
@@ -56,7 +55,7 @@ class Codes
     ];
 
     /**
-     * @param int|string $type
+     * @param int|string $code
      */
     public static function isValid($code): bool
     {
