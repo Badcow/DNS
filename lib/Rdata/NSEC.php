@@ -144,6 +144,7 @@ class NSEC implements RdataInterface
      */
     public static function renderBitmap(array $types): string
     {
+        /** @var string[] $blocks */
         $blocks = [];
 
         foreach ($types as $type) {

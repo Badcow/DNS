@@ -16,6 +16,7 @@ namespace Badcow\DNS;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Factory;
+use Badcow\DNS\Rdata\UnknownType;
 use Badcow\DNS\Rdata\RdataInterface;
 use Badcow\DNS\Rdata\UnknownType;
 use InvalidArgumentException;
@@ -243,6 +244,7 @@ class ResourceRecord
         $rdLength = $integers['dlength'];
         try {
             $rdata = Factory::newRdataFromId($integers['type']);
+
         } catch (Rdata\UnsupportedTypeException $e) {
             $rdata = new UnknownType();
         }
