@@ -35,6 +35,16 @@ class UnknownOption implements OptionInterface
         $this->optionCode = $optionCode;
     }
 
+    public function getNameCode(): int
+    {
+        return $this->optionCode;
+    }
+
+    public function getName(): string
+    {
+        return 'OPTION'.$this->optionCode;
+    }
+
     /**
      * @return string
      */

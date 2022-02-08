@@ -102,6 +102,7 @@ class CLIENT_SUBNET implements OptionInterface
         if (!isset($this->family) || !isset($this->sourceNetmask) || !isset($this->address)) {
             throw new \InvalidArgumentException('Family, SourceNetmask, and Address must all be set.');
         }
+      
         return pack('ncc', $this->family, $this->sourceNetmask, $this->scopeNetmask ?? 0).inet_pton($this->address);
     }
 
@@ -109,19 +110,21 @@ class CLIENT_SUBNET implements OptionInterface
     {
         $integers = unpack('nfamily/csourceNetmask/cscopeNetmask', $optionValue, $offset);
         if (false === $integers) {
-            throw new DecodeException(static::NAME, $optionValue);
+            throw new DecodeException(self::NAME, $optionValue);
         }
         $offset += 4;
-        if (!in_array($integers['family'], [self::FAMILY_IPV4, self::FAMILY_IPV6])) {
-            throw new DecodeException(static::NAME, $optionValue);
+
+        if (!in_array($integers['family'], [self::FAMILIY_IPV4, self::FAMILIY_IPV6])) {
+            throw new DecodeException(self::NAME, $optionValue);
         }
-        if (self::FAMILY_IPV4 === $integers['family'] and ($integers['sourceNetmask'] > 32 or $integers['scopeNetmask'] > 32)) {
-            throw new DecodeException(static::NAME, $optionValue);
+      
+        if (self::FAMILIY_IPV4 === $integers['family'] and ($integers['sourceNetmask'] > 32 or $integers['scopeNetmask'] > 32)) {
+            throw new DecodeException(self::NAME, $optionValue);
         }
         $addressLength = self::FAMILY_IPV4 === $integers['family'] ? 4 : 16;
         $address = @inet_ntop(substr($optionValue, $offset, $addressLength));
         if (false === $address) {
-            throw new DecodeException(static::NAME, $optionValue);
+            throw new DecodeException(self::NAME, $optionValue);
         }
         $offset += $addressLength;
         $this->family = $integers['family'];

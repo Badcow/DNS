@@ -51,12 +51,12 @@ class TCP_KEEPALIVE implements OptionInterface
     {
         $optionLength = $optionLength ?? strlen($optionValue);
         if (0 !== $optionLength and 2 !== $optionLength) {
-            throw new DecodeException(static::NAME, $optionValue);
+            throw new DecodeException(self::NAME, $optionValue);
         }
         if (2 === $optionLength) {
             $integers = unpack('ntimeout', $optionValue, $offset);
             if (false === $integers) {
-                throw new DecodeException(static::NAME, $optionValue);
+                throw new DecodeException(self::NAME, $optionValue);
             }
             $offset += 2;
             $this->timeout = $integers['timeout'];

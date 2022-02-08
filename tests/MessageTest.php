@@ -21,6 +21,7 @@ use Badcow\DNS\Rcode;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\MX;
 use Badcow\DNS\Rdata\NS;
+use Badcow\DNS\Rdata\OPT;
 use Badcow\DNS\Rdata\UnknownType;
 use Badcow\DNS\Rdata\UnsupportedTypeException;
 use Badcow\DNS\ResourceRecord;

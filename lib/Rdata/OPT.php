@@ -105,7 +105,8 @@ class OPT implements RdataInterface
 
         $endOffset = $offset + $rdLength;
         do {
-            if (false === $integers = unpack('ncode/nlength', $rdata, $offset)) {
+            $integers = @unpack('ncode/nlength', $rdata, $offset);
+            if (false === $integers) {
                 throw new DecodeException(static::TYPE, $rdata);
             }
             $offset += 4;
