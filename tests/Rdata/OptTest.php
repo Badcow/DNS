@@ -16,6 +16,7 @@ namespace Badcow\DNS\Tests\Rdata;
 use Badcow\DNS\Edns\Option\OptionInterface;
 use Badcow\DNS\Edns\Option\TCP_KEEPALIVE;
 use Badcow\DNS\Edns\Option\UnknownOption;
+use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\OPT;
 use PHPUnit\Framework\TestCase;
 
@@ -52,7 +53,7 @@ class OptTest extends TestCase
 
     public function testFromWire2(): void
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(DecodeException::class);
         $wire = "\x00\x00";
         $opt = new OPT();
         $opt->fromWire($wire);

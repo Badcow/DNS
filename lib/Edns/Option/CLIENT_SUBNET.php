@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Badcow\DNS\Edns\Option;
 
-use _PHPStan_daf7d5577\Nette\OutOfRangeException;
-
 /**
  * @see https://www.rfc-editor.org/rfc/rfc7871.html#section-6
  */
@@ -102,7 +100,7 @@ class CLIENT_SUBNET implements OptionInterface
         if (!isset($this->family) || !isset($this->sourceNetmask) || !isset($this->address)) {
             throw new \InvalidArgumentException('Family, SourceNetmask, and Address must all be set.');
         }
-      
+
         return pack('ncc', $this->family, $this->sourceNetmask, $this->scopeNetmask ?? 0).inet_pton($this->address);
     }
 
@@ -114,11 +112,11 @@ class CLIENT_SUBNET implements OptionInterface
         }
         $offset += 4;
 
-        if (!in_array($integers['family'], [self::FAMILIY_IPV4, self::FAMILIY_IPV6])) {
+        if (!in_array($integers['family'], [self::FAMILY_IPV4, self::FAMILY_IPV6])) {
             throw new DecodeException(self::NAME, $optionValue);
         }
-      
-        if (self::FAMILIY_IPV4 === $integers['family'] and ($integers['sourceNetmask'] > 32 or $integers['scopeNetmask'] > 32)) {
+
+        if (self::FAMILY_IPV4 === $integers['family'] and ($integers['sourceNetmask'] > 32 or $integers['scopeNetmask'] > 32)) {
             throw new DecodeException(self::NAME, $optionValue);
         }
         $addressLength = self::FAMILY_IPV4 === $integers['family'] ? 4 : 16;

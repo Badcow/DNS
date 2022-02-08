@@ -36,7 +36,7 @@ class CLIENT_SUBNETTest extends TestCase
     public function testToWire(): void
     {
         $address = '200.100.50.1';
-        $this->option->setFamily(CLIENT_SUBNET::FAMILIY_IPV4); // 0x0001
+        $this->option->setFamily(CLIENT_SUBNET::FAMILY_IPV4); // 0x0001
         $this->option->setSourceNetmask(24); // 0x18
         $this->option->setScopeNetmask(22); // 0x16
         $this->option->setAddress($address);
@@ -51,7 +51,7 @@ class CLIENT_SUBNETTest extends TestCase
         $wire = "\x00\x01\x18\x16".inet_pton($address);
         $option = new CLIENT_SUBNET();
         $option->fromWire($wire);
-        $this->assertEquals(CLIENT_SUBNET::FAMILIY_IPV4, $option->getFamily());
+        $this->assertEquals(CLIENT_SUBNET::FAMILY_IPV4, $option->getFamily());
         $this->assertEquals(24, $option->getSourceNetmask());
         $this->assertEquals(22, $option->getScopeNetmask());
         $this->assertEquals($address, $option->getAddress());

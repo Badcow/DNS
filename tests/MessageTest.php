@@ -27,7 +27,6 @@ use Badcow\DNS\Rdata\UnsupportedTypeException;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\UnsetValueException;
 use PHPUnit\Framework\TestCase;
-use Badcow\DNS\Rdata\OPT;
 
 class MessageTest extends TestCase
 {
@@ -253,6 +252,10 @@ class MessageTest extends TestCase
         $this->assertInstanceOf(UnknownType::class, $additionals[0]->getRdata());
     }
 
+    /**
+     * @throws UnsetValueException
+     * @throws UnsupportedTypeException
+     */
     public function testWire8(): void
     {
         $expectation = $this->getWireTestData(8);
