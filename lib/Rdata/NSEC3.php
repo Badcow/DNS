@@ -28,8 +28,8 @@ class NSEC3 implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'NSEC3';
-    const TYPE_CODE = 50;
+    public const TYPE = 'NSEC3';
+    public const TYPE_CODE = 50;
 
     /**
      * {@link https://www.iana.org/assignments/dnssec-nsec3-parameters/dnssec-nsec3-parameters.xhtml}.
@@ -44,17 +44,17 @@ class NSEC3 implements RdataInterface
     private $unsignedDelegationsCovered = false;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $iterations;
 
     /**
-     * @var string Binary encoded string
+     * @var string|null Binary encoded string
      */
     private $salt;
 
     /**
-     * @var string fully qualified next owner name
+     * @var string|null fully qualified next owner name
      */
     private $nextOwnerName;
 
@@ -94,7 +94,7 @@ class NSEC3 implements RdataInterface
         $this->unsignedDelegationsCovered = $unsignedDelegationsCovered;
     }
 
-    public function getIterations(): int
+    public function getIterations(): ?int
     {
         return $this->iterations;
     }
@@ -113,8 +113,12 @@ class NSEC3 implements RdataInterface
     /**
      * @return string Base16 string
      */
-    public function getSalt(): string
+    public function getSalt(): ?string
     {
+        if (null === $this->salt) {
+            return null;
+        }
+
         return bin2hex($this->salt);
     }
 
@@ -129,7 +133,7 @@ class NSEC3 implements RdataInterface
         $this->salt = $bin;
     }
 
-    public function getNextOwnerName(): string
+    public function getNextOwnerName(): ?string
     {
         return $this->nextOwnerName;
     }
@@ -184,7 +188,8 @@ class NSEC3 implements RdataInterface
 
     public function toText(): string
     {
-        return sprintf('%d %d %d %s %s %s',
+        return sprintf(
+            '%d %d %d %s %s %s',
             $this->hashAlgorithm,
             (int) $this->unsignedDelegationsCovered,
             $this->iterations,
@@ -199,11 +204,12 @@ class NSEC3 implements RdataInterface
      */
     public function toWire(): string
     {
-        $wire = pack('CCnC',
+        $wire = pack(
+            'CCnC',
             $this->hashAlgorithm,
             (int) $this->unsignedDelegationsCovered,
             $this->iterations,
-            strlen($this->salt)
+            strlen($this->salt ?? '')
         );
         $wire .= $this->salt;
         $wire .= chr(strlen($this->nextHashedOwnerName));

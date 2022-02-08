@@ -82,7 +82,7 @@ class ATest extends TestCase
 
     public function testToWireThrowsExceptionIfAddressIsMalformed(): void
     {
-        $a_prime = new class() extends A {
+        $a_prime = new class () extends A {
             public function __construct()
             {
                 $this->address = 'abc';

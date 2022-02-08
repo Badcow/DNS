@@ -20,8 +20,8 @@ class NSEC implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'NSEC';
-    const TYPE_CODE = 47;
+    public const TYPE = 'NSEC';
+    public const TYPE_CODE = 47;
 
     /**
      * The Next Domain field contains the next owner name (in the canonical

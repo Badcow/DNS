@@ -29,18 +29,18 @@ class CAA implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'CAA';
-    const TYPE_CODE = 257;
+    public const TYPE = 'CAA';
+    public const TYPE_CODE = 257;
 
-    const TAG_ISSUE = 'issue';
-    const TAG_ISSUEWILD = 'issuewild';
-    const TAG_IODEF = 'iodef';
-    const ALLOWED_TAGS = [self::TAG_ISSUE, self::TAG_ISSUEWILD, self::TAG_IODEF];
+    public const TAG_ISSUE = 'issue';
+    public const TAG_ISSUEWILD = 'issuewild';
+    public const TAG_IODEF = 'iodef';
+    public const ALLOWED_TAGS = [self::TAG_ISSUE, self::TAG_ISSUEWILD, self::TAG_IODEF];
 
     /**
      * It is currently used to represent the critical flag.
      *
-     * @var int
+     * @var int|null
      */
     private $flag;
 
@@ -51,12 +51,12 @@ class CAA implements RdataInterface
      *  - issuewild: explicitly authorizes a single certificate authority to issue a wildcard certificate (and only wildcard) for the hostname.
      *  - iodef: specifies a URL to which a certificate authority may report policy violations.
      *
-     * @var string
+     * @var string|null
      */
     private $tag;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $value;
 
@@ -117,7 +117,8 @@ class CAA implements RdataInterface
             throw new \InvalidArgumentException('All CAA parameters must be set.');
         }
 
-        return sprintf('%d %s "%s"',
+        return sprintf(
+            '%d %s "%s"',
             $this->flag,
             $this->tag ?? '',
             $this->value ?? ''

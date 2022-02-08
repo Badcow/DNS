@@ -32,7 +32,10 @@ class Factory
 
         $className = self::getRdataClassName($name);
 
-        return new $className();
+        /** @var RdataInterface $rdataInterface */
+        $rdataInterface = new $className();
+
+        return $rdataInterface;
     }
 
     /**
@@ -83,7 +86,10 @@ class Factory
             if ('0' === $matches[1]) {
                 $className = self::getRdataClassName($type);
 
-                return new $className();
+                /** @var RdataInterface $rdataInterface */
+                $rdataInterface = new $className();
+
+                return $rdataInterface;
             }
 
             if (false === $wireFormat = hex2bin(str_replace(Tokens::SPACE, '', $matches[2]))) {
@@ -263,10 +269,17 @@ class Factory
         return $rdata;
     }
 
-    public static function RRSIG(string $typeCovered, int $algorithm, int $labels, int $originalTtl,
-                                    \DateTime $signatureExpiration, \DateTime $signatureInception, int $keyTag,
-                                    string $signersName, string $signature): RRSIG
-    {
+    public static function RRSIG(
+        string $typeCovered,
+        int $algorithm,
+        int $labels,
+        int $originalTtl,
+        \DateTime $signatureExpiration,
+        \DateTime $signatureInception,
+        int $keyTag,
+        string $signersName,
+        string $signature
+    ): RRSIG {
         $rrsig = new RRSIG();
         $rrsig->setTypeCovered($typeCovered);
         $rrsig->setAlgorithm($algorithm);
@@ -508,10 +521,17 @@ class Factory
         return $rp;
     }
 
-    public static function SIG(string $typeCovered, int $algorithm, int $labels, int $originalTtl,
-                                 \DateTime $signatureExpiration, \DateTime $signatureInception, int $keyTag,
-                                 string $signersName, string $signature): SIG
-    {
+    public static function SIG(
+        string $typeCovered,
+        int $algorithm,
+        int $labels,
+        int $originalTtl,
+        \DateTime $signatureExpiration,
+        \DateTime $signatureInception,
+        int $keyTag,
+        string $signersName,
+        string $signature
+    ): SIG {
         $sig = new SIG();
         $sig->setTypeCovered($typeCovered);
         $sig->setAlgorithm($algorithm);

@@ -20,7 +20,7 @@ class TimeFormat
     /**
      * Maximum time is the the lesser of 0xffffffff or the PHP maximum integer.
      *
-     * @var int
+     * @var int|null
      */
     public static $maxTime;
 

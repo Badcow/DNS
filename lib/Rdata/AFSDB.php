@@ -19,20 +19,20 @@ class AFSDB implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'AFSDB';
-    const TYPE_CODE = 18;
+    public const TYPE = 'AFSDB';
+    public const TYPE_CODE = 18;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $subType;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $hostname;
 
-    public function getSubType(): int
+    public function getSubType(): ?int
     {
         return $this->subType;
     }
@@ -42,7 +42,7 @@ class AFSDB implements RdataInterface
         $this->subType = $subType;
     }
 
-    public function getHostname(): string
+    public function getHostname(): ?string
     {
         return $this->hostname;
     }
@@ -70,6 +70,9 @@ class AFSDB implements RdataInterface
 
     public function toWire(): string
     {
+        if (!isset($this->subType) || !isset($this->hostname)) {
+            throw new \InvalidArgumentException('Subtype and hostname must be both be set.');
+        }
         return pack('n', $this->subType).Message::encodeName($this->hostname);
     }
 

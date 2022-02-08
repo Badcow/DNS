@@ -87,12 +87,16 @@ class AplTest extends TestCase
 
     public function testWire(): void
     {
-        $expectation = pack('nCCC4nCC',
+        $expectation = pack(
+            'nCCC4nCC',
             1,                  //Address Family
             24,                 //Prefix
             0 +                 //N: "!" is present
             4,                  //AFD Length
-            255, 255, 255, 255,    //AFDPart
+            255,
+            255,
+            255,
+            255,    //AFDPart
 
             2,                  //Address Family
             64,                 //Prefix

@@ -51,7 +51,8 @@ class ZoneBuilder
 
         foreach ($zone as $rr) {
             if (null !== $rr->getRdata()) {
-                $master .= preg_replace('/\s+/', ' ', trim(sprintf('%s %s %s %s %s',
+                $master .= preg_replace('/\s+/', ' ', trim(sprintf(
+                    '%s %s %s %s %s',
                     $rr->getName(),
                     $rr->getTtl(),
                     $rr->getClass(),

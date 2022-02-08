@@ -15,7 +15,7 @@ namespace Badcow\DNS\Tests;
 
 use Badcow\DNS\Question;
 use Badcow\DNS\Rdata\UnsupportedTypeException;
-use PHPStan\Testing\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class QuestionTest extends TestCase
 {

@@ -24,8 +24,8 @@ class TLSA implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'TLSA';
-    const TYPE_CODE = 52;
+    public const TYPE = 'TLSA';
+    public const TYPE_CODE = 52;
 
     /**
      * A one-octet value, called "certificate usage", specifies the provided

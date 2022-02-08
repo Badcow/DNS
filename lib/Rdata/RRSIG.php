@@ -23,9 +23,9 @@ class RRSIG implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'RRSIG';
-    const TYPE_CODE = 46;
-    const TIME_FORMAT = 'YmdHis';
+    public const TYPE = 'RRSIG';
+    public const TYPE_CODE = 46;
+    public const TIME_FORMAT = 'YmdHis';
 
     /**
      *  The Type Covered field identifies the type of the RRset that is
@@ -220,7 +220,8 @@ class RRSIG implements RdataInterface
      */
     public function toWire(): string
     {
-        $wire = pack('nCCNNNn',
+        $wire = pack(
+            'nCCNNNn',
             Types::getTypeCode($this->typeCovered),
             $this->algorithm,
             $this->labels,

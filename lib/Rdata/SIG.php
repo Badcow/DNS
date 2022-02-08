@@ -15,6 +15,6 @@ namespace Badcow\DNS\Rdata;
 
 class SIG extends RRSIG
 {
-    const TYPE = 'SIG';
-    const TYPE_CODE = 24;
+    public const TYPE = 'SIG';
+    public const TYPE_CODE = 24;
 }

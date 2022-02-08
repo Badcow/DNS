@@ -19,17 +19,17 @@ use Badcow\DNS\Rdata\SOA;
 
 class Validator
 {
-    const ZONE_OKAY = 0;
+    public const ZONE_OKAY = 0;
 
-    const ZONE_NO_SOA = 1;
+    public const ZONE_NO_SOA = 1;
 
-    const ZONE_TOO_MANY_SOA = 2;
+    public const ZONE_TOO_MANY_SOA = 2;
 
-    const ZONE_NO_NS = 4;
+    public const ZONE_NO_NS = 4;
 
-    const ZONE_NO_CLASS = 8;
+    public const ZONE_NO_CLASS = 8;
 
-    const ZONE_TOO_MANY_CLASSES = 16;
+    public const ZONE_TOO_MANY_CLASSES = 16;
 
     /**
      * Validate the string as a valid hostname in accordance with RFC 952 {@link https://tools.ietf.org/html/rfc952}

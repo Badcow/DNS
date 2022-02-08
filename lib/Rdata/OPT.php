@@ -25,13 +25,13 @@ class OPT implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'OPT';
-    const TYPE_CODE = 41;
+    public const TYPE = 'OPT';
+    public const TYPE_CODE = 41;
 
     /**
-     * @var OptionInterface[]|null
+     * @var OptionInterface[]
      */
-    protected $options;
+    protected $options = [];
 
     public function toText(): string
     {
@@ -40,7 +40,7 @@ class OPT implements RdataInterface
 
     public function fromText(string $text): void
     {
-        throw new \Exception();
+        throw new \Exception('Badcow\DNS\Rdata\OPT::fromText() cannot be used to hydrate this object.');
     }
 
     /**
@@ -48,13 +48,29 @@ class OPT implements RdataInterface
      */
     public function setOptions(?array $options): void
     {
-        $this->options = $options;
+        $this->options = [];
+
+        if (null === $options) {
+            return;
+        }
+
+        foreach ($options as $option) {
+            $this->addOption($option);
+        }
+    }
+
+    /**
+     * @param OptionInterface $option
+     */
+    public function addOption(OptionInterface $option): void
+    {
+        $this->options[] = $option;
     }
 
     /**
      * @return OptionInterface[]
      */
-    public function getOptions(): ?array
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -70,23 +86,28 @@ class OPT implements RdataInterface
         }
         foreach ($this->options as $option) {
             $optionValue = $option->toWire();
-            $encoded .= pack('nn', $option->getNameCode(), strlen($optionValue));
+            $encoded .= pack('nn', $option->getCode(), strlen($optionValue));
             $encoded .= $optionValue;
         }
 
         return $encoded;
     }
 
+    /**
+     * @param string $rdata
+     * @param int $offset
+     * @param int|null $rdLength
+     * @throws DecodeException
+     */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        if (null === $rdLength) {
-            $rdLength = strlen($rdata);
-        }
+        $rdLength = $rdLength ?? strlen($rdata);
+
         $endOffset = $offset + $rdLength;
         do {
             $integers = @unpack('ncode/nlength', $rdata, $offset);
             if (false === $integers) {
-                throw new \UnexpectedValueException(sprintf('Malformed resource record encountered. "%s"', DecodeException::binaryToHex($rdata)));
+                throw new DecodeException(static::TYPE, $rdata);
             }
             $offset += 4;
             try {

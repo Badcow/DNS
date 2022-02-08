@@ -25,6 +25,11 @@ class UnknownOption implements OptionInterface
      */
     private $data;
 
+    /**
+     * @var string
+     */
+    private $name = '';
+
     public function setOptionCode(int $optionCode): void
     {
         $this->optionCode = $optionCode;
@@ -43,6 +48,22 @@ class UnknownOption implements OptionInterface
     /**
      * @return string
      */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
     public function getData(): ?string
     {
         return $this->data;
@@ -54,6 +75,11 @@ class UnknownOption implements OptionInterface
     public function setData(?string $data): void
     {
         $this->data = $data;
+    }
+
+    public function getCode(): int
+    {
+        return $this->optionCode;
     }
 
     public function toWire(): string
