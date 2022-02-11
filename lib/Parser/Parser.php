@@ -540,19 +540,11 @@ class Parser
         }
     }
 
-    /**
-     * @param string $type
-     * @param ResourceRecordIterator $iterator
-     * @return RdataInterface
-     */
     private function callRdataHandler(string $type, ResourceRecordIterator $iterator): RdataInterface
     {
         $rdataInterface = call_user_func($this->rdataHandlers[$type], $iterator);
         if (!$rdataInterface instanceof RdataInterface) {
-            throw new \UnexpectedValueException(sprintf(
-                'Rdata handler must return instance of Badcow\DNS\Rdata\RdataInterface; "%s" returned instead.',
-                gettype($rdataInterface)
-            ));
+            throw new \UnexpectedValueException(sprintf('Rdata handler must return instance of Badcow\DNS\Rdata\RdataInterface; "%s" returned instead.', gettype($rdataInterface)));
         }
 
         return $rdataInterface;

@@ -27,8 +27,12 @@ class Factory
         }
 
         $className = self::getOptionClassName($name);
+        $optionInterface = new $className();
+        if (!$optionInterface instanceof OptionInterface) {
+            throw new \UnexpectedValueException(sprintf('Badcow\DNS\Edns\Option expected; "%s" instantiated.', gettype($optionInterface)));
+        }
 
-        return new $className();
+        return $optionInterface;
     }
 
     /**

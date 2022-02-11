@@ -19,7 +19,7 @@ class DecodeException extends \Exception
 {
     public function __construct(string $option, string $value, int $code = 0, \Throwable $previous = null)
     {
-        $message = sprintf('Unable to decode %s option from binary data "%s"', $type, Rdata\DecodeException::binaryToHex($value));
+        $message = sprintf('Unable to decode %s option from binary data "%s"', $option, Rdata\DecodeException::binaryToHex($value));
         parent::__construct($message, $code, $previous);
     }
 }

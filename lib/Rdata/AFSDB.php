@@ -73,6 +73,7 @@ class AFSDB implements RdataInterface
         if (!isset($this->subType) || !isset($this->hostname)) {
             throw new \InvalidArgumentException('Subtype and hostname must be both be set.');
         }
+
         return pack('n', $this->subType).Message::encodeName($this->hostname);
     }
 

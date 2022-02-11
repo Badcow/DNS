@@ -27,7 +27,7 @@ interface OptionInterface
      *
      * @return int IANA Option type code
      */
-    public function getNameCode(): int;
+    public function getCode(): int;
 
     /**
      * Return a DNS Server response formatted representation of the Option.

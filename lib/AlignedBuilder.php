@@ -221,11 +221,7 @@ class AlignedBuilder
 
         $formatted = call_user_func($this->rdataFormatters[$rdata->getType()], $rdata, $padding);
         if (!is_string($formatted)) {
-            throw new \UnexpectedValueException(sprintf(
-                'Formatter for RType "%s" returned object type "%s", string expected.',
-                $rdata->getType(),
-                gettype($formatted)
-            ));
+            throw new \UnexpectedValueException(sprintf('Formatter for RType "%s" returned object type "%s", string expected.', $rdata->getType(), gettype($formatted)));
         }
 
         return $formatted;

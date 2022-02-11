@@ -21,10 +21,10 @@ class CLIENT_SUBNET implements OptionInterface
     use OptionTrait;
 
     public const NAME = 'CLIENT_SUBNET';
-    public const NAME_CODE = 8;
+    public const CODE = 8;
 
-    public const FAMILIY_IPV4 = 1;
-    public const FAMILIY_IPV6 = 2;
+    public const FAMILY_IPV4 = 1;
+    public const FAMILY_IPV6 = 2;
 
     /**
      * @var int|null
@@ -51,13 +51,19 @@ class CLIENT_SUBNET implements OptionInterface
         return $this->family;
     }
 
-    public function setFamily(?int $family): void
+    public function setFamily(int $family): void
     {
+        if ($family < 0 || $family > 0xFFFF) {
+            throw new \DomainException(sprintf('Family must be an unsigned 16-bit integer. "%d" given.', $family));
+        }
         $this->family = $family;
     }
 
-    public function setSourceNetmask(?int $sourceNetmask): void
+    public function setSourceNetmask(int $sourceNetmask): void
     {
+        if ($sourceNetmask < 0 || $sourceNetmask > 0xFF) {
+            throw new \DomainException(sprintf('Source Netmask must be an unsigned 8-bit integer. "%d" given.', $sourceNetmask));
+        }
         $this->sourceNetmask = $sourceNetmask;
     }
 
@@ -66,8 +72,11 @@ class CLIENT_SUBNET implements OptionInterface
         return $this->sourceNetmask;
     }
 
-    public function setScopeNetmask(?int $scopeNetmask): void
+    public function setScopeNetmask(int $scopeNetmask): void
     {
+        if ($scopeNetmask < 0 || $scopeNetmask > 0xFF) {
+            throw new \DomainException(sprintf('Scope Netmask must be an unsigned 8-bit integer. "%d" given.', $scopeNetmask));
+        }
         $this->scopeNetmask = $scopeNetmask;
     }
 
@@ -88,6 +97,10 @@ class CLIENT_SUBNET implements OptionInterface
 
     public function toWire(): string
     {
+        if (!isset($this->family) || !isset($this->sourceNetmask) || !isset($this->address)) {
+            throw new \InvalidArgumentException('Family, SourceNetmask, and Address must all be set.');
+        }
+
         return pack('ncc', $this->family, $this->sourceNetmask, $this->scopeNetmask ?? 0).inet_pton($this->address);
     }
 
@@ -95,19 +108,21 @@ class CLIENT_SUBNET implements OptionInterface
     {
         $integers = unpack('nfamily/csourceNetmask/cscopeNetmask', $optionValue, $offset);
         if (false === $integers) {
-            throw new DecodeException(static::NAME, $optionValue);
+            throw new DecodeException(self::NAME, $optionValue);
         }
         $offset += 4;
-        if (!in_array($integers['family'], [self::FAMILIY_IPV4, self::FAMILIY_IPV6])) {
-            throw new DecodeException(static::NAME, $optionValue);
+
+        if (!in_array($integers['family'], [self::FAMILY_IPV4, self::FAMILY_IPV6])) {
+            throw new DecodeException(self::NAME, $optionValue);
         }
-        if (self::FAMILIY_IPV4 === $integers['family'] and ($integers['sourceNetmask'] > 32 or $integers['scopeNetmask'] > 32)) {
-            throw new DecodeException(static::NAME, $optionValue);
+
+        if (self::FAMILY_IPV4 === $integers['family'] and ($integers['sourceNetmask'] > 32 or $integers['scopeNetmask'] > 32)) {
+            throw new DecodeException(self::NAME, $optionValue);
         }
-        $addressLength = self::FAMILIY_IPV4 === $integers['family'] ? 4 : 16;
+        $addressLength = self::FAMILY_IPV4 === $integers['family'] ? 4 : 16;
         $address = @inet_ntop(substr($optionValue, $offset, $addressLength));
         if (false === $address) {
-            throw new DecodeException(static::NAME, $optionValue);
+            throw new DecodeException(self::NAME, $optionValue);
         }
         $offset += $addressLength;
         $this->family = $integers['family'];
