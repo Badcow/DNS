@@ -596,4 +596,25 @@ DNS;
         $this->assertEquals(Classes::INTERNET, $rr->getClass());
         $this->assertEquals('3600', $rr->getRdata()->getText());
     }
+
+    /**
+     * @see {@link https://github.com/Badcow/DNS/issues/107}
+     * @throws ParseException
+     */
+    public function testIssue107(): void
+    {
+        $file = NormaliserTest::readFile(__DIR__.'/Resources/issue-107.txt');
+        $zone = Parser::parse('example.com.', $file);
+
+        $nsec = $zone[0];
+        $rrsig1 = $zone[1];
+        $tlsa = $zone[2];
+        $rrsig2 = $zone[3];
+
+        $this->assertEquals('_25._tcp.example.com.', $tlsa->getName());
+        $this->assertEquals(NSEC::TYPE, $nsec->getType());
+        $this->assertEquals(RRSIG::TYPE, $rrsig1->getType());
+        $this->assertEquals(TLSA::TYPE, $tlsa->getType());
+        $this->assertEquals(RRSIG::TYPE, $rrsig2->getType());
+    }
 }
