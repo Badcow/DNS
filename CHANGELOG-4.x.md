@@ -1,5 +1,7 @@
 CHANGELOG for 4.x
 =================
+## 4.2.0
+* [Issue #104](https://github.com/Badcow/DNS/issues/96) Support EDNS (Thank you, [yeganemehr](https://github.com/yeganemehr))
 ## 4.1.1
 * [Issue #96](https://github.com/Badcow/DNS/issues/96) - Use the correct version of [rlanvin/php-ip](https://github.com/rlanvin/php-ip)
 for PHP 8.0. (Thank you, [AdnanHussainTurki](https://github.com/AdnanHussainTurki))
