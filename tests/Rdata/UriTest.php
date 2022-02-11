@@ -27,7 +27,7 @@ class UriTest extends TestCase
             [0x10000, 10, 'https://tools.ietf.org/html/rfc7553', \InvalidArgumentException::class, 'Priority must be an unsigned integer on the range [0-65535]'],
             [10, -1, 'http://www.example.com/path', \InvalidArgumentException::class, 'Weight must be an unsigned integer on the range [0-65535]'],
             [256, 0x10000, 'https://tools.ietf.org/html/rfc7553', \InvalidArgumentException::class, 'Weight must be an unsigned integer on the range [0-65535]'],
-            [10, 0xff, '"https://tools.ietf.org/html/rfc7553"', \InvalidArgumentException::class, 'The target ""https://tools.ietf.org/html/rfc7553"" is not a valid URI.'],
+            [10, 0xFF, '"https://tools.ietf.org/html/rfc7553"', \InvalidArgumentException::class, 'The target ""https://tools.ietf.org/html/rfc7553"" is not a valid URI.'],
         ];
     }
 

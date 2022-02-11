@@ -39,7 +39,7 @@ class TimeFormat
      *
      * @return bool true if $value is a valid time format
      */
-    public static function isTimeFormat($value): bool
+    public static function isTimeFormat(string $value): bool
     {
         return is_numeric($value) || 1 === \preg_match(self::TIME_FORMAT_REGEX, $value);
     }
@@ -54,7 +54,7 @@ class TimeFormat
     public static function toSeconds($value): int
     {
         if (!isset(static::$maxTime)) {
-            static::$maxTime = min(0xffffffff, PHP_INT_MAX);
+            static::$maxTime = min(0xFFFFFFFF, PHP_INT_MAX);
         }
 
         if (is_numeric($value)) {

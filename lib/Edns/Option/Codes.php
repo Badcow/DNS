@@ -55,7 +55,7 @@ class Codes
     ];
 
     /**
-     * @param int|string $option Either the option name (string) or the option code (integer).
+     * @param int|string $option either the option name (string) or the option code (integer)
      */
     public static function isValid($option): bool
     {

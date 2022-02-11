@@ -59,9 +59,6 @@ class OPT implements RdataInterface
         }
     }
 
-    /**
-     * @param OptionInterface $option
-     */
     public function addOption(OptionInterface $option): void
     {
         $this->options[] = $option;
@@ -94,9 +91,6 @@ class OPT implements RdataInterface
     }
 
     /**
-     * @param string $rdata
-     * @param int $offset
-     * @param int|null $rdLength
      * @throws DecodeException
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void

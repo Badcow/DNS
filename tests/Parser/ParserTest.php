@@ -567,7 +567,7 @@ DNS;
      */
     public function testParserHandlesIncludeDirective(string $zoneName, int $ttl, string $zoneFilePath, string $expectationPath, int $commentOptions): void
     {
-        $zoneFetcher = new class () implements ZoneFileFetcherInterface {
+        $zoneFetcher = new class() implements ZoneFileFetcherInterface {
             public function fetch(string $path): string
             {
                 return file_get_contents(__DIR__.'/Resources/IncludeControlEntryTests/'.$path);

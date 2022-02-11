@@ -82,7 +82,7 @@ class ATest extends TestCase
 
     public function testToWireThrowsExceptionIfAddressIsMalformed(): void
     {
-        $a_prime = new class () extends A {
+        $a_prime = new class() extends A {
             public function __construct()
             {
                 $this->address = 'abc';
@@ -99,7 +99,7 @@ class ATest extends TestCase
      */
     public function testFromWire(): void
     {
-        $wire = pack('C6', 0x07, 0xC0, 0xff, 0x01, 0x01, 0x07); //⍾192.255.1.1⍾
+        $wire = pack('C6', 0x07, 0xC0, 0xFF, 0x01, 0x01, 0x07); //⍾192.255.1.1⍾
         $offset = 1;
         /** @var A $a */
         $a = new A();

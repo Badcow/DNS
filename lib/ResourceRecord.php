@@ -16,8 +16,8 @@ namespace Badcow\DNS;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Factory;
-use Badcow\DNS\Rdata\UnknownType;
 use Badcow\DNS\Rdata\RdataInterface;
+use Badcow\DNS\Rdata\UnknownType;
 use InvalidArgumentException;
 
 class ResourceRecord
@@ -95,9 +95,6 @@ class ResourceRecord
         $this->name = $name;
     }
 
-    /**
-     * @param RdataInterface $rdata
-     */
     public function setRdata(?RdataInterface $rdata): void
     {
         $this->rdata = $rdata;
@@ -115,7 +112,7 @@ class ResourceRecord
         return Classes::getClassName($this->classId);
     }
 
-    public function setClassId(int $classId): void
+    public function setClassId(?int $classId): void
     {
         $this->classId = $classId;
     }

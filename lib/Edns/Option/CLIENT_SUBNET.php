@@ -53,7 +53,7 @@ class CLIENT_SUBNET implements OptionInterface
 
     public function setFamily(int $family): void
     {
-        if ($family < 0 || $family > 0xffff) {
+        if ($family < 0 || $family > 0xFFFF) {
             throw new \DomainException(sprintf('Family must be an unsigned 16-bit integer. "%d" given.', $family));
         }
         $this->family = $family;
@@ -61,7 +61,7 @@ class CLIENT_SUBNET implements OptionInterface
 
     public function setSourceNetmask(int $sourceNetmask): void
     {
-        if ($sourceNetmask < 0 || $sourceNetmask > 0xff) {
+        if ($sourceNetmask < 0 || $sourceNetmask > 0xFF) {
             throw new \DomainException(sprintf('Source Netmask must be an unsigned 8-bit integer. "%d" given.', $sourceNetmask));
         }
         $this->sourceNetmask = $sourceNetmask;
@@ -74,7 +74,7 @@ class CLIENT_SUBNET implements OptionInterface
 
     public function setScopeNetmask(int $scopeNetmask): void
     {
-        if ($scopeNetmask < 0 || $scopeNetmask > 0xff) {
+        if ($scopeNetmask < 0 || $scopeNetmask > 0xFF) {
             throw new \DomainException(sprintf('Scope Netmask must be an unsigned 8-bit integer. "%d" given.', $scopeNetmask));
         }
         $this->scopeNetmask = $scopeNetmask;
