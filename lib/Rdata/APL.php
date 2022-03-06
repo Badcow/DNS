@@ -90,7 +90,7 @@ class APL implements RdataInterface
             $encoded .= pack(
                 'nCC',
                 (4 === $ipBlock->getVersion()) ? 1 : 2,
-                $ipBlock->getPrefix(),
+                $ipBlock->getPrefixLength(),
                 $ipBlock->getGivenIp()::NB_BYTES
             ).inet_pton((string) $ipBlock->getGivenIp());
         }
@@ -99,7 +99,7 @@ class APL implements RdataInterface
             $encoded .= pack(
                 'nCCC*',
                 (4 === $ipBlock->getVersion()) ? 1 : 2,
-                $ipBlock->getPrefix(),
+                $ipBlock->getPrefixLength(),
                 $ipBlock->getGivenIp()::NB_BYTES | 0b10000000
             ).inet_pton((string) $ipBlock->getGivenIp());
         }
