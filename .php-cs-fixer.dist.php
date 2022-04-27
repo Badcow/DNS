@@ -16,8 +16,8 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude(__DIR__.'/tests/Parser/Resources')
 ;
 
-$config = PhpCsFixer\Config::create()
-    ->setRiskyAllowed(true)
+$config = new PhpCsFixer\Config();
+$config->setRiskyAllowed(true)
     ->setRules([
         '@Symfony' => true,
         'header_comment' => ['header' => $header],

@@ -18,6 +18,6 @@ namespace Badcow\DNS\Rdata;
  */
 class TA extends DS
 {
-    const TYPE = 'TA';
-    const TYPE_CODE = 32768;
+    public const TYPE = 'TA';
+    public const TYPE_CODE = 32768;
 }

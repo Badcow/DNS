@@ -24,21 +24,21 @@ class CERT implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'CERT';
-    const TYPE_CODE = 37;
+    public const TYPE = 'CERT';
+    public const TYPE_CODE = 37;
 
-    const KEY_TYPE_PKIX = 1;
-    const KEY_TYPE_SPKI = 2;
-    const KEY_TYPE_PGP = 3;
-    const KEY_TYPE_IPKIX = 4;
-    const KEY_TYPE_ISPKI = 5;
-    const KEY_TYPE_IPGP = 6;
-    const KEY_TYPE_ACPKIX = 7;
-    const KEY_TYPE_IACPKIX = 8;
-    const KEY_TYPE_URI = 253;
-    const KEY_TYPE_OID = 254;
+    public const KEY_TYPE_PKIX = 1;
+    public const KEY_TYPE_SPKI = 2;
+    public const KEY_TYPE_PGP = 3;
+    public const KEY_TYPE_IPKIX = 4;
+    public const KEY_TYPE_ISPKI = 5;
+    public const KEY_TYPE_IPGP = 6;
+    public const KEY_TYPE_ACPKIX = 7;
+    public const KEY_TYPE_IACPKIX = 8;
+    public const KEY_TYPE_URI = 253;
+    public const KEY_TYPE_OID = 254;
 
-    const MNEMONICS = [
+    public const MNEMONICS = [
         self::KEY_TYPE_PKIX => 'PKIX',
         self::KEY_TYPE_SPKI => 'SPKI',
         self::KEY_TYPE_PGP => 'PGP',

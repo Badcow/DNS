@@ -23,10 +23,10 @@ class TXT implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'TXT';
-    const TYPE_CODE = 16;
+    public const TYPE = 'TXT';
+    public const TYPE_CODE = 16;
 
-    const WHITESPACE = [Tokens::SPACE, Tokens::TAB, Tokens::LINE_FEED, Tokens::CARRIAGE_RETURN];
+    public const WHITESPACE = [Tokens::SPACE, Tokens::TAB, Tokens::LINE_FEED, Tokens::CARRIAGE_RETURN];
 
     /**
      * @var string|null
@@ -44,9 +44,9 @@ class TXT implements RdataInterface
         $this->text = stripslashes($text);
     }
 
-    public function getText(): ?string
+    public function getText(): string
     {
-        return (string) $this->text ?? '';
+        return $this->text ?? '';
     }
 
     public function toText(): string

@@ -20,8 +20,8 @@ namespace Badcow\DNS\Rdata;
  */
 class DNSKEY extends KEY
 {
-    const TYPE = 'DNSKEY';
-    const TYPE_CODE = 48;
+    public const TYPE = 'DNSKEY';
+    public const TYPE_CODE = 48;
 
     /**
      * The Protocol Field MUST have value 3, and the DNSKEY RR MUST be

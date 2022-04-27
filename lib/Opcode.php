@@ -21,30 +21,30 @@ class Opcode
     /**
      * [RFC1035].
      */
-    const QUERY = 0;
+    public const QUERY = 0;
 
     /**
      * Inverse Query [RFC3425] (Obsolete).
      */
-    const IQUERY = 1;
+    public const IQUERY = 1;
 
     /**
      * [RFC1035].
      */
-    const STATUS = 2;
+    public const STATUS = 2;
 
     /**
      * [RFC1996].
      */
-    const NOTIFY = 4;
+    public const NOTIFY = 4;
 
     /**
      * [RFC2136].
      */
-    const UPDATE = 5;
+    public const UPDATE = 5;
 
     /**
      * DNS Stateful Operations [RFC8490].
      */
-    const DSO = 6;
+    public const DSO = 6;
 }

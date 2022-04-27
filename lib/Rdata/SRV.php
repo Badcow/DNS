@@ -30,8 +30,8 @@ class SRV implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'SRV';
-    const TYPE_CODE = 33;
+    public const TYPE = 'SRV';
+    public const TYPE_CODE = 33;
 
     /**
      * The priority of this target host. A client MUST attempt to
@@ -148,7 +148,8 @@ class SRV implements RdataInterface
 
     public function toText(): string
     {
-        return sprintf('%s %s %s %s',
+        return sprintf(
+            '%s %s %s %s',
             $this->priority,
             $this->weight,
             $this->port,

@@ -61,7 +61,7 @@ class ParseUnknownTypesTest extends TestCase
         $this->assertEquals('IN', $rr->getClass());
         $this->assertEquals(1, $rr->getClassId());
         $this->assertEquals('RESERVED', $rr->getType());
-        $this->assertEquals(0xffff, $rr->getRdata()->getTypeCode());
+        $this->assertEquals(0xFFFF, $rr->getRdata()->getTypeCode());
         $this->assertEquals(1800, $rr->getTtl());
         $this->assertInstanceOf(PolymorphicRdata::class, $rr->getRdata());
         $this->assertEquals('"A Tale of Two Cities"', $rr->getRdata()->getData());

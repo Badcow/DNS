@@ -22,8 +22,8 @@ class MX implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'MX';
-    const TYPE_CODE = 15;
+    public const TYPE = 'MX';
+    public const TYPE_CODE = 15;
 
     /**
      * @var int|null

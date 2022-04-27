@@ -18,6 +18,6 @@ namespace Badcow\DNS\Rdata;
  */
 class NS extends CNAME
 {
-    const TYPE = 'NS';
-    const TYPE_CODE = 2;
+    public const TYPE = 'NS';
+    public const TYPE_CODE = 2;
 }

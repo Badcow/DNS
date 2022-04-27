@@ -22,8 +22,8 @@ class KEY implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'KEY';
-    const TYPE_CODE = 25;
+    public const TYPE = 'KEY';
+    public const TYPE_CODE = 25;
 
     /**
      * {@link https://tools.ietf.org/html/rfc4034#section-2.1.1}.
