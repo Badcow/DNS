@@ -33,6 +33,3 @@ jobs:
 
       - name: Test Coverage
         run: vendor/bin/phpunit --coverage-text
-
-      - name: PHPStan
-        run: vendor/bin/phpstan analyze
