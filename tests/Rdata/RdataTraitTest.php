@@ -20,7 +20,7 @@ class RdataTraitTest extends TestCase
 {
     use RdataTrait;
 
-    const TYPE = 'RDATA_TEST';
+    public const TYPE = 'RDATA_TEST';
 
     public function testGetType(): void
     {

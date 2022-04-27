@@ -18,12 +18,12 @@ class Comments
     /**
      * No comments are parsed.
      */
-    const NONE = 0;
+    public const NONE = 0;
 
     /**
      * Inline comments that appear at the end of a resource record.
      */
-    const END_OF_ENTRY = 1;
+    public const END_OF_ENTRY = 1;
 
     /**
      * Multi-line record comments: those comments that appear within multi-line brackets. E.g.
@@ -32,15 +32,15 @@ class Comments
      *      mail-gw3 ;So will this comment.
      * ).
      */
-    const MULTILINE = 2;
+    public const MULTILINE = 2;
 
     /**
      * Orphan comments appear without a resource record. Usually these are section headers.
      */
-    const ORPHAN = 4;
+    public const ORPHAN = 4;
 
     /**
      * Parse all comments.
      */
-    const ALL = 7;
+    public const ALL = 7;
 }

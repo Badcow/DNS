@@ -15,10 +15,10 @@ namespace Badcow\DNS;
 
 class Classes
 {
-    const INTERNET = 'IN';
-    const CSNET = 'CS';
-    const CHAOS = 'CH';
-    const HESIOD = 'HS';
+    public const INTERNET = 'IN';
+    public const CSNET = 'CS';
+    public const CHAOS = 'CH';
+    public const HESIOD = 'HS';
 
     /**
      * @var array
@@ -30,7 +30,7 @@ class Classes
         self::INTERNET => 'Internet',
     ];
 
-    const CLASS_IDS = [
+    public const CLASS_IDS = [
         self::CHAOS => 3,
         self::CSNET => 2,
         self::HESIOD => 4,
@@ -40,7 +40,7 @@ class Classes
     /**
      * @const string[]
      */
-    const IDS_CLASSES = [
+    public const IDS_CLASSES = [
         1 => 'IN',
         2 => 'CS',
         3 => 'CH',

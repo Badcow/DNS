@@ -175,7 +175,7 @@ DNS;
             65535,
             'example.com.',
             'aaaaaaaaaaaaaaaaaaaaaaaaa'
-            ));
+        ));
 
         $nsec3 = new ResourceRecord();
         $nsec3->setName('example.com.');

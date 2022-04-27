@@ -23,8 +23,8 @@ class RP implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'RP';
-    const TYPE_CODE = 17;
+    public const TYPE = 'RP';
+    public const TYPE_CODE = 17;
 
     /**
      * @var string

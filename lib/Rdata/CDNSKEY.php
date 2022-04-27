@@ -18,6 +18,6 @@ namespace Badcow\DNS\Rdata;
  */
 class CDNSKEY extends DNSKEY
 {
-    const TYPE = 'CDNSKEY';
-    const TYPE_CODE = 60;
+    public const TYPE = 'CDNSKEY';
+    public const TYPE_CODE = 60;
 }

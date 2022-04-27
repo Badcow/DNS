@@ -420,7 +420,7 @@ class Message
     {
         $flags = 0x0 |
         ($this->isResponse & 0x1) << 15 |
-        ($this->opcode & 0xf) << 11 |
+        ($this->opcode & 0xF) << 11 |
         ($this->isAuthoritative & 0x1) << 10 |
         ($this->isTruncated & 0x1) << 9 |
         ($this->isRecursionDesired & 0x1) << 8 |
@@ -428,7 +428,7 @@ class Message
         ($this->bit9 & 0x1) << 6 |
         ($this->isAuthenticData & 0x1) << 5 |
         ($this->isCheckingDisabled & 0x1) << 4 |
-        ($this->rcode & 0xf);
+        ($this->rcode & 0xF);
 
         $encoded = pack(
             'nnnnnn',
@@ -463,7 +463,7 @@ class Message
 
         $message->setId($header['id']);
         $message->setResponse((bool) ($flags >> 15 & 0x1));
-        $message->setOpcode($flags >> 11 & 0xf);
+        $message->setOpcode($flags >> 11 & 0xF);
         $message->setAuthoritative((bool) ($flags >> 10 & 0x1));
         $message->setTruncated((bool) ($flags >> 9 & 0x1));
         $message->setRecursionDesired((bool) ($flags >> 8 & 0x1));
@@ -471,7 +471,7 @@ class Message
         $message->setBit9($flags >> 6 & 0x1);
         $message->setAuthenticData((bool) ($flags >> 5 & 0x1));
         $message->setCheckingDisabled((bool) ($flags >> 4 & 0x1));
-        $message->setRcode($flags & 0xf);
+        $message->setRcode($flags & 0xF);
 
         for ($i = 0; $i < $header['qdcount']; ++$i) {
             $message->addQuestion(Question::fromWire($encoded, $offset));

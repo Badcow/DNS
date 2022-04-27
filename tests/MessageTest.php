@@ -21,6 +21,7 @@ use Badcow\DNS\Rcode;
 use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\MX;
 use Badcow\DNS\Rdata\NS;
+use Badcow\DNS\Rdata\OPT;
 use Badcow\DNS\Rdata\UnknownType;
 use Badcow\DNS\Rdata\UnsupportedTypeException;
 use Badcow\DNS\ResourceRecord;
@@ -249,6 +250,20 @@ class MessageTest extends TestCase
         $additionals = $msg->getAdditionals();
         $this->assertCount(1, $additionals);
         $this->assertInstanceOf(UnknownType::class, $additionals[0]->getRdata());
+    }
+
+    /**
+     * @throws UnsetValueException
+     * @throws UnsupportedTypeException
+     */
+    public function testWire8(): void
+    {
+        $expectation = $this->getWireTestData(8);
+        $msg = Message::fromWire($this->getWireTestData(8));
+        $additionals = $msg->getAdditionals();
+        $this->assertCount(1, $additionals);
+        $this->assertInstanceOf(OPT::class, $additionals[0]->getRdata());
+        $this->assertEquals($expectation, $msg->toWire());
     }
 
     /**

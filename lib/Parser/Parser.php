@@ -61,7 +61,7 @@ class Parser
     private $origin;
 
     /**
-     * @var int the currently defined default TTL
+     * @var int|null the currently defined default TTL
      */
     private $ttl;
 
@@ -530,7 +530,7 @@ class Parser
         $iterator->next();
 
         if (array_key_exists($type, $this->rdataHandlers)) {
-            return call_user_func($this->rdataHandlers[$type], $iterator);
+            return $this->callRdataHandler($type, $iterator);
         }
 
         try {
@@ -538,5 +538,15 @@ class Parser
         } catch (Exception $exception) {
             throw new ParseException(sprintf('Could not extract Rdata from resource record "%s".', (string) $iterator), null, $exception);
         }
+    }
+
+    private function callRdataHandler(string $type, ResourceRecordIterator $iterator): RdataInterface
+    {
+        $rdataInterface = call_user_func($this->rdataHandlers[$type], $iterator);
+        if (!$rdataInterface instanceof RdataInterface) {
+            throw new \UnexpectedValueException(sprintf('Rdata handler must return instance of Badcow\DNS\Rdata\RdataInterface; "%s" returned instead.', gettype($rdataInterface)));
+        }
+
+        return $rdataInterface;
     }
 }

@@ -24,8 +24,8 @@ class TKEY implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'TKEY';
-    const TYPE_CODE = 249;
+    public const TYPE = 'TKEY';
+    public const TYPE_CODE = 249;
 
     /**
      * The algorithm name is in the form of a domain name with the same
@@ -183,7 +183,8 @@ class TKEY implements RdataInterface
 
     public function toText(): string
     {
-        return sprintf('%s %d %d %d %d %s %s',
+        return sprintf(
+            '%s %d %d %d %d %s %s',
             $this->algorithm,
             $this->inception->format('U'),
             $this->expiration->format('U'),
@@ -197,7 +198,8 @@ class TKEY implements RdataInterface
     public function toWire(): string
     {
         $wire = Message::encodeName($this->algorithm);
-        $wire .= pack('NNnnn',
+        $wire .= pack(
+            'NNnnn',
             $this->inception->format('U'),
             $this->expiration->format('U'),
             $this->mode,

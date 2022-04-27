@@ -26,8 +26,8 @@ class TSIG implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'TSIG';
-    const TYPE_CODE = 250;
+    public const TYPE = 'TSIG';
+    public const TYPE_CODE = 250;
 
     /**
      * Name of the algorithm in domain name syntax.
@@ -155,7 +155,8 @@ class TSIG implements RdataInterface
 
     public function toText(): string
     {
-        return sprintf('%s %d %d %s %d %d %s',
+        return sprintf(
+            '%s %d %d %s %d %d %s',
             $this->algorithmName,
             $this->timeSigned->format('U'),
             $this->fudge,
@@ -169,9 +170,9 @@ class TSIG implements RdataInterface
     public function toWire(): string
     {
         $timeSigned = (int) $this->timeSigned->format('U');
-        $hex1 = (0xffff00000000 & $timeSigned) >> 32;
-        $hex2 = (0x0000ffff0000 & $timeSigned) >> 16;
-        $hex3 = 0x00000000ffff & $timeSigned;
+        $hex1 = (0xFFFF00000000 & $timeSigned) >> 32;
+        $hex2 = (0x0000FFFF0000 & $timeSigned) >> 16;
+        $hex3 = 0x00000000FFFF & $timeSigned;
 
         $wire = Message::encodeName($this->algorithmName);
         $wire .= pack('nnnnn', $hex1, $hex2, $hex3, $this->fudge, strlen($this->mac));

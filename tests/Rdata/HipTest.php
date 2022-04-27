@@ -29,7 +29,8 @@ class HipTest extends TestCase
 
     public function setUp(): void
     {
-        $this->publicKey = base64_decode('AwEAAbdxyhNuSutc5EMzxTs9LBPCIkOFH8cI
+        $this->publicKey = base64_decode(
+            'AwEAAbdxyhNuSutc5EMzxTs9LBPCIkOFH8cI
             vM4p9+LrV4e19WzK00+CI6zBCQTdtWsuxKbWIy87UOoJTwkUs7lBu+Upr1gsNrut79ry
             ra+bSRGQb1slImA8YVJyuIDsj7kwzG7jnERNqnWxZ48AWkskmdHaVDP4BcelrTI3rMXd
             XF5D'

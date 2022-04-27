@@ -23,8 +23,8 @@ class DHCID implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'DHCID';
-    const TYPE_CODE = 49;
+    public const TYPE = 'DHCID';
+    public const TYPE_CODE = 49;
 
     /**
      * 16-bit DHCID RR Identifier Type Code specifies what data from the DHCP

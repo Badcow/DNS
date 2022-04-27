@@ -425,7 +425,7 @@ class Types
 
     public const RESERVED = 65535;
 
-    const TYPE_NAMES = [
+    public const TYPE_NAMES = [
         self::A => 'A',
         self::NS => 'NS',
         self::MD => 'MD',

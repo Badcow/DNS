@@ -53,7 +53,9 @@ class AlignedRdataFormatters
             $rdata->getMinimum(),
         ];
 
-        $longestVarLength = max(array_map('strlen', $vars));
+        /** @var callable $callable */
+        $callable = '\strlen';
+        $longestVarLength = max(array_map($callable, $vars));
 
         return Tokens::OPEN_BRACKET.Tokens::LINE_FEED.
             self::makeLine((string) $rdata->getMname(), 'MNAME', $longestVarLength, $padding).
@@ -84,7 +86,7 @@ class AlignedRdataFormatters
      */
     public static function TXT(TXT $txt, int $padding): string
     {
-        if (null === $txt->getText() || strlen($txt->getText()) <= 50) {
+        if (strlen($txt->getText()) <= 50) {
             return $txt->toText();
         }
 

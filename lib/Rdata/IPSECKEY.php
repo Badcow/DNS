@@ -24,12 +24,12 @@ class IPSECKEY implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'IPSECKEY';
-    const TYPE_CODE = 45;
-    const ALGORITHM_NONE = 0;
-    const ALGORITHM_DSA = 1;
-    const ALGORITHM_RSA = 2;
-    const ALGORITHM_ECDSA = 3;
+    public const TYPE = 'IPSECKEY';
+    public const TYPE_CODE = 45;
+    public const ALGORITHM_NONE = 0;
+    public const ALGORITHM_DSA = 1;
+    public const ALGORITHM_RSA = 2;
+    public const ALGORITHM_ECDSA = 3;
 
     /**
      * This is an 8-bit precedence for this record.  It is interpreted in
@@ -197,7 +197,8 @@ class IPSECKEY implements RdataInterface
 
     public function toText(): string
     {
-        return rtrim(sprintf('%d %d %d %s %s',
+        return rtrim(sprintf(
+            '%d %d %d %s %s',
             $this->precedence,
             $this->gatewayType,
             $this->algorithm,
@@ -241,7 +242,7 @@ class IPSECKEY implements RdataInterface
      */
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
-        $end = $offset + $rdLength ?? strlen($rdata);
+        $end = $offset + ($rdLength ?? strlen($rdata));
 
         if (false === $integers = unpack('CPrecedence/CGatewayType/CAlgorithm', $rdata, $offset)) {
             throw new DecodeException(static::TYPE, $rdata);

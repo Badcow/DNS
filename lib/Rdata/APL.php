@@ -24,8 +24,8 @@ class APL implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'APL';
-    const TYPE_CODE = 42;
+    public const TYPE = 'APL';
+    public const TYPE_CODE = 42;
 
     /**
      * @var IPBlock[]
@@ -87,17 +87,19 @@ class APL implements RdataInterface
         $encoded = '';
 
         foreach ($this->includedAddressRanges as $ipBlock) {
-            $encoded .= pack('nCC',
+            $encoded .= pack(
+                'nCC',
                 (4 === $ipBlock->getVersion()) ? 1 : 2,
-                $ipBlock->getPrefix(),
+                $ipBlock->getPrefixLength(),
                 $ipBlock->getGivenIp()::NB_BYTES
             ).inet_pton((string) $ipBlock->getGivenIp());
         }
 
         foreach ($this->excludedAddressRanges as $ipBlock) {
-            $encoded .= pack('nCCC*',
+            $encoded .= pack(
+                'nCCC*',
                 (4 === $ipBlock->getVersion()) ? 1 : 2,
-                $ipBlock->getPrefix(),
+                $ipBlock->getPrefixLength(),
                 $ipBlock->getGivenIp()::NB_BYTES | 0b10000000
             ).inet_pton((string) $ipBlock->getGivenIp());
         }

@@ -23,8 +23,8 @@ class URI implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'URI';
-    const TYPE_CODE = 256;
+    public const TYPE = 'URI';
+    public const TYPE_CODE = 256;
 
     /**
      * This field holds the priority of the target URI in this RR.  Its
@@ -111,7 +111,8 @@ class URI implements RdataInterface
 
     public function toText(): string
     {
-        return sprintf('%d %d "%s"',
+        return sprintf(
+            '%d %d "%s"',
             $this->priority,
             $this->weight,
             $this->target

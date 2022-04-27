@@ -22,8 +22,8 @@ class CSYNC implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'CSYNC';
-    const TYPE_CODE = 62;
+    public const TYPE = 'CSYNC';
+    public const TYPE_CODE = 62;
 
     /**
      * @var int

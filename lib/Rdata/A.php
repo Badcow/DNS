@@ -22,11 +22,11 @@ class A implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'A';
-    const TYPE_CODE = 1;
+    public const TYPE = 'A';
+    public const TYPE_CODE = 1;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $address;
 
@@ -57,6 +57,10 @@ class A implements RdataInterface
      */
     public function toWire(): string
     {
+        if (!isset($this->address)) {
+            throw new \InvalidArgumentException('No IP address has been set.');
+        }
+
         if (false === $encoded = @inet_pton($this->address)) {
             throw new \InvalidArgumentException(sprintf('The IP address "%s" cannot be encoded. Check that it is a valid IP address.', $this->address));
         }

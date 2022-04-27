@@ -25,8 +25,8 @@ class HIP implements RdataInterface
 {
     use RdataTrait;
 
-    const TYPE = 'HIP';
-    const TYPE_CODE = 55;
+    public const TYPE = 'HIP';
+    public const TYPE_CODE = 55;
 
     /**
      * @var int
@@ -105,7 +105,8 @@ class HIP implements RdataInterface
 
     public function toText(): string
     {
-        return sprintf('%d %s %s %s',
+        return sprintf(
+            '%d %s %s %s',
             $this->publicKeyAlgorithm,
             bin2hex($this->hostIdentityTag),
             base64_encode($this->publicKey),
@@ -115,7 +116,8 @@ class HIP implements RdataInterface
 
     public function toWire(): string
     {
-        $rdata = pack('CCn',
+        $rdata = pack(
+            'CCn',
             strlen($this->hostIdentityTag),
             $this->publicKeyAlgorithm,
             strlen($this->publicKey)
