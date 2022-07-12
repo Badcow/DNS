@@ -62,6 +62,7 @@ class TxtTest extends TestCase
             ['foo bar', 'foo'],
             ["\t\t\tfoobar", 'foobar'],
             ['3600', '3600'],
+            ['double escape sequence \\010', 'double escape sequence \010'],
         ];
     }
 

@@ -33,7 +33,7 @@ class TXT implements RdataInterface
      */
     private $text;
 
-    public function setText(?string $text): void
+    public function setText(?string $text, bool $stripped = false): void
     {
         if (null === $text) {
             $this->text = null;
@@ -41,7 +41,7 @@ class TXT implements RdataInterface
             return;
         }
 
-        $this->text = stripslashes($text);
+        $this->text = $stripped ? $text : stripslashes($text);
     }
 
     public function getText(): string
@@ -92,7 +92,7 @@ class TXT implements RdataInterface
             break;
         }
 
-        $this->setText((string) $txt);
+        $this->setText((string) $txt, true);
     }
 
     /**
