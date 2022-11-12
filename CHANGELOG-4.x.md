@@ -1,5 +1,7 @@
 CHANGELOG for 4.x
 =================
+## 4.2.1
+* [Pull #113](https://github.com/Badcow/DNS/pull/113/) Fix to prevent double stripping of backslashes. (Thank you, [SloEddy](https://github.com/SloEddy))
 ## 4.2.0
 * Deprecate support for PHP 7
 * [Issue #104](https://github.com/Badcow/DNS/issues/96) Support EDNS (Thank you, [yeganemehr](https://github.com/yeganemehr))
