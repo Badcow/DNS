@@ -30,9 +30,9 @@ class TxtTest extends TestCase
     public function dp_testToText(): array
     {
         return [
-            //[$text, $expectation]
-            ['"This is some quoted text". It\'s a nice piece of text.', '"\"This is some quoted text\". It\'s a nice piece of text."'],
-            [
+            //'what is tested' => [$text, $expectation]
+            'quotes are escaped' => ['"This is some quoted text". It\'s a nice piece of text.', '"\"This is some quoted text\". It\'s a nice piece of text."'],
+            'spaces are wraped in quotes' => [
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel lorem in massa elementum blandit nec sed massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu purus id arcu venenatis elementum in quis enim. Aenean at urna varius sapien dapibus.',
                 '"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel lorem in massa elementum blandit nec sed massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu purus id arcu venenatis elementum in quis enim. Aenean at urna varius sapie" "n dapibus."',
             ],
@@ -56,13 +56,13 @@ class TxtTest extends TestCase
     public function dp_testFromTxt(): array
     {
         return [
-            //[$text, $expectation]
-            ['"Some text;" " another some text"', 'Some text; another some text'],
-            ['foobar', 'foobar'],
-            ['foo bar', 'foo'],
-            ["\t\t\tfoobar", 'foobar'],
-            ['3600', '3600'],
-            ['double escape sequence \\010', 'double escape sequence \010'],
+            //'what is tested' => [$text, $expectation]
+            'chunked text literal' => ['"Some text;" " another some text"', 'Some text; another some text'],
+            'string literal' => ['foobar', 'foobar'],
+            'text with space without quotes' => ['foo bar', 'foo'],
+            'trailing whitespace' => ["\t\t\tfoobar", 'foobar'],
+            'integer literal' => ['3600', '3600'],
+            'double escape sequence' => ['\\010', '\010'],
         ];
     }
 
