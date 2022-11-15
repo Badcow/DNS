@@ -62,7 +62,7 @@ class TxtTest extends TestCase
             'text with space without quotes' => ['foo bar', 'foo'],
             'trailing whitespace' => ["\t\t\tfoobar", 'foobar'],
             'integer literal' => ['3600', '3600'],
-            'double escape sequence' => ['\\010', '\010'],
+            'double escape sequence' => ['"double escape \\\\010"', 'double escape \010'],
         ];
     }
 
