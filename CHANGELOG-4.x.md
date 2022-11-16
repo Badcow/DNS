@@ -1,5 +1,7 @@
 CHANGELOG for 4.x
 =================
+## 4.x
+* [Pull #114](https://github.com/Badcow/DNS/pull/114/) Fix broken tests. (Thank you, [srsbiz](https://github.com/srsbiz))
 ## 4.2.1
 * [Pull #113](https://github.com/Badcow/DNS/pull/113/) Fix to prevent double stripping of backslashes. (Thank you, [SloEddy](https://github.com/SloEddy))
 ## 4.2.0
