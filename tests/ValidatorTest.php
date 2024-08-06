@@ -300,6 +300,8 @@ class ValidatorTest extends TestCase
             ['alt2.aspmx.l.google.com.', true],
             ['www.eXAMple.cOm.', true],
             ['3xample.com.', true],
+            ['_sip._tcp.example.com.', true, false],
+            ['_sip._tcp.example.com.', false, true],
             ['_example.com.', false],
             ['-example.com.', false],
             ['example.com', false],
@@ -310,9 +312,9 @@ class ValidatorTest extends TestCase
     /**
      * @dataProvider getTestFqdnDataProvider
      */
-    public function testFqdn(string $domain, bool $isValid): void
+    public function testFqdn(string $domain, bool $isValid, bool $strictHostValidation = true): void
     {
-        $this->assertEquals($isValid, Validator::fullyQualifiedDomainName($domain));
+        $this->assertEquals($isValid, Validator::fullyQualifiedDomainName($domain, $strictHostValidation));
     }
 
     public function testHostName(): void

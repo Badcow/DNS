@@ -43,18 +43,31 @@ class Validator
     }
 
     /**
+     * Validate the string as a valid domain name, without the strict character checking of hostName().
+     */
+    public static function domainName(string $name): bool
+    {
+        return (bool) filter_var($name, FILTER_VALIDATE_DOMAIN);
+    }
+
+    /**
      * Validate the string is a Fully Qualified Domain Name.
      */
-    public static function fullyQualifiedDomainName(string $name): bool
+    public static function fullyQualifiedDomainName(string $name, bool $strictHostValidation = true): bool
     {
         if ('.' === $name) {
             return true;
         }
+
         if ('.' !== substr($name, -1, 1)) {
             return false;
         }
 
-        return self::hostName($name);
+        if ($strictHostValidation) {
+            return self::hostName($name);
+        }
+
+        return self::domainName($name);
     }
 
     /**
