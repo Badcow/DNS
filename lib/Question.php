@@ -48,7 +48,7 @@ class Question
      */
     public function setName($name): void
     {
-        if (!Validator::fullyQualifiedDomainName($name)) {
+        if (!Validator::fullyQualifiedDomainName($name, false)) {
             throw new InvalidArgumentException(sprintf('"%s" is not a fully qualified domain name.', $name));
         }
 
