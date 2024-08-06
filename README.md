@@ -7,7 +7,6 @@ style text files to the PHP objects, and builders to create aesthetically pleasi
 The library can parse and encode DNS messages enabling developers to create DNS client/server platforms in pure PHP.
 
 ## Build Status
-[![Build Status: PHP 7](https://github.com/Badcow/DNS/workflows/PHP%207/badge.svg)](https://github.com/Badcow/DNS/actions?query=workflow%3A%22PHP+7%22)
 [![Build Status: PHP 8](https://github.com/Badcow/DNS/workflows/PHP%208/badge.svg)](https://github.com/Badcow/DNS/actions?query=workflow%3A%22PHP+8%22)
 
 ## Contents
