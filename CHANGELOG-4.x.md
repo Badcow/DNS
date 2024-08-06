@@ -1,6 +1,8 @@
 CHANGELOG for 4.x
 =================
-## 4.x
+## 4.3.0
+* [Pull #118](https://github.com/Badcow/DNS/pull/118/) Remove strict hostname validator for `Question::setName`.
+(Thank you, [tomschlick](https://github.com/tomschlick))
 * [Pull #114](https://github.com/Badcow/DNS/pull/114/) Fix broken tests. (Thank you, [srsbiz](https://github.com/srsbiz))
 ## 4.2.1
 * [Pull #113](https://github.com/Badcow/DNS/pull/113/) Fix to prevent double stripping of backslashes. (Thank you, [SloEddy](https://github.com/SloEddy))
