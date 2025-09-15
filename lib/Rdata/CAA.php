@@ -118,7 +118,7 @@ class CAA implements RdataInterface
         }
 
         return sprintf(
-            '%d %s "%s"',
+            '%d %s %s',
             $this->flag,
             $this->tag ?? '',
             $this->value ?? ''
