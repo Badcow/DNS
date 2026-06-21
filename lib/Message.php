@@ -138,8 +138,12 @@ class Message
         return $res;
     }
 
-    public static function decodeName(string $string, int &$offset = 0): string
+    public static function decodeName(string $string, int &$offset = 0, int $depth = 0): string
     {
+        if ($depth > 127) {
+            throw new \UnexpectedValueException('DNS name has too many compression pointers');
+        }
+
         $len = ord($string[$offset]);
         ++$offset;
 
@@ -163,7 +167,7 @@ class Message
             $offset += $len;
             $len = ord($string[$offset]);
             if ($len & 0b11000000) {
-                $name .= self::decodeName($string, $offset);
+                $name .= self::decodeName($string, $offset, $depth + 1);
                 break;
             }
 
