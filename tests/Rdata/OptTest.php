@@ -59,6 +59,15 @@ class OptTest extends TestCase
         $opt->fromWire($wire);
     }
 
+    public function testFromWire3(): void
+    {
+        $wire = '';
+
+        $opt = new OPT();
+        $opt->fromWire($wire);
+        $this->assertCount(0, $opt->getOptions());
+    }
+
     public function testToWire(): void
     {
         $options = [];
