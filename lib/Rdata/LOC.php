@@ -168,7 +168,9 @@ class LOC implements RdataInterface
 
     public function toText(): string
     {
-        return sprintf(
+        $locale = setlocale(LC_NUMERIC, '0');
+        setlocale(LC_NUMERIC, 'en_IN');
+        $sprintf = sprintf(
             '%s %s %.2fm %.2fm %.2fm %.2fm',
             $this->getLatitude(self::FORMAT_DMS),
             $this->getLongitude(self::FORMAT_DMS),
@@ -177,6 +179,10 @@ class LOC implements RdataInterface
             $this->horizontalPrecision,
             $this->verticalPrecision
         );
+        if (false !== $locale) {
+            setlocale(LC_NUMERIC, $locale);
+        }
+        return $sprintf;
     }
 
     /**
@@ -193,7 +199,13 @@ class LOC implements RdataInterface
             $h = ($decimal < 0) ? 'W' : 'E';
         }
 
-        return sprintf('%d %d %.3f %s', $d, $m, $s, $h);
+        $locale = setlocale(LC_NUMERIC, '0');
+        setlocale(LC_NUMERIC, 'en_IN');
+        $sprintf = sprintf('%d %d %.3f %s', $d, $m, $s, $h);
+        if (false !== $locale) {
+            setlocale(LC_NUMERIC, $locale);
+        }
+        return $sprintf;
     }
 
     public function toWire(): string

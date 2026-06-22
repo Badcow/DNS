@@ -134,6 +134,9 @@ class AlignedRdataFormatters
 
     public static function LOC(LOC $loc, int $padding): string
     {
+
+        $locale = setlocale(LC_NUMERIC, '0');
+        setlocale(LC_NUMERIC, 'en_IN');
         $parts = [
             'LATITUDE' => (string) $loc->getLatitude(LOC::FORMAT_DMS),
             'LONGITUDE' => (string) $loc->getLongitude(LOC::FORMAT_DMS),
@@ -142,6 +145,10 @@ class AlignedRdataFormatters
             'HORIZONTAL PRECISION' => sprintf('%.2fm', $loc->getHorizontalPrecision()),
             'VERTICAL PRECISION' => sprintf('%.2fm', $loc->getVerticalPrecision()),
         ];
+        if (false !== $locale) {
+            setlocale(LC_NUMERIC, $locale);
+        }
+
 
         $longestVarLength = max(array_map('strlen', $parts));
         $rdata = Tokens::OPEN_BRACKET.Tokens::LINE_FEED;
