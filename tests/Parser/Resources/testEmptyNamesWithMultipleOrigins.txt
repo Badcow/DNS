@@ -1,0 +1,10 @@
+$ORIGIN mydomain.biz.
+$TTL 3600
+
+test A 192.168.1.42
+     A 192.168.1.43
+
+$ORIGIN _subdomain.mydomain.biz.
+
+test A 192.168.2.42
+     A 192.168.2.43

@@ -532,6 +532,20 @@ DNS;
     }
 
     /**
+     * Parser handles empty names with multiple $ORIGINS.
+     *
+     * @throws ParseException|\Exception
+     */
+    public function testParserHandlesEmptyNamesWithMultipleOrigins(): void
+    {
+        $file = NormaliserTest::readFile(__DIR__.'/Resources/testEmptyNamesWithMultipleOrigins.txt');
+        $expectation = NormaliserTest::readFile(__DIR__.'/Resources/testEmptyNamesWithMultipleOrigins_expectation.txt');
+        $zone = Parser::parse('mydomain.biz.', $file);
+
+        $this->assertEquals($expectation, ZoneBuilder::build($zone));
+    }
+
+    /**
      * Parser handles $ORIGIN . correctly.
      *
      * @throws ParseException|\Exception
