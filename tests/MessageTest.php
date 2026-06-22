@@ -267,6 +267,16 @@ class MessageTest extends TestCase
         $this->assertEquals($expectation, $msg->toWire());
     }
 
+    public function testWire9(): void
+    {
+        $expectation = $this->getWireTestData(9);
+        $msg = Message::fromWire($this->getWireTestData(9));
+        $additionals = $msg->getAdditionals();
+        $this->assertCount(1, $additionals);
+        $this->assertInstanceOf(OPT::class, $additionals[0]->getRdata());
+        $this->assertEquals($expectation, $msg->toWire());
+    }
+
     public function testWire10(): void
     {
         $this->expectException(UnexpectedValueException::class);
