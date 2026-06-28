@@ -42,15 +42,16 @@ class SpfTest extends TestCase
 
     public function testWire(): void
     {
-        $wireFormat = chr(49).'v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all';
-        $offset = 1;
-        $rdLength = 49;
+        $text = 'v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all';
+        $wireFormat = chr(strlen($text)).$text;
 
         $spf = new SPF();
-        $spf->setText('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all');
+        $spf->setText($text);
+        $this->assertEquals($wireFormat, $spf->toWire());
 
+        $offset = 0;
         $fromWire = new SPF();
-        $fromWire->fromWire($wireFormat, $offset, $rdLength);
+        $fromWire->fromWire($wireFormat, $offset, strlen($wireFormat));
         $this->assertEquals($spf, $fromWire);
     }
 
