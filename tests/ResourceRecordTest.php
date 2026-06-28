@@ -121,6 +121,19 @@ class ResourceRecordTest extends TestCase
         $this->assertEquals($expectation, $rr->toWire());
     }
 
+    public function testToWireNameWithUnderscore(): void
+    {
+        $rr = new ResourceRecord();
+        $rr->setName('_sip._tcp.example.com.');
+        $rr->setClass(Classes::INTERNET);
+        $rr->setRdata(Factory::SRV(0, 5, 5060, 'sip.example.com.'));
+        $rr->setTtl(3600);
+
+        $decoded = ResourceRecord::fromWire($rr->toWire());
+
+        $this->assertEquals('_sip._tcp.example.com.', $decoded->getName());
+    }
+
     public function dataProviderForTestToWireThrowsExceptionsIfValuesAreNotSet(): array
     {
         $rr_noName = new ResourceRecord();
