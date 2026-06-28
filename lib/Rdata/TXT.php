@@ -60,14 +60,26 @@ class TXT implements RdataInterface
 
     public function toWire(): string
     {
-        return $this->text ?? '';
+        $wire = '';
+        foreach (str_split($this->text ?? '', 255) as $chunk) {
+            $wire .= chr(strlen($chunk)).$chunk;
+        }
+
+        return '' === $wire ? "\x00" : $wire;
     }
 
     public function fromWire(string $rdata, int &$offset = 0, ?int $rdLength = null): void
     {
         $rdLength = $rdLength ?? strlen($rdata);
-        $this->setText(substr($rdata, $offset, $rdLength));
-        $offset += $rdLength;
+        $end = $offset + $rdLength;
+        $text = '';
+        while ($offset < $end) {
+            $length = ord($rdata[$offset]);
+            ++$offset;
+            $text .= substr($rdata, $offset, $length);
+            $offset += $length;
+        }
+        $this->setText($text, true);
     }
 
     public function fromText(string $text): void
