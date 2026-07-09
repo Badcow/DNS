@@ -209,7 +209,7 @@ class ResourceRecord
             throw new UnsetValueException('ResourceRecord TTL has not been set.');
         }
 
-        if (!Validator::fullyQualifiedDomainName($this->name)) {
+        if (!Validator::fullyQualifiedDomainName($this->name, false)) {
             throw new InvalidArgumentException(sprintf('"%s" is not a fully qualified domain name.', $this->name));
         }
 
