@@ -253,6 +253,10 @@ class Parser
      */
     private function appendOrigin(string $subdomain): string
     {
+        if (empty($subdomain)) {
+            return $subdomain;
+        }
+
         if ($this->origin === $this->zone->getName()) {
             return $subdomain;
         }
