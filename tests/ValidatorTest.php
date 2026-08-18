@@ -18,9 +18,8 @@ use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\NS;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Validator;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-use RuntimeException;
+use PHPUnit\Framework\TestCase;
 
 class ValidatorTest extends TestCase
 {
@@ -158,7 +157,7 @@ class ValidatorTest extends TestCase
     {
         $zone = TestZone::buildTestZone();
 
-        //Remove the NS records.
+        // Remove the NS records.
         foreach ($zone as $resourceRecord) {
             if (NS::TYPE === $resourceRecord->getType()) {
                 $zone->remove($resourceRecord);
@@ -310,13 +309,13 @@ class ValidatorTest extends TestCase
 
     public function testNoAliasInZone(): void
     {
-        //Pass case
+        // Pass case
         $txt1 = new ResourceRecord();
         $txt1->setName('www');
         $txt1->setRdata(Factory::TXT('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
         $txt1->setClass(Classes::INTERNET);
 
-        //Fail case
+        // Fail case
         $txt2 = new ResourceRecord();
         $txt2->setName('alias');
         $txt2->setRdata(Factory::TXT('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
@@ -336,7 +335,7 @@ class ValidatorTest extends TestCase
         $this->assertTrue(Validator::isUnsignedInteger(65535, 16));
         $this->assertTrue(Validator::isUnsignedInteger(0, 16));
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
         Validator::isUnsignedInteger(10, 64);
     }
 

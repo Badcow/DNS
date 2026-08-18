@@ -73,7 +73,7 @@ class CaaTest extends TestCase
 
     public function testWire(): void
     {
-        $expectation = chr(0).chr(5).'iodef'.'mailto:security@example.com';
+        $expectation = chr(0).chr(5).'iodefmailto:security@example.com';
         $caa = new CAA();
         $caa->setFlag(0);
         $caa->setTag(CAA::TAG_IODEF);

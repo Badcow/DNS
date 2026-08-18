@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\PTR;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 class PtrTest extends TestCase
 {

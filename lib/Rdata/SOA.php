@@ -16,7 +16,6 @@ namespace Badcow\DNS\Rdata;
 use Badcow\DNS\Message;
 use Badcow\DNS\Parser\TimeFormat;
 use Badcow\DNS\Parser\Tokens;
-use InvalidArgumentException;
 
 /**
  * @see https://tools.ietf.org/html/rfc1035#section-3.3.13
@@ -90,9 +89,6 @@ class SOA implements RdataInterface
         $this->expire = $expire;
     }
 
-    /**
-     * @return int
-     */
     public function getExpire(): ?int
     {
         return $this->expire;
@@ -103,9 +99,6 @@ class SOA implements RdataInterface
         $this->minimum = $minimum;
     }
 
-    /**
-     * @return int
-     */
     public function getMinimum(): ?int
     {
         return $this->minimum;
@@ -116,9 +109,6 @@ class SOA implements RdataInterface
         $this->mname = $mname;
     }
 
-    /**
-     * @return string
-     */
     public function getMname(): ?string
     {
         return $this->mname;
@@ -129,9 +119,6 @@ class SOA implements RdataInterface
         $this->refresh = $refresh;
     }
 
-    /**
-     * @return int
-     */
     public function getRefresh(): ?int
     {
         return $this->refresh;
@@ -142,9 +129,6 @@ class SOA implements RdataInterface
         $this->retry = (int) $retry;
     }
 
-    /**
-     * @return int
-     */
     public function getRetry(): ?int
     {
         return $this->retry;
@@ -155,9 +139,6 @@ class SOA implements RdataInterface
         $this->rname = $rname;
     }
 
-    /**
-     * @return string
-     */
     public function getRname(): ?string
     {
         return $this->rname;
@@ -168,9 +149,6 @@ class SOA implements RdataInterface
         $this->serial = $serial;
     }
 
-    /**
-     * @return int
-     */
     public function getSerial(): ?int
     {
         return $this->serial;
@@ -178,14 +156,14 @@ class SOA implements RdataInterface
 
     public function toText(): string
     {
-        if (!isset($this->mname) ||
-            !isset($this->rname) ||
-            !isset($this->serial) ||
-            !isset($this->refresh) ||
-            !isset($this->retry) ||
-            !isset($this->expire) ||
-            !isset($this->minimum)) {
-            throw new InvalidArgumentException('All parameters of SOA must be set.');
+        if (!isset($this->mname)
+            || !isset($this->rname)
+            || !isset($this->serial)
+            || !isset($this->refresh)
+            || !isset($this->retry)
+            || !isset($this->expire)
+            || !isset($this->minimum)) {
+            throw new \InvalidArgumentException('All parameters of SOA must be set.');
         }
 
         return sprintf(
@@ -202,14 +180,14 @@ class SOA implements RdataInterface
 
     public function toWire(): string
     {
-        if (!isset($this->mname) ||
-            !isset($this->rname) ||
-            !isset($this->serial) ||
-            !isset($this->refresh) ||
-            !isset($this->retry) ||
-            !isset($this->expire) ||
-            !isset($this->minimum)) {
-            throw new InvalidArgumentException('All parameters of SOA must be set.');
+        if (!isset($this->mname)
+            || !isset($this->rname)
+            || !isset($this->serial)
+            || !isset($this->refresh)
+            || !isset($this->retry)
+            || !isset($this->expire)
+            || !isset($this->minimum)) {
+            throw new \InvalidArgumentException('All parameters of SOA must be set.');
         }
 
         return

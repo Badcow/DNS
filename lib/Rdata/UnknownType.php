@@ -36,17 +36,11 @@ class UnknownType implements RdataInterface
         $this->typeCode = $typeCode;
     }
 
-    /**
-     * @return string
-     */
     public function getData(): ?string
     {
         return $this->data;
     }
 
-    /**
-     * @param string $data
-     */
     public function setData(?string $data): void
     {
         $this->data = $data;

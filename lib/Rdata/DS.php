@@ -15,7 +15,6 @@ namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
-use InvalidArgumentException;
 
 class DS implements RdataInterface
 {
@@ -105,7 +104,7 @@ class DS implements RdataInterface
     public function calculateDigest(string $owner, DNSKEY $dnskey): void
     {
         if (static::DIGEST_SHA1 !== $this->digestType) {
-            throw new InvalidArgumentException('Can only calculate SHA-1 digests.');
+            throw new \InvalidArgumentException('Can only calculate SHA-1 digests.');
         }
 
         $this->digest = sha1(Message::encodeName(strtolower($owner)).$dnskey->toWire(), true);
@@ -134,7 +133,7 @@ class DS implements RdataInterface
         $this->setAlgorithm((int) array_shift($rdata));
         $this->setDigestType((int) array_shift($rdata));
         if (false === $digest = hex2bin((string) array_shift($rdata))) {
-            throw new InvalidArgumentException(sprintf('The digest is not a valid hexadecimal string.'));
+            throw new \InvalidArgumentException(sprintf('The digest is not a valid hexadecimal string.'));
         }
         $this->setDigest($digest);
     }

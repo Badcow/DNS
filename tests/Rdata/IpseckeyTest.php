@@ -16,8 +16,8 @@ namespace Badcow\DNS\Tests\Rdata;
 use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\IPSECKEY;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 class IpseckeyTest extends TestCase
 {

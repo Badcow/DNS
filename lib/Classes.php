@@ -38,7 +38,7 @@ class Classes
     ];
 
     /**
-     * @const string[]
+     * @var string[]
      */
     public const IDS_CLASSES = [
         1 => 'IN',

@@ -19,7 +19,6 @@ use Badcow\DNS\Rdata\RdataInterface;
 use Badcow\DNS\Rdata\Types;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
-use Exception;
 
 class Parser
 {
@@ -313,14 +312,14 @@ class Parser
 
         list($path, $domain) = $this->extractIncludeArguments($iterator->getRemainingAsString());
 
-        //Copy the state of the parser so as to revert back once included file has been parsed.
+        // Copy the state of the parser so as to revert back once included file has been parsed.
         $_lastStatedDomain = $this->lastStatedDomain;
         $_lastStatedClass = $this->lastStatedClass;
         $_lastStatedTtl = $this->lastStatedTtl;
         $_origin = $this->origin;
         $_ttl = $this->ttl;
 
-        //Parse the included record.
+        // Parse the included record.
         $this->origin = $domain ?? $_origin;
         $childRecord = $this->fetcher->fetch($path);
 
@@ -330,7 +329,7 @@ class Parser
 
         $this->processZone($childRecord);
 
-        //Revert the parser.
+        // Revert the parser.
         $this->lastStatedDomain = $_lastStatedDomain;
         $this->lastStatedClass = $_lastStatedClass;
         $this->lastStatedTtl = $_lastStatedTtl;
@@ -379,9 +378,9 @@ class Parser
             return false;
         }
 
-        $isName = $this->isTTL($iterator) ||
-            $this->isClass($iterator, 'DOMAIN') ||
-            $this->isType($iterator);
+        $isName = $this->isTTL($iterator)
+            || $this->isClass($iterator, 'DOMAIN')
+            || $this->isType($iterator);
         $iterator->prev();
 
         if (!$isName) {
@@ -483,7 +482,7 @@ class Parser
         $comment = null;
 
         while ($string->valid()) {
-            //If a semicolon is within double quotes, it will not be treated as the beginning of a comment.
+            // If a semicolon is within double quotes, it will not be treated as the beginning of a comment.
             $entry .= $this->extractDoubleQuotedText($string);
 
             if ($string->is(Tokens::SEMICOLON)) {
@@ -513,7 +512,7 @@ class Parser
         $string->next();
 
         while ($string->isNot(Tokens::DOUBLE_QUOTES)) {
-            //If the current char is a backslash, treat the next char as being escaped.
+            // If the current char is a backslash, treat the next char as being escaped.
             if ($string->is(Tokens::BACKSLASH)) {
                 $entry .= $string->current();
                 $string->next();
@@ -539,7 +538,7 @@ class Parser
 
         try {
             return Factory::textToRdataType($type, $iterator->getRemainingAsString());
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             throw new ParseException(sprintf('Could not extract Rdata from resource record "%s".', (string) $iterator), null, $exception);
         }
     }

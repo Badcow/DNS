@@ -27,7 +27,6 @@ use Badcow\DNS\Rdata\UnsupportedTypeException;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\UnsetValueException;
 use PHPUnit\Framework\TestCase;
-use UnexpectedValueException;
 
 class MessageTest extends TestCase
 {
@@ -279,7 +278,7 @@ class MessageTest extends TestCase
 
     public function testWire10(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(\UnexpectedValueException::class);
         Message::fromWire($this->getWireTestData(10));
     }
 

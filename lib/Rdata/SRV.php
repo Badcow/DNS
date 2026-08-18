@@ -76,9 +76,6 @@ class SRV implements RdataInterface
      */
     private $target;
 
-    /**
-     * @return int
-     */
     public function getPriority(): ?int
     {
         return $this->priority;
@@ -96,9 +93,6 @@ class SRV implements RdataInterface
         $this->priority = $priority;
     }
 
-    /**
-     * @return int
-     */
     public function getWeight(): ?int
     {
         return $this->weight;
@@ -116,9 +110,6 @@ class SRV implements RdataInterface
         $this->weight = $weight;
     }
 
-    /**
-     * @return int
-     */
     public function getPort(): ?int
     {
         return $this->port;
