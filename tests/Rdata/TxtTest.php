@@ -76,15 +76,44 @@ class TxtTest extends TestCase
         $this->assertEquals($expectation, $txt->getText());
     }
 
-    public function testWire(): void
+    public function testWire1(): void
     {
-        $expectation = 'This is some text. It\'s a nice piece of text.';
+        $text = 'This is some text. It\'s a nice piece of text.';
         $txt = new TXT();
-        $txt->setText($expectation);
+        $txt->setText($text);
 
-        $this->assertEquals($expectation, $txt->toWire());
+        $this->assertEquals(chr(strlen($text)).$text, $txt->toWire());
+
         $fromWire = new TXT();
-        $fromWire->fromWire($expectation);
+        $fromWire->fromWire($txt->toWire());
         $this->assertEquals($txt, $fromWire);
+    }
+
+    public function testWire2(): void
+    {
+        $text = str_repeat('a', 255).str_repeat('b', 100);
+        $txt = new TXT();
+        $txt->setText($text);
+
+        $this->assertEquals(
+            chr(255).str_repeat('a', 255).chr(100).str_repeat('b', 100),
+            $txt->toWire()
+        );
+
+        $fromWire = new TXT();
+        $fromWire->fromWire($txt->toWire());
+        $this->assertEquals($text, $fromWire->getText());
+    }
+
+    public function testWire3(): void
+    {
+        $txt = new TXT();
+        $txt->setText('');
+
+        $this->assertEquals("\x00", $txt->toWire());
+
+        $fromWire = new TXT();
+        $fromWire->fromWire($txt->toWire());
+        $this->assertEquals('', $fromWire->getText());
     }
 }
