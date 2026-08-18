@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd"
         colors="true"
         bootstrap="vendor/autoload.php"
-        convertDeprecationsToExceptions="false"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
-  <coverage>
+        failOnDeprecation="true"
+        failOnRisky="true"
+        failOnWarning="true"
+        displayDetailsOnPhpunitDeprecations="true"
+>
+  <source ignoreSuppressionOfDeprecations="true">
     <include>
       <directory>./lib</directory>
     </include>
@@ -13,7 +17,7 @@
       <directory>./tests</directory>
       <directory>./vendor</directory>
     </exclude>
-  </coverage>
+  </source>
   <php>
     <ini name="error_reporting" value="-1"/>
     <ini name="date.timezone" value="UTC"/>

@@ -16,10 +16,11 @@ namespace Badcow\DNS\Tests\Rdata;
 use Badcow\DNS\Rdata\DHCID;
 use Badcow\DNS\Rdata\Factory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DhcidTest extends TestCase
 {
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
             //[Text,                                             IDType, Identifier,                                  FQDN]
@@ -82,9 +83,7 @@ class DhcidTest extends TestCase
         $dhcid->calculateDigest();
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testToText(string $text, int $identifierType, string $identifier, string $fqdn): void
     {
         $dhcid = new DHCID();
@@ -95,9 +94,7 @@ class DhcidTest extends TestCase
         $this->assertEquals($text, $dhcid->toText());
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testToFromWire(string $text, int $identifierType, string $identifier, string $fqdn): void
     {
         $expectation = new DHCID();
@@ -115,10 +112,9 @@ class DhcidTest extends TestCase
     }
 
     /**
-     * @dataProvider getDataProvider
-     *
      * @throws \Exception
      */
+    #[DataProvider('getDataProvider')]
     public function testFromText(string $text, int $identifierType, string $identifier, string $fqdn): void
     {
         $expectation = new DHCID();
@@ -140,9 +136,7 @@ class DhcidTest extends TestCase
         $dhcid->fromText($text.'%');
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testFactory(string $text, int $identifierType, string $identifier, string $fqdn): void
     {
         $dhcid = Factory::DHCID(null, $identifierType, $identifier, $fqdn);

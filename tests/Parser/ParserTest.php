@@ -33,6 +33,7 @@ use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
 use Badcow\DNS\ZoneBuilder;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ParserTest extends TestCase
 {
@@ -548,7 +549,7 @@ DNS;
         $this->assertEquals($expectation, ZoneBuilder::build($zone));
     }
 
-    public function dp_testParserHandlesIncludeDirective(): array
+    public static function dp_testParserHandlesIncludeDirective(): array
     {
         $baseDir = __DIR__.'/Resources/IncludeControlEntryTests/';
 
@@ -561,10 +562,10 @@ DNS;
     /**
      * Parser imports files specified by the $INCLUDE directive.
      *
-     * @dataProvider dp_testParserHandlesIncludeDirective
      *
      * @throws ParseException|\Exception
      */
+    #[DataProvider('dp_testParserHandlesIncludeDirective')]
     public function testParserHandlesIncludeDirective(string $zoneName, int $ttl, string $zoneFilePath, string $expectationPath, int $commentOptions): void
     {
         $zoneFetcher = new class() implements ZoneFileFetcherInterface {

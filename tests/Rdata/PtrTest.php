@@ -15,10 +15,11 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\PTR;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PtrTest extends TestCase
 {
-    public function provider_expandIPv6(): array
+    public static function provider_expandIPv6(): array
     {
         return [
             ['0000:0000:0000:0000:0000:0000:0000:0001', '::1'],
@@ -31,26 +32,22 @@ class PtrTest extends TestCase
         ];
     }
 
-    public function provider_contractIPv6(): array
+    public static function provider_contractIPv6(): array
     {
-        return array_merge($this->provider_expandIPv6(), [
+        return array_merge(self::provider_expandIPv6(), [
             ['2001:db8:0:0:f:0:0:0', '2001:db8:0:0:f::'],
             ['2001:db8::ff00:42:8329', '2001:db8::ff00:42:8329'],
             ['2001:db8:a:bac:8099:d:f:9', '2001:db8:a:bac:8099:d:f:9'],
         ]);
     }
 
-    /**
-     * @dataProvider provider_expandIPv6
-     */
+    #[DataProvider('provider_expandIPv6')]
     public function testExpandIpv6(string $expectation, string $ip): void
     {
         $this->assertEquals($expectation, PTR::expandIpv6($ip));
     }
 
-    /**
-     * @dataProvider provider_contractIPv6
-     */
+    #[DataProvider('provider_contractIPv6')]
     public function testContractIpv6(string $ip, string $expectation): void
     {
         $this->assertEquals($expectation, PTR::contractIpv6($ip));
