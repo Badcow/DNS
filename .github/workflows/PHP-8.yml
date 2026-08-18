@@ -39,3 +39,6 @@ jobs:
 
       - name: Test Coverage
         run: vendor/bin/phpunit --coverage-text
+
+      - name: PHP Coding Standards
+        run: vendor/bin/php-cs-fixer check
