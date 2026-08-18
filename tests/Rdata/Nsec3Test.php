@@ -16,8 +16,8 @@ namespace Badcow\DNS\Tests\Rdata;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\NSEC3;
 use Base32\Base32Hex;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 class Nsec3Test extends TestCase
 {

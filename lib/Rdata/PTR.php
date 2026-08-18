@@ -84,9 +84,9 @@ class PTR extends CNAME
      *
      * @param string $ip IPv6 address
      *
-     * @throws \InvalidArgumentException
-     *
      * @return string Contracted IPv6 address
+     *
+     * @throws \InvalidArgumentException
      */
     public static function contractIpv6(string $ip): string
     {

@@ -15,15 +15,15 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\URI;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 class UriTest extends TestCase
 {
     public static function dataProvider_testExceptions(): array
     {
         return [
-            //[Priority, Weight, Target, ExpectedException, ExpectedExceptionMessage]
+            // [Priority, Weight, Target, ExpectedException, ExpectedExceptionMessage]
             [-1, 1, 'http://www.example.com/path', \InvalidArgumentException::class, 'Priority must be an unsigned integer on the range [0-65535]'],
             [0x10000, 10, 'https://tools.ietf.org/html/rfc7553', \InvalidArgumentException::class, 'Priority must be an unsigned integer on the range [0-65535]'],
             [10, -1, 'http://www.example.com/path', \InvalidArgumentException::class, 'Weight must be an unsigned integer on the range [0-65535]'],

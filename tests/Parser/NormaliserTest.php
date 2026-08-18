@@ -215,7 +215,7 @@ TXT;
             throw new \Exception(sprintf('Unable to read file "%s".', $filename));
         }
 
-        //Remove Windows carriage returns.
+        // Remove Windows carriage returns.
         $file = str_replace("\r", '', $file);
 
         return $file;

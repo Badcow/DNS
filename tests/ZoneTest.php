@@ -77,12 +77,12 @@ class ZoneTest extends TestCase
         $loc = new ResourceRecord();
         $loc->setName('canberra');
         $loc->setRdata(Factory::LOC(
-            -35.3075,   //Lat
-            149.1244,   //Lon
-            500,        //Alt
-            20.12,      //Size
-            200.3,      //HP
-            300.1       //VP
+            -35.3075,   // Lat
+            149.1244,   // Lon
+            500,        // Alt
+            20.12,      // Size
+            200.3,      // HP
+            300.1       // VP
         ));
         $loc->setComment('This is Canberra');
 
@@ -132,7 +132,7 @@ class ZoneTest extends TestCase
         ZoneBuilder::fillOutZone($zone);
         $expectation = file_get_contents(__DIR__.'/Resources/example.com_filled-out.txt');
 
-        //This is a fix for Windows systems that may expect a carriage return char.
+        // This is a fix for Windows systems that may expect a carriage return char.
         $expectation = str_replace("\r", '', $expectation);
 
         $this->assertEquals($expectation, $alignedBuilder->build($zone));
@@ -150,7 +150,7 @@ class ZoneTest extends TestCase
         $this->assertFalse($zone->remove($rr));
         $this->assertFalse($zone->contains($rr));
 
-        //Test Zone:offsetSet()
+        // Test Zone:offsetSet()
         $this->assertArrayNotHasKey(0, $zone);
         $zone[0] = $rr;
         $this->assertArrayHasKey(0, $zone);

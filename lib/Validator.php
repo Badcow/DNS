@@ -76,8 +76,8 @@ class Validator
      */
     public static function resourceRecordName(string $name): bool
     {
-        return strlen($name) < 254 &&
-            (1 === preg_match('/(?:^(?:\*\.)?((?!-)[a-z0-9_\-]{1,63}(?<!-)\.?){1,127}$)|^@$|^\*$/i', $name));
+        return strlen($name) < 254
+            && (1 === preg_match('/(?:^(?:\*\.)?((?!-)[a-z0-9_\-]{1,63}(?<!-)\.?){1,127}$)|^@$|^\*$/i', $name));
     }
 
     /**
@@ -183,7 +183,7 @@ class Validator
         }
 
         $octets = explode('.', $matches[1]);
-        array_pop($octets); //Remove the last decimal from the array
+        array_pop($octets); // Remove the last decimal from the array
 
         foreach ($octets as $octet) {
             if ((int) $octet > 255) {

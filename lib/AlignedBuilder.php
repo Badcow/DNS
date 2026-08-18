@@ -179,31 +179,31 @@ class AlignedBuilder
         $a_rdata = (null === $a->getRdata()) ? '' : $a->getRdata()->toText();
         $b_rdata = (null === $b->getRdata()) ? '' : $b->getRdata()->toText();
 
-        //If the types are the same, do a simple alphabetical comparison.
+        // If the types are the same, do a simple alphabetical comparison.
         if ($a->getType() === $b->getType()) {
             return strcmp($a->getName().$a_rdata, $b->getName().$b_rdata);
         }
 
-        //Find the precedence (if any) for the two types.
+        // Find the precedence (if any) for the two types.
         $_a = array_search($a->getType(), $this->order);
         $_b = array_search($b->getType(), $this->order);
 
-        //If neither types have defined precedence.
+        // If neither types have defined precedence.
         if (!is_int($_a) && !is_int($_b)) {
             return strcmp($a->getType() ?? '', $b->getType() ?? '');
         }
 
-        //If both types have defined precedence.
+        // If both types have defined precedence.
         if (is_int($_a) && is_int($_b)) {
             return $_a - $_b;
         }
 
-        //If only $b has defined precedence.
+        // If only $b has defined precedence.
         if (false === $_a) {
             return 1;
         }
 
-        //If only $a has defined precedence.
+        // If only $a has defined precedence.
         return -1;
     }
 

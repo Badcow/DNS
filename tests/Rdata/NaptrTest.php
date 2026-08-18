@@ -15,15 +15,15 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\NAPTR;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 class NaptrTest extends TestCase
 {
     public static function getDataProvider(): array
     {
         return [
-            //Text                                                 Order Pref Flags Service             Regexp                                 Replacement
+            // Text                                                Order Pref Flags Service             Regexp                                 Replacement
             ['100 50 "s" "http+N2L+N2C+N2R" "" www.example.com.',  100,  50,  's',  'http+N2L+N2C+N2R', '',                                    'www.example.com.'],
             ['100 10 "" "" "!^urn:cid:.+@([^\.]+\.)(.*)$!\2!i" .', 100,  10,  '',   '',                 '!^urn:cid:.+@([^\.]+\.)(.*)$!\2!i',   '.'],
             ['100 50 "s" "SIP+D2U" "" _sip2._udp.testnaptr.at.',   100,  50,  's',  'SIP+D2U',          '',                                    '_sip2._udp.testnaptr.at.'],

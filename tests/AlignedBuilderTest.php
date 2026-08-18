@@ -104,7 +104,7 @@ DNS;
 
     protected function getExpected(): string
     {
-        //This is a fix for Windows systems that may expect a carriage return char.
+        // This is a fix for Windows systems that may expect a carriage return char.
         return str_replace("\r", '', $this->expected);
     }
 

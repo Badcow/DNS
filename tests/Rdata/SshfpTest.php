@@ -15,15 +15,15 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\SSHFP;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 class SshfpTest extends TestCase
 {
     public static function dataProvider_testExceptions(): array
     {
         return [
-            //[Algorithm, FPType, Fingerprint, ExpectedException, ExpectedExceptionMessage]
+            // [Algorithm, FPType, Fingerprint, ExpectedException, ExpectedExceptionMessage]
             [-1, 255, '123456789abcdef67890123456789abcdef67890', \InvalidArgumentException::class, 'Algorithm must be an 8-bit integer between 0 and 255.'],
             [256, 255, '123456789abcdef67890123456789abcdef67890', \InvalidArgumentException::class, 'Algorithm must be an 8-bit integer between 0 and 255.'],
             [0, -1, '123456789abcdef67890123456789abcdef67890', \InvalidArgumentException::class, 'Fingerprint type must be an 8-bit integer between 0 and 255.'],

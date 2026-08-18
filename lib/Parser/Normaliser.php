@@ -47,7 +47,7 @@ class Normaliser
      */
     public function __construct(string $zone, int $commentOptions = Comments::NONE)
     {
-        //Remove Windows line feeds and tabs
+        // Remove Windows line feeds and tabs
         $zone = str_replace([Tokens::CARRIAGE_RETURN, Tokens::TAB], ['', Tokens::SPACE], $zone);
 
         $this->string = new StringIterator($zone);
@@ -123,7 +123,7 @@ class Normaliser
                 throw new ParseException('Unbalanced double quotation marks. End of file reached.');
             }
 
-            //If escape character
+            // If escape character
             if ($this->string->is(Tokens::BACKSLASH)) {
                 $this->append();
             }
@@ -197,9 +197,9 @@ class Normaliser
      */
     private function append(): void
     {
-        if (($this->string->is(Tokens::LINE_FEED) || !$this->string->valid()) &&
-            $this->commentOptions &&
-            ('' !== $this->comment || '' !== $this->multilineComments)) {
+        if (($this->string->is(Tokens::LINE_FEED) || !$this->string->valid())
+            && $this->commentOptions
+            && ('' !== $this->comment || '' !== $this->multilineComments)) {
             $this->appendComment();
         }
 
@@ -211,8 +211,8 @@ class Normaliser
     {
         $zone = rtrim($this->normalisedString, Tokens::SPACE);
 
-        //If there is no Resource Record on the line
-        if ((Tokens::LINE_FEED === substr($zone, -1, 1) || 0 === strlen($zone))) {
+        // If there is no Resource Record on the line
+        if (Tokens::LINE_FEED === substr($zone, -1, 1) || 0 === strlen($zone)) {
             if ($this->commentOptions & Comments::ORPHAN) {
                 $this->normalisedString = sprintf('%s;%s', $zone, trim($this->comment));
             }

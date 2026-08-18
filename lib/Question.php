@@ -16,8 +16,6 @@ namespace Badcow\DNS;
 use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Types;
 use Badcow\DNS\Rdata\UnsupportedTypeException;
-use InvalidArgumentException;
-use UnexpectedValueException;
 
 class Question
 {
@@ -44,12 +42,12 @@ class Question
     /**
      * @param string $name
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setName($name): void
     {
         if (!Validator::fullyQualifiedDomainName($name, false)) {
-            throw new InvalidArgumentException(sprintf('"%s" is not a fully qualified domain name.', $name));
+            throw new \InvalidArgumentException(sprintf('"%s" is not a fully qualified domain name.', $name));
         }
 
         $this->name = $name;
@@ -103,7 +101,7 @@ class Question
     public function setClassId(int $classId): void
     {
         if (!Validator::isUnsignedInteger($classId, 16)) {
-            throw new InvalidArgumentException(sprintf('Invalid class: "%s".', $classId));
+            throw new \InvalidArgumentException(sprintf('Invalid class: "%s".', $classId));
         }
 
         $this->classId = $classId;
@@ -120,7 +118,7 @@ class Question
     }
 
     /**
-     * @throws UnexpectedValueException
+     * @throws \UnexpectedValueException
      * @throws UnsupportedTypeException
      */
     public static function fromWire(string $encoded, int &$offset = 0): Question

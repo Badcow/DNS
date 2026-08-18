@@ -120,12 +120,12 @@ DNS;
         $loc = new ResourceRecord();
         $loc->setName('canberra');
         $loc->setRdata(Factory::LOC(
-            -35.3075,   //Lat
-            149.1244,   //Lon
-            500,        //Alt
-            20.12,      //Size
-            200.3,      //HP
-            300.1       //VP
+            -35.3075,   // Lat
+            149.1244,   // Lon
+            500,        // Alt
+            20.12,      // Size
+            200.3,      // HP
+            300.1       // VP
         ));
         $loc->setComment('This is Canberra');
         $loc->setClass(Classes::INTERNET);

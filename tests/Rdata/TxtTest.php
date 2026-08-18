@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\TXT;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 class TxtTest extends TestCase
 {
@@ -31,7 +31,7 @@ class TxtTest extends TestCase
     public static function dp_testToText(): array
     {
         return [
-            //'what is tested' => [$text, $expectation]
+            // 'what is tested' => [$text, $expectation]
             'quotes are escaped' => ['"This is some quoted text". It\'s a nice piece of text.', '"\"This is some quoted text\". It\'s a nice piece of text."'],
             'spaces are wraped in quotes' => [
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel lorem in massa elementum blandit nec sed massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu purus id arcu venenatis elementum in quis enim. Aenean at urna varius sapien dapibus.',
@@ -56,7 +56,7 @@ class TxtTest extends TestCase
     public static function dp_testFromTxt(): array
     {
         return [
-            //'what is tested' => [$text, $expectation]
+            // 'what is tested' => [$text, $expectation]
             'chunked text literal' => ['"Some text;" " another some text"', 'Some text; another some text'],
             'string literal' => ['foobar', 'foobar'],
             'text with space without quotes' => ['foo bar', 'foo'],

@@ -67,7 +67,7 @@ class AplTest extends TestCase
         $expectation_incl = [
             new IPv4Block('192.168.0.0', 23),
             new IPv6Block('2001:acad:1::', 112),
-            ];
+        ];
 
         $expectation_excl = [
             new IPv4Block('192.168.1.64', 28),
@@ -89,20 +89,20 @@ class AplTest extends TestCase
     {
         $expectation = pack(
             'nCCC4nCC',
-            1,                  //Address Family
-            24,                 //Prefix
-            0 +                 //N: "!" is present
-            4,                  //AFD Length
+            1,                  // Address Family
+            24,                 // Prefix
+            0 +                 // N: "!" is present
+            4,                  // AFD Length
             255,
             255,
             255,
-            255,    //AFDPart
+            255,    // AFDPart
 
-            2,                  //Address Family
-            64,                 //Prefix
-            128 +               //N: "!" is present
-            16                  //AFD Length
-        ).inet_pton('2001:acad:dead:beef::'); //AFDPart
+            2,                  // Address Family
+            64,                 // Prefix
+            128 +               // N: "!" is present
+            16                  // AFD Length
+        ).inet_pton('2001:acad:dead:beef::'); // AFDPart
 
         $apl = new APL();
         $apl->addAddressRange(IPBlock::create('255.255.255.255/24'), true);
