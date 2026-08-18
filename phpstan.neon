@@ -1,6 +1,6 @@
 parameters:
   level: max
-  checkMissingIterableValueType: false
-  checkGenericClassInNonGenericObjectType: false
+  #checkMissingIterableValueType: false
+  #checkGenericClassInNonGenericObjectType: false
   paths:
     - lib/

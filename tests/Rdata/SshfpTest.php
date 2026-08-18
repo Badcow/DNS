@@ -16,10 +16,11 @@ namespace Badcow\DNS\Tests\Rdata;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\SSHFP;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SshfpTest extends TestCase
 {
-    public function dataProvider_testExceptions(): array
+    public static function dataProvider_testExceptions(): array
     {
         return [
             //[Algorithm, FPType, Fingerprint, ExpectedException, ExpectedExceptionMessage]
@@ -41,9 +42,7 @@ class SshfpTest extends TestCase
         $this->assertEquals($expectation, $sshfp->toText());
     }
 
-    /**
-     * @dataProvider dataProvider_testExceptions
-     */
+    #[DataProvider('dataProvider_testExceptions')]
     public function testExceptions(int $algorithm, int $fpType, string $fingerprint, string $expectedException, string $expectedExceptionMessage): void
     {
         $this->expectException($expectedException);

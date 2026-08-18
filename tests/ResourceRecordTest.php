@@ -21,6 +21,7 @@ use Badcow\DNS\UnsetValueException;
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ResourceRecordTest extends TestCase
 {
@@ -134,7 +135,7 @@ class ResourceRecordTest extends TestCase
         $this->assertEquals('_sip._tcp.example.com.', $decoded->getName());
     }
 
-    public function dataProviderForTestToWireThrowsExceptionsIfValuesAreNotSet(): array
+    public static function dataProviderForTestToWireThrowsExceptionsIfValuesAreNotSet(): array
     {
         $rr_noName = new ResourceRecord();
         $rr_noName->setClass(null);
@@ -161,10 +162,9 @@ class ResourceRecordTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderForTestToWireThrowsExceptionsIfValuesAreNotSet
-     *
      * @throws UnsetValueException
      */
+    #[DataProvider('dataProviderForTestToWireThrowsExceptionsIfValuesAreNotSet')]
     public function testToWireThrowsExceptionsIfValuesAreNotSet(ResourceRecord $rr, string $exception, string $exceptionMessage): void
     {
         $this->expectException($exception);

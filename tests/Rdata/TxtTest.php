@@ -15,6 +15,7 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\TXT;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TxtTest extends TestCase
 {
@@ -27,7 +28,7 @@ class TxtTest extends TestCase
         $this->assertEquals($text, $txt->getText());
     }
 
-    public function dp_testToText(): array
+    public static function dp_testToText(): array
     {
         return [
             //'what is tested' => [$text, $expectation]
@@ -40,11 +41,10 @@ class TxtTest extends TestCase
     }
 
     /**
-     * @dataProvider dp_testToText
-     *
      * @param string $text        the input text value
      * @param string $expectation The expected output of TXT::toText()
      */
+    #[DataProvider('dp_testToText')]
     public function testToText(string $text, string $expectation): void
     {
         $txt = new TXT();
@@ -53,7 +53,7 @@ class TxtTest extends TestCase
         $this->assertEquals($expectation, $txt->toText());
     }
 
-    public function dp_testFromTxt(): array
+    public static function dp_testFromTxt(): array
     {
         return [
             //'what is tested' => [$text, $expectation]
@@ -66,9 +66,7 @@ class TxtTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dp_testFromTxt
-     */
+    #[DataProvider('dp_testFromTxt')]
     public function testFromTxt(string $text, string $expectation): void
     {
         $txt = new TXT();

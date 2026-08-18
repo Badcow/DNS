@@ -16,10 +16,11 @@ namespace Badcow\DNS\Tests\Rdata;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\URI;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class UriTest extends TestCase
 {
-    public function dataProvider_testExceptions(): array
+    public static function dataProvider_testExceptions(): array
     {
         return [
             //[Priority, Weight, Target, ExpectedException, ExpectedExceptionMessage]
@@ -42,9 +43,7 @@ class UriTest extends TestCase
         $this->assertEquals('http://www.example.com/path', $srv->getTarget());
     }
 
-    /**
-     * @dataProvider dataProvider_testExceptions
-     */
+    #[DataProvider('dataProvider_testExceptions')]
     public function testExceptions(int $priority, int $weight, string $target, string $expectedException, string $expectedExceptionMessage): void
     {
         $this->expectException($expectedException);

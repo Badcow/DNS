@@ -23,7 +23,7 @@ class ParseException extends \Exception
     /**
      * ParseException constructor.
      */
-    public function __construct(string $message = '', ?StringIterator $stringIterator = null, \Throwable $previous = null)
+    public function __construct(string $message = '', ?StringIterator $stringIterator = null, ?\Throwable $previous = null)
     {
         if (null !== $stringIterator) {
             $this->stringIterator = $stringIterator;

@@ -17,10 +17,11 @@ use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\IPSECKEY;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class IpseckeyTest extends TestCase
 {
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
             // Text, Precedence, GatewayType, Algorithm, Gateway, PublicKey
@@ -45,9 +46,7 @@ class IpseckeyTest extends TestCase
         $this->assertEquals(45, $ipseckey->getTypeCode());
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testToText(string $text, int $precedence, int $gatewayType, int $algorithm, ?string $gateway, ?string $publicKey): void
     {
         $ipseckey = new IPSECKEY();
@@ -59,10 +58,9 @@ class IpseckeyTest extends TestCase
     }
 
     /**
-     * @dataProvider getDataProvider
-     *
      * @throws DecodeException
      */
+    #[DataProvider('getDataProvider')]
     public function testToFromWire(string $text, int $precedence, int $gatewayType, int $algorithm, ?string $gateway, ?string $publicKey): void
     {
         $ipseckey = new IPSECKEY();
@@ -82,9 +80,7 @@ class IpseckeyTest extends TestCase
         $this->assertEquals(3 + $rdLength, $offset);
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testFromText(string $text, int $precedence, int $gatewayType, int $algorithm, ?string $gateway, ?string $publicKey): void
     {
         $ipseckey = new IPSECKEY();
@@ -97,9 +93,7 @@ class IpseckeyTest extends TestCase
         $this->assertEquals($publicKey, $ipseckey->getPublicKey());
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testFactory(string $text, int $precedence, int $gatewayType, int $algorithm, ?string $gateway, ?string $publicKey): void
     {
         $ipseckey = Factory::IPSECKEY($precedence, $gateway, $algorithm, $publicKey);
