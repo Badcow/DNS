@@ -26,6 +26,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: gmp, intl
+          ini-values: "intl.default_locale=${{ matrix.locale }}"
 
       - name: Display versions
         run: |
@@ -36,8 +37,6 @@ jobs:
         run: composer install -n
 
       - name: PHPUnit
-        with:
-          ini-values: "intl.default_locale=${{ matrix.locale }}" #optional
         run: vendor/bin/phpunit
 
       - name: Test Coverage
