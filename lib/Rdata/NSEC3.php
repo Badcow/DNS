@@ -16,10 +16,7 @@ namespace Badcow\DNS\Rdata;
 use Badcow\DNS\Message;
 use Badcow\DNS\Parser\Tokens;
 use Badcow\DNS\Validator;
-use BadMethodCallException;
 use Base32\Base32Hex;
-use DomainException;
-use InvalidArgumentException;
 
 /**
  * {@link https://tools.ietf.org/html/rfc5155}.
@@ -74,12 +71,12 @@ class NSEC3 implements RdataInterface
     }
 
     /**
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setHashAlgorithm(int $hashAlgorithm): void
     {
         if (!Validator::isUnsignedInteger($hashAlgorithm, 8)) {
-            throw new InvalidArgumentException('Hash algorithm must be 8-bit integer.');
+            throw new \InvalidArgumentException('Hash algorithm must be 8-bit integer.');
         }
         $this->hashAlgorithm = $hashAlgorithm;
     }
@@ -100,12 +97,12 @@ class NSEC3 implements RdataInterface
     }
 
     /**
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setIterations(int $iterations): void
     {
         if (!Validator::isUnsignedInteger($iterations, 16)) {
-            throw new InvalidArgumentException('Hash algorithm must be 16-bit integer.');
+            throw new \InvalidArgumentException('Hash algorithm must be 16-bit integer.');
         }
         $this->iterations = $iterations;
     }
@@ -128,7 +125,7 @@ class NSEC3 implements RdataInterface
     public function setSalt(string $salt): void
     {
         if (false === $bin = @hex2bin($salt)) {
-            throw new InvalidArgumentException('Salt must be a hexadecimal string.');
+            throw new \InvalidArgumentException('Salt must be a hexadecimal string.');
         }
         $this->salt = $bin;
     }
@@ -143,12 +140,12 @@ class NSEC3 implements RdataInterface
      *
      * @param string $nextOwnerName the fully qualified next owner name
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setNextOwnerName(string $nextOwnerName): void
     {
         if (!Validator::fullyQualifiedDomainName($nextOwnerName)) {
-            throw new InvalidArgumentException(sprintf('NSEC3: Next owner "%s" is not a fully qualified domain name.', $nextOwnerName));
+            throw new \InvalidArgumentException(sprintf('NSEC3: Next owner "%s" is not a fully qualified domain name.', $nextOwnerName));
         }
         $this->nextOwnerName = $nextOwnerName;
     }
@@ -267,12 +264,12 @@ class NSEC3 implements RdataInterface
     /**
      * Calculate and set NSEC3::nextOwnerHash. Requires NSEC3::salt, NSEC3::nextOwnerName, and NSEC3::iterations to be set.
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function calculateNextOwnerHash(): void
     {
         if (!isset($this->nextOwnerName) || !isset($this->salt) || !isset($this->iterations)) {
-            throw new BadMethodCallException('NSEC3::salt, NSEC3::nextOwnerName, and NSEC3::iterations must be set.');
+            throw new \BadMethodCallException('NSEC3::salt, NSEC3::nextOwnerName, and NSEC3::iterations must be set.');
         }
         $nextOwner = Message::encodeName(strtolower($this->nextOwnerName));
         $this->nextHashedOwnerName = self::hash($this->salt, $nextOwner, $this->iterations);
@@ -285,12 +282,12 @@ class NSEC3 implements RdataInterface
      *
      * @return string the hashed value
      *
-     * @throws DomainException
+     * @throws \DomainException
      */
     private static function hash(string $salt, string $x, int $k = 0): string
     {
         if ($k < 0) {
-            throw new DomainException('Number of iterations, $k, must be a positive integer greater than, or equal to, 0.');
+            throw new \DomainException('Number of iterations, $k, must be a positive integer greater than, or equal to, 0.');
         }
         $x = sha1($x.$salt, true);
         if (0 === $k) {

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\TXT;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class TxtTest extends TestCase
@@ -27,10 +28,10 @@ class TxtTest extends TestCase
         $this->assertEquals($text, $txt->getText());
     }
 
-    public function dp_testToText(): array
+    public static function dp_testToText(): array
     {
         return [
-            //'what is tested' => [$text, $expectation]
+            // 'what is tested' => [$text, $expectation]
             'quotes are escaped' => ['"This is some quoted text". It\'s a nice piece of text.', '"\"This is some quoted text\". It\'s a nice piece of text."'],
             'spaces are wraped in quotes' => [
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel lorem in massa elementum blandit nec sed massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu purus id arcu venenatis elementum in quis enim. Aenean at urna varius sapien dapibus.',
@@ -40,11 +41,10 @@ class TxtTest extends TestCase
     }
 
     /**
-     * @dataProvider dp_testToText
-     *
      * @param string $text        the input text value
      * @param string $expectation The expected output of TXT::toText()
      */
+    #[DataProvider('dp_testToText')]
     public function testToText(string $text, string $expectation): void
     {
         $txt = new TXT();
@@ -53,10 +53,10 @@ class TxtTest extends TestCase
         $this->assertEquals($expectation, $txt->toText());
     }
 
-    public function dp_testFromTxt(): array
+    public static function dp_testFromTxt(): array
     {
         return [
-            //'what is tested' => [$text, $expectation]
+            // 'what is tested' => [$text, $expectation]
             'chunked text literal' => ['"Some text;" " another some text"', 'Some text; another some text'],
             'string literal' => ['foobar', 'foobar'],
             'text with space without quotes' => ['foo bar', 'foo'],
@@ -66,9 +66,7 @@ class TxtTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dp_testFromTxt
-     */
+    #[DataProvider('dp_testFromTxt')]
     public function testFromTxt(string $text, string $expectation): void
     {
         $txt = new TXT();
@@ -76,15 +74,44 @@ class TxtTest extends TestCase
         $this->assertEquals($expectation, $txt->getText());
     }
 
-    public function testWire(): void
+    public function testWire1(): void
     {
-        $expectation = 'This is some text. It\'s a nice piece of text.';
+        $text = 'This is some text. It\'s a nice piece of text.';
         $txt = new TXT();
-        $txt->setText($expectation);
+        $txt->setText($text);
 
-        $this->assertEquals($expectation, $txt->toWire());
+        $this->assertEquals(chr(strlen($text)).$text, $txt->toWire());
+
         $fromWire = new TXT();
-        $fromWire->fromWire($expectation);
+        $fromWire->fromWire($txt->toWire());
         $this->assertEquals($txt, $fromWire);
+    }
+
+    public function testWire2(): void
+    {
+        $text = str_repeat('a', 255).str_repeat('b', 100);
+        $txt = new TXT();
+        $txt->setText($text);
+
+        $this->assertEquals(
+            chr(255).str_repeat('a', 255).chr(100).str_repeat('b', 100),
+            $txt->toWire()
+        );
+
+        $fromWire = new TXT();
+        $fromWire->fromWire($txt->toWire());
+        $this->assertEquals($text, $fromWire->getText());
+    }
+
+    public function testWire3(): void
+    {
+        $txt = new TXT();
+        $txt->setText('');
+
+        $this->assertEquals("\x00", $txt->toWire());
+
+        $fromWire = new TXT();
+        $fromWire->fromWire($txt->toWire());
+        $this->assertEquals('', $fromWire->getText());
     }
 }

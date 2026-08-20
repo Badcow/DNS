@@ -18,8 +18,7 @@ use Badcow\DNS\Rdata\A;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\UnsetValueException;
-use Exception;
-use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ResourceRecordTest extends TestCase
@@ -30,7 +29,7 @@ class ResourceRecordTest extends TestCase
         $rr->setClass(Classes::INTERNET);
         $this->assertEquals(Classes::INTERNET, $rr->getClass());
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $rr->setClass('XX');
     }
 
@@ -72,7 +71,7 @@ class ResourceRecordTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function testToWire(): void
     {
@@ -94,21 +93,21 @@ class ResourceRecordTest extends TestCase
             0x63,
             0x6F,
             0x6D,
-            0x00, //(3)abc(7)example(3)com(NULL)
+            0x00, // (3)abc(7)example(3)com(NULL)
             0x00,
-            0x01, //A (1)
+            0x01, // A (1)
             0x00,
-            0x01, //IN (1)
+            0x01, // IN (1)
             0x00,
             0x00,
             0x0E,
-            0x10, //3600
+            0x10, // 3600
             0x00,
-            0x04, //4 (RDLENGTH)
+            0x04, // 4 (RDLENGTH)
             0xC0,
             0xA8,
             0x01,
-            0x01 //192.168.1.1
+            0x01 // 192.168.1.1
         );
 
         $a = Factory::A('192.168.1.1');
@@ -121,7 +120,20 @@ class ResourceRecordTest extends TestCase
         $this->assertEquals($expectation, $rr->toWire());
     }
 
-    public function dataProviderForTestToWireThrowsExceptionsIfValuesAreNotSet(): array
+    public function testToWireNameWithUnderscore(): void
+    {
+        $rr = new ResourceRecord();
+        $rr->setName('_sip._tcp.example.com.');
+        $rr->setClass(Classes::INTERNET);
+        $rr->setRdata(Factory::SRV(0, 5, 5060, 'sip.example.com.'));
+        $rr->setTtl(3600);
+
+        $decoded = ResourceRecord::fromWire($rr->toWire());
+
+        $this->assertEquals('_sip._tcp.example.com.', $decoded->getName());
+    }
+
+    public static function dataProviderForTestToWireThrowsExceptionsIfValuesAreNotSet(): array
     {
         $rr_noName = new ResourceRecord();
         $rr_noName->setClass(null);
@@ -148,10 +160,9 @@ class ResourceRecordTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderForTestToWireThrowsExceptionsIfValuesAreNotSet
-     *
      * @throws UnsetValueException
      */
+    #[DataProvider('dataProviderForTestToWireThrowsExceptionsIfValuesAreNotSet')]
     public function testToWireThrowsExceptionsIfValuesAreNotSet(ResourceRecord $rr, string $exception, string $exceptionMessage): void
     {
         $this->expectException($exception);
@@ -160,7 +171,7 @@ class ResourceRecordTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function testFromWire(): void
     {
@@ -173,7 +184,7 @@ class ResourceRecordTest extends TestCase
             0x04,
             0x05,
             0x06,
-            0x07, //8-bytes to test the offset
+            0x07, // 8-bytes to test the offset
             0x03,
             0x61,
             0x62,
@@ -190,21 +201,21 @@ class ResourceRecordTest extends TestCase
             0x63,
             0x6F,
             0x6D,
-            0x00, //(3)abc(7)example(3)com(NULL)
+            0x00, // (3)abc(7)example(3)com(NULL)
             0x00,
-            0x01, //A (1)
+            0x01, // A (1)
             0x00,
-            0x01, //IN (1)
+            0x01, // IN (1)
             0x00,
             0x00,
             0x0E,
-            0x10, //3600
+            0x10, // 3600
             0x00,
-            0x04, //4 (RDLENGTH)
+            0x04, // 4 (RDLENGTH)
             0xC0,
             0xA8,
             0x01,
-            0x01 //192.168.1.1
+            0x01 // 192.168.1.1
         );
 
         $offset = 8;

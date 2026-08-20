@@ -15,11 +15,12 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\UnsupportedTypeException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {
-    public function getTestData(): array
+    public static function getTestData(): array
     {
         $namespace = '\\Badcow\\DNS\\Rdata\\';
 
@@ -31,10 +32,9 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * @dataProvider getTestData
-     *
      * @throws UnsupportedTypeException
      */
+    #[DataProvider('getTestData')]
     public function testNewRdataFromNameAndId(string $type, int $typeCode, string $classname): void
     {
         $this->assertInstanceOf($classname, Factory::newRdataFromName($type));

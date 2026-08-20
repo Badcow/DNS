@@ -15,14 +15,15 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\NAPTR;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class NaptrTest extends TestCase
 {
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
-            //Text                                                 Order Pref Flags Service             Regexp                                 Replacement
+            // Text                                                Order Pref Flags Service             Regexp                                 Replacement
             ['100 50 "s" "http+N2L+N2C+N2R" "" www.example.com.',  100,  50,  's',  'http+N2L+N2C+N2R', '',                                    'www.example.com.'],
             ['100 10 "" "" "!^urn:cid:.+@([^\.]+\.)(.*)$!\2!i" .', 100,  10,  '',   '',                 '!^urn:cid:.+@([^\.]+\.)(.*)$!\2!i',   '.'],
             ['100 50 "s" "SIP+D2U" "" _sip2._udp.testnaptr.at.',   100,  50,  's',  'SIP+D2U',          '',                                    '_sip2._udp.testnaptr.at.'],
@@ -42,9 +43,7 @@ class NaptrTest extends TestCase
         $this->assertEquals(35, $naptr->getTypeCode());
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testToText(string $text, int $order, int $preference, string $flags, string $services, string $regexp, string $replacement): void
     {
         $naptr = new NAPTR();
@@ -58,9 +57,7 @@ class NaptrTest extends TestCase
         $this->assertEquals($text, $naptr->toText());
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testToAndFromWire(string $text, int $order, int $preference, string $flags, string $services, string $regexp, string $replacement): void
     {
         $naptr = new NAPTR();
@@ -81,9 +78,7 @@ class NaptrTest extends TestCase
         $this->assertEquals(3 + $rdLength, $offset);
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testFromText(string $text, int $order, int $preference, string $flags, string $services, string $regexp, string $replacement): void
     {
         $naptr = new NAPTR();
@@ -97,9 +92,7 @@ class NaptrTest extends TestCase
         $this->assertEquals($replacement, $naptr->getReplacement());
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testFactory(string $text, int $order, int $preference, string $flags, string $services, string $regexp, string $replacement): void
     {
         $naptr = Factory::NAPTR($order, $preference, $flags, $services, $regexp, $replacement);

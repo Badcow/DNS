@@ -32,6 +32,7 @@ use Badcow\DNS\Rdata\TXT;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Zone;
 use Badcow\DNS\ZoneBuilder;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ParserTest extends TestCase
@@ -91,12 +92,12 @@ class ParserTest extends TestCase
         $loc = new ResourceRecord();
         $loc->setName('canberra');
         $loc->setRdata(Factory::LOC(
-            -35.3075,   //Lat
-            149.1244,   //Lon
-            500,        //Alt
-            20.12,      //Size
-            200.3,      //HP
-            300.1       //VP
+            -35.3075,   // Lat
+            149.1244,   // Lon
+            500,        // Alt
+            20.12,      // Size
+            200.3,      // HP
+            300.1       // VP
         ));
         $loc->setComment('This is Canberra');
 
@@ -532,6 +533,20 @@ DNS;
     }
 
     /**
+     * Parser handles empty names with multiple $ORIGINS.
+     *
+     * @throws ParseException|\Exception
+     */
+    public function testParserHandlesEmptyNamesWithMultipleOrigins(): void
+    {
+        $file = NormaliserTest::readFile(__DIR__.'/Resources/testEmptyNamesWithMultipleOrigins.txt');
+        $expectation = NormaliserTest::readFile(__DIR__.'/Resources/testEmptyNamesWithMultipleOrigins_expectation.txt');
+        $zone = Parser::parse('mydomain.biz.', $file);
+
+        $this->assertEquals($expectation, ZoneBuilder::build($zone));
+    }
+
+    /**
      * Parser handles $ORIGIN . correctly.
      *
      * @throws ParseException|\Exception
@@ -548,7 +563,7 @@ DNS;
         $this->assertEquals($expectation, ZoneBuilder::build($zone));
     }
 
-    public function dp_testParserHandlesIncludeDirective(): array
+    public static function dp_testParserHandlesIncludeDirective(): array
     {
         $baseDir = __DIR__.'/Resources/IncludeControlEntryTests/';
 
@@ -561,13 +576,12 @@ DNS;
     /**
      * Parser imports files specified by the $INCLUDE directive.
      *
-     * @dataProvider dp_testParserHandlesIncludeDirective
-     *
      * @throws ParseException|\Exception
      */
+    #[DataProvider('dp_testParserHandlesIncludeDirective')]
     public function testParserHandlesIncludeDirective(string $zoneName, int $ttl, string $zoneFilePath, string $expectationPath, int $commentOptions): void
     {
-        $zoneFetcher = new class() implements ZoneFileFetcherInterface {
+        $zoneFetcher = new class implements ZoneFileFetcherInterface {
             public function fetch(string $path): string
             {
                 return file_get_contents(__DIR__.'/Resources/IncludeControlEntryTests/'.$path);

@@ -63,9 +63,6 @@ class Zone implements \Countable, \IteratorAggregate, \ArrayAccess
         return $this->name;
     }
 
-    /**
-     * @return int
-     */
     public function getDefaultTtl(): ?int
     {
         return $this->defaultTtl;

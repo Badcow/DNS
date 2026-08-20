@@ -163,8 +163,6 @@ class AlignedRdataFormatters
 
     /**
      * Returns a padded line with comment.
-     *
-     * @param string $comment
      */
     public static function makeLine(string $text, ?string $comment, int $longestVarLength, int $padding): string
     {

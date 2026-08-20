@@ -15,7 +15,6 @@ namespace Badcow\DNS\Rdata;
 
 use Badcow\DNS\Algorithms;
 use Badcow\DNS\Parser\Tokens;
-use InvalidArgumentException;
 
 /*
  * {@link https://tools.ietf.org/html/rfc4398#section-2.1}.
@@ -79,7 +78,7 @@ class CERT implements RdataInterface
     /**
      * @param int|string $certificateType
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setCertificateType($certificateType): void
     {
@@ -110,7 +109,7 @@ class CERT implements RdataInterface
     /**
      * @param string|int $algorithm
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setAlgorithm($algorithm): void
     {
@@ -126,7 +125,7 @@ class CERT implements RdataInterface
     /**
      * @param string $certificate Base64 encoded string
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setCertificate(string $certificate): void
     {
@@ -179,12 +178,12 @@ class CERT implements RdataInterface
     }
 
     /**
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function getKeyTypeValue(string $keyTypeMnemonic): int
     {
         if (false === $keyTypeValue = array_search($keyTypeMnemonic, self::MNEMONICS, true)) {
-            throw new InvalidArgumentException(sprintf('"%s" is not a valid key type mnemonic.', $keyTypeMnemonic));
+            throw new \InvalidArgumentException(sprintf('"%s" is not a valid key type mnemonic.', $keyTypeMnemonic));
         }
 
         return (int) $keyTypeValue;
@@ -193,12 +192,12 @@ class CERT implements RdataInterface
     /**
      * Get the associated mnemonic of a key type.
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function getKeyTypeMnemonic(int $keyTypeValue): string
     {
         if (!array_key_exists($keyTypeValue, self::MNEMONICS)) {
-            throw new InvalidArgumentException(sprintf('"%d" is not a valid key type.', $keyTypeValue));
+            throw new \InvalidArgumentException(sprintf('"%d" is not a valid key type.', $keyTypeValue));
         }
 
         return self::MNEMONICS[$keyTypeValue];

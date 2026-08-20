@@ -15,7 +15,7 @@ namespace Badcow\DNS\Rdata;
 
 class DecodeException extends \Exception
 {
-    public function __construct(string $type, string $rdata, int $code = 0, \Throwable $previous = null)
+    public function __construct(string $type, string $rdata, int $code = 0, ?\Throwable $previous = null)
     {
         $message = sprintf('Unable to decode %s record rdata from binary data "%s"', $type, self::binaryToHex($rdata));
         parent::__construct($message, $code, $previous);

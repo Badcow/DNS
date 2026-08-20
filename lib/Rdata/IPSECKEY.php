@@ -108,7 +108,7 @@ class IPSECKEY implements RdataInterface
      *
      * @var string|null
      */
-    private $publicKey = null;
+    private $publicKey;
 
     public function getPrecedence(): int
     {
@@ -230,7 +230,7 @@ class IPSECKEY implements RdataInterface
     {
         $rdata = explode(Tokens::SPACE, $text);
         $this->setPrecedence((int) array_shift($rdata));
-        array_shift($rdata); //Gateway type is inferred from setGateway.
+        array_shift($rdata); // Gateway type is inferred from setGateway.
         $algorithm = (int) array_shift($rdata);
         $this->setGateway((string) array_shift($rdata));
         $publicKey = (0 === $algorithm) ? null : base64_decode(implode('', $rdata));

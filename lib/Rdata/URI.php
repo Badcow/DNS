@@ -52,9 +52,6 @@ class URI implements RdataInterface
      */
     private $target;
 
-    /**
-     * @return int
-     */
     public function getPriority(): ?int
     {
         return $this->priority;
@@ -72,9 +69,6 @@ class URI implements RdataInterface
         $this->priority = $priority;
     }
 
-    /**
-     * @return int
-     */
     public function getWeight(): ?int
     {
         return $this->weight;
@@ -92,9 +86,6 @@ class URI implements RdataInterface
         $this->weight = $weight;
     }
 
-    /**
-     * @return string
-     */
     public function getTarget(): ?string
     {
         return $this->target;

@@ -1,5 +1,12 @@
 CHANGELOG for 4.x
 =================
+## 4.4.0
+* [Pull #121](https://github.com/Badcow/DNS/pull/121/) Fix parsing of empty names with multiple $ORIGINS. (Thank you, [@not-implemented](https://github.com/not-implemented))
+* [Pull #128](https://github.com/Badcow/DNS/pull/128/) Fix handling empty OPT. (Thank you, [@yeganemehr](https://github.com/yeganemehr))
+* [Pull #130](https://github.com/Badcow/DNS/pull/130/) Fix encoding TXT records as length-prefixed character-strings. (Thank you, [@yeganemehr](https://github.com/yeganemehr))
+* [Pull #131](https://github.com/Badcow/DNS/pull/131/) Fix encoding ResourceRecord with underscore on their name. (Thank you, [@yeganemehr](https://github.com/yeganemehr))
+* [Pull #129](https://github.com/Badcow/DNS/pull/129/) Fix stack overflow on self-referential compression pointer (Thank you, [@yeganemehr](https://github.com/yeganemehr))
+* [Pull #122](https://github.com/Badcow/DNS/pull/122/) Explicitly declare nullable types. (Thank you, [@SilvanWakker](https://github.com/SilvanWakker))
 ## 4.3.0
 * [Pull #118](https://github.com/Badcow/DNS/pull/118/) Remove strict hostname validator for `Question::setName`.
 (Thank you, [tomschlick](https://github.com/tomschlick))

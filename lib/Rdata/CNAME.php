@@ -35,9 +35,6 @@ class CNAME implements RdataInterface
         $this->target = $target;
     }
 
-    /**
-     * @return string
-     */
     public function getTarget(): ?string
     {
         return $this->target;

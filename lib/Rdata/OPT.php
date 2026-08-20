@@ -98,7 +98,7 @@ class OPT implements RdataInterface
         $rdLength = $rdLength ?? strlen($rdata);
 
         $endOffset = $offset + $rdLength;
-        do {
+        while ($offset < $endOffset) {
             $integers = @unpack('ncode/nlength', $rdata, $offset);
             if (false === $integers) {
                 throw new DecodeException(static::TYPE, $rdata);
@@ -112,6 +112,6 @@ class OPT implements RdataInterface
             }
             $option->fromWire($rdata, $offset, $integers['length']);
             $this->options[] = $option;
-        } while ($offset < $endOffset);
+        }
     }
 }

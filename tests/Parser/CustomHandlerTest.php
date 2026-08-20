@@ -28,7 +28,7 @@ class CustomHandlerTest extends TestCase
             $string .= $iterator->current().' ';
             $iterator->next();
         }
-        $string = trim($string, ' "'); //Remove whitespace and quotes
+        $string = trim($string, ' "'); // Remove whitespace and quotes
 
         $spf = new TXT();
         $spf->setText($string);

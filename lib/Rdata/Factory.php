@@ -278,7 +278,7 @@ class Factory
         \DateTime $signatureInception,
         int $keyTag,
         string $signersName,
-        string $signature
+        string $signature,
     ): RRSIG {
         $rrsig = new RRSIG();
         $rrsig->setTypeCovered($typeCovered);
@@ -530,7 +530,7 @@ class Factory
         \DateTime $signatureInception,
         int $keyTag,
         string $signersName,
-        string $signature
+        string $signature,
     ): SIG {
         $sig = new SIG();
         $sig->setTypeCovered($typeCovered);

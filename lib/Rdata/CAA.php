@@ -60,9 +60,6 @@ class CAA implements RdataInterface
      */
     private $value;
 
-    /**
-     * @return int
-     */
     public function getFlag(): ?int
     {
         return $this->flag;
@@ -80,9 +77,6 @@ class CAA implements RdataInterface
         $this->flag = $flag;
     }
 
-    /**
-     * @return string
-     */
     public function getTag(): ?string
     {
         return $this->tag;

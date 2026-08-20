@@ -16,11 +16,12 @@ namespace Badcow\DNS\Tests\Rdata;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\NSEC3;
 use Base32\Base32Hex;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class Nsec3Test extends TestCase
 {
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
             ['1 1 10 12345678 589R358VSPJUFVAJU949JPVF74D9PTGH A RRSIG', true, 10, '12345678', 'ns.sub.delzsk.example.', ['A', 'RRSIG'], '589R358VSPJUFVAJU949JPVF74D9PTGH'],
@@ -40,9 +41,7 @@ class Nsec3Test extends TestCase
         $this->assertEquals(50, $nsec3->getTypeCode());
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testToText(string $text, bool $unsignedDelegationsCovered, int $iterations, string $salt, string $nextOwnerName, array $types, string $nextHashedOwnerName): void
     {
         $nsec3 = new NSEC3();
@@ -56,9 +55,7 @@ class Nsec3Test extends TestCase
         $this->assertEquals($text, $nsec3->toText());
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testWire(string $text, bool $unsignedDelegationsCovered, int $iterations, string $salt, string $nextOwnerName, array $types, string $nextHashedOwnerName): void
     {
         $nsec3 = new NSEC3();
@@ -75,9 +72,7 @@ class Nsec3Test extends TestCase
         $this->assertEquals($nsec3, $fromWire);
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testFromText(string $text, bool $unsignedDelegationsCovered, int $iterations, string $salt, string $nextOwnerName, array $types, string $nextHashedOwnerName): void
     {
         $fromText = new NSEC3();
@@ -90,9 +85,7 @@ class Nsec3Test extends TestCase
         $this->assertEquals($fromText->getNextHashedOwnerName(), Base32Hex::decode($nextHashedOwnerName));
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testFactory(string $text, bool $unsignedDelegationsCovered, int $iterations, string $salt, string $nextOwnerName, array $types, string $nextHashedOwnerName): void
     {
         $nsec3 = Factory::NSEC3($unsignedDelegationsCovered, $iterations, $salt, $nextOwnerName, $types);

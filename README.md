@@ -152,3 +152,10 @@ $zone = Badcow\DNS\Parser\Parser::parse('example.com.', $file); //Badcow Zone Ob
 Simple as that.
 
 More examples can be found in the [The Docs](docs/Parser)
+
+## Contributing
+
+When making new contributions, please ensure you write corresponding tests. Also be sure to run the code standards compliance tools. The GitHub workflow will fail if you haven't fixed code standard issues.
+```
+$ vendor/bin/php-cs-fixer check
+```

@@ -18,7 +18,6 @@ use Badcow\DNS\Rdata\DecodeException;
 use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\RdataInterface;
 use Badcow\DNS\Rdata\UnknownType;
-use InvalidArgumentException;
 
 class ResourceRecord
 {
@@ -47,11 +46,7 @@ class ResourceRecord
      */
     private $comment;
 
-    /**
-     * @param int    $ttl
-     * @param string $comment
-     */
-    public static function create(string $name, RdataInterface $rdata, int $ttl = null, string $class = Classes::INTERNET, string $comment = null): ResourceRecord
+    public static function create(string $name, RdataInterface $rdata, ?int $ttl = null, string $class = Classes::INTERNET, ?string $comment = null): ResourceRecord
     {
         $rr = new self();
         $rr->setName($name);
@@ -67,14 +62,12 @@ class ResourceRecord
      * Set the class for the resource record
      * Usually one of IN, HS, or CH.
      *
-     * @param string $class
-     *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setClass(?string $class): void
     {
         if (null !== $class && !Classes::isValid($class)) {
-            throw new InvalidArgumentException(sprintf('No such class as "%s"', $class));
+            throw new \InvalidArgumentException(sprintf('No such class as "%s"', $class));
         }
 
         if (null === $class) {
@@ -100,9 +93,6 @@ class ResourceRecord
         $this->rdata = $rdata;
     }
 
-    /**
-     * @return string
-     */
     public function getClass(): ?string
     {
         if (null === $this->classId) {
@@ -124,25 +114,17 @@ class ResourceRecord
 
     /**
      * Set the time to live.
-     *
-     * @param int $ttl
      */
     public function setTtl(?int $ttl): void
     {
         $this->ttl = $ttl;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): ?string
     {
         if (null === $this->rdata) {
@@ -152,17 +134,11 @@ class ResourceRecord
         return $this->rdata->getType();
     }
 
-    /**
-     * @return RdataInterface
-     */
     public function getRdata(): ?RdataInterface
     {
         return $this->rdata;
     }
 
-    /**
-     * @return int
-     */
     public function getTtl(): ?int
     {
         return $this->ttl;
@@ -170,8 +146,6 @@ class ResourceRecord
 
     /**
      * Set a comment for the record.
-     *
-     * @param string $comment
      */
     public function setComment(?string $comment): void
     {
@@ -180,8 +154,6 @@ class ResourceRecord
 
     /**
      * Get the record's comment.
-     *
-     * @return string
      */
     public function getComment(): ?string
     {
@@ -189,7 +161,7 @@ class ResourceRecord
     }
 
     /**
-     * @throws UnsetValueException|InvalidArgumentException
+     * @throws UnsetValueException|\InvalidArgumentException
      */
     public function toWire(): string
     {
@@ -209,8 +181,8 @@ class ResourceRecord
             throw new UnsetValueException('ResourceRecord TTL has not been set.');
         }
 
-        if (!Validator::fullyQualifiedDomainName($this->name)) {
-            throw new InvalidArgumentException(sprintf('"%s" is not a fully qualified domain name.', $this->name));
+        if (!Validator::fullyQualifiedDomainName($this->name, false)) {
+            throw new \InvalidArgumentException(sprintf('"%s" is not a fully qualified domain name.', $this->name));
         }
 
         $rdata = $this->rdata->toWire();

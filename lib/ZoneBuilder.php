@@ -116,7 +116,7 @@ class ZoneBuilder
         $rdata->setRname(self::fullyQualify($rdata->getRname(), $zone->getName()));
     }
 
-    protected static function fillOutCname(Cname $rdata, Zone $zone): void
+    protected static function fillOutCname(CNAME $rdata, Zone $zone): void
     {
         $rdata->setTarget(self::fullyQualify($rdata->getTarget(), $zone->getName()));
     }

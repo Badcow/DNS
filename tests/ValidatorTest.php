@@ -18,12 +18,12 @@ use Badcow\DNS\Rdata\Factory;
 use Badcow\DNS\Rdata\NS;
 use Badcow\DNS\ResourceRecord;
 use Badcow\DNS\Validator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 class ValidatorTest extends TestCase
 {
-    public function dp_testValidateResourceRecordName(): array
+    public static function dp_testValidateResourceRecordName(): array
     {
         return [
             [true, 'example.com.'],
@@ -47,15 +47,13 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dp_testValidateResourceRecordName
-     */
+    #[DataProvider('dp_testValidateResourceRecordName')]
     public function testValidateResourceRecordName(bool $isValid, string $resourceName): void
     {
         $this->assertEquals($isValid, Validator::resourceRecordName($resourceName));
     }
 
-    public function getIPv4TestDataSet(): array
+    public static function getIPv4TestDataSet(): array
     {
         return [
             ['119.15.101.102', true],
@@ -71,15 +69,13 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getIPv4TestDataSet
-     */
+    #[DataProvider('getIPv4TestDataSet')]
     public function testValidateIpv4Address(string $address, bool $isValid): void
     {
         $this->assertEquals($isValid, Validator::ipv4($address));
     }
 
-    public function getIPv6TestDataSet(): array
+    public static function getIPv6TestDataSet(): array
     {
         return [
             ['2001:0db8:0000:0000:0000:ff00:0042:8329', true],
@@ -93,15 +89,13 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getIPv6TestDataSet
-     */
+    #[DataProvider('getIPv6TestDataSet')]
     public function testValidateIpv6Address(string $address, bool $isValid): void
     {
         $this->assertEquals($isValid, Validator::ipv6($address));
     }
 
-    public function getIPvTestDataSet(): array
+    public static function getIPvTestDataSet(): array
     {
         return [
             ['2001:0db8:0000:0000:0000:ff00:0042:8329', true],
@@ -120,9 +114,7 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getIPvTestDataSet
-     */
+    #[DataProvider('getIPvTestDataSet')]
     public function testValidateIpAddress(string $address, bool $isValid): void
     {
         $this->assertEquals($isValid, Validator::ipAddress($address));
@@ -165,7 +157,7 @@ class ValidatorTest extends TestCase
     {
         $zone = TestZone::buildTestZone();
 
-        //Remove the NS records.
+        // Remove the NS records.
         foreach ($zone as $resourceRecord) {
             if (NS::TYPE === $resourceRecord->getType()) {
                 $zone->remove($resourceRecord);
@@ -205,7 +197,7 @@ class ValidatorTest extends TestCase
         $this->assertEquals(Validator::ZONE_OKAY, Validator::zone($zone));
     }
 
-    public function getWildcardTestData(): array
+    public static function getWildcardTestData(): array
     {
         return [
             ['*.example.com.', true],
@@ -224,15 +216,14 @@ class ValidatorTest extends TestCase
     /**
      * @param string $name    the wildcard domain to be validated
      * @param bool   $isValid whether the domain is valid
-     *
-     * @dataProvider getWildcardTestData
      */
+    #[DataProvider('getWildcardTestData')]
     public function testWildcard(string $name, bool $isValid): void
     {
         $this->assertEquals($isValid, Validator::resourceRecordName($name));
     }
 
-    public function getTestReverseIpv4DataProvider(): array
+    public static function getTestReverseIpv4DataProvider(): array
     {
         return [
             ['10.IN-ADDR.ARPA.', true],
@@ -254,15 +245,13 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getTestReverseIpv4DataProvider
-     */
+    #[DataProvider('getTestReverseIpv4DataProvider')]
     public function testReverseIpv4(string $ptr, bool $isValid): void
     {
         $this->assertEquals($isValid, Validator::reverseIpv4($ptr));
     }
 
-    public function getTestReverseIpv6DataProvider(): array
+    public static function getTestReverseIpv6DataProvider(): array
     {
         return [
             ['b.a.9.8.7.6.5.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.', true],
@@ -271,9 +260,7 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getTestReverseIpv6DataProvider
-     */
+    #[DataProvider('getTestReverseIpv6DataProvider')]
     public function testReverseIpv6(string $ptr, bool $isValid): void
     {
         $this->assertEquals($isValid, Validator::reverseIpv6($ptr));
@@ -290,7 +277,7 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::resourceRecordName($case_3));
     }
 
-    public function getTestFqdnDataProvider(): array
+    public static function getTestFqdnDataProvider(): array
     {
         return [
             ['example.com.', true],
@@ -309,9 +296,7 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getTestFqdnDataProvider
-     */
+    #[DataProvider('getTestFqdnDataProvider')]
     public function testFqdn(string $domain, bool $isValid, bool $strictHostValidation = true): void
     {
         $this->assertEquals($isValid, Validator::fullyQualifiedDomainName($domain, $strictHostValidation));
@@ -324,13 +309,13 @@ class ValidatorTest extends TestCase
 
     public function testNoAliasInZone(): void
     {
-        //Pass case
+        // Pass case
         $txt1 = new ResourceRecord();
         $txt1->setName('www');
         $txt1->setRdata(Factory::TXT('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
         $txt1->setClass(Classes::INTERNET);
 
-        //Fail case
+        // Fail case
         $txt2 = new ResourceRecord();
         $txt2->setName('alias');
         $txt2->setRdata(Factory::TXT('v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all'));
@@ -350,7 +335,7 @@ class ValidatorTest extends TestCase
         $this->assertTrue(Validator::isUnsignedInteger(65535, 16));
         $this->assertTrue(Validator::isUnsignedInteger(0, 16));
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
         Validator::isUnsignedInteger(10, 64);
     }
 

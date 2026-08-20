@@ -39,9 +39,6 @@ class A implements RdataInterface
         $this->address = $address;
     }
 
-    /**
-     * @return string
-     */
     public function getAddress(): ?string
     {
         return $this->address;

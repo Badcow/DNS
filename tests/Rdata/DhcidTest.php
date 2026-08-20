@@ -15,14 +15,15 @@ namespace Badcow\DNS\Tests\Rdata;
 
 use Badcow\DNS\Rdata\DHCID;
 use Badcow\DNS\Rdata\Factory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DhcidTest extends TestCase
 {
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
-            //[Text,                                             IDType, Identifier,                                  FQDN]
+            // [Text,                                             IDType, Identifier,                                  FQDN]
             ['AAIBY2/AuCccgoJbsaxcQc9TUapptP69lOjxfNuVAA2kjEA=', 2,      '00:01:00:06:41:2d:f1:66:01:02:03:04:05:06', 'chi6.example.com.'],
             ['AAEBOSD+XR3Os/0LozeXVqcNc7FwCfQdWL3b/NaiUDlW2No=', 1,      '01:07:08:09:0a:0b:0c',                      'chi.example.com.'],
             ['AAABxLmlskllE0MVjd57zHcWmEH3pCQ6VytcKD//7es/deY=', 0,      '01:02:03:04:05:06',                         'client.example.com.'],
@@ -82,9 +83,7 @@ class DhcidTest extends TestCase
         $dhcid->calculateDigest();
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testToText(string $text, int $identifierType, string $identifier, string $fqdn): void
     {
         $dhcid = new DHCID();
@@ -95,9 +94,7 @@ class DhcidTest extends TestCase
         $this->assertEquals($text, $dhcid->toText());
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testToFromWire(string $text, int $identifierType, string $identifier, string $fqdn): void
     {
         $expectation = new DHCID();
@@ -115,10 +112,9 @@ class DhcidTest extends TestCase
     }
 
     /**
-     * @dataProvider getDataProvider
-     *
      * @throws \Exception
      */
+    #[DataProvider('getDataProvider')]
     public function testFromText(string $text, int $identifierType, string $identifier, string $fqdn): void
     {
         $expectation = new DHCID();
@@ -140,9 +136,7 @@ class DhcidTest extends TestCase
         $dhcid->fromText($text.'%');
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testFactory(string $text, int $identifierType, string $identifier, string $fqdn): void
     {
         $dhcid = Factory::DHCID(null, $identifierType, $identifier, $fqdn);

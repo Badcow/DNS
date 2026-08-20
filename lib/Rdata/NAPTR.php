@@ -88,9 +88,6 @@ class NAPTR implements RdataInterface
      */
     private $replacement;
 
-    /**
-     * @return int
-     */
     public function getOrder(): ?int
     {
         return $this->order;
@@ -108,9 +105,6 @@ class NAPTR implements RdataInterface
         $this->order = $order;
     }
 
-    /**
-     * @return int
-     */
     public function getPreference(): ?int
     {
         return $this->preference;
@@ -128,57 +122,36 @@ class NAPTR implements RdataInterface
         $this->preference = $preference;
     }
 
-    /**
-     * @return string
-     */
     public function getFlags(): ?string
     {
         return $this->flags;
     }
 
-    /**
-     * @param string $flags
-     */
     public function setFlags(?string $flags): void
     {
         $this->flags = $flags;
     }
 
-    /**
-     * @return string
-     */
     public function getServices(): ?string
     {
         return $this->services;
     }
 
-    /**
-     * @param string $services
-     */
     public function setServices(?string $services): void
     {
         $this->services = $services;
     }
 
-    /**
-     * @return string
-     */
     public function getRegexp(): ?string
     {
         return $this->regexp;
     }
 
-    /**
-     * @param string $regexp
-     */
     public function setRegexp(?string $regexp): void
     {
         $this->regexp = $regexp;
     }
 
-    /**
-     * @return string
-     */
     public function getReplacement(): ?string
     {
         return $this->replacement;

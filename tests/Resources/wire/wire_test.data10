@@ -1,0 +1,13 @@
+# HEADER SECTION
+30 99  # ID
+01 00  # FLAGS
+00 01  # QDCOUNT=1
+00 00  # ANCOUNT=0
+00 00  # NSCOUNT=0
+00 00  # ARCOUNT=0
+
+# QUESTION SECTION
+01 61  # QNAME label: len=1, "a"
+c0 0c  # compression pointer -> offset 0x0C (12) = start of QNAME
+00 01  # QTYPE=A
+00 01  # QCLASS=IN
