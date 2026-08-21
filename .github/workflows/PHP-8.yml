@@ -15,6 +15,7 @@ jobs:
           - '8.3'
           - '8.4'
           - '8.5'
+        locale: ['en_IN', 'sk_SK']
     name: PHP ${{ matrix.php }}
     steps:
       - name: Checkout
@@ -24,7 +25,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: gmp
+          extensions: gmp, intl
+          ini-values: "intl.default_locale=${{ matrix.locale }}"
 
       - name: Display versions
         run: |
