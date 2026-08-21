@@ -134,7 +134,6 @@ class AlignedRdataFormatters
 
     public static function LOC(LOC $loc, int $padding): string
     {
-
         $locale = setlocale(LC_NUMERIC, '0');
         setlocale(LC_NUMERIC, 'en_IN');
         $parts = [
@@ -148,7 +147,6 @@ class AlignedRdataFormatters
         if (false !== $locale) {
             setlocale(LC_NUMERIC, $locale);
         }
-
 
         $longestVarLength = max(array_map('strlen', $parts));
         $rdata = Tokens::OPEN_BRACKET.Tokens::LINE_FEED;

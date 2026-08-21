@@ -182,6 +182,7 @@ class LOC implements RdataInterface
         if (false !== $locale) {
             setlocale(LC_NUMERIC, $locale);
         }
+
         return $sprintf;
     }
 
@@ -205,6 +206,7 @@ class LOC implements RdataInterface
         if (false !== $locale) {
             setlocale(LC_NUMERIC, $locale);
         }
+
         return $sprintf;
     }
 
