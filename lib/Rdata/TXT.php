@@ -86,22 +86,32 @@ class TXT implements RdataInterface
     {
         $string = new StringIterator($text);
         $txt = new StringIterator();
-        $whitespace = [Tokens::SPACE, Tokens::TAB];
+        $hasCharacterString = false;
+        $hasWhitespace = false;
+        $previousWasQuoted = false;
 
         while ($string->valid()) {
             if ($string->is(static::WHITESPACE)) {
+                $hasWhitespace = true;
                 $string->next();
                 continue;
             }
 
-            if ($string->is(Tokens::DOUBLE_QUOTES)) {
+            $isQuoted = $string->is(Tokens::DOUBLE_QUOTES);
+            if ($hasCharacterString && $hasWhitespace && (!$previousWasQuoted || !$isQuoted)) {
+                $txt->append(Tokens::SPACE);
+            }
+
+            if ($isQuoted) {
                 self::handleTxt($string, $txt);
                 $string->next();
-                continue;
+            } else {
+                self::handleContiguousString($string, $txt);
             }
 
-            self::handleContiguousString($string, $txt);
-            break;
+            $hasCharacterString = true;
+            $hasWhitespace = false;
+            $previousWasQuoted = $isQuoted;
         }
 
         $this->setText((string) $txt, true);

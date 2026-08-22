@@ -58,8 +58,15 @@ class TxtTest extends TestCase
         return [
             // 'what is tested' => [$text, $expectation]
             'chunked text literal' => ['"Some text;" " another some text"', 'Some text; another some text'],
+            'quoted character strings are concatenated' => ['"foo" "bar"', 'foobar'],
             'string literal' => ['foobar', 'foobar'],
-            'text with space without quotes' => ['foo bar', 'foo'],
+            'text with space without quotes' => ['foo bar', 'foo bar'],
+            'multiple unquoted character strings' => [
+                'v=spf1 mx include:_spf.example.com -all',
+                'v=spf1 mx include:_spf.example.com -all',
+            ],
+            'quoted then unquoted character string' => ['"foo" bar', 'foo bar'],
+            'unquoted then quoted character string' => ['foo "bar"', 'foo bar'],
             'trailing whitespace' => ["\t\t\tfoobar", 'foobar'],
             'integer literal' => ['3600', '3600'],
             'double escape sequence' => ['"double escape \\\\010"', 'double escape \010'],
